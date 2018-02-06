@@ -1,4 +1,4 @@
-import { isUrl } from '../utils/utils';
+import { isUrl } from '../src/utils/utils';
 
 const menuData = [{
   name: 'dashboard',
@@ -67,7 +67,7 @@ const menuData = [{
   }, {
     name: '高级详情页',
     path: 'advanced',
-    authority: 'admin',
+    authority: 'adminx',
   }],
 }, {
   name: '结果页',
@@ -120,6 +120,10 @@ const menuData = [{
   target: '_blank',
 }];
 
+export function getMenuData(req, res) {
+  res.send(formatter(menuData));
+}
+
 function formatter(data, parentPath = '', parentAuthority) {
   return data.map((item) => {
     let { path } = item;
@@ -137,5 +141,3 @@ function formatter(data, parentPath = '', parentAuthority) {
     return result;
   });
 }
-
-export const getMenuData = () => formatter(menuData);

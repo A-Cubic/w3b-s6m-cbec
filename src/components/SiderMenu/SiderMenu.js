@@ -7,7 +7,6 @@ import styles from './index.less';
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-// Allow menu.js config icon as string or ReactNode
 //   icon: 'setting',
 //   icon: 'http://demo.com/icon.png',
 //   icon: <Icon type="setting" />,
@@ -199,6 +198,7 @@ export default class SiderMenu extends PureComponent {
   render() {
     const { logo, collapsed, location: { pathname }, onCollapse } = this.props;
     const { openKeys } = this.state;
+    this.menus = this.props.menuData;
     // Don't show popup menu when it is been collapsed
     const menuProps = collapsed ? {} : {
       openKeys,

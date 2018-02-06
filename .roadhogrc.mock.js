@@ -1,5 +1,6 @@
 import mockjs from 'mockjs';
 import { getRule, postRule } from './mock/rule';
+import { getMenuData } from './mock/menu';
 import { getActivities, getNotice, getFakeList } from './mock/api';
 import { getFakeChartData } from './mock/chart';
 import { imgMap } from './mock/utils';
@@ -132,6 +133,7 @@ const proxy = {
       "path": "/base/category/list"
     });
   },
+  'POST /api/menu': getMenuData,
 };
 
 export default noProxy ? {} : delay(proxy, 1000);

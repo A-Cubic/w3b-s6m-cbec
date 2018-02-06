@@ -13,7 +13,7 @@ import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
-import { getMenuData } from '../common/menu';
+import { setRouterAuth } from '../common/router';
 import logo from '../assets/logo.svg';
 
 const { Content } = Layout;
@@ -36,7 +36,6 @@ const getRedirect = (item) => {
     }
   }
 };
-getMenuData().forEach(getRedirect);
 
 const query = {
   'screen-xs': {
@@ -87,6 +86,9 @@ class BasicLayout extends React.PureComponent {
     });
     this.props.dispatch({
       type: 'user/fetchCurrent',
+    });
+    this.props.dispatch({
+      type: 'menu/init',
     });
   }
   getPageTitle() {
@@ -148,6 +150,9 @@ class BasicLayout extends React.PureComponent {
     const {
       currentUser, collapsed, fetchingNotices, notices, routerData, match, location,
     } = this.props;
+    const { menu: { menu } } = this.props;
+    menu.forEach(getRedirect);
+    const routerDataAuth = setRouterAuth(menu, routerData);
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
@@ -157,7 +162,7 @@ class BasicLayout extends React.PureComponent {
           // If you do not have the Authorized parameter
           // you will be forced to jump to the 403 interface without permission
           Authorized={Authorized}
-          menuData={getMenuData()}
+          menuData={menu}
           collapsed={collapsed}
           location={location}
           isMobile={this.state.isMobile}
@@ -184,7 +189,7 @@ class BasicLayout extends React.PureComponent {
                 )
               }
               {
-                getRoutes(match.path, routerData).map(item =>
+                getRoutes(match.path, routerDataAuth).map(item =>
                   (
                     <AuthorizedRoute
                       key={item.key}
@@ -238,7 +243,8 @@ class BasicLayout extends React.PureComponent {
   }
 }
 
-export default connect(({ user, global, loading }) => ({
+export default connect(({ menu, user, global, loading }) => ({
+  menu,
   currentUser: user.currentUser,
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
