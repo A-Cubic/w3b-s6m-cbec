@@ -2,6 +2,7 @@ import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
+import { getToken } from '../utils/Global';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据',
@@ -22,6 +23,14 @@ const codeMessage = {
 };
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
+    const code = response.headers.get('code');
+    if (code !== null && code !== '0') {
+      notification.error({
+        message: response.headers.get('msg'),
+        description: response.headers.get('msg'),
+      });
+      return;
+    }
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
@@ -47,10 +56,13 @@ export default function request(url, options) {
     credentials: 'include',
   };
   const newOptions = { ...defaultOptions, ...options };
+  const tokens = getToken();
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     newOptions.headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json; charset=utf-8',
+      token: tokens === '' ? '' : tokens.token,
+      userId: tokens === '' ? '' : tokens.userId,
       ...newOptions.headers,
     };
     newOptions.body = JSON.stringify(newOptions.body);

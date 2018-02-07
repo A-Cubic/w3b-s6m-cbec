@@ -72,25 +72,34 @@ const proxy = {
   'POST /api/login/account': (req, res) => {
     const { password, userName, type } = req.body;
     if(password === '888888' && userName === 'admin'){
+      res.setHeader('code', '0');
+      res.setHeader('msg', 'success');
       res.send({
-        status: 'ok',
+        status: true,
         type,
-        currentAuthority: 'admin'
+        currentAuthority: 'admin',
+        token: {token: 'admin1234',  userId: 'admin' },
       });
       return ;
     }
     if(password === '123456' && userName === 'user'){
+      res.setHeader('code', '0');
+      res.setHeader('msg', 'success');
       res.send({
-        status: 'ok',
+        status: true,
         type,
-        currentAuthority: 'user'
+        currentAuthority: 'user',
+        token: {token: 'user1234',  userId: 'user' },
       });
       return ;
     }
+    res.setHeader('code', '0');
+    res.setHeader('msg', 'wrong');
     res.send({
-      status: 'error',
+      status: false,
       type,
-      currentAuthority: 'guest'
+      currentAuthority: 'guest',
+      token: {token: 'user1234',  userId: 'user' },
     });
   },
   'POST /api/register': (req, res) => {
