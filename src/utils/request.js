@@ -22,8 +22,10 @@ const codeMessage = {
   504: '网关超时',
 };
 function checkStatus(response) {
+  console.log(response);
   if (response.status >= 200 && response.status < 300) {
     const code = response.headers.get('code');
+    console.log(code);
     if (code !== null && code !== '0') {
       notification.error({
         message: response.headers.get('msg'),
@@ -61,13 +63,17 @@ export default function request(url, options) {
     newOptions.headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json; charset=utf-8',
-      token: tokens === '' ? '' : tokens.token,
-      userId: tokens === '' ? '' : tokens.userId,
       ...newOptions.headers,
     };
+    if (tokens !== '') {
+      newOptions.headers = {
+        token: tokens.token,
+        userId: tokens.userId,
+        ...newOptions.headers,
+      };
+    }
     newOptions.body = JSON.stringify(newOptions.body);
   }
-
   return fetch(url, newOptions)
     .then(checkStatus)
     .then((response) => {

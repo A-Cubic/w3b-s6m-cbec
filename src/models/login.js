@@ -7,23 +7,30 @@ export default {
   namespace: 'login',
 
   state: {
-    status: undefined,
+    status: true,
   },
 
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
       if (response == null) {
-        return;
-      }
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      // Login successfully
-      if (response.status) {
-        reloadAuthorized();
-        yield put(routerRedux.push('/'));
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            status: false,
+            currentAuthority: 'guest',
+          },
+        });
+      } else {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
+        // Login successfully
+        if (response.status) {
+          reloadAuthorized();
+          yield put(routerRedux.push('/'));
+        }
       }
     },
     *logout(_, { put, select }) {
@@ -38,7 +45,7 @@ export default {
         yield put({
           type: 'changeLoginStatus',
           payload: {
-            status: false,
+            status: true,
             currentAuthority: 'guest',
           },
         });

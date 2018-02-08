@@ -59,7 +59,6 @@ export default class LoginPage extends Component {
           <Tab key="account" tab="账户密码登录">
             {
               !login.status &&
-              login.type === 'account' &&
               !login.submitting &&
               this.renderMessage('账户或密码错误')
             }
@@ -69,7 +68,6 @@ export default class LoginPage extends Component {
           <Tab key="mobile" tab="手机号登录">
             {
               !login.status &&
-              login.type === 'mobile' &&
               !login.submitting &&
               this.renderMessage('验证码错误')
             }

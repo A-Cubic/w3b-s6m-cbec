@@ -142,6 +142,12 @@ const proxy = {
     });
   },
   'POST /api/menu': getMenuData,
+
+  //----------------------------------------------------------
+
+  'POST /llback/user/validate': 'http://172.16.10.100:9999/',
 };
+
+
 
 export default noProxy ? {} : delay(proxy, 1000);
