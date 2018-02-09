@@ -15,10 +15,10 @@ addons:
     packages:
       - xvfb
 
-sudo: required
-
-services:
-  - docker
+#sudo: required
+#
+#services:
+#  - docker
 
 cache:
   directories:
