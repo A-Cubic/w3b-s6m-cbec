@@ -10,7 +10,7 @@ node_js:
 
 env:
   matrix:
-    - TEST_TYPE=lint
+#    - TEST_TYPE=lint
     - TEST_TYPE=build
     - TEST_TYPE=test-all
 #    - TEST_TYPE=test-dist
@@ -31,20 +31,20 @@ install:
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "production" && "$TEST_TYPE" == build ]; then
-    docker build -t registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web .
+    docker build -t registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web .;
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" registry.cn-beijing.aliyuncs.com;
     docker push registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web;
     fi
 
 script:
   - |
-    if [ "$TEST_TYPE" = lint ]; then
+    if [ "$TEST_TYPE" = lint && "$TRAVIS_BRANCH" = "master" ]; then
       npm run lint
     elif [ "$TEST_TYPE" = build && "$TRAVIS_BRANCH" = "production" ]; then
       npm run build
-    elif [ "$TEST_TYPE" = test-all ]; then
+    elif [ "$TEST_TYPE" = test-all && "$TRAVIS_BRANCH" = "master" ]; then
       npm run test:all
-    elif [ "$TEST_TYPE" = test-dist ]; then
+    elif [ "$TEST_TYPE" = test-dist && "$TRAVIS_BRANCH" = "master" ]; then
       npm run site
       mv dist/* ./
       php -S localhost:8000 &
