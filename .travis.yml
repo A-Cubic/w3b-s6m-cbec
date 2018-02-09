@@ -32,11 +32,9 @@ script:
       npm run build
     elif [ "$TEST_TYPE" = test-all ]; then
       npm run test:all
-#    elif [ "$TEST_TYPE" = test-dist ]; then
-#      npm run site
-#      mv dist/* ./
-#      php -S localhost:8000 &
-#      DEBUG=* npm test .e2e.js
+    elif [ "$TEST_TYPE" = test-dist ]; then
+      npm run site
+      mv dist/* ./
+      php -S localhost:8000 &
+      DEBUG=* npm test .e2e.js
     fi
-
-
