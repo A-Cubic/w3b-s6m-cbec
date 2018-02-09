@@ -29,12 +29,12 @@ install:
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - npm install
 
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "production" && "$TEST_TYPE" == build ]; then
-    docker build -t registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web .
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" registry.cn-beijing.aliyuncs.com;
-    docker push registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web;
-    fi
+#after_success:
+#  - if [ "$TRAVIS_BRANCH" == "production" && "$TEST_TYPE" == build ]; then
+#    docker build -t registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web .
+#    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" registry.cn-beijing.aliyuncs.com;
+#    docker push registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web;
+#    fi
 
 script:
   - |
