@@ -15,6 +15,11 @@ addons:
     packages:
       - xvfb
 
+sudo: required
+
+services:
+  - docker
+
 cache:
   directories:
     - "node_modules"
@@ -28,20 +33,20 @@ script:
   - |
     if [ "$TEST_TYPE" = lint ]; then
       npm run lint
-    elif [ "$TEST_TYPE" = build ]; then
+    elif [ "$TEST_TYPE" = build && "$TRAVIS_BRANCH" == "production" ]; then
       npm run build
     elif [ "$TEST_TYPE" = test-all ]; then
       npm run test:all
-    elif [ "$TEST_TYPE" = test-dist ]; then
-      npm run site
-      mv dist/* ./
-      php -S localhost:8000 &
-      DEBUG=* npm test .e2e.js
+#    elif [ "$TEST_TYPE" = test-dist ]; then
+#      npm run site
+#      mv dist/* ./
+#      php -S localhost:8000 &
+#      DEBUG=* npm test .e2e.js
     fi
 
-#after_success:
-#  - if [ "$TRAVIS_BRANCH" == "production" && "$TEST_TYPE" == build ]; then
-#    docker build -t registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web .
-#    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" registry.cn-beijing.aliyuncs.com;
-#    docker push registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web;
-#    fi
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "production" && "$TEST_TYPE" == build ]; then
+    docker build -t registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web .
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" registry.cn-beijing.aliyuncs.com;
+    docker push registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web;
+    fi
