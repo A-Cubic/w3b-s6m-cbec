@@ -30,7 +30,7 @@ install:
   - npm install
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "production" && "$TEST_TYPE" == build ]; then
+  - if [ "$TRAVIS_BRANCH" == "master" && "$TEST_TYPE" == build ]; then
     docker build -t registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web .;
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" registry.cn-beijing.aliyuncs.com;
     docker push registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web;
@@ -38,13 +38,13 @@ after_success:
 
 script:
   - |
-    if [ "$TEST_TYPE" = lint && "$TRAVIS_BRANCH" = "master" ]; then
+    if [ "$TEST_TYPE" = lint && "$TRAVIS_BRANCH" = "develop" ]; then
       npm run lint
-    elif [ "$TEST_TYPE" = build && "$TRAVIS_BRANCH" = "production" ]; then
+    elif [ "$TEST_TYPE" = build && "$TRAVIS_BRANCH" = "master" ]; then
       npm run build
-    elif [ "$TEST_TYPE" = test-all && "$TRAVIS_BRANCH" = "master" ]; then
+    elif [ "$TEST_TYPE" = test-all && "$TRAVIS_BRANCH" = "develop" ]; then
       npm run test:all
-    elif [ "$TEST_TYPE" = test-dist && "$TRAVIS_BRANCH" = "master" ]; then
+    elif [ "$TEST_TYPE" = test-dist && "$TRAVIS_BRANCH" = "develop" ]; then
       npm run site
       mv dist/* ./
       php -S localhost:8000 &
