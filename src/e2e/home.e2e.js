@@ -1,4 +1,4 @@
-import Nightmare from 'nightmare';
+// import Nightmare from 'nightmare';
 
 describe('Homepage', () => {
   // it('it should have logo text', async () => {
