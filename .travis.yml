@@ -42,7 +42,7 @@ script:
       npm run lint
     elif [ "$TEST_TYPE" = build ] && [ "$TRAVIS_BRANCH" = "master" ]; then
       npm run build
-    elif [ "$TEST_TYPE" = test-all ]; && [ "$TRAVIS_BRANCH" = "develop" ] then
+    elif [ "$TEST_TYPE" = test-all ] && [ "$TRAVIS_BRANCH" = "develop" ]; then
       npm run test:all
     elif [ "$TEST_TYPE" = test-dist ] && [ "$TRAVIS_BRANCH" = "develop" ]; then
       npm run site
