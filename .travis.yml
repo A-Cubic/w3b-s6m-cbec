@@ -50,5 +50,3 @@ script:
       php -S localhost:8000 &
       DEBUG=* npm test .e2e.js
     fi
-
-
