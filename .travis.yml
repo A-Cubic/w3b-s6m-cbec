@@ -20,9 +20,9 @@ addons:
     packages:
       - xvfb
 
-cache:
-  directories:
-    - "node_modules"
+#cache:
+#  directories:
+#    - "node_modules"
 
 install:
   - export DISPLAY=':99.0'
