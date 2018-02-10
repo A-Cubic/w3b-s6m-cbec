@@ -31,9 +31,9 @@ install:
 
 after_success:
   - if [ "$TRAVIS_BRANCH" = "master" ] && [ "$TEST_TYPE" = build ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-    docker build -t registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web .;
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" registry.cn-beijing.aliyuncs.com;
-    docker push registry.cn-beijing.aliyuncs.com/a-cubic/cbec-b2b-web;
+    docker build -t "$REGISTRY_URL"/"$REGISTRY_IMAGE" .;
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$REGISTRY_URL";
+    docker push "$REGISTRY_URL"/"$REGISTRY_IMAGE";
     fi
 
 script:
