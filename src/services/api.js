@@ -1,6 +1,8 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
+const apiUrl = process.env.NODE_ENV === 'development' ? '' : 'http://api.llwell.net/';
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
@@ -68,7 +70,7 @@ export async function fakeAccountLogin(params) {
 }
 
 export async function realAccountLogin(params) {
-  return request('/llback/user/validate', {
+  return request(`${apiUrl}/llback/user/validate`, {
     method: 'POST',
     body: params,
   });

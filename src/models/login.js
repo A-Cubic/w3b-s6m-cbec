@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin } from '../services/api';
+import { realAccountLogin } from '../services/api';
 import { setAuthority, setToken } from '../utils/Global';
 import { reloadAuthorized } from '../utils/Authorized';
 
@@ -12,7 +12,7 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(realAccountLogin, payload);
       if (response == null) {
         yield put({
           type: 'changeLoginStatus',

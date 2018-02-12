@@ -145,7 +145,7 @@ const proxy = {
 
   //----------------------------------------------------------
 
-  'POST /llback/user/validate': 'http://172.16.10.100:9999/',
+  'POST /llback/user/validate': 'http://api.llwell.net/',
 };
 
 
