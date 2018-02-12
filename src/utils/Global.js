@@ -12,7 +12,8 @@ export function setAuthority(authority) {
 }
 
 export function getToken() {
-  return JSON.parse(localStorage.getItem(TokenKey)) || '';
+  const token = localStorage.getItem(TokenKey);
+  return token || JSON.parse(token);
 }
 
 export function setToken(token) {
