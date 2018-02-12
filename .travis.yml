@@ -24,6 +24,9 @@ cache:
   directories:
     - "node_modules"
 
+notifications:
+  webhooks: https://hook.bearychat.com/=bwCGO/travis/42614e695afefe41ff5437de242de91c
+
 install:
   - export DISPLAY=':99.0'
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
