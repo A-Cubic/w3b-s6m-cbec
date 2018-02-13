@@ -88,7 +88,7 @@ export async function queryNotices() {
 }
 
 export async function getMenu() {
-  return request('/api/menu', {
+  return request('/llback/system/menu', {
     method: 'POST',
   });
 }

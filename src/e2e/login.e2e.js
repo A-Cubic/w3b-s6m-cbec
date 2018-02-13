@@ -7,7 +7,7 @@ describe('Login', () => {
     page
       .goto('http://localhost:8000/')
       .evaluate(() => {
-        window.localStorage.setItem('antd-pro-authority', 'guest');
+        window.localStorage.setItem('acbc-authority', 'guest');
       })
       .goto('http://localhost:8000/#/user/login');
   });
