@@ -132,6 +132,9 @@ export const getRouterData = (app) => {
     //   component: dynamicWrapper(app, ['profile'], () =>
     // import('../routes/Profile/AdvancedProfile')),
     // },
+    '/goods/a': {
+      component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),
+    },
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
     },
