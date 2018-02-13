@@ -69,13 +69,6 @@ export async function fakeAccountLogin(params) {
   });
 }
 
-export async function realAccountLogin(params) {
-  return request(`${apiUrl}/llback/user/validate`, {
-    method: 'POST',
-    body: params,
-  });
-}
-
 export async function fakeRegister(params) {
   return request('/api/register', {
     method: 'POST',
@@ -88,7 +81,15 @@ export async function queryNotices() {
 }
 
 export async function getMenu() {
-  return request('/llback/user/menu', {
+  return request(`${apiUrl}/llback/user/menu`, {
     method: 'POST',
+  });
+}
+
+
+export async function realAccountLogin(params) {
+  return request(`${apiUrl}/llback/user/validate`, {
+    method: 'POST',
+    body: params,
   });
 }
