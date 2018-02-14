@@ -14,7 +14,7 @@ import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { setRouterAuth } from '../common/router';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo.png';
 
 const { Content } = Layout;
 const { AuthorizedRoute } = Authorized;
@@ -94,9 +94,9 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = '跨境电商贸易平台';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - Ant Design Pro`;
+      title = `${routerData[pathname].name}`;
     }
     return title;
   }
@@ -225,7 +225,7 @@ class BasicLayout extends React.PureComponent {
             }]}
             copyright={
               <div>
-                Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+                Copyright <Icon type="copyright" /> 2017 壹立方（大连）信息技术有限公司出品
               </div>
             }
           />

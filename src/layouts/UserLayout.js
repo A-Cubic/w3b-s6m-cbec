@@ -21,15 +21,15 @@ const links = [{
   href: '',
 }];
 
-const copyright = <div>Copyright <Icon type="copyright" /> 2018 蚂蚁岂止科技（大连）有限公司 </div>;
+const copyright = <div>Copyright <Icon type="copyright" /> 2017 岂止科技（大连）有限公司 </div>;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = '跨境电商贸易平台';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - Ant Design Pro`;
+      title = `${routerData[pathname].name}`;
     }
     return title;
   }
