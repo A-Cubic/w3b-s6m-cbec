@@ -217,11 +217,11 @@ export default class SiderMenu extends PureComponent {
         onCollapse={onCollapse}
         width={256}
         className={styles.sider}
+        style={{background: '#333'}}
       >
         <div className={styles.logo} key="logo">
-          <Link to="/">
-            <img src={logo} alt="logo" />
-            <h1>Ant Design Pro</h1>
+          <Link to="/">           
+            <h1>跨境电商贸易平台</h1>
           </Link>
         </div>
         <Menu
@@ -231,7 +231,7 @@ export default class SiderMenu extends PureComponent {
           {...menuProps}
           onOpenChange={this.handleOpenChange}
           selectedKeys={selectedKeys}
-          style={{ padding: '16px 0', width: '100%' }}
+          style={{ padding: '16px 0', width: '100%',background:'#333'}}
         >
           {this.getNavMenuItems(this.menus)}
         </Menu>
