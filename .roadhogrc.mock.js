@@ -148,6 +148,9 @@ const proxy = {
   'POST /llback/user/validate': 'http://api.llwell.net/',
   'POST /llback/user/menu': 'http://api.llwell.net/',
   'POST /llback/user/currentUser': 'http://api.llwell.net/',
+  'POST /llback/user/message/list': 'http://api.llwell.net/',
+  'POST /llback/user/message/empty': 'http://api.llwell.net/',
+
 };
 
 

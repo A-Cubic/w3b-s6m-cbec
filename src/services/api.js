@@ -1,7 +1,7 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-const apiUrl = process.env.NODE_ENV === 'development' ? '' : 'http://api.llwell.net/';
+const apiUrl = process.env.NODE_ENV === 'development' ? '' : 'http://api.llwell.net';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -62,12 +62,12 @@ export async function queryFakeList(params) {
   return request(`/api/fake_list?${stringify(params)}`);
 }
 
-export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
-    method: 'POST',
-    body: params,
-  });
-}
+// export async function fakeAccountLogin(params) {
+//   return request('/api/login/account', {
+//     method: 'POST',
+//     body: params,
+//   });
+// }
 
 export async function fakeRegister(params) {
   return request('/api/register', {
@@ -78,6 +78,12 @@ export async function fakeRegister(params) {
 
 export async function queryNotices() {
   return request('/api/notices');
+}
+
+export async function getNotices() {
+  return request(`${apiUrl}/llback/user/message/list`, {
+    method: 'POST',
+  });
 }
 
 export async function getMenu() {
