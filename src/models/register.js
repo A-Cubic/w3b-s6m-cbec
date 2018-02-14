@@ -12,6 +12,8 @@ export default {
   effects: {
     *submit(_, { call, put }) {
       const response = yield call(fakeRegister);
+      console.log('response------------------')
+      console.log(response);
       yield put({
         type: 'registerHandle',
         payload: response,
