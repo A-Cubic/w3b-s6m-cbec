@@ -1,148 +1,150 @@
-/* eslint no-useless-escape:0 */
-const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g;
-
-function isUrl(path) {
-  return reg.test(path);
-}
-
 const menuData = [{
-  name: 'dashboard',
+  name: '工作台',
   icon: 'dashboard',
-  path: 'dashboard',
+  authority: ['admin', 'supplier'],
+  path: 'dashboard-s',
+}, {
+  name: '工作台',
+  icon: 'dashboard',
+  authority: ['admin', 'purchasers'],
+  path: 'dashboard-p',
+}, {
+  name: '工作台',
+  icon: 'dashboard',
+  authority: ['admin', 'operate'],
+  path: 'dashboard-o',
+}, {
+  name: '商品管理',
+  icon: 'barcode',
+  authority: ['admin', 'supplier', 'operate'],
+  path: 'goods',
   children: [{
-    name: '分析页',
-    path: 'analysis',
+    name: '新增商品',
+    authority: ['admin', 'operate'],
+    path: 'info/add',
   }, {
-    name: '监控页',
-    path: 'monitor',
+    name: '修改商品',
+    authority: ['admin', 'operate'],
+    path: 'info/mod/:id',
+    hideInMenu: true,
   }, {
-    name: '工作台',
-    path: 'workplace',
-    // hideInMenu: true,
+    name: '商品管理',
+    authority: ['admin', 'operate'],
+    path: 'info/list',
+  }, {
+    name: '新增报价',
+    authority: ['admin', 'supplier', 'operate'],
+    path: 'quote/add',
+  }, {
+    name: '修改报价',
+    authority: ['admin', 'supplier', 'operate'],
+    path: 'quote/mod/:id',
+    hideInMenu: true,
+  }, {
+    name: '商品报价',
+    authority: ['admin', 'supplier', 'operate'],
+    path: 'quote/list',
   }],
 }, {
-  name: '表单页',
-  icon: 'form',
-  path: 'form',
+  name: '海外备货',
+  icon: 'global',
+  authority: ['admin', 'supplier', 'purchasers', 'operate'],
+  path: 'trade',
   children: [{
-    name: '基础表单',
-    path: 'basic-form',
+    name: '采购单管理',
+    authority: ['admin', 'purchasers'],
+    path: 'order-p/list',
   }, {
-    name: '分步表单',
-    path: 'step-form',
+    name: '创建采购单',
+    authority: ['admin', 'purchasers'],
+    path: 'order-p/add',
   }, {
-    name: '高级表单',
-    authority: 'admin',
-    path: 'advanced-form',
-  }],
-}, {
-  name: '列表页',
-  icon: 'table',
-  path: 'list',
-  children: [{
-    name: '查询表格',
-    path: 'table-list',
+    name: '修改采购单',
+    authority: ['admin', 'purchasers'],
+    path: 'order-p/mod/:id',
+    hideInMenu: true,
   }, {
-    name: '标准列表',
-    path: 'basic-list',
+    name: '查看采购单',
+    authority: ['admin', 'purchasers'],
+    path: 'order-p/info/:id',
+    hideInMenu: true,
   }, {
-    name: '卡片列表',
-    path: 'card-list',
+    name: '处理采购单',
+    authority: ['admin', 'purchasers'],
+    path: 'order-p/handle/:id',
+    hideInMenu: true,
   }, {
-    name: '搜索列表',
-    path: 'search',
-    children: [{
-      name: '搜索列表（文章）',
-      path: 'articles',
-    }, {
-      name: '搜索列表（项目）',
-      path: 'projects',
-    }, {
-      name: '搜索列表（应用）',
-      path: 'applications',
-    }],
-  }],
-}, {
-  name: '详情页',
-  icon: 'profile',
-  path: 'profile',
-  children: [{
-    name: '基础详情页',
-    path: 'basic',
+    name: '采购单管理',
+    authority: ['admin', 'supplier'],
+    path: 'order-s/list',
   }, {
-    name: '高级详情页',
-    path: 'advanced',
-    authority: 'adminx',
-  }],
-}, {
-  name: '结果页',
-  icon: 'check-circle-o',
-  path: 'result',
-  children: [{
-    name: '成功',
-    path: 'success',
+    name: '处理采购单',
+    authority: ['admin', 'supplier'],
+    path: 'order-s/handle/:id',
+    hideInMenu: true,
   }, {
-    name: '失败',
-    path: 'fail',
-  }],
-}, {
-  name: '异常页',
-  icon: 'warning',
-  path: 'exception',
-  children: [{
-    name: '403',
-    path: '403',
+    name: '采购单管理',
+    authority: ['admin', 'operate'],
+    path: 'order-o/list',
   }, {
-    name: '404',
-    path: '404',
-  }, {
-    name: '500',
-    path: '500',
-  }, {
-    name: '触发异常',
-    path: 'trigger',
+    name: '处理采购单',
+    authority: ['admin', 'operate'],
+    path: 'order-o/handle/:id',
     hideInMenu: true,
   }],
 }, {
-  name: '账户',
-  icon: 'user',
-  path: 'user',
-  authority: 'guest',
+  name: '海外直邮',
+  icon: 'rocket',
+  authority: ['admin', 'operate'],
+  path: 'express',
+  children: [],
+}, {
+  name: 'O2O',
+  icon: 'shop',
+  authority: ['admin', 'operate'],
+  path: 'sale',
+  children: [],
+}, {
+  name: '开放平台',
+  icon: 'api',
+  authority: ['admin'],
+  path: 'open-api',
+  children: [],
+}, {
+  name: '结算管理',
+  icon: 'bank',
+  authority: ['admin', 'supplier', 'purchasers', 'operate'],
+  path: 'account',
   children: [{
-    name: '登录',
-    path: 'login',
+    name: '结算单',
+    authority: ['admin', 'purchasers', 'operate'],
+    path: 'list-p',
   }, {
-    name: '注册',
-    path: 'register',
-  }, {
-    name: '注册结果',
-    path: 'register-result',
+    name: '结算单',
+    authority: ['admin', 'supplier', 'operate'],
+    path: 'list-s',
   }],
 }, {
-  name: '使用文档',
-  icon: 'book',
-  path: 'http://pro.ant.design/docs/getting-started',
+  name: '用户管理',
+  icon: 'team',
+  authority: ['admin', 'operate'],
+  path: 'member',
+  children: [{
+    name: '用户信息',
+    authority: ['admin', 'operate'],
+    path: 'info/list',
+  }, {
+    name: '注册审批',
+    authority: ['admin', 'operate'],
+    path: 'reg/check',
+  }],
+}, {
+  name: '商城首页',
+  icon: 'home',
+  path: 'http://b2b.llwell.net/mall',
   target: '_blank',
 }];
 
 export function getMenuData(req, res) {
-  res.send(formatter(menuData));
-}
-
-function formatter(data, parentPath = '', parentAuthority) {
-  return data.map((item) => {
-    let { path } = item;
-    if (!isUrl(path)) {
-      path = parentPath + item.path;
-    }
-    const result = {
-      ...item,
-      path,
-      authority: item.authority || parentAuthority,
-    };
-    if (item.children) {
-      result.children = formatter(item.children, `${parentPath}${item.path}/`, item.authority);
-    }
-    return result;
-  });
+  res.send(menuData);
 }

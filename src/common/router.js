@@ -72,9 +72,9 @@ export const getRouterData = (app) => {
     '/': {
       component: dynamicWrapper(app, ['global', 'user', 'login', 'menu'], () => import('../layouts/BasicLayout')),
     },
-    // '/dashboard/analysis': {
-    //   component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
-    // },
+    '/dashboard-o': {
+      component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
+    },
     // '/dashboard/monitor': {
     //   component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
     // },
@@ -132,8 +132,15 @@ export const getRouterData = (app) => {
     //   component: dynamicWrapper(app, ['profile'], () =>
     // import('../routes/Profile/AdvancedProfile')),
     // },
-    '/goods/a': {
+    '/dashboard-s': {
       component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),
+    },
+    '/dashboard-p': {
+      component: dynamicWrapper(app, ['project', 'activities', 'chart'],
+    () => import('../routes/Dashboard/Workplace')),
+      hideInBreadcrumb: true,
+      name: '工作台',
+      authority: 'admin',
     },
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
