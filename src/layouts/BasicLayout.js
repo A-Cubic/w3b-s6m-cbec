@@ -15,6 +15,7 @@ import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { setRouterAuth } from '../common/router';
 import logo from '../assets/logo.png';
+import { getAuthority } from '../utils/Global';
 
 const { Content } = Layout;
 const { AuthorizedRoute } = Authorized;
@@ -111,7 +112,26 @@ class BasicLayout extends React.PureComponent {
       urlParams.searchParams.delete('redirect');
       window.history.replaceState(null, 'redirect', urlParams.href);
     } else {
-      return '/dashboard/analysis';
+      const auth = getAuthority();
+      let tUrl = '/user/login';
+      switch (auth) {
+        case 'admin':
+          tUrl = '/dashboard-o';
+          break;
+        case 'supplier':
+          tUrl = '/dashboard-s';
+          break;
+        case 'purchasers':
+          tUrl = '/dashboard-p';
+          break;
+        case 'operate':
+          tUrl = '/dashboard-o';
+          break;
+        case '':
+          tUrl = '/user/login';
+          break;
+      }
+      return tUrl;
     }
     return redirect;
   }
