@@ -5,7 +5,11 @@ export default {
 
   state: {
     list: [],
-    currentUser: {},
+    currentUser: {
+      name: undefined,
+      avatar: undefined,
+      notifyCount: 0,
+    },
   },
 
   effects: {
@@ -18,10 +22,13 @@ export default {
     },
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
+      console.log(response);
+      if (response !== undefined) {
+        yield put({
+          type: 'saveCurrentUser',
+          payload: response,
+        });
+      }
     },
   },
 

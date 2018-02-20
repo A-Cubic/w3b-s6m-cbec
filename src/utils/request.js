@@ -2,7 +2,7 @@ import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
-import { getToken } from '../utils/Global';
+import { getToken, setAuthority, setToken } from '../utils/Global';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据',
@@ -29,6 +29,14 @@ function checkStatus(response) {
         message: response.headers.get('msg'),
         description: response.headers.get('msg'),
       });
+      const { dispatch } = store;
+      switch (code) {
+        default:
+          setAuthority('guest');
+          setToken('');
+          dispatch(routerRedux.push('/user/login'));
+          break;
+      }
       return;
     }
     return response;
