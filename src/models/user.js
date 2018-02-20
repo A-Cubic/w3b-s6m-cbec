@@ -22,7 +22,6 @@ export default {
     },
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
-      console.log(response);
       if (response !== undefined) {
         yield put({
           type: 'saveCurrentUser',

@@ -34,10 +34,12 @@ export default {
   effects: {
     *init({ payload }, { call, put }) {
       const response = yield call(getMenu, payload);
-      yield put({
-        type: 'initMenuData',
-        payload: response,
-      });
+      if (response !== undefined) {
+        yield put({
+          type: 'initMenuData',
+          payload: response,
+        });
+      }
     },
   },
 
