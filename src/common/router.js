@@ -176,6 +176,9 @@ export const getRouterData = (app) => {
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },
+    '/goods/quote/list': {
+      component: dynamicWrapper(app, [], () => import('../routes/Quote/QuoteList')),
+    },
   };
   // const menuData = getFlatMenuData(getMenuData());
 
