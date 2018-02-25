@@ -53,6 +53,16 @@ const columns = [{
   title: '供应商',
   dataIndex: 'gys',
   key: 'gys',
+},{
+  title: '操作',
+  dataIndex: 'operate',
+  key: 'operate',
+  render:()=>
+  	<div>
+		<a href="" className={styles.mR10}>新增</a>	
+		<a href="">编辑</a>  		
+  	</div>
+  
 }];
 @Form.create()
 
