@@ -76,10 +76,15 @@ class QuoteMod extends Component {
   }
 
   componentWillMount () {
+    let goodsTm = this.props.match.params.id;
+    console.log(goodsTm);
+    //假装获取到数据
     this.setState({
       data: data
     });
   }
+
+
 
   render () {
     const { getFieldDecorator } = this.props.form;
