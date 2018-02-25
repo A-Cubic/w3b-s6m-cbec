@@ -2,6 +2,7 @@ import { routerRedux } from 'dva/router';
 import { realAccountLogin } from '../services/api';
 import { setAuthority, setToken } from '../utils/Global';
 import { reloadAuthorized } from '../utils/Authorized';
+import { getAuthority } from '../utils/Global';
 
 export default {
   namespace: 'login',
@@ -29,7 +30,32 @@ export default {
         // Login successfully
         if (response.status) {
           reloadAuthorized();
-          yield put(routerRedux.push('/'));
+          const auth = getAuthority();
+          let tUrl = '/user/login';
+          switch (auth) {
+            case 'admin':
+              tUrl = '/dashboard-o';
+              break;
+            case 'supplier':
+              tUrl = '/dashboard-s';
+              break;
+            case 'purchasers':
+              tUrl = '/dashboard-p';
+              break;
+            case 'operate':
+              tUrl = '/dashboard-o';
+              break;
+            case 'unaudited-s':
+              tUrl = '/user/register-verify';
+              break;
+            case 'unaudited-p':
+              tUrl = '/user/register-verify';
+              break;
+            case '':
+              tUrl = '/user/login';
+              break;
+          }
+          yield put(routerRedux.push(tUrl));
         }
       }
     },
