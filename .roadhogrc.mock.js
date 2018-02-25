@@ -149,8 +149,11 @@ const proxy = {
   'POST /llback/user/currentUser': 'http://api.llwell.net/',
   'POST /llback/user/message/list': 'http://api.llwell.net/',
   'POST /llback/user/message/empty': 'http://api.llwell.net/',
-  'POST /llback/user/register/code': 'http://172.16.10.100:9999/',
+  'POST /llback/user/register/code': 'http://api.llwell.net/',
   'POST /llback/user/register/submit': 'http://172.16.10.100:9999/',
+  'POST /llback/user/register/upload': 'http://172.16.10.100:9999/',
+  'POST /llback/user/register/status': 'http://172.16.10.100:9999/',
+  'POST /llback/user/register/check': 'http://172.16.10.100:9999/',
   //'POST /llback/user/register/code': 'http://api.llwell.net/',
 
 };
