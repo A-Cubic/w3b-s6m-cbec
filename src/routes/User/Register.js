@@ -62,8 +62,18 @@ export default class Register extends Component {
   onMailCallback = (params) => {
     // let count = 0;
     const count = params.msg;
-    if(params.type==="0") {
-      this.setState({ count });
+    if(params.type==="-1") {
+      this.setState({count});
+    } else if(params.type==="0"){
+      notification.error({
+        message: "提示",
+        description: count,
+      });
+    }else {
+      notification.success({
+        message: "提示",
+        description: count,
+      });
     }
 
 }
@@ -105,6 +115,15 @@ export default class Register extends Component {
     return 'poor';
   };
 
+  onSubmitCallback = (params) => {
+    const msg = params.msg;
+    notification.error({
+      message: "提示",
+      description: msg,
+    });
+
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
@@ -113,10 +132,10 @@ export default class Register extends Component {
           type: 'register/submit',
           payload: {
             ...values,
-            prefix: this.state.prefix,
+            type: 2,
           },
+          callback: this.onSubmitCallback,
         });
-        console.log(values);
       }
     });
   };

@@ -92,8 +92,15 @@ export async function realAccountLogin(params) {
   });
 }
 
-export async function realRegister(params) {
+export async function realRegisterCdoe(params) {
   return request(`${apiUrl}/llback/user/register/code`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function realRegisterSubmit(params) {
+  return request(`${apiUrl}/llback/user/register/submit`, {
     method: 'POST',
     body: params,
   });

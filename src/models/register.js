@@ -1,6 +1,8 @@
-import { realRegister } from '../services/api';
+import { realRegisterCdoe, realRegisterSubmit } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
+import { notification } from 'antd'
+import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'register',
@@ -8,17 +10,25 @@ export default {
   state: {},
 
   effects: {
-    *submit(_, { call, put }) {
-      const response = yield call(fakeRegister);
-      console.log('response------------------')
-      console.log(response);
-      yield put({
-        type: 'registerHandle',
-        payload: response,
-      });
+    *submit({payload, callback}, { call, put }) {
+      const response = yield call(realRegisterSubmit,payload);
+      if (response === undefined) {
+
+      } else {
+        const msg = response.msg;
+        if (response.type ==="0") {
+          callback(response);
+        }else {
+          notification.success({
+            message: "提示",
+            description: msg,
+          });
+          yield put(routerRedux.push('/user/login'));
+        }
+      }
     },
     *getCode({payload, callback},{call}) {
-      const response = yield call(realRegister, payload);
+      const response = yield call(realRegisterCdoe, payload);
       if (response === undefined) {
 
       } else {
@@ -28,13 +38,5 @@ export default {
   },
 
   reducers: {
-    registerHandle(state, { payload }) {
-      setAuthority('user');
-      reloadAuthorized();
-      return {
-        ...state,
-        status: payload.status,
-      };
-    },
   },
 };
