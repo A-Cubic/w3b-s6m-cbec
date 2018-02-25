@@ -4,6 +4,7 @@ import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress,Steps,notification,Upload,Icon   } from 'antd';
 import styles from './Register.less';
 import { getAuthority } from '../../utils/Global';
+import { getCurrentUrl } from '../../services/api'
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -34,8 +35,9 @@ export default class RegisterVerify extends Component {
 	      sm: { span: 16 },
 	    },
 	  };
+	   const url = getCurrentUrl('/llback/user/validate');
 	  const props = {
-	      action: '/llback/user/validate',
+	      action: url,
 	      listType: 'picture',
 	      onChange({ file, fileList }) {
 	          if (file.status !== 'uploading') {
