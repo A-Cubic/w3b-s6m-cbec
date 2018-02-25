@@ -212,17 +212,21 @@ export default class RegisterVerify extends Component {
     	console.log(values);
       if (!err) {
 
-      	var data = {
+      	/*var data = {
       		...values,
       		img1 : values.img1 !== undefined ? values.img1.file.thumbUrl : '',
       		img2 : values.img2 !== undefined ? values.img2.file.thumbUrl : '',
       		img3 : values.img3 !== undefined ? values.img3.file.thumbUrl : '',
       		img4 : values.img4 !== undefined ? values.img4.file.thumbUrl :'',
-      	}
+      	}*/
          this.props.dispatch({
           type: 'register/verify',
           payload: {
-            data
+            ...values,
+      		img1 : values.img1 !== undefined ? values.img1.file.thumbUrl : '',
+      		img2 : values.img2 !== undefined ? values.img2.file.thumbUrl : '',
+      		img3 : values.img3 !== undefined ? values.img3.file.thumbUrl : '',
+      		img4 : values.img4 !== undefined ? values.img4.file.thumbUrl :''
           },
         });
         this.state.currentStep++;
