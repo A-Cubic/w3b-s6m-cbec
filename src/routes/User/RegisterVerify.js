@@ -3,12 +3,13 @@ import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress,Steps,notification,Upload,Icon   } from 'antd';
 import styles from './Register.less';
+import { getAuthority } from '../../utils/Global';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const InputGroup = Input.Group;
 const Step = Steps.Step;
-
+var temUploadKey = '';
 @connect(({ register, loading }) => ({
   register,
   submitting: loading.effects['register/submit'],
@@ -16,14 +17,13 @@ const Step = Steps.Step;
 @Form.create()
 export default class RegisterVerify extends Component {
 	state = {
-	  currentStep : 1,
-	  verifyMsg:{}
+	  currentStep : 1
 	};
 	renderStep = (currentStep) => {
 	  const { form, submitting } = this.props;
 	  const { getFieldDecorator,getFieldsValue,validateFields,setFields } = form;
 	  const { count, prefix } = this.state;
-	  var temUploadKey = '';
+
 	   const formItemLayout = {
 	    labelCol: {
 	      xs: { span: 24 },
@@ -39,16 +39,7 @@ export default class RegisterVerify extends Component {
 	      listType: 'picture',
 	      onChange({ file, fileList }) {
 	          if (file.status !== 'uploading') {
-	            console.log(file);
-	            setFields({
-	            	certification: {
-	                    value: {
-	                    	// ...getFieldsValue('certification'),
-	                    	[temUploadKey]:file.thumbUrl
-	                    }
-	                  }
-	            });
-	            // console.log(getFieldsValue());
+	            // console.log(fileList);
 	          }
 	        }
 	    };
@@ -109,6 +100,7 @@ export default class RegisterVerify extends Component {
 	                      ]
 	                    })(<Input size="large" placeholder="联系人常用邮箱且能正常收发邮件" />)}
 	                  </FormItem>
+
 	                   <FormItem
 	                    {...formItemLayout}
 	                    label='资质上传'>
@@ -121,36 +113,56 @@ export default class RegisterVerify extends Component {
 	                      ]
 	                    })(
 	                      <div>
-	                      <Row>
+	                      <Row style={{marginBottom:'20px'}}>
 	                        <Col span={12}>
-	                          <Upload {...props} >
-	                              <Button id="img1" onClick={cusUpload}>
-	                                <Icon type="upload"/> 营业执照
-	                              </Button>
-	                            </Upload>
+	                           <FormItem
+	                             {...formItemLayout}>
+	                             {getFieldDecorator('img1')(
+	                             	<Upload {...props} >
+	                             	    <Button>
+	                             	      <Icon type="upload"/> 营业执照
+	                             	    </Button>
+	                             	  </Upload>
+	                             	)}
+	                           </FormItem>
 	                        </Col>
 	                        <Col span={12}>
-	                          <Upload {...props}>
-	                              <Button>
-	                                <Icon type="upload" /> 组织机构代码
-	                              </Button>
-	                            </Upload>
+	                           <FormItem
+	                             {...formItemLayout}>
+	                             {getFieldDecorator('img2')(
+	                             	<Upload {...props}>
+	                             	    <Button>
+	                             	      <Icon type="upload" /> 组织机构代码
+	                             	    </Button>
+	                             	  </Upload>
+	                             	)}
+	                           </FormItem>
 	                        </Col>
 	                      </Row>
-	                       <Row>
+	                      <Row style={{marginBottom:'20px'}}>
 	                        <Col span={12}>
-	                          <Upload {...props}>
-	                              <Button>
-	                                <Icon type="upload" /> 税务登记证
-	                              </Button>
-	                            </Upload>
+	                           <FormItem
+	                             {...formItemLayout}>
+	                             {getFieldDecorator('img3')(
+	                             	<Upload {...props} >
+	                             	    <Button>
+	                             	      <Icon type="upload"/> 税务登记证
+	                             	    </Button>
+	                             	  </Upload>
+	                             	)}
+	                           </FormItem>
 	                        </Col>
 	                        <Col span={12}>
-	                          <Upload {...props}>
-	                              <Button>
-	                                <Icon type="upload" /> 营业执照（三证合一）
-	                              </Button>
-	                            </Upload>
+	                           <FormItem
+	                             {...formItemLayout}>
+	                             {getFieldDecorator('img4')(
+	                             	<Upload {...props}>
+	                             	    <Button>
+	                             	      <Icon type="upload" /> 营业执照（三证合一）
+	                             	    </Button>
+	                             	  </Upload>
+	                             	)}
+	                           </FormItem>
 	                        </Col>
 	                      </Row>
 	                      <Row className={styles.uploadNote}>
@@ -197,20 +209,51 @@ export default class RegisterVerify extends Component {
 	handleVerify = (e) => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
+    	console.log(values);
       if (!err) {
-         /*this.props.dispatch({
+
+      	var data = {
+      		...values,
+      		img1 : values.img1 !== undefined ? values.img1.file.thumbUrl : '',
+      		img2 : values.img2 !== undefined ? values.img2.file.thumbUrl : '',
+      		img3 : values.img3 !== undefined ? values.img3.file.thumbUrl : '',
+      		img4 : values.img4 !== undefined ? values.img4.file.thumbUrl :'',
+      	}
+         this.props.dispatch({
           type: 'register/verify',
           payload: {
-            ...values,
-            prefix: this.state.prefix,
+            data
           },
-        });*/
-        console.log(values);
+        });
         this.state.currentStep++;
       }
     });
   }
-
+  	componentWillMount(){
+  		//获取注册用户状态接口（用于判断跳转到第几步）
+      const auth = getAuthority();
+      if (auth !== 'unaudited-s' && auth !== 'unaudited-p') {
+        this.props.dispatch(routerRedux.push('/user/login'));
+      } else {
+        this.props.dispatch({
+          type: '/register/status',
+          payload: {},
+          callback:this.setStep,
+        });
+      }
+  	}
+  	setStep(step){
+  		const verifycode = step.verifycode*1;
+  		var step;
+  		if (verifycode == 2) {
+			step = 1
+  		}else if (verifycode == 3 || verifycode == -1) {
+  			step = 2
+  		};
+		this.setState({
+			currentStep : step
+		});
+  	}
 	render() {
     return (
       <div>
@@ -223,7 +266,7 @@ export default class RegisterVerify extends Component {
           {this.renderStep(this.state.currentStep)}
       </div>
       </div>
-      
+
     );
   }
 }

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress,Steps,notification,Upload,Icon   } from 'antd';
+import { Form, Input, Button, Select, Row, Col, Popover, Progress,Steps,notification,Upload,Icon,Radio} from 'antd';
 import styles from './Register.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const InputGroup = Input.Group;
 const Step = Steps.Step;
+const RadioGroup = Radio.Group;
 const openNotificationWithIcon = (type) => {
   notification[type]({
     message: '注册通知',
@@ -59,11 +60,42 @@ export default class Register extends Component {
     clearInterval(this.interval);
   }
 
+  onMailCallback = (params) => {
+    // let count = 0;
+    const count = params.msg;
+    if(params.type==="-1") {
+      this.setState({count});
+    } else if(params.type==="0"){
+      notification.error({
+        message: "提示",
+        description: count,
+      });
+    }else {
+      notification.success({
+        message: "提示",
+        description: count,
+      });
+    }
+}
+
   onGetCaptcha = () => {
     let count = 59;
     this.setState({ count });
+    this.props.form.validateFields(['mail'],{ force: true }, (err, values) => {
+      if (!err) {
+        const mail = this.props.form.getFieldValue('mail');
+        this.props.dispatch({
+          type: 'register/getCode',
+          payload: {
+            mail,
+          },
+          callback: this.onMailCallback,
+        });
+      }
+    });
+
     this.interval = setInterval(() => {
-      count -= 1;
+      count = this.state.count - 1;
       this.setState({ count });
       if (count === 0) {
         clearInterval(this.interval);
@@ -83,18 +115,28 @@ export default class Register extends Component {
     return 'poor';
   };
 
+  onSubmitCallback = (params) => {
+    const msg = params.msg;
+    notification.error({
+      message: "提示",
+      description: msg,
+    });
+
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
       if (!err) {
+        console.log(values);
         this.props.dispatch({
           type: 'register/submit',
           payload: {
             ...values,
-            prefix: this.state.prefix,
+            // type: 2,
           },
+          callback: this.onSubmitCallback,
         });
-        console.log(values);
       }
     });
   };
@@ -163,12 +205,20 @@ export default class Register extends Component {
       </div>
     ) : null;
   };
+  handleChangeRole = (e) =>{
+    this.props.form.setFields({
+          type:{
+            value : e.target.value
+          }
+      });
+    console.log(this.props.form.getFieldsValue());
+  }
   renderStep = (currentStep) => {
     const { form, submitting } = this.props;
-    const { getFieldDecorator } = form;
-    const { count, prefix } = this.state;
+    const { getFieldDecorator,getFieldsValue,getFieldValue } = form;
+    const { count, prefix,type } = this.state;
     const fileList = [];
-     const formItemLayout = {
+    const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
         sm: { span: 8 },
@@ -184,9 +234,29 @@ export default class Register extends Component {
         defaultFileList: [...fileList],
       };
     switch(currentStep){
-      case 0 : 
+      case 0 :
             return(
                 <Form onSubmit={this.handleSubmit}>
+                  <FormItem
+                  {...formItemLayout}
+                    label ='注册身份'
+                  >
+                    {getFieldDecorator('type', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请选择注册身份',
+                        }
+                      ],
+                      initialValue: getFieldValue('type')
+                    })(
+                      <RadioGroup onChange={this.handleChangeRole} >
+                        <Radio value={2}>供应商</Radio>
+                        <Radio value={3}>采购商</Radio>
+                      </RadioGroup>
+                    )}
+                  </FormItem>
+                  
                   <FormItem
                   {...formItemLayout}
                     label ='邮箱/手机号码'
@@ -214,24 +284,25 @@ export default class Register extends Component {
                           rules: [
                             {
                               required: true,
-                              message: '请输入验证码！',
+                              message: '请输入6位验证码！',
+                              len: 6
                             },
                           ],
-                        })(<Input size="large" placeholder="验证码" />)}
+                        })(<Input size="large" placeholder="验证码"/>)}
                       </Col>
                       <Col span={8}>
                         <Button
                           size="large"
                           disabled={count}
                           className={styles.getCaptcha}
-                          onClick={this.onGetCaptcha}
+                          onClick={ this.onGetCaptcha }
                         >
                           {count ? `${count} s` : '获取验证码'}
                         </Button>
                       </Col>
                     </Row>
                   </FormItem>
-                    <FormItem 
+                    <FormItem
                       help={this.state.help}
                        {...formItemLayout}
                       label ='密码'
@@ -302,6 +373,19 @@ export default class Register extends Component {
             break;
     }
   }
+  componentDidMount (){
+    var type = parseInt(this.props.match.params.type);
+    if(!type || (type!==2 && type!==3)){
+      return
+    }
+    //初始设置注册身份
+    this.props.form.setFields({
+          type:{
+            value : type
+          }
+      });
+    console.log(this.props.form.getFieldsValue())
+  }
   render() {
     return (
       <div>
@@ -314,7 +398,7 @@ export default class Register extends Component {
           {this.renderStep(this.state.currentStep)}
       </div>
       </div>
-      
+
     );
   }
 }

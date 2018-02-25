@@ -67,6 +67,9 @@ const columns = [{
 @Form.create()
 
 export default class Register extends Component {
+	handleSubmit(){
+
+	}
 	render(){
 		const { getFieldDecorator } = this.props.form;
 		return(
@@ -75,7 +78,7 @@ export default class Register extends Component {
 					<Row>
 						<Form onSubmit={this.handleSubmit}>
 							<Row>
-								<Col  xs={2} sm={4} md={6} lg={8} xl={10} >
+								<Col  xs={24} sm={12} md={8} lg={8} xl={8} >
 									<FormItem
 									{...formItemLayout}
 									  label ='商品条码'
@@ -85,7 +88,7 @@ export default class Register extends Component {
 									}
 									</FormItem>
 								</Col>
-								<Col xs={2} sm={4} md={6} lg={8} xl={10}>
+								<Col xs={24} sm={12} md={8} lg={8} xl={8}>
 									<FormItem
 									{...formItemLayout}
 									  label ='商品名称'
@@ -95,7 +98,7 @@ export default class Register extends Component {
 									}
 									</FormItem>
 								</Col>
-								<Col xs={2} sm={4} md={6} lg={8} xl={10}>
+								<Col xs={24} sm={12} md={8} lg={8} xl={8}>
 									<FormItem
 									{...formItemLayout}
 									  label ='供应商'
@@ -109,10 +112,8 @@ export default class Register extends Component {
 						</Form>
 					</Row>
 					<Row>
-						<Col span={1} xs={{offset:2}} sm={{offset:4}} md={{offset:18}} lg={{offset:18}} xl={{offset:18}} className={styles.mR10}>
-							<Button type="primary">搜索</Button>
-						</Col>
-						<Col span={1}><Button>重置</Button></Col>
+						<Col span={20}></Col>
+						<Col span={4}><Button type="primary">搜索</Button><Button>重置</Button></Col>
 					</Row>
 				</Card>
 				<Card className={styles.mT10}>
