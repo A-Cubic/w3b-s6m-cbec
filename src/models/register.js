@@ -1,13 +1,11 @@
-import { fakeRegister } from '../services/api';
+import { realRegister } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 
 export default {
   namespace: 'register',
 
-  state: {
-    status: undefined,
-  },
+  state: {},
 
   effects: {
     *submit(_, { call, put }) {
@@ -19,6 +17,14 @@ export default {
         payload: response,
       });
     },
+    *getCode({payload, callback},{call}) {
+      const response = yield call(realRegister, payload);
+      if (response === undefined) {
+
+      } else {
+        callback(response);
+      }
+    }
   },
 
   reducers: {

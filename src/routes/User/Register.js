@@ -59,11 +59,33 @@ export default class Register extends Component {
     clearInterval(this.interval);
   }
 
+  onMailCallback = (params) => {
+    // let count = 0;
+    const count = params.msg;
+    if(params.type==="0") {
+      this.setState({ count });
+    }
+
+}
+
   onGetCaptcha = () => {
     let count = 59;
     this.setState({ count });
+    this.props.form.validateFields(['mail'],{ force: true }, (err, values) => {
+      if (!err) {
+        const mail = this.props.form.getFieldValue('mail');
+        this.props.dispatch({
+          type: 'register/getCode',
+          payload: {
+            mail,
+          },
+          callback: this.onMailCallback,
+        });
+      }
+    });
+
     this.interval = setInterval(() => {
-      count -= 1;
+      count = this.state.count - 1;
       this.setState({ count });
       if (count === 0) {
         clearInterval(this.interval);
@@ -184,7 +206,7 @@ export default class Register extends Component {
         defaultFileList: [...fileList],
       };
     switch(currentStep){
-      case 0 : 
+      case 0 :
             return(
                 <Form onSubmit={this.handleSubmit}>
                   <FormItem
@@ -224,14 +246,14 @@ export default class Register extends Component {
                           size="large"
                           disabled={count}
                           className={styles.getCaptcha}
-                          onClick={this.onGetCaptcha}
+                          onClick={ this.onGetCaptcha }
                         >
                           {count ? `${count} s` : '获取验证码'}
                         </Button>
                       </Col>
                     </Row>
                   </FormItem>
-                    <FormItem 
+                    <FormItem
                       help={this.state.help}
                        {...formItemLayout}
                       label ='密码'
@@ -314,7 +336,7 @@ export default class Register extends Component {
           {this.renderStep(this.state.currentStep)}
       </div>
       </div>
-      
+
     );
   }
 }

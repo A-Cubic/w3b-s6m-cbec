@@ -91,3 +91,10 @@ export async function realAccountLogin(params) {
     body: params,
   });
 }
+
+export async function realRegister(params) {
+  return request(`${apiUrl}/llback/user/register/code`, {
+    method: 'POST',
+    body: params,
+  });
+}
