@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { routerRedux, Link } from 'dva/router';
+import { routerRedux, Link, withRouter } from 'dva/router';
 import { Input, Button, Table,Card,Form,Row, Col  } from 'antd';
 import styles from '../../utils/utils.less'
 
@@ -57,19 +57,16 @@ const columns = [{
   title: '操作',
   dataIndex: 'operate',
   key: 'operate',
-  render:()=>
+  render:(text, record)=>
   	<div>
-		<a href="" className={styles.mR10}>新增</a>	
-		<a href="">编辑</a>  		
+      <Link to='/goods/quote/add' className={styles.mR10}>新增</Link>
+      <Link to={`/goods/quote/mod/${record.goodsTm}`}>编辑</Link>
   	</div>
-  
+
 }];
 @Form.create()
 
 export default class Register extends Component {
-	handleSubmit(){
-
-	}
 	render(){
 		const { getFieldDecorator } = this.props.form;
 		return(
@@ -108,7 +105,7 @@ export default class Register extends Component {
 									}
 									</FormItem>
 								</Col>
-							</Row>										
+							</Row>
 						</Form>
 					</Row>
 					<Row>
@@ -121,6 +118,6 @@ export default class Register extends Component {
 				</Card>
 			</div>
 			)
-		
+
 	}
 }

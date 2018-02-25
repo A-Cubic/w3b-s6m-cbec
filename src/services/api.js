@@ -105,3 +105,23 @@ export async function realRegisterSubmit(params) {
     body: params,
   });
 }
+
+export async function realRegisterUpload(params) {
+  return request(`${apiUrl}/llback/user/register/upload`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function realRegisterStatus() {
+  return request(`${apiUrl}/llback/user/register/status`, {
+    method: 'POST',
+  });
+}
+
+  export async function realRegisterCheck(params) {
+    return request(`${apiUrl}/llback/user/register/check`, {
+      method: 'POST',
+      body: params,
+    });
+}

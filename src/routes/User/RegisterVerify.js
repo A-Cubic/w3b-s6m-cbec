@@ -10,19 +10,19 @@ const { Option } = Select;
 const InputGroup = Input.Group;
 const Step = Steps.Step;
 var temUploadKey = '';
-@connect(({ register, loading }) => ({
-  register,
-  submitting: loading.effects['register/submit'],
+@connect(({ registerVerify, loading }) => ({
+  registerVerify,
+  submitting: loading.effects['registerVerify/upload'],
 }))
 @Form.create()
 export default class RegisterVerify extends Component {
-	state = {
-	  currentStep : 1
-	};
+	// state = {
+	//   currentStep : 1
+	// };
 	renderStep = (currentStep) => {
 	  const { form, submitting } = this.props;
 	  const { getFieldDecorator,getFieldsValue,validateFields,setFields } = form;
-	  const { count, prefix } = this.state;
+	  // const { count, prefix } = this.state;
 
 	   const formItemLayout = {
 	    labelCol: {
@@ -207,31 +207,47 @@ export default class RegisterVerify extends Component {
 	  }
 	}
 	handleVerify = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields({ force: true }, (err, values) => {
-    	console.log(values);
-      if (!err) {
+	    e.preventDefault();
+	    this.props.form.validateFields({ force: true }, (err, values) => {
+	    	// console.log(values);
+	      const img1Vaule = values.img1 !== undefined ? values.img1.file.thumbUrl : '';
+	      const img2Vaule = values.img2 !== undefined ? values.img2.file.thumbUrl : '';
+	      const img3Vaule = values.img3 !== undefined ? values.img3.file.thumbUrl : '';
+	      const img4Vaule = values.img4 !== undefined ? values.img4.file.thumbUrl : '';
 
-      	/*var data = {
-      		...values,
-      		img1 : values.img1 !== undefined ? values.img1.file.thumbUrl : '',
-      		img2 : values.img2 !== undefined ? values.img2.file.thumbUrl : '',
-      		img3 : values.img3 !== undefined ? values.img3.file.thumbUrl : '',
-      		img4 : values.img4 !== undefined ? values.img4.file.thumbUrl :'',
-      	}*/
-         this.props.dispatch({
-          type: 'register/verify',
-          payload: {
-            ...values,
-      		img1 : values.img1 !== undefined ? values.img1.file.thumbUrl : '',
-      		img2 : values.img2 !== undefined ? values.img2.file.thumbUrl : '',
-      		img3 : values.img3 !== undefined ? values.img3.file.thumbUrl : '',
-      		img4 : values.img4 !== undefined ? values.img4.file.thumbUrl :''
-          },
-        });
-        this.state.currentStep++;
-      }
-    });
+	      if (!err) {
+
+	      	var data = {
+	      		...values,
+	      		img1 : img1Vaule,
+	      		img2 : img2Vaule,
+	      		img3 : img3Vaule,
+	      		img4 : img4Vaule,
+	      	};
+	         this.props.dispatch({
+	          type: 'registerVerify/upload',
+	          payload: {
+	            ...data,
+	          },
+	          callback: this.onUploadCallback,
+	        });
+	      }
+	    });
+	  }
+
+  onUploadCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      notification.error({
+        message: "提示",
+        description: msg,
+      });
+    }else {
+      notification.success({
+        message: "提示",
+        description: msg,
+      });
+    }
   }
   	componentWillMount(){
   		//获取注册用户状态接口（用于判断跳转到第几步）
@@ -240,34 +256,35 @@ export default class RegisterVerify extends Component {
         this.props.dispatch(routerRedux.push('/user/login'));
       } else {
         this.props.dispatch({
-          type: '/register/status',
+          type: 'registerVerify/status',
           payload: {},
-          callback:this.setStep,
         });
       }
   	}
-  	setStep(step){
-  		const verifycode = step.verifycode*1;
-  		var step;
-  		if (verifycode == 2) {
-			step = 1
-  		}else if (verifycode == 3 || verifycode == -1) {
-  			step = 2
-  		};
-		this.setState({
-			currentStep : step
-		});
-  	}
+  	// setStep(step){
+  	// 	const verifycode = step.verifycode*1;
+      //
+  	// 	var stepc;
+  	// 	if (verifycode == 2) {
+       //  stepc = 1
+  	// 	}else if (verifycode == 3 || verifycode == -1) {
+       //  stepc = 2
+  	// 	}
+		//   this.props.setState({
+		// 	  currentStep : stepc
+		//   });
+  	// }
 	render() {
+    const { registerVerify: { currentStep } } = this.props;
     return (
       <div>
-        <Steps current={this.state.currentStep} className={styles.steps}>
+        <Steps current={currentStep} className={styles.steps}>
           <Step title="注册账号"/>
           <Step title="认证提交"/>
           <Step title="审核认证"/>
         </Steps>
         <div className={styles.main}>
-          {this.renderStep(this.state.currentStep)}
+          {this.renderStep(currentStep)}
       </div>
       </div>
 
