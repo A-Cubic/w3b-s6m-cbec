@@ -12,7 +12,7 @@ env:
   matrix:
 #    - TEST_TYPE=lint
     - TEST_TYPE=build
-    - TEST_TYPE=test-all
+#    - TEST_TYPE=test-all
 #    - TEST_TYPE=test-dist
 
 addons:
