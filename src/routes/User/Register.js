@@ -374,13 +374,17 @@ export default class Register extends Component {
     }
   }
   componentDidMount (){
-    console.log(this.props)
+    var type = parseInt(this.props.match.params.type);
+    if(!type || (type!==2 && type!==3)){
+      return
+    }
     //初始设置注册身份
     this.props.form.setFields({
           type:{
-            value : '' //路由身份参数 || ''
+            value : type
           }
       });
+    console.log(this.props.form.getFieldsValue())
   }
   render() {
     return (
