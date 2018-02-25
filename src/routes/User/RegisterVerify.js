@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress,Steps,notification,Upload,Icon   } from 'antd';
 import styles from './Register.less';
+import { getAuthority } from '../../utils/Global';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -38,7 +39,7 @@ export default class RegisterVerify extends Component {
 	      listType: 'picture',
 	      onChange({ file, fileList }) {
 	          if (file.status !== 'uploading') {
-	            // console.log(fileList); 
+	            // console.log(fileList);
 	          }
 	        }
 	    };
@@ -99,7 +100,7 @@ export default class RegisterVerify extends Component {
 	                      ]
 	                    })(<Input size="large" placeholder="联系人常用邮箱且能正常收发邮件" />)}
 	                  </FormItem>
-	                   
+
 	                   <FormItem
 	                    {...formItemLayout}
 	                    label='资质上传'>
@@ -230,11 +231,16 @@ export default class RegisterVerify extends Component {
   }
   	componentWillMount(){
   		//获取注册用户状态接口（用于判断跳转到第几步）
-  		 this.props.dispatch({
+      const auth = getAuthority();
+      if (auth !== 'unaudited-s' && auth !== 'unaudited-p') {
+        this.props.dispatch(routerRedux.push('/user/login'));
+      } else {
+        this.props.dispatch({
           type: '/register/status',
           payload: {},
           callback:this.setStep,
         });
+      }
   	}
   	setStep(step){
   		const verifycode = step.verifycode*1;
@@ -260,7 +266,7 @@ export default class RegisterVerify extends Component {
           {this.renderStep(this.state.currentStep)}
       </div>
       </div>
-      
+
     );
   }
 }

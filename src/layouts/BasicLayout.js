@@ -79,18 +79,22 @@ class BasicLayout extends React.PureComponent {
       breadcrumbNameMap: routerData,
     };
   }
+
   componentDidMount() {
     enquireScreen((mobile) => {
       this.setState({
         isMobile: mobile,
       });
     });
-    this.props.dispatch({
-      type: 'user/fetchCurrent',
-    });
-    this.props.dispatch({
-      type: 'menu/init',
-    });
+    const auth = getAuthority();
+    if (auth !== 'unaudited-s' && auth !== 'unaudited-p' && auth !== 'guest') {
+      this.props.dispatch({
+        type: 'user/fetchCurrent',
+      });
+      this.props.dispatch({
+        type: 'menu/init',
+      });
+    }
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -105,32 +109,13 @@ class BasicLayout extends React.PureComponent {
     // According to the url parameter to redirect
     // 这里是重定向的,重定向到 url 的 redirect 参数所示地址
     const urlParams = new URL(window.location.href);
-
     const redirect = urlParams.searchParams.get('redirect');
     // Remove the parameters in the url
     if (redirect) {
       urlParams.searchParams.delete('redirect');
       window.history.replaceState(null, 'redirect', urlParams.href);
     } else {
-      const auth = getAuthority();
       let tUrl = '/user/login';
-      switch (auth) {
-        case 'admin':
-          tUrl = '/dashboard-o';
-          break;
-        case 'supplier':
-          tUrl = '/dashboard-s';
-          break;
-        case 'purchasers':
-          tUrl = '/dashboard-p';
-          break;
-        case 'operate':
-          tUrl = '/dashboard-o';
-          break;
-        case '':
-          tUrl = '/user/login';
-          break;
-      }
       return tUrl;
     }
     return redirect;
