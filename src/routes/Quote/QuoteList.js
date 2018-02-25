@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { routerRedux, Link } from 'dva/router';
+import { routerRedux, Link, withRouter } from 'dva/router';
 import { Input, Button, Table,Card,Form,Row, Col  } from 'antd';
 import styles from '../../utils/utils.less'
 
@@ -57,12 +57,12 @@ const columns = [{
   title: '操作',
   dataIndex: 'operate',
   key: 'operate',
-  render:()=>
+  render:(text, record)=>
   	<div>
-		<a href="" className={styles.mR10}>新增</a>	
-		<a href="">编辑</a>  		
+      <Link to='/goods/quote/add' className={styles.mR10}>新增</Link>
+      <Link to={`/goods/quote/mod/${record.goodsTm}`}>编辑</Link>
   	</div>
-  
+
 }];
 @Form.create()
 
@@ -75,7 +75,7 @@ export default class Register extends Component {
 					<Row>
 						<Form onSubmit={this.handleSubmit}>
 							<Row>
-								<Col  xs={2} sm={4} md={6} lg={8} xl={10} >
+								<Col  xs={24} sm={12} md={8} lg={8} xl={8} >
 									<FormItem
 									{...formItemLayout}
 									  label ='商品条码'
@@ -85,7 +85,7 @@ export default class Register extends Component {
 									}
 									</FormItem>
 								</Col>
-								<Col xs={2} sm={4} md={6} lg={8} xl={10}>
+								<Col xs={24} sm={12} md={8} lg={8} xl={8}>
 									<FormItem
 									{...formItemLayout}
 									  label ='商品名称'
@@ -95,7 +95,7 @@ export default class Register extends Component {
 									}
 									</FormItem>
 								</Col>
-								<Col xs={2} sm={4} md={6} lg={8} xl={10}>
+								<Col xs={24} sm={12} md={8} lg={8} xl={8}>
 									<FormItem
 									{...formItemLayout}
 									  label ='供应商'
@@ -105,14 +105,12 @@ export default class Register extends Component {
 									}
 									</FormItem>
 								</Col>
-							</Row>										
+							</Row>
 						</Form>
 					</Row>
 					<Row>
-						<Col span={1} xs={{offset:2}} sm={{offset:4}} md={{offset:18}} lg={{offset:18}} xl={{offset:18}} className={styles.mR10}>
-							<Button type="primary">搜索</Button>
-						</Col>
-						<Col span={1}><Button>重置</Button></Col>
+						<Col span={20}></Col>
+						<Col span={4}><Button type="primary">搜索</Button><Button>重置</Button></Col>
 					</Row>
 				</Card>
 				<Card className={styles.mT10}>
@@ -120,6 +118,6 @@ export default class Register extends Component {
 				</Card>
 			</div>
 			)
-		
+
 	}
 }

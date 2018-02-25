@@ -167,7 +167,10 @@ export const getRouterData = (app) => {
     '/user/login': {
       component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
     },
-    '/user/register': {
+    '/user/register/': {
+      component: dynamicWrapper(app, ['register'], () => import('../routes/User/Register')),
+    },
+    '/user/register/:type': {
       component: dynamicWrapper(app, ['register'], () => import('../routes/User/Register')),
     },
     '/user/register-verify': {
@@ -178,6 +181,9 @@ export const getRouterData = (app) => {
     // },
     '/goods/quote/list': {
       component: dynamicWrapper(app, [], () => import('../routes/Quote/QuoteList')),
+    },
+    '/goods/quote/mod/:id': {
+      component: dynamicWrapper(app, [], () => import('../routes/Quote/QuoteMod')),
     },
   };
   // const menuData = getFlatMenuData(getMenuData());
