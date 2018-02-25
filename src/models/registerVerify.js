@@ -10,7 +10,7 @@ export default {
   },
 
   effects: {
-    *upload({payload, callback}, { call }) {
+    *upload({payload, callback}, { call, put }) {
       const response = yield call(realRegisterUpload, payload);
       if (response === undefined) {
 
