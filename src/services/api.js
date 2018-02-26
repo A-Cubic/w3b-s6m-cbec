@@ -123,9 +123,16 @@ export async function realRegisterStatus() {
   });
 }
 
-  export async function realRegisterCheck(params) {
+export async function realRegisterCheck(params) {
     return request(`${apiUrl}/llback/user/register/check`, {
       method: 'POST',
       body: params,
     });
+}
+
+export async function getRegisterCheckUsers(params) {
+  return request(`${apiUrl}/llback/user/pagelist`, {
+    method: 'POST',
+    body: params,
+  });
 }
