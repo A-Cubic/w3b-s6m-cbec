@@ -251,12 +251,12 @@ export default class Register extends Component {
                       initialValue: getFieldValue('type')
                     })(
                       <RadioGroup onChange={this.handleChangeRole} >
-                        <Radio value={2}>供应商</Radio>
-                        <Radio value={3}>采购商</Radio>
+                        <Radio value={1}>供应商</Radio>
+                        <Radio value={2}>采购商</Radio>
                       </RadioGroup>
                     )}
                   </FormItem>
-                  
+
                   <FormItem
                   {...formItemLayout}
                     label ='邮箱/手机号码'
