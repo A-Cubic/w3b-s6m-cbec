@@ -18,7 +18,8 @@ const formItemLayout = {
 		sm: { span: 16 },
 	}
 };
-const dataSource = [{
+const dataSource = [
+{
   key: '1',
   purchasesn: '1',
   stage: 1,
@@ -215,11 +216,7 @@ const columns = [
 	  title: '操作',
 	  dataIndex: 'operate',
 	  key: 'operate',
-	  render:()=>
-	  	<div>
-			<a href="" className={styles.mR10}>新增</a>	
-			<a href="">编辑</a>  		
-	  	</div>
+	  render:()=><a href="">编辑</a>  	
   
 }];
 @Form.create()
@@ -229,65 +226,85 @@ const columns = [
 export default class Register extends Component {
 	state = {
 		pagination : {
-			showSizeChanger:true,
 			current : 1,
-			total:11,
-			showTotal:(total, range)=>{
-				console.log('0000000')
-				console.log(total, range)
-			},
-			onChange:(page, pageSize)=>{
-				console.log('111111')
-				console.log(page,pageSize)
-			},
-			onShowSizeChange : (current, size)=>{
-				console.log('222222222222')
-				console.log(current, size)
-			}
+			pageSize : 3,
+			total:11
 		},
-		search:{
-			userCode:getToken().userId || '',//采购商账号 管理员置空
-			purchasesn:'',
-			createtime:'',
-			endtime : '',
-			stage:''
-		}
-		
+		userCode:getToken().userId || '',//采购商账号 管理员置空
 	}
 	handleSubmit = () => {
 		const { getFieldsValue } = this.props.form;
-		const { search } = this.state;
+		const { userCode,pagination } = this.state;
 		var data = getFieldsValue();
 		var data = {
-			...data,
+			...getFieldsValue(),
 			createtime : data.createtime ? data.createtime.format('YYYYMMDD') : '',
 			endtime : data.endtime ? data.endtime.format('YYYYMMDD') : '',
+			userCode : userCode,
+			current : pagination.current,
+			pageSize : pagination.pageSize
 		};
-		this.setState({
-			search : {
-				...data,
-				userCode : search.userCode
-			}
-		});
+		console.log(data);
+		
 		/*this.props.dispatch({
           type: 'register/submit',
-          payload: this.state.search
+          payload: {
+          	...data,
+          }
         });*/
 	}
 	resetSearch = () => {
 		const { resetFields } = this.props.form;
 		resetFields();
 	}
-	componentWillMount(){
+	changPage = (page, filters, sorter) =>{
+		const { getFieldsValue } = this.props.form;
+		const { userCode,pagination } = this.state;
+		var data = getFieldsValue();
+		var data = {
+			...getFieldsValue(),
+			createtime : data.createtime ? data.createtime.format('YYYYMMDD') : '',
+			endtime : data.endtime ? data.endtime.format('YYYYMMDD') : '',
+			userCode : userCode,
+			current : page.current,
+			pageSize : page.pageSize
+		};
+		console.log(data);
+		
 		/*this.props.dispatch({
           type: 'register/submit',
-          payload: this.state.search
+          payload: {
+          	...data,
+          }
+        });*/
+	}
+	goAddPurOrder = () =>{
+
+	}
+	gohandlePurOrder = () => {
+
+	}
+	componentWillMount(){
+		const { pagination,userCode } = this.state;
+		/*this.props.dispatch({
+          type: 'register/submit',
+          payload: {
+			...pagination,
+			...userCode,
+          }
         });*/
 	}
 	
 	render(){
 		{console.log(this.state)}
 		const { getFieldDecorator } = this.props.form;
+		const { pagination } = this.state;
+		const rowSelection = {
+			selectedRowKeys : [],
+			onChange : (selectedRowKeys, selectedRows)=>{
+				console.log(selectedRowKeys, selectedRows)
+			}
+		}
 		return(
 			<div>
 				<Card>
@@ -311,6 +328,7 @@ export default class Register extends Component {
 									>
 									  {getFieldDecorator('stage')(
 									  	<Select placeholder='请选择采购单阶段'>
+									  		<Option value={""}>全部</Option>
 									  		<Option value={0}>关闭</Option>
 									  		<Option value={1}>询价</Option>
 									  		<Option value={2}>待付款</Option>
@@ -356,7 +374,16 @@ export default class Register extends Component {
 					
 				</Card>
 				<Card className={styles.mT10}>
-					<Table dataSource={dataSource} columns={columns} pagination={this.state.pagination}/>
+					<Row className={styles.mB10}>
+						<Button onClick={this.goAddPurOrder} className={styles.mR10}>新增采购单</Button>
+						<Button onClick={this.gohandlePurOrder}>处理</Button>
+					</Row>
+					<Table 
+						dataSource={dataSource} 
+						columns={columns} 
+						pagination={pagination} 
+						onChange={this.changPage}
+						rowSelection={rowSelection}/>
 				</Card>
 			</div>
 			)

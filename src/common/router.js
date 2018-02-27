@@ -188,6 +188,9 @@ export const getRouterData = (app) => {
     '/trade/order-p/list': {
       component: dynamicWrapper(app, [], () => import('../routes/Purorder/List')),
     },
+    '/trade/order-p/add': {
+      component: dynamicWrapper(app, [], () => import('../routes/Purorder/NewPurOrder')),
+    },
   };
   // const menuData = getFlatMenuData(getMenuData());
 
