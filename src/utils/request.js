@@ -24,21 +24,17 @@ const codeMessage = {
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     const code = response.headers.get('code');
-    console.log(response);
     console.log(code);
     if (code !== null && code !== '0') {
-      console.log(response.headers.get('msg'));
-      notification.error({
-        message: response.headers.get('msg'),
-        description: response.headers.get('msg'),
-      });
-      // const { dispatch } = store;
       const error = new Error(response.headers.get('msg'));
       error.response = response;
       switch (code) {
         default:
+          notification.error({
+            message: response.headers.get('msg'),
+            description: response.headers.get('msg'),
+          });
           error.name = 401;
-          // dispatch(routerRedux.push('/user/login'));
           break;
       }
       throw error;
@@ -95,9 +91,7 @@ export default function request(url, options) {
     .catch((e) => {
       const { dispatch } = store;
       const status = e.name;
-      console.log(status);
       if (status === 401) {
-        console.log('401了');
         dispatch({
           type: 'login/logout',
         });
