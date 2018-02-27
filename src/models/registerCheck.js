@@ -5,6 +5,7 @@ export default {
 
   state: {
     list: [],
+    pagination:{},
   },
 
   effects: {
@@ -20,8 +21,7 @@ export default {
   reducers: {
     queryList(state, action) {
       return {
-        ...state,
-        list: action.payload,
+        ...action.payload,
       };
     },
   },

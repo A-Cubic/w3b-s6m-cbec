@@ -45,9 +45,9 @@ export default class RegisterVerify extends Component {
 	          }
 	        }
 	    };
-	    const cusUpload = (e)=>{
-	    	temUploadKey = e.target.id;
-	    }
+  const cusUpload = (e)=>{
+    temUploadKey = e.target.id;
+  }
 	  switch(currentStep){
 	    case 1 :
 	        return(

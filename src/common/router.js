@@ -176,8 +176,8 @@ export const getRouterData = (app) => {
     '/user/register-verify': {
       component: dynamicWrapper(app, ['registerVerify'], () => import('../routes/User/RegisterVerify')),
     },
-    '/user/register-check': {
-      component: dynamicWrapper(app, [], () => import('../routes/User/RegisterCheck')),
+    '/member/reg/check': {
+      component: dynamicWrapper(app, ['registerCheck'], () => import('../routes/Member/RegisterCheck')),
     },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
