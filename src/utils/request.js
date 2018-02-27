@@ -24,12 +24,15 @@ const codeMessage = {
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     const code = response.headers.get('code');
+    console.log(store);
     if (code !== null && code !== '0') {
       notification.error({
         message: response.headers.get('msg'),
         description: response.headers.get('msg'),
       });
       const { dispatch } = store;
+      console.log(dispatch);
+      console.log(store);
       switch (code) {
         default:
           setAuthority('guest');
