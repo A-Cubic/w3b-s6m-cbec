@@ -2,7 +2,7 @@ import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
-import { getToken, setAuthority, setToken } from '../utils/Global';
+import { getToken } from '../utils/Global';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据',
@@ -24,23 +24,23 @@ const codeMessage = {
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     const code = response.headers.get('code');
-    console.log(store);
+    console.log(code);
     if (code !== null && code !== '0') {
+      console.log(response.headers.get('msg'));
       notification.error({
         message: response.headers.get('msg'),
         description: response.headers.get('msg'),
       });
-      const { dispatch } = store;
-      console.log(dispatch);
-      console.log(store);
+      // const { dispatch } = store;
+      const error = new Error(response.headers.get('msg'));
+      error.response = response;
       switch (code) {
         default:
-          setAuthority('guest');
-          setToken('');
-          dispatch(routerRedux.push('/user/login'));
+          error.name = 401;
+          // dispatch(routerRedux.push('/user/login'));
           break;
       }
-      return;
+      throw error;
     }
     return response;
   }
@@ -94,7 +94,9 @@ export default function request(url, options) {
     .catch((e) => {
       const { dispatch } = store;
       const status = e.name;
+      console.log(status);
       if (status === 401) {
+        console.log('401了');
         dispatch({
           type: 'login/logout',
         });
