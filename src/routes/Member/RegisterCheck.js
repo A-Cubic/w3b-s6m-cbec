@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input, Button, Table,Card,Form,Row, Col,Select,Pagination,Badge  } from 'antd';
+import { Input, Button, Table,Card,Form,Row, Col,Select,Pagination,Badge,Modal  } from 'antd';
 import styles from '../../utils/utils.less'
 import moment from 'moment';
 
@@ -21,47 +21,7 @@ const formItemLayout = {
 	}
 };
 
-const columns = [{
-  title: '账号名称',
-  dataIndex: 'usercode',
-  key: 'usercode',
-}, {
-  title: '账号类型',
-  dataIndex: 'usertype',
-  key: 'usertype',
-  // filters: [
-  //   {
-  //     text: status[0],
-  //     value: 1,
-  //   },
-  //   {
-  //     text: status[1],
-  //     value: 2,
-  //   },
-  // ],
-  render(val) {
 
-    return <span>{status[val]}</span>
-  },
-}, {
-  title: '注册公司名',
-  dataIndex: 'company',
-  key: 'company',
-},{
-  title: '注册日期',
-  dataIndex: 'createtime',
-  key: 'createtime',
-  render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-},{
-  title: '操作',
-  dataIndex: 'operate',
-  key: 'operate',
-  render:()=>
-  	<div>
-		<a href="" className={styles.mR10}>审核</a>
-  	</div>
-
-}];
 
 @connect(({ registerCheck, loading }) => ({
   registerCheck,
@@ -78,6 +38,10 @@ export default class RegisterCheck extends Component {
       total: 10,
       pageSize: 5,
     },
+    visible: false,
+    loading: false,
+    selectedRow:{},
+    selectedRowKeys: [],
   }
 
   componentDidMount() {
@@ -160,9 +124,85 @@ export default class RegisterCheck extends Component {
     });
   }
 
+  onRowClick = (e) => {
+    this.setState({ selectedRow: e }, () => this.sendParm(e));
+  }
+
+  sendParm = (e) => {
+    const { selectedRow } = this.state;
+    // console.log(selectedRow);
+  }
+
+  showModal = () => {
+    setTimeout(() => {
+      const { selectedRow } = this.state;
+      console.log(selectedRow);
+      this.setState({
+        visible: true,
+      });
+    }, 0);
+  }
+
+  handleOk = () => {
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false, visible: false });
+    }, 3000);
+  }
+  handleCancel = () => {
+    this.setState({ visible: false });
+  }
+  handleRowSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log(selectedRows);
+
+
+    if (this.props.onSelectRow) {
+      this.props.onSelectRow(selectedRows);
+    }
+
+    this.setState({ selectedRowKeys});
+  }
+
 	render(){
 		const { getFieldDecorator } = this.props.form;
 		const { registerCheck: { list, pagination }, submitting }  = this.props;
+    const { visible, loading, selectedRowKeys, selectedRow } = this.state;
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.handleRowSelectChange,
+    };
+    const columns = [{
+      title: '账号名称',
+      dataIndex: 'usercode',
+      key: 'usercode',
+    }, {
+      title: '账号类型',
+      dataIndex: 'usertype',
+      key: 'usertype',
+      render(val) {
+        return <span>{status[val]}</span>
+      },
+    }, {
+      title: '注册公司',
+      dataIndex: 'company',
+      key: 'company',
+    },{
+      title: '注册日期',
+      dataIndex: 'createtime',
+      key: 'createtime',
+      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    },{
+      title: '操作',
+      dataIndex: 'operate',
+      key: 'operate',
+      render:(text, record) =>(
+        <div>
+          <Button type="primary" onClick={this.showModal} >
+            审核
+          </Button>
+        </div>
+      ),
+    }];
 		return(
 			<div>
 				<Card>
@@ -212,9 +252,46 @@ export default class RegisterCheck extends Component {
           </Form>
 				</Card>
 				<Card className={styles.mT10}>
-					<Table dataSource={list} columns={columns} pagination={pagination}
+					<Table dataSource={list}
+                 columns={columns}
+                 pagination={pagination}
+                 rowKey={record => record.id}
+                  onRow = {(record) => {
+                    return {
+                      onClick: () => {this.onRowClick(record)},
+                    };
+                  }}
+                 // rowSelection={rowSelection}
                  onChange={this.handleStandardTableChange}/>
 				</Card>
+
+        <Modal
+          visible={visible}
+          style={{ height: 1000 }}
+          width="1000px"
+          title="注册用户审核信息表"
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="back" onClick={this.handleCancel}>Return</Button>,
+            <Button key="submit" type="primary" loading={loading} onClick={this.handleOk}>
+              Submit
+            </Button>,
+          ]}
+        >
+          <p>账号名称：{selectedRow.usercode}</p>
+          <p>账号类型：{selectedRow.usertype}</p>
+          <p>公司名称：{selectedRow.company}</p>
+          <p>联系人：{selectedRow.contact}</p>
+          <p>联系电话：{selectedRow.tel}</p>
+          <p>邮箱：{selectedRow.email}</p>
+          <p>账号名称：{selectedRow.usercode}</p>
+          <p>账号类型：{selectedRow.usertype}</p>
+          <p>公司名称：{selectedRow.company}</p>
+          <p>联系人：{selectedRow.contact}</p>
+          <p>联系电话：{selectedRow.tel}</p>
+          <p>邮箱：{selectedRow.email}</p>
+        </Modal>
 			</div>
 			)
 
