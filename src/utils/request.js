@@ -24,6 +24,7 @@ const codeMessage = {
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     const code = response.headers.get('code');
+    console.log(response);
     console.log(code);
     if (code !== null && code !== '0') {
       console.log(response.headers.get('msg'));
