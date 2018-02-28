@@ -4,6 +4,7 @@ import { routerRedux } from 'dva/router';
 import store from '../index';
 import { getToken } from '../utils/Global';
 
+// 网络错误列表
 const codeMessage = {
   200: '服务器成功返回请求的数据',
   201: '新建或修改数据成功。',
@@ -21,32 +22,41 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护',
   504: '网关超时',
 };
+
+// 业务错误列表
+const serverCodeMessage = {
+  '1': { code: 401, msg: '登录信息过期，请重新登录' },
+  '2': { code: 403, msg: '没有该功能相关权限' },
+  '3': { code: 401, msg: '登录信息有误，请重新登录' },
+  '4': { code: 404, msg: '请求目标数据不存在' },
+  '5': { code: 500, msg: '服务器繁忙，请稍后重试' },
+  '6': { code: 500, msg: '数据处理有误' },
+  '7': { code: 500, msg: '请求参数不正确' },
+  'default': { code: 500, msg: '未知错误' },
+};
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     const code = response.headers.get('code');
-    console.log(code);
     if (code !== null && code !== '0') {
       const error = new Error(response.headers.get('msg'));
       error.response = response;
-      switch (code) {
-        default:
-          notification.error({
-            message: response.headers.get('msg'),
-            description: response.headers.get('msg'),
-          });
-          error.name = 401;
-          break;
-      }
+      const serverCode = serverCodeMessage[code].code || serverCodeMessage['default'].code;
+      const serverMsg = serverCodeMessage[code].msg || serverCodeMessage['default'].msg;
+      notification.error({
+        message: serverMsg,
+        description: response.headers.get('msg'),
+      });
+      error.name = serverCode;
       throw error;
     }
     return response;
   }
-  const errortext = codeMessage[response.status] || response.statusText;
+  const errorText = codeMessage[response.status] || response.statusText;
   notification.error({
     message: `请求错误 ${response.status}: ${response.url}`,
-    description: errortext,
+    description: errorText,
   });
-  const error = new Error(errortext);
+  const error = new Error(errorText);
   error.name = response.status;
   error.response = response;
   throw error;
@@ -107,6 +117,8 @@ export default function request(url, options) {
       }
       if (status >= 404 && status < 422) {
         dispatch(routerRedux.push('/exception/404'));
+        return;
       }
+      console.log(e);
     });
 }
