@@ -16,6 +16,18 @@ export default {
         payload: response,
       });
     },
+    *check({ payload }, { call , put}) {
+      const response = yield call(realRegisterCheck, payload);
+      if (response === undefined) {
+
+      } else {
+        const responseData = yield call(getRegisterCheckUsers, payload);
+        yield put({
+          type: 'queryList',
+          payload: responseData,
+        });
+      }
+    },
   },
 
   reducers: {

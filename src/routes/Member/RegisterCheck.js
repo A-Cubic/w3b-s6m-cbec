@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input, Button, Table,Card,Form,Row, Col,Select,Pagination,Badge,Modal  } from 'antd';
+import { Input, Button, Table,Card,Form,Row, Col,Select,Pagination,Badge,Modal,List,Icon,Radio,Tabs } from 'antd';
 import styles from '../../utils/utils.less'
 import moment from 'moment';
 
+const { TextArea } = Input;
+const RadioGroup = Radio.Group;
+const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const statusMap = ['default', 'processing', 'success', 'error'];
@@ -42,6 +45,11 @@ export default class RegisterCheck extends Component {
     loading: false,
     selectedRow:{},
     selectedRowKeys: [],
+    previewVisible: false,
+    previewImage: {},
+    radioValue: "1",
+    tabKey: "1",
+    failmark:"",
   }
 
   componentDidMount() {
@@ -143,19 +151,40 @@ export default class RegisterCheck extends Component {
     }, 0);
   }
 
+  showImg = (i) => {
+    setTimeout(() => {
+      // const { previewImage } = this.state;
+      this.setState({
+        previewVisible: true,
+        previewImage: i,
+      });
+    }, 0);
+  }
+
   handleOk = () => {
     this.setState({ loading: true });
     setTimeout(() => {
       this.setState({ loading: false, visible: false });
     }, 3000);
   }
+
   handleCancel = () => {
-    this.setState({ visible: false });
+    setTimeout(() => {
+      this.setState({
+        visible: false,
+        previewVisible: false,
+        previewImage: {},
+        radioValue: "1",
+        tabKey: "1",
+      });
+    }, 0);
   }
+
+  handleCancelPreview = () => {
+    this.setState({ previewVisible: false });
+  }
+
   handleRowSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(selectedRows);
-
-
     if (this.props.onSelectRow) {
       this.props.onSelectRow(selectedRows);
     }
@@ -163,10 +192,37 @@ export default class RegisterCheck extends Component {
     this.setState({ selectedRowKeys});
   }
 
+  radioOnChange = (e) => {
+    setTimeout(() => {
+      this.setState({
+        radioValue: e.target.value,
+        tabKey: e.target.value,
+      });
+    }, 0);
+
+  }
+  submitCheckResult = () => {
+    const { selectedRow, radioValue } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'registerCheck/check',
+      payload: {
+        userid: selectedRow.id,
+        usertype: selectedRow.usertype,
+        check: radioValue,
+      },
+    });
+
+  }
+
+  handleTextAreaOnChange = (e) => {
+    console.log(e);
+  }
+
 	render(){
 		const { getFieldDecorator } = this.props.form;
 		const { registerCheck: { list, pagination }, submitting }  = this.props;
-    const { visible, loading, selectedRowKeys, selectedRow } = this.state;
+    const { visible, loading, selectedRowKeys, selectedRow,previewVisible,previewImage,radioValue,tabKey,failmark } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.handleRowSelectChange,
@@ -203,6 +259,51 @@ export default class RegisterCheck extends Component {
         </div>
       ),
     }];
+
+    const cardData = [
+      {
+        title: '账号名称',
+        data: (selectedRow.usercode !==null && selectedRow.usercode !=="")?selectedRow.usercode:"无账号名称",
+      },
+      {
+        title: '账号类型',
+        data: selectedRow.usertype==="1"?"供应商":"采购商",
+      },
+      {
+        title: '公司名称',
+        data: (selectedRow.company !==null && selectedRow.company !=="")?selectedRow.company:"无公司名称",
+      },
+      {
+        title: '联系人',
+        data: (selectedRow.contact !==null && selectedRow.contact !=="")?selectedRow.contact:"无联系人信息",
+      },
+      {
+        title: '联系电话',
+        data: (selectedRow.tel !==null && selectedRow.tel !=="")?selectedRow.tel:"无联系电话信息",
+      },
+      {
+        title: '邮箱',
+        data: (selectedRow.email !==null && selectedRow.email !=="")?selectedRow.email:"无邮箱信息",
+      },
+      {
+        title: '营业执照',
+        data: (selectedRow.img1 !==null && selectedRow.img1 !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.img1} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img1)} type="primary" shape="circle" icon="eye" size="large" style={{ position: 'absolute' }}/></div>:"无营业执照照片",
+      },
+      {
+        title: '组织机构代码证',
+        data: (selectedRow.img2 !==null && selectedRow.img2 !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.img2} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img2)} type="primary" shape="circle" icon="eye" size="large" style={{ position: 'absolute' }}/></div>:"无组织机构代码证照片",
+      },
+      {
+        title: '税务登记证',
+        data: (selectedRow.img3 !==null && selectedRow.img3 !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.img3} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img3)} type="primary" shape="circle" icon="eye" size="large" style={{ position: 'absolute' }}/></div>:"无税务登记证照片",
+      },
+      {
+        title: '三证合一',
+        data: (selectedRow.three !==null && selectedRow.three !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.three} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img4)} type="primary" shape="circle" icon="eye" size="large" style={{ position: 'absolute' }}/></div>:"无三证合一照片",
+      },
+    ];
+    const operations = <Button onClick={this.submitCheckResult}>确认审核</Button>;
+
 		return(
 			<div>
 				<Card>
@@ -267,30 +368,47 @@ export default class RegisterCheck extends Component {
 
         <Modal
           visible={visible}
-          style={{ height: 1000 }}
+          style={{top: 20 }}
           width="1000px"
           title="注册用户审核信息表"
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          footer={[
-            <Button key="back" onClick={this.handleCancel}>Return</Button>,
-            <Button key="submit" type="primary" loading={loading} onClick={this.handleOk}>
-              Submit
-            </Button>,
-          ]}
+          // footer={[
+          //   <Button key="back" onClick={this.handleCancel}>Return</Button>,
+          //   <Button key="submit" type="primary" loading={loading} onClick={this.handleOk}>
+          //     Submit
+          //   </Button>,
+          // ]}
+          footer={null}
         >
-          <p>账号名称：{selectedRow.usercode}</p>
-          <p>账号类型：{selectedRow.usertype}</p>
-          <p>公司名称：{selectedRow.company}</p>
-          <p>联系人：{selectedRow.contact}</p>
-          <p>联系电话：{selectedRow.tel}</p>
-          <p>邮箱：{selectedRow.email}</p>
-          <p>账号名称：{selectedRow.usercode}</p>
-          <p>账号类型：{selectedRow.usertype}</p>
-          <p>公司名称：{selectedRow.company}</p>
-          <p>联系人：{selectedRow.contact}</p>
-          <p>联系电话：{selectedRow.tel}</p>
-          <p>邮箱：{selectedRow.email}</p>
+          <List
+            grid={{ gutter: 16,xs: 1, sm: 2, md: 3, lg: 3, xl: 3, xxl: 3 }}
+            dataSource={cardData}
+            renderItem={item => (
+              <List.Item>
+                <Card title={item.title}>{item.data}</Card>
+              </List.Item>
+            )}
+          />
+          <Card title="审批结果">
+            <RadioGroup onChange={this.radioOnChange} value={radioValue}>
+              <Radio value={"1"}>通过</Radio>
+              <Radio value={"0"}>未通过</Radio>
+            </RadioGroup>
+
+            <Tabs defaultActiveKey="1" activeKey={tabKey} tabBarExtraContent={operations}>
+              <TabPane tab={<Icon type="check-circle" />} key="1">
+                所有审核无误，请确认后点击确认审核结果。
+              </TabPane>
+              <TabPane tab={<Icon type="exclamation-circle" />} key="0">
+                <label>未通过原因：</label><TextArea rows={4} value={failmark} onChange={()=>{this.handleTextAreaOnChange(this)}}/>
+              </TabPane>
+            </Tabs>
+          </Card>
+        </Modal>
+
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancelPreview}>
+          <img alt="example" style={{ width: '100%' }} src={previewImage} />
         </Modal>
 			</div>
 			)
