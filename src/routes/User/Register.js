@@ -251,7 +251,7 @@ export default class Register extends Component {
                       initialValue: getFieldValue('type')
                     })(
                       <RadioGroup onChange={this.handleChangeRole} >
-                        <Radio value={1}>供应商</Radio>
+                        <Radio value={3}>供应商</Radio>
                         <Radio value={2}>采购商</Radio>
                       </RadioGroup>
                     )}
@@ -384,7 +384,7 @@ export default class Register extends Component {
             value : type
           }
       });
-    console.log(this.props.form.getFieldsValue())
+    // console.log(this.props.form.getFieldsValue())
   }
   render() {
     return (
