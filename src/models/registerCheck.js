@@ -1,4 +1,4 @@
-import { getRegisterCheckUsers } from '../services/api';
+import { getRegisterCheckUsers,realRegisterCheck } from '../services/api';
 
 export default {
   namespace: 'registerCheck',
@@ -9,23 +9,19 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *fetch({ payload}, { call, put }) {
       const response = yield call(getRegisterCheckUsers, payload);
       yield put({
         type: 'queryList',
         payload: response,
       });
     },
-    *check({ payload }, { call , put}) {
+    *check({ payload, callback }, { call }) {
       const response = yield call(realRegisterCheck, payload);
       if (response === undefined) {
 
       } else {
-        const responseData = yield call(getRegisterCheckUsers, payload);
-        yield put({
-          type: 'queryList',
-          payload: responseData,
-        });
+        callback(response);
       }
     },
   },
@@ -36,5 +32,6 @@ export default {
         ...action.payload,
       };
     },
+
   },
 };

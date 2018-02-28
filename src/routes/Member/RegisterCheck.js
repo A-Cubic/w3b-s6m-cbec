@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input, Button, Table,Card,Form,Row, Col,Select,Pagination,Badge,Modal,List,Icon,Radio,Tabs } from 'antd';
+import { Input, Button, Table,Card,Form,Row, Col,Select,Pagination,Badge,Modal,List,Icon,Radio,Tabs,notification, Popconfirm, message } from 'antd';
 import styles from '../../utils/utils.less'
 import moment from 'moment';
 
@@ -138,13 +138,11 @@ export default class RegisterCheck extends Component {
 
   sendParm = (e) => {
     const { selectedRow } = this.state;
-    // console.log(selectedRow);
   }
 
   showModal = () => {
     setTimeout(() => {
       const { selectedRow } = this.state;
-      console.log(selectedRow);
       this.setState({
         visible: true,
       });
@@ -176,6 +174,7 @@ export default class RegisterCheck extends Component {
         previewImage: {},
         radioValue: "1",
         tabKey: "1",
+        failmark: "",
       });
     }, 0);
   }
@@ -201,22 +200,63 @@ export default class RegisterCheck extends Component {
     }, 0);
 
   }
-  submitCheckResult = () => {
-    const { selectedRow, radioValue } = this.state;
+  submitCheckResult = (e) => {
+    e.preventDefault();
+    const { selectedRow, radioValue,failmark } = this.state;
     const { dispatch } = this.props;
+    if(radioValue==="0"){
+      if (failmark.trim() === "") {
+        message.error("审核失败原因不能为空！");
+        return;
+      }
+    }
     dispatch({
       type: 'registerCheck/check',
       payload: {
         userid: selectedRow.id,
+        usercode: selectedRow.usercode,
         usertype: selectedRow.usertype,
         check: radioValue,
+        failmark,
       },
+      callback: this.onCheckCallback,
     });
 
   }
 
+  onCheckCallback = (params) => {
+    const { formValues,pagination } = this.state;
+    const { dispatch } = this.props;
+
+    this.handleCancel();
+
+    const msg = params.msg;
+    if(params.type==="0"){
+      notification.error({
+        message: "提示",
+        description: msg,
+      });
+    }else {
+      notification.success({
+        message: "提示",
+        description: msg,
+      });
+    }
+
+    dispatch({
+      type: 'registerCheck/fetch',
+      payload: {
+        ...formValues,
+        ...pagination,
+      },
+    });
+  }
+
   handleTextAreaOnChange = (e) => {
-    console.log(e);
+    // console.log(e.target.value);
+    this.setState({
+      failmark: e.target.value
+    });
   }
 
 	render(){
@@ -302,7 +342,9 @@ export default class RegisterCheck extends Component {
         data: (selectedRow.three !==null && selectedRow.three !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.three} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img4)} type="primary" shape="circle" icon="eye" size="large" style={{ position: 'absolute' }}/></div>:"无三证合一照片",
       },
     ];
-    const operations = <Button onClick={this.submitCheckResult}>确认审核</Button>;
+    const operations = <Popconfirm placement="leftBottom" title="确认提交审核结果吗？" onConfirm={this.submitCheckResult} okText="是" cancelText="否">
+        <Button type="primary" size="default">提交</Button>
+      </Popconfirm>
 
 		return(
 			<div>
@@ -401,7 +443,7 @@ export default class RegisterCheck extends Component {
                 所有审核无误，请确认后点击确认审核结果。
               </TabPane>
               <TabPane tab={<Icon type="exclamation-circle" />} key="0">
-                <label>未通过原因：</label><TextArea rows={4} value={failmark} onChange={()=>{this.handleTextAreaOnChange(this)}}/>
+                <label> <label style={{color:"red"}}> *</label> 审核失败原因</label><TextArea placeholder="请输入审核失败原因，以告知用户" rows={4} value={failmark} onChange={this.handleTextAreaOnChange}/>
               </TabPane>
             </Tabs>
           </Card>
