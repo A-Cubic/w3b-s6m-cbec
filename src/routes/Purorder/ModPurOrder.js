@@ -95,7 +95,7 @@ export default class NewPurOrder extends Component {
 			}
 		}
 	}
-	/*showModal = () => {
+	showModal = () => {
 	    this.setState({
 	      visible: true,
 	    });
@@ -109,7 +109,7 @@ export default class NewPurOrder extends Component {
 	    this.setState({
 	      visible: false,
 	    });
-	  }*/
+	  }
 	  
 	goStepOne = () => {
 		this.setState({currentStep:0})
@@ -291,16 +291,14 @@ export default class NewPurOrder extends Component {
   		}
   		const savePruOrder = () => {
   			const { purList:{ purDataSource } } = this.state;
-  			const { getFieldsValue,validateFields,setFields } = this.props.form;
-  			/*if( purDataSource.length == 0){
+  			if( purDataSource.length == 0){
 				notification.info({
 				    message: '提示',
 				    description: '请添加采购单商品',
 				  });
   			}else{
   				this.showModal();
-  			}*/
-  			console.log(getFieldsValue());
+  			}
   		}
   		const deletePruOrder = () => {
   			const { purList } = this.state;
@@ -314,74 +312,17 @@ export default class NewPurOrder extends Component {
 		if(currentStep == 0){
 			return(
 				<div>
-		          <Form onSubmit={this.handleSubmit} className={styles.mB20}>
-					<Row>
-						<Col  xs={24} sm={12} md={8} lg={8} xl={8} >
-							<FormItem
-							{...formItemLayout}
-							  label ='取货方式'
-							>
-							  {getFieldDecorator('sendtype')(
-							    <Input placeholder="取货方式"/>
-							  )}
-							</FormItem>
-						</Col>
-						
-						<Col xs={24} sm={12} md={8} lg={8} xl={8}>
-							<FormItem
-							{...formItemLayout}
-							  label ='目的地'
-							>
-							  {getFieldDecorator('address')(
-							    <Input placeholder="目的地"/>
-							  )}
-							</FormItem>
-						</Col>
-						<Col xs={24} sm={12} md={8} lg={8} xl={8}>
-							<FormItem
-							{...formItemLayout}
-							  label ='纳期'
-							>
-							  {getFieldDecorator('deliverytime')(
-							    <Input placeholder="纳期"/>
-							  )}
-							</FormItem>
-						</Col>
-						<Col xs={24} sm={12} md={8} lg={8} xl={8}>
-							<FormItem
-							{...formItemLayout}
-							  label ='币种'
-							>
-							  {getFieldDecorator('currency')(
-							    <Input placeholder="币种"/>
-							  )}
-							</FormItem>
-						</Col>
-						<Col xs={24} sm={12} md={8} lg={8} xl={8}>
-							<FormItem
-							{...formItemLayout}
-							  label ='备注'
-							>
-							  {getFieldDecorator('remark')(
-							    <Input placeholder="备注"/>
-							  )}
-							</FormItem>
-						</Col>
-					</Row>	
-				  </Form>
-					
+					<Row className={styles.mB20}>
+				  		<Button className={styles.mR10} onClick={this.goAddGoods}>新增商品</Button>
+				  		<Button className={styles.mR10} onClick={savePruOrder}>保存</Button>
+				  		<Button onClick={deletePruOrder}>放弃</Button>
+			  		</Row>
 					<Table 
 						dataSource={purList.purDataSource} 
 						columns={purColumns} 
 						pagination={purList.pagination}
 						onChange={changPurPage}
-						className={styles.mB10}
 						/>
-					<Row className={styles.fr}>
-				  		<Button type="primary" className={styles.mR10} onClick={this.goAddGoods}>新增商品</Button>
-				  		<Button className={styles.mR10} onClick={savePruOrder}>保存</Button>
-				  		<Button onClick={deletePruOrder}>放弃</Button>
-			  		</Row>
 				</div>
 				)
 		}else if(currentStep == 1){
@@ -430,7 +371,7 @@ export default class NewPurOrder extends Component {
 							/>
 							<div className={`${styles.mT10} ${styles.fr}`}>
 								<Button className={styles.mR10} onClick={this.goStepOne}>返回</Button>
-								<Button type='primary' onClick={addGoods}>确认新增</Button>
+								<Button onClick={addGoods}>新增商品</Button>
 							</div>
 					</div>
 
@@ -442,16 +383,7 @@ export default class NewPurOrder extends Component {
 		const { currentStep,visible } = this.state;
 		return(
 			<div>
-				<Card>
-					<Steps current={currentStep} className={styles.mB20}>
-					    <Step title="采购单信息" />
-					    <Step title="添加商品" />
-				  	</Steps>
-					{this.renderStep(currentStep)}
-				</Card>
-				{/*<NewPurModal visible={visible}
-							 handleOk={this.handleOk}
-							 handleCancel={this.handleCancel}/>*/}
+				
 		 	</div>
 			)
 	}

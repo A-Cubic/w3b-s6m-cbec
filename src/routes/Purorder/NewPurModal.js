@@ -123,8 +123,7 @@ export default class NewPurModal extends Component {
 									</FormItem>
 								</Col>
 							</Row>	
-															
-						</Form>
+				  </Form>
 		        </Modal>
 		)
 	}
