@@ -179,6 +179,12 @@ export const getRouterData = (app) => {
     '/member/reg/check': {
       component: dynamicWrapper(app, ['registerCheck'], () => import('../routes/Member/RegisterCheck')),
     },
+    '/member/info/list': {
+      component: dynamicWrapper(app, ['member'], () => import('../routes/Member/UserInfoList')),
+    },
+    '/member/info/user:id': {
+      component: dynamicWrapper(app, ['member'], () => import('../routes/Member/UserInfoDetails')),
+    },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },

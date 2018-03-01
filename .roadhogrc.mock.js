@@ -154,8 +154,10 @@ const proxy = {
   'POST /llback/user/register/upload': 'http://api.llwell.net/',
   'POST /llback/user/register/status': 'http://api.llwell.net/',
   'POST /llback/user/register/check': 'http://api.llwell.net/',
-  'POST /llback/user/pagelist': 'http://api.llwell.net/',
-
+  'POST /llback/user/member/pagelist': 'http://api.llwell.net/',
+  'POST /llback/user/member/info/list': 'http://api.llwell.net/',
+  'POST /llback/user/member/info/details': 'http://api.llwell.net/',
+  'POST /llback/user/member/update/status': 'http://api.llwell.net/',
 };
 
 

@@ -131,7 +131,28 @@ export async function realRegisterCheck(params) {
 }
 
 export async function getRegisterCheckUsers(params) {
-  return request(`${apiUrl}/llback/user/pagelist`, {
+  return request(`${apiUrl}/llback/user/member/pagelist`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function getMemberInfoList(params) {
+  return request(`${apiUrl}/llback/user/member/info/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updateUserStatus(params) {
+  return request(`${apiUrl}/llback/user/member/update/status`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function getMemberInfoDetails(params) {
+  return request(`${apiUrl}/llback/user/member/info/details`, {
     method: 'POST',
     body: params,
   });
