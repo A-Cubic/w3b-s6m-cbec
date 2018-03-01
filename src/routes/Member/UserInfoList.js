@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Pagination,Badge,notification,Divider,Switch,Icon,TabPane } from 'antd';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Pagination,Badge,notification,Divider,Switch,Icon } from 'antd';
 import styles from '../../utils/utils.less'
 import moment from 'moment';
 
@@ -29,13 +29,13 @@ const formItemLayout = {
 
 @Form.create()
 
-export default class RegisterCheck extends Component {
+export default class UserInfoList extends Component {
   state = {
     formValues: {},
     pagination: {
       current: 1,
       total: 10,
-      pageSize: 5,
+      pageSize: 10,
     },
   }
 
@@ -119,8 +119,42 @@ export default class RegisterCheck extends Component {
     });
   }
 
-  handleChangeStatus= () => {
+  handleChangeStatus= (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'member/updateStatus',
+      payload: {
+        userid: record.id,
+        flag: record.flag,
+      },
+      callback: this.onChangeStatusCallback,
+    });
+  }
 
+  onChangeStatusCallback = (params) => {
+    const { formValues,pagination } = this.state;
+    const { dispatch } = this.props;
+
+    const msg = params.msg;
+    if(params.type==="0"){
+      notification.error({
+        message: "提示",
+        description: msg,
+      });
+    }else {
+      notification.success({
+        message: "提示",
+        description: msg,
+      });
+    }
+
+    dispatch({
+      type: 'member/list',
+      payload: {
+        ...formValues,
+        ...pagination,
+      },
+    });
   }
 
 	render(){
@@ -160,10 +194,14 @@ export default class RegisterCheck extends Component {
       key: 'operate',
       render: (text, record) => (
         <Fragment>
-          <a href="">查看</a>
+          <Link to={`/member/info/${record.id}`}>查看</Link>
           <Divider type="vertical" />
           {/*<Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="cross" />} defaultChecked />*/}
-          <Switch checkedChildren="使用中" unCheckedChildren="冻结" defaultChecked={record.flag==="0"?false:true} onChange={this.handleChangeStatus}/>
+
+          <Switch checkedChildren="使用中"
+                  unCheckedChildren="冻结"
+                  defaultChecked={record.flag==="0"?false:true}
+                  onChange={()=>this.handleChangeStatus(record)}/>
         </Fragment>
       ),
     }];
