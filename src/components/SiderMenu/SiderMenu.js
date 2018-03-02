@@ -158,7 +158,7 @@ export default class SiderMenu extends PureComponent {
     if (!menusData) {
       return [];
     }
-    return menusData 
+    return menusData
       .filter(item => item.name && !item.hideInMenu)
       .map((item) => {
         const ItemDom = this.getSubMenuOrItem(item);
@@ -220,8 +220,9 @@ export default class SiderMenu extends PureComponent {
         style={{background: '#333'}}
       >
         <div className={styles.logo} key="logo" style={{background: '#232323'}}>
-          <Link to="/">           
-            <h1>跨境电商贸易平台</h1>
+          <Link to="/">
+            <h1>{ collapsed?<img src={logo} alt="logo" style={{marginLeft:'-10px'}} width="32" />:"跨境电商贸易平台"}</h1>
+            {/*<h1>{ collapsed?<div style={{marginLeft:'-27px'}}>LLWell</div>:"跨境电商贸易平台"}</h1>*/}
           </Link>
         </div>
         <Menu
