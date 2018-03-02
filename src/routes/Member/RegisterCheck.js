@@ -293,7 +293,7 @@ export default class RegisterCheck extends Component {
       key: 'operate',
       render:(text, record) =>(
         <div>
-          <Button type="primary" onClick={this.showModal} >
+          <Button type="primary" ghost onClick={this.showModal} >
             审核
           </Button>
         </div>

@@ -12,10 +12,6 @@ import styley from '../Profile/AdvancedProfile.less';
 const { Description } = DescriptionList;
 const getWindowWidth = () => (window.innerWidth || document.documentElement.clientWidth);
 
-
-
-
-
 const operationTabList = [{
   key: 'tab1',
   tab: '操作日志一',
@@ -128,6 +124,14 @@ export default class UserInfoDetails extends Component {
   render() {
     const { stepDirection, currentUser,previewVisible,previewImage } = this.state;
     const { profile, loading } = this.props;
+
+    const userType = [' ', '供应商', '采购商','采购商 ','采购商 ', '客服'];
+    const userStatus = [' ', '系统账号', '未提交资料','待审核 ','已通过审核'];
+    const flagMap = ['error','processing'];
+    const flag = ['冻结','使用中'];
+
+
+
     // const { advancedOperation1, advancedOperation2, advancedOperation3 } = profile;
     const contentList = {
       // tab1: <Table
@@ -152,8 +156,8 @@ export default class UserInfoDetails extends Component {
     const extra = (
       <Row>
         <Col xs={24} sm={12}>
-          <div className={styley.textSecondary}>最后一次登录时间</div>
-          <div className={styley.heading}>{currentUser.lasttime}</div>
+          <div className={styley.textSecondary}>用户状态</div>
+          <div className={styley.heading}>{currentUser.verifycode==="-1"?"未通过审核":userStatus[currentUser.verifycode*1]}</div>
         </Col>
       </Row>
     );
@@ -161,29 +165,26 @@ export default class UserInfoDetails extends Component {
     const cardData = [
       {
         title: '营业执照',
-        data: (currentUser.img1 !==null && currentUser.img1 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img1} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(currentUser.img1)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无营业执照照片",
+        data: (currentUser.img1 !==null && currentUser.img1 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img1} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.img1)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无营业执照照片",
       },
       {
         title: '组织机构代码证',
-        data: (currentUser.img2 !==null && currentUser.img2 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img2} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(currentUser.img2)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无组织机构代码证照片",
+        data: (currentUser.img2 !==null && currentUser.img2 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img2} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.img2)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无组织机构代码证照片",
       },
       {
         title: '税务登记证',
-        data: (currentUser.img3 !==null && currentUser.img3 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img3} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(currentUser.img3)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无税务登记证照片",
+        data: (currentUser.img3 !==null && currentUser.img3 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img3} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.img3)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无税务登记证照片",
       },
       {
         title: '三证合一',
-        data: (currentUser.three !==null && currentUser.three !=="")?<div style={{ position: 'relative' }}><img src={currentUser.three} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(currentUser.three)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无三证合一照片",
+        data: (currentUser.three !==null && currentUser.three !=="")?<div style={{ position: 'relative' }}><img src={currentUser.three} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.three)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无三证合一照片",
       },
     ];
-    const userType = [' ', '供应商', '采购商','采购商 ','采购商 ', '客服'];
-    const userStatus = [' ', '系统账号', '未提交资料','待审核 ','已通过审核'];
-    const flagMap = ['error','processing'];
-    const flag = ['冻结','使用中'];
+
     const description = (
       <DescriptionList className={styles.headerList} size="large" col="4">
         <Description term="账号状态"><Badge status={flagMap[currentUser.flag]} text={flag[currentUser.flag]} /></Description>
-        <Description term="用户状态">{currentUser.verifycode==="-1"?"未通过审核":userType[currentUser.verifycode*1]}</Description>
+        <Description term="最后登录">{currentUser.lasttime}</Description>
       </DescriptionList>
     );
     return (
@@ -205,7 +206,7 @@ export default class UserInfoDetails extends Component {
 
           <Card type="inner" title="上传材料">
             <List
-              grid={{ gutter: 16,xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 }}
+              grid={{ gutter: 16,xs: 1, sm: 2, md: 2, lg: 4, xl: 4, xxl: 4 }}
               dataSource={cardData}
               renderItem={item => (
                 <List.Item>
