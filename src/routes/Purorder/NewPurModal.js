@@ -24,11 +24,11 @@ export default class NewPurModal extends Component {
 		loading : false
 	}
 	handleOk = (e) => {
-	const { getFieldsValue } = this.props.form;
-		console.log(getFieldsValue());
-	  this.setState({
-	  	loading : true
-	  });
+		const { getFieldsValue } = this.props.form;
+			console.log(getFieldsValue());
+		  this.setState({
+		  	loading : true
+		  });
 
 	  /*this.props.dispatch({
 	  	type : '',
