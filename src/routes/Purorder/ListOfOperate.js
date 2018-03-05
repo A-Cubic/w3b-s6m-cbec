@@ -78,14 +78,14 @@ const columns = [
     key: 'operate',
     render: (text, record) => (
       <Fragment>
-        <Link to={`/member/info/${record.id}`}>处理</Link>
+        <Link to={`/trade/order-o/info/${record.purchasesn}`}>处理</Link>
       </Fragment>
     ),
   }];
 
-@connect(({ purchase, loading }) => ({
-  purchase,
-  submitting: loading.effects['purchase/list'],
+@connect(({ purchaseOperate, loading }) => ({
+  purchaseOperate,
+  submitting: loading.effects['purchaseOperate/list'],
 }))
 
 @Form.create()
@@ -105,7 +105,7 @@ export default class ListOfOperate extends Component {
     const { formValues, pagination } = this.state;
 
     this.props.dispatch({
-      type: 'purchase/list',
+      type: 'purchaseOperate/list',
       payload: {
         ...formValues,
         ...pagination,
@@ -134,7 +134,7 @@ export default class ListOfOperate extends Component {
     }
 
     dispatch({
-      type: 'purchase/list',
+      type: 'purchaseOperate/list',
       payload: params,
     });
   }
@@ -156,7 +156,7 @@ export default class ListOfOperate extends Component {
       });
 
       dispatch({
-        type: 'purchase/list',
+        type: 'purchaseOperate/list',
         payload: {
           ...values,
           ...pagination,
@@ -174,7 +174,7 @@ export default class ListOfOperate extends Component {
       formValues: {},
     });
     dispatch({
-      type: 'purchase/list',
+      type: 'purchaseOperate/list',
       payload: {
         ...pagination,
       },
@@ -328,7 +328,7 @@ export default class ListOfOperate extends Component {
 
   render(){
     const { getFieldDecorator } = this.props.form;
-    const { purchase: { list, pagination }, submitting }  = this.props;
+    const { purchaseOperate: { list, pagination }, submitting }  = this.props;
 
     return(
       <div>

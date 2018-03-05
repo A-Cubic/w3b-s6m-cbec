@@ -207,7 +207,10 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../routes/Purorder/ModPurOrder')),
     },
     '/trade/order-o/list': {
-      component: dynamicWrapper(app, ['purchase'], () => import('../routes/Purorder/ListOfOperate')),
+      component: dynamicWrapper(app, ['purchaseOperate'], () => import('../routes/Purorder/ListOfOperate')),
+    },
+    '/trade/order-o/info/:id': {
+      component: dynamicWrapper(app, ['purchaseOperate'], () => import('../routes/Purorder/PurDetailsOfOperate')),
     },
   };
   // const menuData = getFlatMenuData(getMenuData());

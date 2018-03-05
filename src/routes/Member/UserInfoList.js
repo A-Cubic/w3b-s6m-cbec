@@ -257,7 +257,6 @@ export default class UserInfoList extends Component {
 						<Col span={20}></Col>
 						<Col span={4}>
               <Button type="primary"
-                      loading={submitting}
                       className={styles.submit}
                       htmlType="submit">
                 搜索
@@ -272,7 +271,8 @@ export default class UserInfoList extends Component {
                  columns={columns}
                  pagination={pagination}
                  rowKey={record => record.id}
-                 onChange={this.handleStandardTableChange}/>
+                 onChange={this.handleStandardTableChange}
+                 loading={submitting}/>/>
 				</Card>
 
 			</div>

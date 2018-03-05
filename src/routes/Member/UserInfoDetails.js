@@ -11,7 +11,7 @@ import styley from '../Profile/AdvancedProfile.less';
 
 const { Description } = DescriptionList;
 const getWindowWidth = () => (window.innerWidth || document.documentElement.clientWidth);
-
+const breadcrumbList=[{title: '用户信息',href:'/member/info/list'},{title: '用户详情',}];
 const operationTabList = [{
   key: 'tab1',
   tab: '操作日志一',
@@ -193,6 +193,7 @@ export default class UserInfoDetails extends Component {
         logo={<img alt="" src={currentUser.avatar} />}
         content={description}
         extraContent={extra}
+        breadcrumbList={breadcrumbList}
       >
 
         <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>

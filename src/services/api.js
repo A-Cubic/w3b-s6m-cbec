@@ -158,8 +158,15 @@ export async function getMemberInfoDetails(params) {
   });
 }
 
-export async function getPurOrderList(params) {
+export async function getPurOrderListOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function getPurGoodsListOfOperate(params) {
+  return request(`${apiUrl}/llback/purchase/operate/goods`, {
     method: 'POST',
     body: params,
   });

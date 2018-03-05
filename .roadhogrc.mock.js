@@ -159,6 +159,7 @@ const proxy = {
   'POST /llback/user/member/info/details': 'http://api.llwell.net/',
   'POST /llback/user/member/update/status': 'http://api.llwell.net/',
   'POST /llback/purchase/list': 'http://api.llwell.net/',
+  'POST /llback/purchase/operate/goods': 'http://192.168.31.89:9999/',
 };
 
 
