@@ -211,7 +211,6 @@ export default class Register extends Component {
             value : e.target.value
           }
       });
-    console.log(this.props.form.getFieldsValue());
   }
   renderStep = (currentStep) => {
     const { form, submitting } = this.props;
@@ -251,7 +250,7 @@ export default class Register extends Component {
                       initialValue: getFieldValue('type')
                     })(
                       <RadioGroup onChange={this.handleChangeRole} >
-                        <Radio value={3}>供应商</Radio>
+                        <Radio value={1}>供应商</Radio>
                         <Radio value={2}>采购商</Radio>
                       </RadioGroup>
                     )}

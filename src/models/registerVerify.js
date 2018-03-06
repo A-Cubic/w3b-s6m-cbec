@@ -28,9 +28,9 @@ export default {
       } else {
         const verifycode = response.verifycode*1;
         let stepc;
-        if (verifycode == 2) {
+        if (verifycode === 2 || verifycode === -1) {
           stepc = 1
-        }else if (verifycode == 3 || verifycode == -1) {
+        }else if (verifycode === 3 ) {
           stepc = 2
         }else{
           setToken('');
