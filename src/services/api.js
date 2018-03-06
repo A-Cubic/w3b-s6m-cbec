@@ -172,3 +172,10 @@ export async function getPurGoodsListOfOperate(params) {
   });
 }
 
+export async function getPurInfoDetailsOfOperate(params) {
+  return request(`${apiUrl}/llback/purchase/operate/info/details`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
