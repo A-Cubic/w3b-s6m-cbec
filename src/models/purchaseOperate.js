@@ -1,4 +1,4 @@
-import { getPurOrderListOfOperate, getPurGoodsListOfOperate, getPurInfoDetailsOfOperate } from '../services/api';
+import { getPurOrderListOfOperate, getPurGoodsListOfOperate, getPurInfoDetailsOfOperate, updateFeeOfOperate } from '../services/api';
 
 export default {
   namespace: 'purchaseOperate',
@@ -14,23 +14,36 @@ export default {
   effects: {
     *list({ payload }, { call, put }) {
       const response = yield call(getPurOrderListOfOperate, payload);
-      yield put({
-        type: 'queryList',
-        payload: response,
-      });
+      if (response !== undefined) {
+        yield put({
+          type: 'queryList',
+          payload: response,
+        });
+      }
     },
     *goodslist({ payload }, { call, put }) {
       const response1 = yield call(getPurInfoDetailsOfOperate, payload);
-      yield put({
-        type: 'queryDetails',
-        payload: response1,
-      });
+      if (response1 !== undefined) {
+        yield put({
+          type: 'queryDetails',
+          payload: response1,
+        });
+      }
 
       const response = yield call(getPurGoodsListOfOperate, payload);
-      yield put({
-        type: 'queryGoodsList',
-        payload: response,
-      });
+      if (response !== undefined) {
+        yield put({
+          type: 'queryGoodsList',
+          payload: response,
+        });
+      }
+
+    },
+    *updateFee({ payload, callback }, { call }) {
+      const response = yield call(updateFeeOfOperate, payload);
+      if (response !== undefined) {
+          callback(response);
+      }
     },
 
   },

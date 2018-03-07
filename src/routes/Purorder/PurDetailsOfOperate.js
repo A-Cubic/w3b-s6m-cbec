@@ -3,7 +3,7 @@ import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider } from 'antd';
+import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider,Input,notification } from 'antd';
 import classNames from 'classnames';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import DescriptionList from '../../components/DescriptionList';
@@ -13,6 +13,7 @@ import moment from 'moment';
 const { Step } = Steps;
 const { Description } = DescriptionList;
 const ButtonGroup = Button.Group;
+const Search = Input.Search;
 
 const getWindowWidth = () => (window.innerWidth || document.documentElement.clientWidth);
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
@@ -39,6 +40,9 @@ export default class PurDetailsOfOperate extends Component {
     },
     operationkey: 'tab1',
     stepDirection: 'horizontal',
+    searchDisable:true,
+    waybillfeeValue:'',
+    goodsSum:'0.00',
   }
 
   componentDidMount() {
@@ -51,11 +55,13 @@ export default class PurDetailsOfOperate extends Component {
         ...pagination,
       },
     });
-
-
+    this.setState({
+      waybillfeeValue: this.props.purchaseOperate.purchase.waybillfee,
+    });
     this.setStepDirection();
     window.addEventListener('resize', this.setStepDirection);
   }
+
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.setStepDirection);
@@ -94,6 +100,58 @@ export default class PurDetailsOfOperate extends Component {
       },
     });
   }
+  handleBtnOnChange = (e) => {
+    if(this.state.searchDisable){
+      this.setState({
+        searchDisable: false,
+      });
+    }else{
+      this.props.dispatch({
+        type: 'purchaseOperate/updateFee',
+        payload: {
+          purchasesn: this.props.match.params.id,
+          waybillfeeValue: e,
+        },
+        callback: this.updateFeeCallback,
+      });
+      this.setState({
+        searchDisable: true,
+      });
+    }
+
+
+  }
+  handleWaybillfeeOnChange = (e) => {
+    const { value } = e.target;
+    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+    if ((!isNaN(value) && reg.test(value)) || value === '') {
+      this.setState({
+        waybillfeeValue: value,
+      });
+    }
+  }
+
+  updateFeeCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      notification.error({
+        message: "提示",
+        description: msg,
+      });
+    }else {
+      notification.success({
+        message: "提示",
+        description: msg,
+      });
+    }
+  }
+
+
+  tableFooterSum = (params) => {
+    return (
+      <div style={{textAlign:'right',fontWeight:'600'}}>总计：{params.length?params[0].sum:'0.00'}</div>
+    );
+  }
 
   @Bind()
   @Debounce(200)
@@ -112,7 +170,7 @@ export default class PurDetailsOfOperate extends Component {
   }
 
   render() {
-    const { stepDirection } = this.state;
+    const { stepDirection, searchDisable, waybillfeeValue, goodsSum } = this.state;
     const { purchaseOperate: { listGoods, paginationGoods, purchase }, submitting }  = this.props;
 
     const menu = (
@@ -161,13 +219,11 @@ export default class PurDetailsOfOperate extends Component {
       </DescriptionList>
     );
 
-
     const desc1 = (
       <div className={styles.stepDescription}>
         <div>2018-03-06 12:32:57</div>
       </div>
     );
-
     const desc2 = (
       <div className={styles.stepDescription}>
         <div>
@@ -175,7 +231,6 @@ export default class PurDetailsOfOperate extends Component {
         </div>
       </div>
     );
-
     const desc3 = (
       <div className={styles.stepDescription}>
         <div>
@@ -183,7 +238,6 @@ export default class PurDetailsOfOperate extends Component {
         </div>
       </div>
     );
-
     const desc4 = (
       <div className={styles.stepDescription}>
         <div>
@@ -191,7 +245,6 @@ export default class PurDetailsOfOperate extends Component {
         </div>
       </div>
     );
-
     const desc5 = (
       <div className={styles.stepDescription}>
         <div>
@@ -199,22 +252,6 @@ export default class PurDetailsOfOperate extends Component {
         </div>
       </div>
     );
-
-    const popoverContent = (
-      <div style={{ width: 160 }}>
-        吴加号
-        <span className={styles.textSecondary} style={{ float: 'right' }}>
-          <Badge status="default" text={<span style={{ color: 'rgba(0, 0, 0, 0.45)' }}>未响应</span>} />
-        </span>
-        <div className={styles.textSecondary} style={{ marginTop: 4 }}>耗时：2小时25分钟</div>
-      </div>
-    );
-
-    const customDot = (dot, { status }) => (status === 'process' ? (
-      <Popover placement="topLeft" arrowPointAtCenter content={popoverContent}>
-        {dot}
-      </Popover>
-    ) : dot);
 
     const operationTabList = [{
       key: 'tab1',
@@ -266,6 +303,10 @@ export default class PurDetailsOfOperate extends Component {
         dataIndex: 'total',
         key: 'total',
       },{
+        title: '其他费用',
+        dataIndex: 'otherprice',
+        key: 'otherprice',
+      },{
         title: '商品价格',
         dataIndex: 'price',
         key: 'price',
@@ -277,10 +318,6 @@ export default class PurDetailsOfOperate extends Component {
         title: '实际价格',
         dataIndex: 'realprice',
         key: 'realprice',
-      },{
-        title: '其他费用',
-        dataIndex: 'otherprice',
-        key: 'otherprice',
       },{
         title: '操作',
         dataIndex: 'operate',
@@ -325,7 +362,7 @@ export default class PurDetailsOfOperate extends Component {
         breadcrumbList={breadcrumbList}
       >
         <Card title="询价进度" style={{ marginBottom: 24 }} bordered={false}>
-          <Steps direction={stepDirection} progressDot={customDot} current={1}>
+          <Steps direction={stepDirection} progressDot current={purchase.status*1-1}>
             <Step title="创建采购单" description={desc1} />
             <Step title="处理中" description={desc2} />
             <Step title="询价结束" description={desc3} />
@@ -339,11 +376,20 @@ export default class PurDetailsOfOperate extends Component {
                  pagination={paginationGoods}
                  rowKey={record => record.id}
                  onChange={this.handleStandardTableChange}
-                 loading={submitting}/>
+                 loading={submitting}
+                 footer={this.tableFooterSum}/>
         </Card>
-        <Card title="用户近半年来电记录" style={{ marginBottom: 24 }} bordered={false}>
-          <div className={styles.noData}>
-            <Icon type="frown-o" />暂无数据
+        <Card title="物流信息" style={{ marginBottom: 24 }} bordered={false}>
+          <div style={{ textAlign:'center' }}>
+            <Search addonBefore="运费："
+                    placeholder="请填写运费"
+                    enterButton={searchDisable?"修改":"确定"}
+                    size="large"
+                    style={{width:'30%'}}
+                    disabled={searchDisable}
+                    onSearch={this.handleBtnOnChange}
+                    onChange={this.handleWaybillfeeOnChange}
+                    value={waybillfeeValue}/>
           </div>
         </Card>
         <Card

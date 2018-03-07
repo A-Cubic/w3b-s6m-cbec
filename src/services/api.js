@@ -179,3 +179,9 @@ export async function getPurInfoDetailsOfOperate(params) {
   });
 }
 
+export async function updateFeeOfOperate(params) {
+  return request(`${apiUrl}llback/purchase/operate/update/fee`, {
+    method: 'POST',
+    body: params,
+  });
+}
