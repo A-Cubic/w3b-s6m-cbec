@@ -180,14 +180,14 @@ export async function getPurInfoDetailsOfOperate(params) {
 }
 
 export async function updateFeeOfOperate(params) {
-  return request(`${apiUrl}llback/purchase/operate/update/fee`, {
+  return request(`${apiUrl}/llback/purchase/operate/update/fee`, {
     method: 'POST',
     body: params,
   });
 }
 
 export async function updatePriceOfOperate(params) {
-  return request(`${apiUrl}llback/purchase/operate/update/price`, {
+  return request(`${apiUrl}/llback/purchase/operate/update/price`, {
     method: 'POST',
     body: params,
   });
