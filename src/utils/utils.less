@@ -91,3 +91,45 @@
 .steps-action {
   margin-top: 24px;
 }
+.editableCell {
+  position: relative;
+}
+
+.editableCIW,
+.editableCTW {
+  padding-right: 24px;
+}
+
+.editableCTW {
+  padding: 5px 24px 5px 5px;
+}
+
+.editableCI,
+.editableCIC {
+  position: absolute;
+  right: 0;
+  width: 20px;
+  cursor: pointer;
+}
+
+.editableCI {
+  line-height: 18px;
+  display: none;
+}
+
+.editableCIC {
+  line-height: 28px;
+}
+
+.editableCell:hover .editableCI {
+  display: inline-block;
+}
+
+.editableCI:hover,
+.editableCIC:hover {
+  color: #108ee9;
+}
+
+.editableAB {
+  margin-bottom: 8px;
+}
