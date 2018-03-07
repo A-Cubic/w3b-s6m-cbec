@@ -185,3 +185,10 @@ export async function updateFeeOfOperate(params) {
     body: params,
   });
 }
+
+export async function updatePriceOfOperate(params) {
+  return request(`${apiUrl}llback/purchase/operate/update/price`, {
+    method: 'POST',
+    body: params,
+  });
+}

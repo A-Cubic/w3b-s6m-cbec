@@ -3,7 +3,7 @@ import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider,Input,notification } from 'antd';
+import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider,Input,notification,message,Modal } from 'antd';
 import classNames from 'classnames';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import DescriptionList from '../../components/DescriptionList';
@@ -29,16 +29,23 @@ class EditableCell extends Component {
   state = {
     value: this.props.value,
     editable: false,
+    backValue: this.props.value,
   }
   handleChange = (e) => {
     const value = e.target.value;
-    this.setState({ value });
+    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+    if ((!isNaN(value) && reg.test(value))) {
+      this.setState({ value });
+    }
   }
   check = () => {
     this.setState({ editable: false });
     if (this.props.onChange) {
       this.props.onChange(this.state.value);
     }
+  }
+  close = () => {
+    this.setState({ editable: false, value:this.state.backValue});
   }
   edit = () => {
     this.setState({ editable: true });
@@ -54,11 +61,16 @@ class EditableCell extends Component {
                 value={value}
                 onChange={this.handleChange}
                 onPressEnter={this.check}
+                style={{width:'85%'}}
               />
               <Icon
                 type="check"
                 className={ustyle.editableCIC}
                 onClick={this.check}
+              />
+              <Icon type="close"
+                className={ustyle.editableCIE}
+                onClick={this.close}
               />
             </div>
             :
@@ -93,6 +105,11 @@ export default class PurDetailsOfOperate extends Component {
     searchDisable:true,
     waybillfeeValue:'',
     goodsSum:'0.00',
+    listGoods: [],
+    totalPrice:'0.00',
+    loading: false,
+    visible: false,
+    content: '',
   }
 
   componentDidMount() {
@@ -112,9 +129,35 @@ export default class PurDetailsOfOperate extends Component {
   }
 
   getGoodsCallback = (params) => {
+    let sum = '0.00';
+
+    if(params.list.length){
+      if(params.list[0].sum){
+        sum=params.list[0].sum;
+      }
+    }
+    let fee = '';
+    if(params.bean.waybillfee){
+      fee = params.bean.waybillfee;
+    }
+    const price = fee*1+sum*1;
+
     this.setState({
-      waybillfeeValue: params.waybillfee,
+      waybillfeeValue: fee,
+      listGoods:params.list,
+      goodsSum:sum,
+      totalPrice: price===0?'0.00':price,
     });
+  }
+
+  updatePriceCallback = (params) => {
+    // console.log(params);
+    // this.setState({
+    //   waybillfeeValue: params.bean.waybillfee,
+    //   listGoods:params.list,
+    //   goodsSum:params.list[0].sum?params.list[0].sum:'0.00',
+    //   totalPrice: params.bean.waybillfee*1+params.list[0].sum*1,
+    // });
   }
 
   componentWillUnmount() {
@@ -177,10 +220,14 @@ export default class PurDetailsOfOperate extends Component {
   }
   handleWaybillfeeOnChange = (e) => {
     const { value } = e.target;
+    const fee = this.state.waybillfeeValue;
+    const total = this.state.totalPrice;
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if ((!isNaN(value) && reg.test(value)) || value === '') {
+      const matchTotal = total*1-(fee*1-value*1);
       this.setState({
         waybillfeeValue: value,
+        totalPrice: matchTotal,
       });
     }
   }
@@ -188,22 +235,24 @@ export default class PurDetailsOfOperate extends Component {
   updateFeeCallback = (params) => {
     const msg = params.msg;
     if(params.type==="0"){
-      notification.error({
-        message: "提示",
-        description: msg,
-      });
+      message.error(msg);
+      // notification.error({
+      //   message: "提示",
+      //   description: msg,
+      // });
     }else {
-      notification.success({
-        message: "提示",
-        description: msg,
-      });
+      message.success(msg);
+      // notification.success({
+      //   message: "提示",
+      //   description: msg,
+      // });
     }
   }
 
 
   tableFooterSum = (params) => {
     return (
-      <div style={{textAlign:'right',fontWeight:'600'}}>总计：{params.length?params[0].sum:'0.00'}</div>
+      <div style={{textAlign:'right',fontWeight:'600'}}>总计：{this.state.goodsSum}</div>
     );
   }
 
@@ -225,20 +274,62 @@ export default class PurDetailsOfOperate extends Component {
 
   onCellChange = (key, dataIndex) => {
     return (value) => {
+      const dataSource = [...this.state.listGoods];
+      const totalPrice = this.state.totalPrice;
+      const goodsSum = this.state.goodsSum;
 
-      const { purchaseOperate: { listGoods } }  = this.props;
+      const target = dataSource.find(item => item.id === key);
 
-      const target = listGoods.find(item => item.key === key);
-      console.log(target);
-      // if (target) {
-      //   target[dataIndex] = value;
-      //   this.setState({ dataSource });
-      // }
+      if (target) {
+        const matchPrice = totalPrice*1-(target[dataIndex]*1-value*1);
+        const matchSum = goodsSum*1-(target[dataIndex]*1-value*1);
+        target[dataIndex] = value;
+        this.props.dispatch({
+          type: 'purchaseOperate/updatePrice',
+          payload: {
+            id: key,
+            realprice: value,
+          },
+          callback: this.updatePriceCallback,
+        });
+
+        this.setState({ dataSource ,totalPrice:matchPrice,goodsSum:matchSum });
+      }
     };
   }
 
+  showModal = () => {
+    // setTimeout(() => {
+      // const { selectedRow } = this.state;
+      this.setState({
+        visible: true,
+      });
+    // }, 0);
+  }
+
+  handleModalOk = () => {
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false, visible: false });
+    }, 3000);
+  }
+
+  handleModalCancel = () => {
+    this.setState({ visible: false });
+    // setTimeout(() => {
+    //   this.setState({
+    //     visible: false,
+    //     previewVisible: false,
+    //     previewImage: {},
+    //     radioValue: "1",
+    //     tabKey: "1",
+    //     failmark: "",
+    //   });
+    // }, 0);
+  }
+
   render() {
-    const { stepDirection, searchDisable, waybillfeeValue, goodsSum } = this.state;
+    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible, loading, content } = this.state;
     const { purchaseOperate: { listGoods, paginationGoods, purchase }, submitting }  = this.props;
 
     const menu = (
@@ -270,7 +361,7 @@ export default class PurDetailsOfOperate extends Component {
         </Col>
         <Col xs={24} sm={12}>
           <div className={styles.textSecondary}>总金额</div>
-          <div className={styles.heading}>¥ </div>
+          <div className={styles.heading}>¥ {totalPrice}</div>
         </Col>
       </Row>
     );
@@ -362,46 +453,59 @@ export default class PurDetailsOfOperate extends Component {
         title: '商品名称',
         dataIndex: 'goodsname',
         key: 'goodsname',
+        width: '30%',
       },{
         title: '产品条码',
         dataIndex: 'barcode',
         key: 'barcode',
+        width: '12%',
       },{
         title: '商品数量',
         dataIndex: 'total',
         key: 'total',
+        width: '10%',
       },{
         title: '其他费用',
         dataIndex: 'otherprice',
         key: 'otherprice',
+        width: '10%',
       },{
         title: '商品价格',
         dataIndex: 'price',
         key: 'price',
+        width: '10%',
       },{
         title: '期望价格',
         dataIndex: 'expectprice',
         key: 'expectprice',
+        width: '10%',
       },{
         title: '实际价格',
         dataIndex: 'realprice',
         key: 'realprice',
+        width: '10%',
         render: (text, record) => (
           <EditableCell
             value={text}
-            onChange={this.onCellChange(record.key, 'realprice')}
+            onChange={this.onCellChange(record.id, 'realprice')}
           />
         ),
       },{
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
+        width: '8%',
         render: (text, record) => (
-          <Fragment>
-            <Link to={`/trade/order-o/info/${record.purchasesn}`}>编辑</Link>
-            <Divider type="vertical" />
-            <Link to={`/trade/order-o/info/${record.purchasesn}`}>询价</Link>
-          </Fragment>
+          <div>
+            <Button type="primary" size="small" ghost onClick={this.showModal} >
+              反馈
+            </Button>
+          </div>
+          // <Fragment>
+          //   {/*<Link to={`/trade/order-o/info/${record.purchasesn}`}>编辑</Link>*/}
+          //   {/*<Divider type="vertical" />*/}
+          //   <Link to={`/trade/order-o/info/${record.purchasesn}`}>反馈</Link>
+          // </Fragment>
         ),
       }];
 
@@ -445,7 +549,7 @@ export default class PurDetailsOfOperate extends Component {
           </Steps>
         </Card>
         <Card title="商品列表" style={{ marginBottom: 24 }} bordered={false}>
-          <Table dataSource={listGoods}
+          <Table dataSource={this.state.listGoods}
                  columns={goodsColumns}
                  pagination={paginationGoods}
                  rowKey={record => record.id}
@@ -474,6 +578,20 @@ export default class PurDetailsOfOperate extends Component {
         >
           {contentList[this.state.operationkey]}
         </Card>
+        <Modal
+          visible={visible}
+          style={{top: 20 }}
+          title="供应商反馈列表"
+          footer={[
+            <Button key="back" onClick={this.handleModalCancel}>关闭</Button>,
+            <Button key="submit" type="primary" loading={loading} onClick={this.handleModalOk}>
+              发送
+            </Button>,
+          ]}
+          onOk={this.handleModalOk}
+          onCancel={this.handleModalCancel} >
+          {content}
+        </Modal>
       </PageHeaderLayout>
     );
   }
