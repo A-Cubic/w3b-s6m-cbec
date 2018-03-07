@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import DescriptionList from '../../components/DescriptionList';
 import styles from '../Profile/AdvancedProfile.less';
+import ustyle from '../../utils/utils.less';
 import moment from 'moment';
 
 const { Step } = Steps;
@@ -24,7 +25,56 @@ const breadcrumbList = [{
   title: '采购单详情',
 }];
 
-
+class EditableCell extends Component {
+  state = {
+    value: this.props.value,
+    editable: false,
+  }
+  handleChange = (e) => {
+    const value = e.target.value;
+    this.setState({ value });
+  }
+  check = () => {
+    this.setState({ editable: false });
+    if (this.props.onChange) {
+      this.props.onChange(this.state.value);
+    }
+  }
+  edit = () => {
+    this.setState({ editable: true });
+  }
+  render() {
+    const { value, editable } = this.state;
+    return (
+      <div className={ustyle.editableCell}>
+        {
+          editable ?
+            <div className={ustyle.editableCIW}>
+              <Input
+                value={value}
+                onChange={this.handleChange}
+                onPressEnter={this.check}
+              />
+              <Icon
+                type="check"
+                className={ustyle.editableCIC}
+                onClick={this.check}
+              />
+            </div>
+            :
+            <div className={ustyle.editableCTW}>
+              {value || ' '}
+              <Icon
+                type="edit"
+                className={ustyle.editableCI}
+                onClick={this.edit}
+              />
+            </div>
+        }
+      </div>
+    );
+  }
+}
 
 @connect(({ purchaseOperate, loading }) => ({
   purchaseOperate,
@@ -171,6 +221,20 @@ export default class PurDetailsOfOperate extends Component {
         stepDirection: 'horizontal',
       });
     }
+  }
+
+  onCellChange = (key, dataIndex) => {
+    return (value) => {
+
+      const { purchaseOperate: { listGoods } }  = this.props;
+
+      const target = listGoods.find(item => item.key === key);
+      console.log(target);
+      // if (target) {
+      //   target[dataIndex] = value;
+      //   this.setState({ dataSource });
+      // }
+    };
   }
 
   render() {
@@ -322,6 +386,12 @@ export default class PurDetailsOfOperate extends Component {
         title: '实际价格',
         dataIndex: 'realprice',
         key: 'realprice',
+        render: (text, record) => (
+          <EditableCell
+            value={text}
+            onChange={this.onCellChange(record.key, 'realprice')}
+          />
+        ),
       },{
         title: '操作',
         dataIndex: 'operate',
