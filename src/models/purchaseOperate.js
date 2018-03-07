@@ -21,13 +21,14 @@ export default {
         });
       }
     },
-    *goodslist({ payload }, { call, put }) {
+    *goodslist({ payload,callback }, { call, put }) {
       const response1 = yield call(getPurInfoDetailsOfOperate, payload);
       if (response1 !== undefined) {
         yield put({
           type: 'queryDetails',
           payload: response1,
         });
+        callback(response1);
       }
 
       const response = yield call(getPurGoodsListOfOperate, payload);
@@ -36,6 +37,7 @@ export default {
           type: 'queryGoodsList',
           payload: response,
         });
+
       }
 
     },
