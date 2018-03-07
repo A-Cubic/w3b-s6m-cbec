@@ -21,13 +21,13 @@ const links = [{
   href: '',
 }];
 
-const copyright = <div>Copyright <Icon type="copyright" /> 2017 岂止科技（大连）有限公司 </div>;
+const copyright = <div>Copyright <Icon type="copyright" /> 2018 岂止科技（大连）有限公司 </div>;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '跨境电商贸易平台';
+    let title = '流连优选';
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name}`;
     }
@@ -45,7 +45,7 @@ class UserLayout extends React.PureComponent {
                   <img alt="logo" className={styles.logo} src={logo} />
                 </Link>
               </div>
-              <div className={styles.desc}>SLOGEN</div>
+              <div className={styles.desc}>不一样的跨境供货、采购、分销体验</div>
             </div>
             <Switch>
               {getRoutes(match.path, routerData).map(item =>

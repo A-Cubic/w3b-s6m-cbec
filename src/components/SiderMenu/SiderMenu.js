@@ -221,8 +221,8 @@ export default class SiderMenu extends PureComponent {
       >
         <div className={styles.logo} key="logo" style={{background: '#232323'}}>
           <Link to="/">
-            <h1>{ collapsed?<img src={logo} alt="logo" style={{marginLeft:'-10px'}} width="32" />:"跨境电商贸易平台"}</h1>
-            {/*<h1>{ collapsed?<div style={{marginLeft:'-27px'}}>LLWell</div>:"跨境电商贸易平台"}</h1>*/}
+            <h1>{ collapsed?<img src={logo} alt="logo" style={{marginLeft:'-10px'}} width="32" />:"流连优选"}</h1>
+            {/*<h1>{ collapsed?<div style={{marginLeft:'-27px'}}>LLWell</div>:"流连优选"}</h1>*/}
           </Link>
         </div>
         <Menu
