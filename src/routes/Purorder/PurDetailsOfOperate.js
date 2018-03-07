@@ -54,14 +54,18 @@ export default class PurDetailsOfOperate extends Component {
         purchasesn: this.props.match.params.id,
         ...pagination,
       },
+      callback:this.getGoodsCallback,
     });
-    this.setState({
-      waybillfeeValue: this.props.purchaseOperate.purchase.waybillfee,
-    });
+
     this.setStepDirection();
     window.addEventListener('resize', this.setStepDirection);
   }
 
+  getGoodsCallback = (params) => {
+    this.setState({
+      waybillfeeValue: params.waybillfee,
+    });
+  }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.setStepDirection);
