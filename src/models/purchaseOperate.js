@@ -1,4 +1,4 @@
-import { getPurOrderListOfOperate, getPurGoodsListOfOperate, getPurInfoDetailsOfOperate, updateFeeOfOperate, updatePriceOfOperate } from '../services/api';
+import { getPurOrderListOfOperate, getPurGoodsListOfOperate, getPurInfoDetailsOfOperate, updateFeeOfOperate, updatePriceOfOperate,supplyListOfOperate,updateSupplyFlagOfOperate } from '../services/api';
 
 export default {
   namespace: 'purchaseOperate',
@@ -9,6 +9,7 @@ export default {
     listGoods: [],
     paginationGoods: {},
     purchase: {},
+    supplyList: [],
   },
 
   effects: {
@@ -30,21 +31,16 @@ export default {
           payload: response1,
         });
       }
-
       if (response !== undefined) {
         yield put({
           type: 'queryGoodsList',
           payload: response,
         });
       }
-
-      if(response !== undefined && response1 !== undefined){
+      if(response !== undefined && response1 !== undefined) {
         const result = {bean:response1,...response};
         callback(result);
       }
-
-
-
     },
     *updateFee({ payload, callback }, { call }) {
       const response = yield call(updateFeeOfOperate, payload);
@@ -52,11 +48,25 @@ export default {
           callback(response);
       }
     },
-
     *updatePrice({ payload, callback }, { call }) {
       const response = yield call(updatePriceOfOperate, payload);
       if (response !== undefined) {
-        callback(response);
+          callback(response);
+      }
+    },
+    *supplyList({ payload, callback }, { call, put }) {
+      const response = yield call(supplyListOfOperate, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'querySupplyList',
+          payload: response,
+        });
+      }
+    },
+    *updateSupplyFlag({ payload, callback }, { call }) {
+      const response = yield call(updateSupplyFlagOfOperate, payload);
+      if (response !== undefined) {
+          callback(response);
       }
     },
 
@@ -83,5 +93,12 @@ export default {
         purchase:action.payload,
       };
     },
+    querySupplyList(state, action) {
+      return {
+        ...state,
+        supplyList:action.payload,
+      };
+    },
+
   },
 };

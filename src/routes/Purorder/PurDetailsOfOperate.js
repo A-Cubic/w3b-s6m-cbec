@@ -298,13 +298,17 @@ export default class PurDetailsOfOperate extends Component {
     };
   }
 
-  showModal = () => {
-    // setTimeout(() => {
-      // const { selectedRow } = this.state;
-      this.setState({
-        visible: true,
-      });
-    // }, 0);
+  showModal = (record) => {
+    this.setState({
+      visible: true,
+    });
+    this.props.dispatch({
+      type: 'purchaseOperate/supplyList',
+      payload: {
+        purchasesn: record.purchasesn,
+        goodsid: record.goodsid,
+      },
+    });
   }
 
   handleModalOk = () => {
@@ -316,21 +320,31 @@ export default class PurDetailsOfOperate extends Component {
 
   handleModalCancel = () => {
     this.setState({ visible: false });
-    // setTimeout(() => {
-    //   this.setState({
-    //     visible: false,
-    //     previewVisible: false,
-    //     previewImage: {},
-    //     radioValue: "1",
-    //     tabKey: "1",
-    //     failmark: "",
-    //   });
-    // }, 0);
+  }
+  handleUpdateSupplyFlag = (record) => {
+    // console.log(record);
+    this.props.dispatch({
+      type: 'purchaseOperate/updateSupplyFlag',
+      payload: {
+        id: record.id+'',
+        flag: record.flag==='1'?'2':'1',
+      },
+      callback: this.UpdateSupplyFlagCallback,
+    });
+  }
+
+  UpdateSupplyFlagCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      message.error(msg);
+    }else {
+      message.success(msg);
+    }
   }
 
   render() {
     const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible, loading, content } = this.state;
-    const { purchaseOperate: { listGoods, paginationGoods, purchase }, submitting }  = this.props;
+    const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting }  = this.props;
 
     const menu = (
       <Menu>
@@ -497,7 +511,7 @@ export default class PurDetailsOfOperate extends Component {
         width: '8%',
         render: (text, record) => (
           <div>
-            <Button type="primary" size="small" ghost onClick={this.showModal} >
+            <Button type="primary" size="small" ghost onClick={()=>{this.showModal(record)}} >
               反馈
             </Button>
           </div>
@@ -529,6 +543,37 @@ export default class PurDetailsOfOperate extends Component {
       //   columns={columns}
       // />,
     };
+
+    ////////////////////////////////////////////////////////////////  弹出部分  //////////////////////////////////////////////////////////////
+    const supplyColumns = [
+      {
+        title: '报价账号',
+        dataIndex: 'usercode',
+        key: 'usercode',
+      },{
+        title: '公司名称',
+        dataIndex: 'company',
+        key: 'company',
+      },{
+        title: '商品数量',
+        dataIndex: 'total',
+        key: 'total',
+      },{
+        title: '商品价格',
+        dataIndex: 'price',
+        key: 'price',
+      },{
+        title: '操作',
+        dataIndex: 'operate',
+        key: 'operate',
+        render: (text, record) => (
+          <div>
+            <Button type="primary" size="small" ghost onClick={()=>{this.handleUpdateSupplyFlag(record)}} >
+              敲定
+            </Button>
+          </div>
+        ),
+      }];
 
     return (
       <PageHeaderLayout
@@ -580,7 +625,8 @@ export default class PurDetailsOfOperate extends Component {
         </Card>
         <Modal
           visible={visible}
-          style={{top: 20 }}
+          style={{top: 20}}
+          width="60%"
           title="供应商反馈列表"
           footer={[
             <Button key="back" onClick={this.handleModalCancel}>关闭</Button>,
@@ -590,6 +636,11 @@ export default class PurDetailsOfOperate extends Component {
           ]}
           onOk={this.handleModalOk}
           onCancel={this.handleModalCancel} >
+          <Table dataSource={supplyList}
+                 columns={supplyColumns}
+                 pagination={false}
+                 rowKey={record => record.id}
+                 loading={submitting}/>
           {content}
         </Modal>
       </PageHeaderLayout>

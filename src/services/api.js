@@ -193,6 +193,20 @@ export async function updatePriceOfOperate(params) {
   });
 }
 
+export async function supplyListOfOperate(params) {
+  return request(`${apiUrl}/llback/purchase/operate/supply/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updateSupplyFlagOfOperate(params) {
+  return request(`${apiUrl}/llback/purchase/operate/supply/flag`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function getOfferOfSupplier(params) {
   return request(`${apiUrl}/llback/goods/supplier/offerinfo`, {
     method: 'POST',
