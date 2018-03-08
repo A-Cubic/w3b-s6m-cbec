@@ -192,3 +192,10 @@ export async function updatePriceOfOperate(params) {
     body: params,
   });
 }
+
+export async function getOfferOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/offerinfo`, {
+    method: 'POST',
+    body: params,
+  });
+}
