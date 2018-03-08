@@ -18,8 +18,13 @@ const formItemLayout = {
 		sm: { span: 16 },
 	}
 };
+
 var goodsSelections = [];
 @Form.create()
+@connect(({ addPurOrder, loading }) => ({
+  addPurOrder,
+  loading: loading.models.addPurOrder,
+}))
 export default class AddGoodsModal extends Component {
 	state = {
 		pagination : {
@@ -55,7 +60,17 @@ export default class AddGoodsModal extends Component {
 		resetFields();
 	}
 	changGoodsPage = (page, filters, sorter) =>{
-		console.log(page);
+		console.log(page)
+		const { getFieldsValue } = this.props.form;
+		const values = getFieldsValue();
+		this.props.dispatch({
+			type:'addPurOrder/goodsList',
+			payload:{
+				search : '',
+				pageNumber:page.current,
+				pageSize:page.pageSize
+			}
+		});
 	}	
 
 	addGoods = () => {
@@ -89,12 +104,12 @@ export default class AddGoodsModal extends Component {
 			},
 			{
 			  title: '商品名称',
-			  dataIndex: 'goodsnames',
-			  key: 'goodsnames',
+			  dataIndex: 'goodsname',
+			  key: 'goodsname',
 			},{
 			  title: '商品条码',
-			  dataIndex: 'goodsTm',
-			  key: 'goodsTm',
+			  dataIndex: 'barcode',
+			  key: 'barcode',
 			},{
 			  title: '商品单价',
 			  dataIndex: 'price',
@@ -103,11 +118,15 @@ export default class AddGoodsModal extends Component {
 			  title: '提货方式',
 			  dataIndex: 'sendtype',
 			  key: 'sendtype',
+			  render : (text, record) => {
+
+			  }
+			  	
 			},{
 			  title: '图片',
-			  dataIndex: 'slt',
-			  key: 'slt',
-			  render : (text, record) => <img src='asd'/>
+			  dataIndex: 'content',
+			  key: 'content',
+			  render : (text, record) => <img src="text"/>
 			}];
 		const goodsDataSource = [
 			{
@@ -191,7 +210,7 @@ export default class AddGoodsModal extends Component {
 							  label ='商品名称'
 							>
 							  {getFieldDecorator('goodsnames')(
-							    <Input placeholder="商品条码"/>
+							    <Input placeholder="商品名称"/>
 							  )}
 							</FormItem>
 						</Col>
@@ -206,10 +225,10 @@ export default class AddGoodsModal extends Component {
 			</Row>
 			<div>
 				<Table 
-					dataSource={goodsDataSource} 
+					dataSource={this.props.list} 
 					columns={goodsColumns} 
 					rowSelection = {rowSelection}
-					pagination={pagination}
+					pagination={this.props.pagination}
 					onChange={this.changGoodsPage}
 					/>
 					

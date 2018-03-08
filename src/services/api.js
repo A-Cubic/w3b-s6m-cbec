@@ -213,3 +213,10 @@ export async function getOfferOfSupplier(params) {
     body: params,
   });
 }
+export async function goodsList(params) {
+  return request(`${apiUrl}/llback/goods/purchasers/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+

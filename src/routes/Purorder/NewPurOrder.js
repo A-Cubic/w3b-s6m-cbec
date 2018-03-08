@@ -71,8 +71,9 @@ class EditableCell extends React.Component {
     );
   }
 }
-@connect(({ register, loading }) => ({
-  register
+@connect(({ addPurOrder, loading }) => ({
+  addPurOrder,
+  loading: loading.models.addPurOrder,
 }))
 @Form.create()
 export default class NewPurOrder extends Component {
@@ -96,7 +97,7 @@ export default class NewPurOrder extends Component {
 	  handleOk = (arr) => {
 	  	const { purList, purList:{ purDataSource } } = this.state;
 	  	var data = [...purDataSource,...arr];
-	  	console.log(data)
+	  	// console.log(data)
   		if(arr.length > 0){
   			this.setState({
   				purList : {
@@ -117,13 +118,21 @@ export default class NewPurOrder extends Component {
 	  
 
 	goAddGoods = () =>{
+		console.log('00000000000');
+		this.props.dispatch({
+			type:'addPurOrder/goodsList',
+			payload:{
+				pageNumber:1,
+				pageSize:10
+			}
+		});
 		this.showModal();
 	}
 	
-	
-	render(){ console.log(this.state)
+	render(){ 
 		  	const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
 		  	const { purList,visible } = this.state;
+		  	const { addPurOrder:{goodsList:{ list,pagination }} } = this.props;
 			const purColumns = [
 				{
 				  title: '序号',
@@ -184,12 +193,12 @@ export default class NewPurOrder extends Component {
 		  	}
 	  		
 	  		const changPurPage = (page, filters, sorter) =>{
-	  			console.log(page);
+	  			// console.log(page);
 	  		}
 	  		const savePruOrder = () => {
 	  			const { purList:{ purDataSource } } = this.state;
 	  			const { getFieldsValue,validateFields,setFields } = this.props.form;
-	  			console.log(getFieldsValue());
+	  			// console.log(getFieldsValue());
 	  		}
 	  		const deletePruOrder = () => {
 	  			const { purList } = this.state;
@@ -270,7 +279,8 @@ export default class NewPurOrder extends Component {
 						/>
 					<Row className={styles.fr}>
 				  		<Button type="primary" className={styles.mR10} onClick={this.goAddGoods}>新增商品</Button>
-				  		<Button className={styles.mR10} onClick={savePruOrder}>保存</Button>
+				  		<Button className={styles.mR10} onClick={savePruOrder}>暂存</Button>
+				  		<Button className={styles.mR10}>提交</Button>
 				  		<Button onClick={deletePruOrder}>放弃</Button>
 			  		</Row>
 				</div>
@@ -280,6 +290,8 @@ export default class NewPurOrder extends Component {
 			 				 visible={visible}
 							 handleOk={this.handleOk}
 							 handleCancel={this.handleCancel}
+							 list={list}
+							 pagination={pagination}
 				 />
 		 	</div>
 			)
