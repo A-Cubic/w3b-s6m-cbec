@@ -658,7 +658,7 @@ export default class PurDetailsOfOperate extends Component {
                   <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_s.png" />
               </span>
               <div className={iaClass}>
-                  二货，你看你傻样！
+                  1箱10500,10箱的话10000.
               </div>
             </div>
 
@@ -667,7 +667,7 @@ export default class PurDetailsOfOperate extends Component {
                   <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_server.png" />
               </span>
               <div className={ibClass}>
-                没错我是李晓
+                10箱9800？可以吗？
               </div>
             </div>
             {/*<div>*/}
