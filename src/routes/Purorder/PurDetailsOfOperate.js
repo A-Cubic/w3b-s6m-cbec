@@ -670,15 +670,7 @@ export default class PurDetailsOfOperate extends Component {
                 10箱9800？可以吗？
               </div>
             </div>
-            {/*<div>*/}
-              {/*<Avatar src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_s.png" />*/}
-              {/*<div>李2狗？</div>*/}
-            {/*</div>*/}
-            {/*<div>*/}
-              {/*<Avatar src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_server.png" />*/}
-              {/*<div>是的.</div>*/}
-            {/*</div>*/}
-            {/*{content}*/}
+            {content}
           </div>
           <TextArea rows={4} style={{ height:'100px'}}/>
         </Modal>
