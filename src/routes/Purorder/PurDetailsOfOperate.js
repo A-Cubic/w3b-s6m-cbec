@@ -3,7 +3,7 @@ import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider,Input,notification,message,Modal } from 'antd';
+import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider,Input,notification,message,Modal,Switch,Avatar } from 'antd';
 import classNames from 'classnames';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import DescriptionList from '../../components/DescriptionList';
@@ -15,6 +15,9 @@ const { Step } = Steps;
 const { Description } = DescriptionList;
 const ButtonGroup = Button.Group;
 const Search = Input.Search;
+const { TextArea } = Input;
+const iaClass = classNames(ustyle.speech , ustyle.left);
+const ibClass = classNames(ustyle.speech , ustyle.right);
 
 const getWindowWidth = () => (window.innerWidth || document.documentElement.clientWidth);
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
@@ -563,17 +566,19 @@ export default class PurDetailsOfOperate extends Component {
         dataIndex: 'price',
         key: 'price',
       },{
-        title: '操作',
+        title: '敲定价格',
         dataIndex: 'operate',
         key: 'operate',
         render: (text, record) => (
-          <div>
-            <Button type="primary" size="small" ghost onClick={()=>{this.handleUpdateSupplyFlag(record)}} >
-              敲定
-            </Button>
-          </div>
+          <Fragment>
+            <Switch checkedChildren="是"
+                    unCheckedChildren="否"
+                    defaultChecked={record.flag==="2"?false:true}
+                    onChange={()=>this.handleUpdateSupplyFlag(record)}/>
+          </Fragment>
         ),
       }];
+
 
     return (
       <PageHeaderLayout
@@ -640,8 +645,42 @@ export default class PurDetailsOfOperate extends Component {
                  columns={supplyColumns}
                  pagination={false}
                  rowKey={record => record.id}
-                 loading={submitting}/>
-          {content}
+                 loading={submitting}
+                 style={{maxHeight:'300px'}}/>
+          <div style={{ marginBottom: 0,marginTop:20,height:'50px',border:'1px solid #F5F5F5' }}>
+            <div className={ustyle.mydiv}>聊天内容</div>
+          </div>
+          <div style={{ height:'300px',
+            overflowY:'auto',
+            backgroundColor:'#F5F5F5' }}>
+            <div className={ustyle.leftd}>
+              <span className={ustyle.leftd_h}>
+                  <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_s.png" />
+              </span>
+              <div className={iaClass}>
+                  二货，你看你傻样！
+              </div>
+            </div>
+
+            <div className={ustyle.rightd}>
+              <span className={ustyle.rightd_h}>
+                  <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_server.png" />
+              </span>
+              <div className={ibClass}>
+                没错我是李晓
+              </div>
+            </div>
+            {/*<div>*/}
+              {/*<Avatar src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_s.png" />*/}
+              {/*<div>李2狗？</div>*/}
+            {/*</div>*/}
+            {/*<div>*/}
+              {/*<Avatar src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_server.png" />*/}
+              {/*<div>是的.</div>*/}
+            {/*</div>*/}
+            {/*{content}*/}
+          </div>
+          <TextArea rows={4} style={{ height:'100px'}}/>
         </Modal>
       </PageHeaderLayout>
     );
