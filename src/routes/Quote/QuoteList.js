@@ -29,7 +29,9 @@ const formItemLayout = {
 
 export default class QuoteList extends Component {
    state = {
-     formValues: {},
+     formValues: {
+        usercode:'gongying',
+     },
      pagination: {
        current: 1,
        total: 10,
@@ -50,15 +52,15 @@ export default class QuoteList extends Component {
    }
 
    handleChangeStatus= (record) => {
-     // const { dispatch } = this.props;
-     // dispatch({
-     //   type: 'quote/updateStatus',
-     //   payload: {
-     //     userid: record.id,
-     //     flag: record.flag,
-     //   },
-     //   callback: this.onChangeStatusCallback,
-     // });
+     const { dispatch } = this.props;
+     dispatch({
+       type: 'quote/updateStatus',
+       payload: {
+         userid: record.id,
+         flag: record.flag,
+       },
+       callback: this.onChangeStatusCallback,
+     });
    }
    render(){
 		const { getFieldDecorator } = this.props.form;
@@ -151,7 +153,7 @@ export default class QuoteList extends Component {
                  pagination={pagination}
                  rowKey={record => record.id}
                  onChange={this.handleStandardTableChange}
-                 loading={submitting}/>/>
+                 loading={submitting}/>
 				</Card>
 			</div>
 			)

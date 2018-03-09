@@ -272,7 +272,7 @@ export default class UserInfoList extends Component {
                  pagination={pagination}
                  rowKey={record => record.id}
                  onChange={this.handleStandardTableChange}
-                 loading={submitting}/>/>
+                 loading={submitting}/>
 				</Card>
 
 			</div>
