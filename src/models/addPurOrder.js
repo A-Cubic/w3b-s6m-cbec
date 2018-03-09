@@ -1,4 +1,4 @@
-import { goodsList } from '../services/api';
+import { goodsList,getSendType } from '../services/api';
 
 export default {
   namespace: 'addPurOrder',
@@ -8,17 +8,24 @@ export default {
       list: [],
       pagination: {},
     },
+    sendTypeDate : []
   },
 
   effects: {
     *goodsList({ payload }, { call, put }) {
-      console.log('111');
       const response = yield call(goodsList, payload);
       yield put({
         type: 'save',
         payload: response,
       });
-    }
+    },
+    *getSendType({ payload }, { call, put }) {
+      const response = yield call(getSendType, payload);
+      yield put({
+        type: 'sendType',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
@@ -26,6 +33,12 @@ export default {
       return {
         ...state,
         goodsList: action.payload,
+      };
+    },
+    sendType(state, action) {
+      return {
+        ...state,
+        sendTypeDate: action.payload,
       };
     },
   },

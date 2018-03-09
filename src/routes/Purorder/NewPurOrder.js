@@ -82,9 +82,7 @@ export default class NewPurOrder extends Component {
 		// currentStep : 0,
 		purList : {
 			pagination : {
-				current : 1,
-				pageSize :2,
-				total:3
+				pageSize :10
 			},
 			purDataSource : []
 		}
@@ -118,8 +116,8 @@ export default class NewPurOrder extends Component {
 	  
 
 	goAddGoods = () =>{
-		console.log('00000000000');
-		this.props.dispatch({
+		const { dispatch } = this.props;
+		dispatch({
 			type:'addPurOrder/goodsList',
 			payload:{
 				pageNumber:1,
@@ -128,25 +126,33 @@ export default class NewPurOrder extends Component {
 		});
 		this.showModal();
 	}
-	
+	componentWillMount(){
+		const { addPurOrder:{ sendTypeDate },dispatch } = this.props;
+		if ( sendTypeDate.length == 0 ) {
+			dispatch({
+				type:'addPurOrder/getSendType',
+				payload:{}
+			});
+		}
+	}
 	render(){ 
 		  	const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
 		  	const { purList,visible } = this.state;
-		  	const { addPurOrder:{goodsList:{ list,pagination }} } = this.props;
+		  	const { addPurOrder:{goodsList:{ list,pagination },sendTypeDate},dispatch } = this.props;
 			const purColumns = [
 				{
 				  title: '序号',
-				  dataIndex: 'index',
-				  key: 'index',
+				  dataIndex: 'id',
+				  key: 'id',
 				},
 				{
 				  title: '商品名称',
-				  dataIndex: 'goodsnames',
-				  key: 'goodsnames',
+				  dataIndex: 'goodsname',
+				  key: 'goodsname',
 				},{
 				  title: '商品条码',
-				  dataIndex: 'goodsTm',
-				  key: 'goodsTm',
+				  dataIndex: 'barcode',
+				  key: 'barcode',
 				},{
 				  title: '商品单价',
 				  dataIndex: 'price',
@@ -155,6 +161,17 @@ export default class NewPurOrder extends Component {
 				  title: '提货方式',
 				  dataIndex: 'sendtype',
 				  key: 'sendtype',
+	  			  render : (text, record) => {
+	    			  	if (record.ifXG) {
+	    			  		return '香港自提'
+	    			  	}else if (record.ifHW) {
+	    			  		return '海外自提'
+	    			  	}else if (record.ifBS) {
+	    			  		return '保税备货'
+	    			  	}else if (record.ifMY) {
+	    			  		return '一般贸易'
+	    			  	}
+	  			  }				  
 				},{
 				  title: '期望价格',
 				  dataIndex: 'wantedPrice',
@@ -202,6 +219,13 @@ export default class NewPurOrder extends Component {
 	  		}
 	  		const deletePruOrder = () => {
 	  			const { purList } = this.state;
+	  			setFields({
+	  				sendtype : {value:''},
+	  				address : {value:''},
+	  				deliverytime : {value:''},
+	  				currency : {value:''},
+	  				remark : {value:''},
+	  			})
 	  			this.setState({
 	  				purList : {
 	  					...purList,
@@ -209,7 +233,6 @@ export default class NewPurOrder extends Component {
 	  				}
 	  			})
 	  		}
-
 		return(
 			<div>
 				<Card>
@@ -219,10 +242,12 @@ export default class NewPurOrder extends Component {
 						<Col  xs={24} sm={12} md={8} lg={8} xl={8} >
 							<FormItem
 							{...formItemLayout}
-							  label ='取货方式'
+							  label ='提货方式'
 							>
 							  {getFieldDecorator('sendtype')(
-							    <Input placeholder="取货方式"/>
+							    <Select placeholder='请选择提货方式' style={{ width: '100%' }}>
+							      {sendTypeDate.map((val,index) => <Option value={val.id}>{val.typename}</Option>)}
+							    </Select>
 							  )}
 							</FormItem>
 						</Col>

@@ -219,4 +219,10 @@ export async function goodsList(params) {
     body: params,
   });
 }
+export async function getSendType(params) {
+  return request(`${apiUrl}/llback/goods/sendtype`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
