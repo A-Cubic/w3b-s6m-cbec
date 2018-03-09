@@ -113,6 +113,7 @@ export default class PurDetailsOfOperate extends Component {
     loading: false,
     visible: false,
     content: '',
+    sendMessage:'',
   }
 
   componentDidMount() {
@@ -322,7 +323,10 @@ export default class PurDetailsOfOperate extends Component {
   }
 
   handleModalCancel = () => {
-    this.setState({ visible: false });
+    this.setState({
+      visible: false,
+      sendMessage: '',
+    });
   }
   handleUpdateSupplyFlag = (record) => {
     // console.log(record);
@@ -345,8 +349,48 @@ export default class PurDetailsOfOperate extends Component {
     }
   }
 
+  leftSender = (img,text) => {
+    <div className={ustyle.leftd}>
+        <span className={ustyle.leftd_h}>
+          <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_s.png" />
+        </span>
+      <div className={iaClass}>
+        1箱10500,10箱的话10000.
+      </div>
+    </div>
+  }
+  rightSender = (img,text) => {
+    <div className={ustyle.rightd}>
+        <span className={ustyle.rightd_h}>
+          <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_server.png" />
+        </span>
+      <div className={ibClass}>
+        10箱9800？可以吗？
+      </div>
+    </div>
+  }
+  handleSendMessage = (e) => {
+    e.preventDefault();
+    const { sendMessage } = this.state;
+    console.log(sendMessage);
+    if ( sendMessage.trim() === '') {
+      message.warning("不能发送空白信息");
+    }else {
+      this.setState({
+        sendMessage: '',
+      });
+    }
+  }
+
+  handleSendMessageOnChange = (e) => {
+    const { value } = e.target;
+    this.setState({
+      sendMessage: value,
+    });
+  }
+
   render() {
-    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible, loading, content } = this.state;
+    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible, loading, content,sendMessage } = this.state;
     const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting }  = this.props;
 
     const menu = (
@@ -653,26 +697,22 @@ export default class PurDetailsOfOperate extends Component {
           <div style={{ height:'300px',
             overflowY:'auto',
             backgroundColor:'#F5F5F5' }}>
-            <div className={ustyle.leftd}>
-              <span className={ustyle.leftd_h}>
-                  <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_s.png" />
-              </span>
-              <div className={iaClass}>
-                  1箱10500,10箱的话10000.
-              </div>
-            </div>
 
-            <div className={ustyle.rightd}>
-              <span className={ustyle.rightd_h}>
-                  <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_server.png" />
-              </span>
-              <div className={ibClass}>
-                10箱9800？可以吗？
-              </div>
-            </div>
             {content}
           </div>
-          <TextArea rows={4} style={{ height:'100px'}}/>
+
+          <div style={{position:'relative'}}>
+            <TextArea
+                      style={{ height:'100px',resize:'none'}}
+                      onChange={this.handleSendMessageOnChange}
+                      value={sendMessage}
+                      onPressEnter={this.handleSendMessage}/>
+            <div style={{position:'absolute',right:0,bottom:0,margin:'0 10px 10px 0'}} >
+              <Button  type="primary"  onClick={this.handleSendMessage} >发送(S)</Button>
+            </div>
+          </div>
+
+
         </Modal>
       </PageHeaderLayout>
     );
