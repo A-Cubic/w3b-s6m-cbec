@@ -214,7 +214,7 @@ class BasicLayout extends React.PureComponent {
           <GlobalFooter
             copyright={
               <div>
-                Copyright <Icon type="copyright" /> 2017 岂止科技（大连）有限公司出品
+                Copyright <Icon type="copyright" /> 2018 岂止科技（大连）有限公司
               </div>
             }
           />
