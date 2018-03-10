@@ -122,6 +122,7 @@ export default class PurDetailsOfOperate extends Component {
     chatList: [],
     purChatList: [],
     chatTitle:'聊天内容',
+    btnDisabled: false,
   }
 
   componentDidMount() {
@@ -153,12 +154,17 @@ export default class PurDetailsOfOperate extends Component {
       fee = params.bean.waybillfee;
     }
     const price = fee*1+sum*1;
+    let able = false;
+    if(params.bean.status==='0' || params.bean.status==='4'){
+      able = true;
+    }
 
     this.setState({
       waybillfeeValue: fee,
       listGoods:params.list,
       goodsSum:sum,
       totalPrice: price===0?'0.00':price,
+      btnDisabled: able,
     });
   }
 
@@ -206,23 +212,32 @@ export default class PurDetailsOfOperate extends Component {
     });
   }
   handleBtnOnChange = (e) => {
-    if(this.state.searchDisable){
-      this.setState({
-        searchDisable: false,
-      });
+    const { btnDisabled } = this.state;
+    if(!btnDisabled){
+      if(this.state.searchDisable){
+        this.setState({
+          searchDisable: false,
+        });
+      }else{
+        this.props.dispatch({
+          type: 'purchaseOperate/updateFee',
+          payload: {
+            purchasesn: this.props.match.params.id,
+            waybillfeeValue: e,
+          },
+          callback: this.updateFeeCallback,
+        });
+        this.setState({
+          searchDisable: true,
+        });
+      }
     }else{
-      this.props.dispatch({
-        type: 'purchaseOperate/updateFee',
-        payload: {
-          purchasesn: this.props.match.params.id,
-          waybillfeeValue: e,
-        },
-        callback: this.updateFeeCallback,
-      });
-      this.setState({
-        searchDisable: true,
+      notification.error({
+        message: "提示",
+        description: '此状态不可修改运单价格',
       });
     }
+
 
 
   }
@@ -515,7 +530,7 @@ export default class PurDetailsOfOperate extends Component {
 
 
   render() {
-    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage } = this.state;
+    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled } = this.state;
     const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting }  = this.props;
 
     // const menu = (
@@ -535,7 +550,7 @@ export default class PurDetailsOfOperate extends Component {
             {/*<Button><Icon type="ellipsis" /></Button>*/}
           {/*</Dropdown>*/}
         </ButtonGroup>
-        <Button type="primary" onClick={this.submitPur}>确认采购单</Button>
+        <Button type="primary" onClick={this.submitPur} disabled={btnDisabled}>确认采购单</Button>
       </div>
     );
 
@@ -598,31 +613,6 @@ export default class PurDetailsOfOperate extends Component {
       </div>
     );
 
-    const columns = [{
-      title: '操作类型',
-      dataIndex: 'type',
-      key: 'type',
-    }, {
-      title: '操作人',
-      dataIndex: 'name',
-      key: 'name',
-    }, {
-      title: '执行结果',
-      dataIndex: 'status',
-      key: 'status',
-      render: text => (
-        text === 'agree' ? <Badge status="success" text="成功" /> : <Badge status="error" text="驳回" />
-      ),
-    }, {
-      title: '操作时间',
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
-    }, {
-      title: '备注',
-      dataIndex: 'memo',
-      key: 'memo',
-    }];
-
     const goodsColumns = [
       {
         title: '商品名称',
@@ -659,12 +649,16 @@ export default class PurDetailsOfOperate extends Component {
         dataIndex: 'realprice',
         key: 'realprice',
         width: '10%',
-        render: (text, record) => (
-          <EditableCell
-            value={text}
-            onChange={this.onCellChange(record.id, 'realprice')}
-          />
-        ),
+        render: (text, record) => {
+            if(!btnDisabled) {
+              return(<EditableCell
+                value={text}
+                onChange={this.onCellChange(record.id, 'realprice')}
+              />);
+            }else{
+              return(<div>{record.realprice}</div>);
+            }
+        },
       },{
         title: '操作',
         dataIndex: 'operate',
@@ -672,7 +666,7 @@ export default class PurDetailsOfOperate extends Component {
         width: '8%',
         render: (text, record) => (
           <div>
-            <Button type="primary" size="small" ghost onClick={()=>{this.showModal(record)}} >
+            <Button type="primary" size="small" ghost onClick={()=>{this.showModal(record)}} disabled={btnDisabled}>
               反馈
             </Button>
           </div>
@@ -747,15 +741,18 @@ export default class PurDetailsOfOperate extends Component {
         </Card>
         <Card title="物流信息" style={{ marginBottom: 24 }} bordered={false}>
           <div style={{ textAlign:'center' }}>
-            <Search addonBefore="运费："
-                    placeholder="请填写运费"
-                    enterButton={searchDisable?"修改":"确定"}
-                    size="large"
-                    style={{width:'30%'}}
-                    disabled={searchDisable}
-                    onSearch={this.handleBtnOnChange}
-                    onChange={this.handleWaybillfeeOnChange}
-                    value={waybillfeeValue}/>
+            {
+              btnDisabled?<div style={{fontSize:'17px'}}>运费：{waybillfeeValue}</div>
+                :<Search addonBefore="运费："
+                         placeholder="请填写运费"
+                         enterButton={searchDisable?"修改":"确定"}
+                         size="large"
+                         style={{width:'30%'}}
+                         disabled={searchDisable}
+                         onSearch={this.handleBtnOnChange}
+                         onChange={this.handleWaybillfeeOnChange}
+                         value={waybillfeeValue}/>
+            }
           </div>
         </Card>
         <Modal
