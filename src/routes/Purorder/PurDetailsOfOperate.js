@@ -10,6 +10,7 @@ import DescriptionList from '../../components/DescriptionList';
 import styles from '../Profile/AdvancedProfile.less';
 import ustyle from '../../utils/utils.less';
 import moment from 'moment';
+import { getToken } from '../../utils/Global';
 
 const { Step } = Steps;
 const { Description } = DescriptionList;
@@ -18,6 +19,7 @@ const Search = Input.Search;
 const { TextArea } = Input;
 const iaClass = classNames(ustyle.speech , ustyle.left);
 const ibClass = classNames(ustyle.speech , ustyle.right);
+const usercode = getToken().userId;
 
 const getWindowWidth = () => (window.innerWidth || document.documentElement.clientWidth);
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
@@ -103,7 +105,6 @@ export default class PurDetailsOfOperate extends Component {
       total: 10,
       pageSize: 5,
     },
-    operationkey: 'tab1',
     stepDirection: 'horizontal',
     searchDisable:true,
     waybillfeeValue:'',
@@ -112,8 +113,15 @@ export default class PurDetailsOfOperate extends Component {
     totalPrice:'0.00',
     loading: false,
     visible: false,
+    purVisible: false,
     content: '',
+    purContent: '',
     sendMessage:'',
+    sendPurMessage:'',
+    selectedRow:{},
+    chatList: [],
+    purChatList: [],
+    chatTitle:'聊天内容',
   }
 
   componentDidMount() {
@@ -167,10 +175,6 @@ export default class PurDetailsOfOperate extends Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.setStepDirection);
     this.setStepDirection.cancel();
-  }
-
-  onOperationTabChange = (key) => {
-    this.setState({ operationkey: key });
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -240,19 +244,10 @@ export default class PurDetailsOfOperate extends Component {
     const msg = params.msg;
     if(params.type==="0"){
       message.error(msg);
-      // notification.error({
-      //   message: "提示",
-      //   description: msg,
-      // });
     }else {
       message.success(msg);
-      // notification.success({
-      //   message: "提示",
-      //   description: msg,
-      // });
     }
   }
-
 
   tableFooterSum = (params) => {
     return (
@@ -315,21 +310,17 @@ export default class PurDetailsOfOperate extends Component {
     });
   }
 
-  handleModalOk = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false, visible: false });
-    }, 3000);
-  }
-
   handleModalCancel = () => {
     this.setState({
       visible: false,
       sendMessage: '',
+      chatList:[],
+      chatTitle:'聊天内容',
+      selectedRow:{},
     });
   }
+
   handleUpdateSupplyFlag = (record) => {
-    // console.log(record);
     this.props.dispatch({
       type: 'purchaseOperate/updateSupplyFlag',
       payload: {
@@ -349,33 +340,41 @@ export default class PurDetailsOfOperate extends Component {
     }
   }
 
-  leftSender = (img,text) => {
-    <div className={ustyle.leftd}>
-        <span className={ustyle.leftd_h}>
-          <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_s.png" />
-        </span>
-      <div className={iaClass}>
-        1箱10500,10箱的话10000.
-      </div>
-    </div>
-  }
-  rightSender = (img,text) => {
-    <div className={ustyle.rightd}>
-        <span className={ustyle.rightd_h}>
-          <img src="http://ecc-product.oss-cn-beijing.aliyuncs.com/upload/head_server.png" />
-        </span>
-      <div className={ibClass}>
-        10箱9800？可以吗？
-      </div>
-    </div>
-  }
   handleSendMessage = (e) => {
     e.preventDefault();
-    const { sendMessage } = this.state;
-    console.log(sendMessage);
+    const { sendMessage,selectedRow } = this.state;
     if ( sendMessage.trim() === '') {
       message.warning("不能发送空白信息");
+    } else if(selectedRow ==null || selectedRow.usercode==null || selectedRow.usercode=='') {
+      message.warning("请选择聊天对象");
+    } else {
+      this.props.dispatch({
+        type: 'purchaseOperate/sendChat',
+        payload: {
+          purchasesn: selectedRow.purchasesn,
+          inquiry_id: selectedRow.id,
+          content: sendMessage,
+        },
+        callback: this.sendChatCallback,
+      });
+
+    }
+  }
+  sendChatCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      message.error(msg);
     }else {
+      const { selectedRow } = this.state;
+      this.props.dispatch({
+        type: 'purchaseOperate/listChat',
+        payload: {
+          purchasesn: selectedRow.purchasesn,
+          inquiry_id: selectedRow.id,
+        },
+        callback: this.onRowClickCallback,
+      });
+      // message.success(msg);
       this.setState({
         sendMessage: '',
       });
@@ -389,8 +388,111 @@ export default class PurDetailsOfOperate extends Component {
     });
   }
 
+  onRowClick = (e) => {
+    this.setState({
+      chatTitle: e.usercode,
+      selectedRow: e,
+    });
+    this.props.dispatch({
+      type: 'purchaseOperate/listChat',
+      payload: {
+        purchasesn: e.purchasesn,
+        inquiry_id: e.id,
+      },
+      callback: this.onRowClickCallback,
+    });
+  }
+
+  onRowClickCallback = (params) => {
+      this.setState({
+        chatList: params.length?params:[],
+      });
+    setTimeout(() => {
+      const div = document.getElementById("chat");
+      div.scrollTop = div.scrollHeight;
+    }, 0);
+  }
+
+
+  showPurModal = () => {
+    this.setState({
+      purVisible: true,
+    });
+    const { purchaseOperate: { purchase } }  = this.props;
+
+    this.props.dispatch({
+      type: 'purchaseOperate/listChat',
+      payload: {
+        purchasesn: purchase.purchasesn,
+      },
+      callback: this.listChatCallback,
+    });
+
+  }
+
+  handlePurModalCancel = () => {
+    this.setState({
+      purVisible: false,
+      sendPurMessage: '',
+      purChatList:[],
+    });
+  }
+
+  handleSendPurMessage = (e) => {
+    e.preventDefault();
+    const { sendPurMessage } = this.state;
+    const { purchaseOperate: { purchase } }  = this.props;
+    if ( sendPurMessage.trim() === '') {
+      message.warning("不能发送空白信息");
+    }  else {
+      this.props.dispatch({
+        type: 'purchaseOperate/sendChat',
+        payload: {
+          purchasesn: purchase.purchasesn,
+          content: sendPurMessage,
+        },
+        callback: this.sendPurChatCallback,
+      });
+    }
+  }
+  sendPurChatCallback = (params) => {
+    const { purchaseOperate: { purchase } }  = this.props;
+    const msg = params.msg;
+    if(params.type==="0"){
+      message.error(msg);
+    }else {
+      const { selectedRow } = this.state;
+      this.props.dispatch({
+        type: 'purchaseOperate/listChat',
+        payload: {
+          purchasesn: purchase.purchasesn,
+        },
+        callback: this.listChatCallback,
+      });
+      // message.success(msg);
+      this.setState({
+        sendPurMessage: '',
+      });
+    }
+  }
+  listChatCallback = (params) => {
+    this.setState({
+      purChatList: params.length?params:[],
+    });
+    setTimeout(() => {
+      const div = document.getElementById("purchat");
+      div.scrollTop = div.scrollHeight;
+    }, 0);
+  }
+  handleSendPurMessageOnChange = (e) => {
+    const { value } = e.target;
+    this.setState({
+      sendPurMessage: value,
+    });
+  }
+
   render() {
-    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible, loading, content,sendMessage } = this.state;
+    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage } = this.state;
     const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting }  = this.props;
 
     const menu = (
@@ -404,13 +506,13 @@ export default class PurDetailsOfOperate extends Component {
     const action = (
       <div>
         <ButtonGroup>
-          <Button>操作</Button>
-          <Button>操作</Button>
-          <Dropdown overlay={menu} placement="bottomRight">
-            <Button><Icon type="ellipsis" /></Button>
-          </Dropdown>
+          {/*<Button >操作</Button>*/}
+          <Button onClick={this.showPurModal}>聊天</Button>
+          {/*<Dropdown overlay={menu} placement="bottomRight">*/}
+            {/*<Button><Icon type="ellipsis" /></Button>*/}
+          {/*</Dropdown>*/}
         </ButtonGroup>
-        <Button type="primary">主操作</Button>
+        <Button type="primary">确认采购单</Button>
       </div>
     );
 
@@ -472,17 +574,6 @@ export default class PurDetailsOfOperate extends Component {
         </div>
       </div>
     );
-
-    const operationTabList = [{
-      key: 'tab1',
-      tab: '操作日志一',
-    }, {
-      key: 'tab2',
-      tab: '操作日志二',
-    }, {
-      key: 'tab3',
-      tab: '操作日志三',
-    }];
 
     const columns = [{
       title: '操作类型',
@@ -570,26 +661,6 @@ export default class PurDetailsOfOperate extends Component {
         ),
       }];
 
-    const contentList = {
-      // tab1: <Table
-      //   pagination={false}
-      //   loading={loading}
-      //   dataSource={advancedOperation1}
-      //   columns={columns}
-      // />,
-      // tab2: <Table
-      //   pagination={false}
-      //   loading={loading}
-      //   dataSource={advancedOperation2}
-      //   columns={columns}
-      // />,
-      // tab3: <Table
-      //   pagination={false}
-      //   loading={loading}
-      //   dataSource={advancedOperation3}
-      //   columns={columns}
-      // />,
-    };
 
     ////////////////////////////////////////////////////////////////  弹出部分  //////////////////////////////////////////////////////////////
     const supplyColumns = [
@@ -664,41 +735,53 @@ export default class PurDetailsOfOperate extends Component {
                     value={waybillfeeValue}/>
           </div>
         </Card>
-        <Card
-          className={styles.tabsCard}
-          bordered={false}
-          tabList={operationTabList}
-          onTabChange={this.onOperationTabChange}
-        >
-          {contentList[this.state.operationkey]}
-        </Card>
         <Modal
           visible={visible}
           style={{top: 20}}
           width="60%"
           title="供应商反馈列表"
-          footer={[
-            <Button key="back" onClick={this.handleModalCancel}>关闭</Button>,
-            <Button key="submit" type="primary" loading={loading} onClick={this.handleModalOk}>
-              发送
-            </Button>,
-          ]}
-          onOk={this.handleModalOk}
+          footer={null}
           onCancel={this.handleModalCancel} >
           <Table dataSource={supplyList}
                  columns={supplyColumns}
                  pagination={false}
                  rowKey={record => record.id}
                  loading={submitting}
+                 onRow = {(record) => {
+                   return {
+                     onClick: () => {this.onRowClick(record)},
+                   };
+                 }}
                  style={{maxHeight:'300px'}}/>
           <div style={{ marginBottom: 0,marginTop:20,height:'50px',border:'1px solid #F5F5F5' }}>
-            <div className={ustyle.mydiv}>聊天内容</div>
+            <div className={ustyle.mydiv}>{chatTitle}</div>
           </div>
-          <div style={{ height:'300px',
+          <div id="chat" style={{ height:'300px',
             overflowY:'auto',
             backgroundColor:'#F5F5F5' }}>
-
-            {content}
+            {
+              chatList.map(function(item,i) {
+                if(item.sender===usercode){
+                  return (<div key={i} className={ustyle.rightd}>
+                            <span className={ustyle.rightd_h}>
+                              <img src={item.avatar}/>
+                            </span>
+                            <div className={ibClass}>
+                              {item.content}
+                            </div>
+                          </div>);
+                }else{
+                  return (<div key={i} className={ustyle.leftd}>
+                            <span className={ustyle.leftd_h}>
+                              <img src={item.avatar}/>
+                            </span>
+                          <div className={iaClass}>
+                            {item.content}
+                          </div>
+                        </div>);
+                }
+              })
+            }
           </div>
 
           <div style={{position:'relative'}}>
@@ -709,6 +792,57 @@ export default class PurDetailsOfOperate extends Component {
                       onPressEnter={this.handleSendMessage}/>
             <div style={{position:'absolute',right:0,bottom:0,margin:'0 10px 10px 0'}} >
               <Button  type="primary"  onClick={this.handleSendMessage} >发送(S)</Button>
+            </div>
+          </div>
+        </Modal>
+
+
+        <Modal
+          visible={purVisible}
+          // style={{top: 20}}
+          width="50%"
+          title={purchase.userCode}
+          footer={null}
+          onCancel={this.handlePurModalCancel} >
+          {/*<div style={{ marginBottom: 0,marginTop:20,height:'50px',border:'1px solid #F5F5F5' }}>*/}
+            {/*<div className={ustyle.mydiv}>{purchase.userCode}</div>*/}
+          {/*</div>*/}
+          <div id="purchat" style={{ height:'300px',
+            overflowY:'auto',
+            backgroundColor:'#F5F5F5' }}>
+            {
+              purChatList.map(function(item,i) {
+                if(item.sender===usercode){
+                  return (<div key={i} className={ustyle.rightd}>
+                            <span className={ustyle.rightd_h}>
+                              <img src={item.avatar}/>
+                            </span>
+                    <div className={ibClass}>
+                      {item.content}
+                    </div>
+                  </div>);
+                }else{
+                  return (<div key={i} className={ustyle.leftd}>
+                            <span className={ustyle.leftd_h}>
+                              <img src={item.avatar}/>
+                            </span>
+                    <div className={iaClass}>
+                      {item.content}
+                    </div>
+                  </div>);
+                }
+              })
+            }
+          </div>
+
+          <div style={{position:'relative'}}>
+            <TextArea
+              style={{ height:'100px',resize:'none'}}
+              onChange={this.handleSendPurMessageOnChange}
+              value={sendPurMessage}
+              onPressEnter={this.handleSendPurMessage}/>
+            <div style={{position:'absolute',right:0,bottom:0,margin:'0 10px 10px 0'}} >
+              <Button  type="primary"  onClick={this.handleSendPurMessage} >发送(S)</Button>
             </div>
           </div>
 

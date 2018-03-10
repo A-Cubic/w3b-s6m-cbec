@@ -1,4 +1,6 @@
-import { getPurOrderListOfOperate, getPurGoodsListOfOperate, getPurInfoDetailsOfOperate, updateFeeOfOperate, updatePriceOfOperate,supplyListOfOperate,updateSupplyFlagOfOperate } from '../services/api';
+import { getPurOrderListOfOperate, getPurGoodsListOfOperate,
+  getPurInfoDetailsOfOperate, updateFeeOfOperate, updatePriceOfOperate,
+  supplyListOfOperate,updateSupplyFlagOfOperate,listChat,sendChat } from '../services/api';
 
 export default {
   namespace: 'purchaseOperate',
@@ -69,6 +71,18 @@ export default {
           callback(response);
       }
     },
+    *listChat({ payload, callback }, { call }) {
+      const response = yield call(listChat, payload);
+      if (response !== undefined) {
+        callback(response);
+      }
+    },
+    *sendChat({ payload, callback }, { call }) {
+      const response = yield call(sendChat, payload);
+      if (response !== undefined) {
+        callback(response);
+      }
+    },
 
   },
 
@@ -99,6 +113,12 @@ export default {
         supplyList:action.payload,
       };
     },
+    // queryChatList(state, action) {
+    //   return {
+    //     ...state,
+    //     chatList:action.payload,
+    //   };
+    // },
 
   },
 };

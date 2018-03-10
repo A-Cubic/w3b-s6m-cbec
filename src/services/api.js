@@ -244,3 +244,17 @@ export async function splitPurGoods(params) {
     body: params,
   });
 }
+
+export async function listChat(params) {
+  return request(`${apiUrl}/llback/purchase/chat/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function sendChat(params) {
+  return request(`${apiUrl}/llback/purchase/chat/send`, {
+    method: 'POST',
+    body: params,
+  });
+}

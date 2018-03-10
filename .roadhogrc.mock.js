@@ -166,11 +166,13 @@ const proxy = {
   'POST /llback/goods/supplier/offerinfo': 'http://api.llwell.net/',
   'POST /llback/purchase/operate/supply/list': 'http://api.llwell.net/',
   'POST /llback/purchase/operate/supply/flag': 'http://api.llwell.net/',
-  'POST /llback/goods/purchasers/list': 'http://172.16.10.183:9999/',
+  'POST /llback/goods/purchasers/list': 'http://api.llwell.net/',
   'POST /llback/goods/sendtype': 'http://api.llwell.net/',
-  'POST /llback/purchase/add': 'http://172.16.10.183:9999/',
-  'POST /llback/purchase/goods/add': 'http://172.16.10.183:9999/',
-  'POST /llback/purchase/split': 'http://172.16.10.183:9999/',
+  'POST /llback/purchase/add': 'http://api.llwell.net/',
+  'POST /llback/purchase/goods/add': 'http://api.llwell.net/',
+  'POST /llback/purchase/split': 'http://api.llwell.net/',
+  'POST /llback/purchase/chat/list': 'http://api.llwell.net/',
+  'POST /llback/purchase/chat/send': 'http://api.llwell.net/',
 };
 
 
