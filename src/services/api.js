@@ -219,4 +219,22 @@ export async function goodsList(params) {
     body: params,
   });
 }
+export async function updateOfferOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/updateoffer`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function updateOfferflagOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/updateofferflag`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function offerbyid(params) {
+  return request(`${apiUrl}/llback/goods/supplier/offerbyid`, {
+    method: 'POST',
+    body: params,
+  });
+}
 

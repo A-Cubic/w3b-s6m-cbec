@@ -192,7 +192,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['quote'], () => import('../routes/Quote/QuoteList')),
     },
     '/goods/quote/mod/:id': {
-      component: dynamicWrapper(app, [], () => import('../routes/Quote/QuoteMod')),
+      component: dynamicWrapper(app, ['quote'], () => import('../routes/Quote/QuoteMod')),
     },
     '/goods/quote/add': {
       component: dynamicWrapper(app, [], () => import('../routes/Quote/QuoteAdd')),
