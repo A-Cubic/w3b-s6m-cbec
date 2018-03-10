@@ -39,6 +39,7 @@ export default class RegisterVerify extends Component {
 	  const props = {
 	      action: url,
 	      listType: 'picture',
+        accept:'image/*',
 	      onChange({ file, fileList }) {
 	          if (file.status !== 'uploading') {
 	            // console.log(fileList);

@@ -165,19 +165,23 @@ export default class UserInfoDetails extends Component {
     const cardData = [
       {
         title: '营业执照',
-        data: (currentUser.img1 !==null && currentUser.img1 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img1} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.img1)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无营业执照照片",
+        // data: (currentUser.img1 !==null && currentUser.img1 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img1} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.img1)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无营业执照照片",
+        data: (currentUser.img1 !==null && currentUser.img1 !=="")?<img src={currentUser.img1} style={{ width: '250px',height:'320px' }} onClick={()=>this.showImg(currentUser.img1)}></img>:"无营业执照照片",
       },
       {
         title: '组织机构代码证',
-        data: (currentUser.img2 !==null && currentUser.img2 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img2} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.img2)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无组织机构代码证照片",
+        // data: (currentUser.img2 !==null && currentUser.img2 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img2} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.img2)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无组织机构代码证照片",
+        data: (currentUser.img2 !==null && currentUser.img2 !=="")?<img src={currentUser.img2} style={{ width: '250px',height:'320px' }} onClick={()=>this.showImg(currentUser.img2)}></img>:"无组织机构代码证照片",
       },
       {
         title: '税务登记证',
-        data: (currentUser.img3 !==null && currentUser.img3 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img3} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.img3)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无税务登记证照片",
+        // data: (currentUser.img3 !==null && currentUser.img3 !=="")?<div style={{ position: 'relative' }}><img src={currentUser.img3} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.img3)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无税务登记证照片",
+        data: (currentUser.img3 !==null && currentUser.img3 !=="")?<img src={currentUser.img3} style={{ width: '250px',height:'320px' }} onClick={()=>this.showImg(currentUser.img3)}></img>:"无税务登记证照片",
       },
       {
         title: '三证合一',
-        data: (currentUser.three !==null && currentUser.three !=="")?<div style={{ position: 'relative' }}><img src={currentUser.three} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.three)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无三证合一照片",
+        // data: (currentUser.three !==null && currentUser.three !=="")?<div style={{ position: 'relative' }}><img src={currentUser.three} style={{ width: '250px',height:'250px' }}></img><Button onClick={()=>this.showImg(currentUser.three)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无三证合一照片",
+        data: (currentUser.three !==null && currentUser.three !=="")?<img src={currentUser.three} style={{ width: '250px',height:'320px' }} onClick={()=>this.showImg(currentUser.three)}></img>:"无三证合一照片",
       },
     ];
 

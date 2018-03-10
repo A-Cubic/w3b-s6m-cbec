@@ -327,19 +327,22 @@ export default class RegisterCheck extends Component {
       },
       {
         title: '营业执照',
-        data: (selectedRow.img1 !==null && selectedRow.img1 !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.img1} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img1)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无营业执照照片",
+        // data: (selectedRow.img1 !==null && selectedRow.img1 !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.img1} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img1)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无营业执照照片",
+        data: (selectedRow.img1 !==null && selectedRow.img1 !=="")?<img src={selectedRow.img1} style={{ width: '250px',height:'320px' }} onClick={()=>this.showImg(selectedRow.img1)}></img>:"无营业执照照片",
       },
       {
         title: '组织机构代码证',
-        data: (selectedRow.img2 !==null && selectedRow.img2 !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.img2} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img2)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无组织机构代码证照片",
+        // data: (selectedRow.img2 !==null && selectedRow.img2 !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.img2} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img2)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无组织机构代码证照片",
+        data: (selectedRow.img2 !==null && selectedRow.img2 !=="")?<img src={selectedRow.img2} style={{ width: '250px',height:'320px' }} onClick={()=>this.showImg(selectedRow.img2)}></img>:"无组织机构代码证照片",
       },
       {
         title: '税务登记证',
-        data: (selectedRow.img3 !==null && selectedRow.img3 !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.img3} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img3)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无税务登记证照片",
+        // data: (selectedRow.img3 !==null && selectedRow.img3 !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.img3} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.img3)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无税务登记证照片",
+        data: (selectedRow.img3 !==null && selectedRow.img3 !=="")?<img src={selectedRow.img3} style={{ width: '250px',height:'320px' }} onClick={()=>this.showImg(selectedRow.img3)}></img>:"无税务登记证照片",
       },
       {
         title: '三证合一',
-        data: (selectedRow.three !==null && selectedRow.three !=="")?<div style={{ position: 'relative' }}><img src={selectedRow.three} style={{ width: '200px',height:'200px' }}></img><Button onClick={()=>this.showImg(selectedRow.three)} type="primary" shape="circle" icon="eye" size="default" style={{ position: 'absolute',right:'2px' }}/></div>:"无三证合一照片",
+        data: (selectedRow.three !==null && selectedRow.three !=="")?<img src={selectedRow.three} style={{ width: '250px',height:'320px' }} onClick={()=>this.showImg(selectedRow.three)}></img>:"无三证合一照片",
       },
     ];
     const operations = <Popconfirm placement="leftBottom" title="确认提交审核结果吗？" onConfirm={this.submitCheckResult} okText="是" cancelText="否">
