@@ -216,5 +216,3 @@ export default class QuoteMod extends Component {
   }
 }
 
-
-export default QuoteMod;
