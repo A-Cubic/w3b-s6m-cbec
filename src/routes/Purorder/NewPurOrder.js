@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input, Button, Table,Card,Form,Row, Col,DatePicker,Select,Steps,Icon,Modal,notification  } from 'antd';
+import { Input, Button, Table,Card,Form,Row, Col,DatePicker,Select,Steps,Icon,Modal,notification,Spin   } from 'antd';
 import styles from '../../utils/utils.less'
 import ustyle from '../Profile/AdvancedProfile.less';
 import { getToken } from '../../utils/Global';
@@ -99,8 +99,7 @@ export default class NewPurOrder extends Component {
 			},
 			purDataSource : []
 		},
-		saveLoading : false,
-		submitLoading : false,
+		loading : false
 	}
 	showModal = () => {
 	    this.setState({
@@ -164,9 +163,9 @@ export default class NewPurOrder extends Component {
 			});
 		}
 	}
-	render(){  console.log(this.state)
-		  	const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
-		  	const { purList,visible,selectedRowKeys,saveLoading,submitLoading  } = this.state;
+	render(){  
+		  	const { getFieldDecorator,getFieldsValue,validateFields,setFields,resetFields } = this.props.form;
+		  	const { purList,visible,selectedRowKeys,loading  } = this.state;
 		  	const { addPurOrder:{goodsList:{ list,pagination },sendTypeDate},dispatch } = this.props;
 			const purColumns = [
 				{
@@ -272,10 +271,9 @@ export default class NewPurOrder extends Component {
 	  			// console.log(page);
 	  		}
 	  		const savePruOrder = (btn,loading) => {
-	  			console.log(btn);
 	  			const { purList:{ purDataSource } } = this.state;
 	  			const { dispatch }  = this.props;
-	  			const { getFieldsValue,validateFields,setFields } = this.props.form;
+	  			const { getFieldsValue,validateFields,setFields,resetFields } = this.props.form;
 	  			var data = {
 	  				...getFieldsValue(),
 	  				userCode : getToken().userId,
@@ -285,7 +283,17 @@ export default class NewPurOrder extends Component {
 
 	  			validateFields((err,fieldsValue)=>{
 	  				if(!err){
-	  					this.setState({saveLoading:true})
+	  					this.setState({loading:true})
+
+  						if (btn == 'submit'&& purList.purDataSource.length == 0) {
+  							notification['error']({
+					          message: '采购单通知',
+					          description: '请添加采购单商品'
+					        });
+					        this.setState({loading:false});
+					        return false
+  						}
+
 	  					dispatch({
 	  						type:'addPurOrder/savePurOrder',
 	  						payload:data,
@@ -297,7 +305,7 @@ export default class NewPurOrder extends Component {
 							          message: '采购单通知',
 							          description: '创建成功'
 							        });
-							        this.setState({saveLoading:false})
+							        this.setState({loading:false})
 	  							}
 	  							else if(purchasesn && purList.purDataSource.length > 0){
 	  								var data2 = {
@@ -325,7 +333,7 @@ export default class NewPurOrder extends Component {
   										  	  	  message: '采购单通知',
   										  	  	  description: '创建成功',
   										  	  	});
-  										  	  	this.setState({saveLoading:false});
+  										  	  	this.setState({loading:false});
   										  	  }else if (btn !== undefined && btn=='submit'){
   										  	  	//拆单
   										  	  	dispatch({
@@ -345,7 +353,7 @@ export default class NewPurOrder extends Component {
 									  	  					  description: `创建成功，${response.msg}`,
 									  	  					});
 									  	  				}
-									  	  				this.setState({saveLoading:false});
+									  	  				this.setState({loading:false});
 									  	  			}
 									  	  		})
   										  	  }
@@ -355,7 +363,7 @@ export default class NewPurOrder extends Component {
 	  										    message: '采购单通知',
 	  										    description: `创建成功，商品未添加  ${response.msg}`,
 	  										  });
-	  										  this.setState({saveLoading:false});
+	  										  this.setState({loading:false});
 	  										}
 	  									}
 		  							});	  								
@@ -367,13 +375,7 @@ export default class NewPurOrder extends Component {
 	  		}
 	  		const deletePruOrder = () => {
 	  			const { purList } = this.state;
-	  			setFields({
-	  				sendtype : {value:''},
-	  				address : {value:''},
-	  				deliverytime : {value:''},
-	  				currency : {value:''},
-	  				remark : {value:''},
-	  			})
+	  			resetFields();
 	  			this.setState({
 	  				purList : {
 	  					...purList,
@@ -384,7 +386,8 @@ export default class NewPurOrder extends Component {
 		return(
 			<div>
 				<Card>
-					<div>
+				<Spin className={loading ? '' : styles.none} style={{position:'absolute',left:'50%',top:100,transform:'translateX(-50%)',zIndex:100}}/>
+				<div>
 		          <Form onSubmit={this.handleSubmit} className={styles.mB20}>
 					<Row>
 						<Col  xs={24} sm={12} md={8} lg={8} xl={8} >
@@ -427,10 +430,12 @@ export default class NewPurOrder extends Component {
 							>
 							  {getFieldDecorator('currency',{rules: [{ required: true, message: '请选择币种' }]})(
 							     <Select placeholder='请选择币种' style={{ width: '100%' }}>
-							      <Option value='美元'>美元</Option>
-							      <Option value='日元'>日元</Option>
-							      <Option value='韩元'>韩元</Option>
-							      <Option value='人民币（RMB）'>人民币（RMB）</Option>
+							      <Option value='CNY人民币'>人民币(CNY)</Option>
+							      <Option value='HKD港币'>港币(HKD)</Option>
+							      <Option value='KRW韩元'>韩元(KRW)</Option>
+							      <Option value='USD美元'>美元(USD)</Option>
+							      <Option value='EUR欧元'>欧元(EUR)</Option>
+							      <Option value='JPY日元'>日元(JPY)</Option>
 							    </Select>
 							  )}
 							</FormItem>
@@ -458,8 +463,8 @@ export default class NewPurOrder extends Component {
 						/>
 					<Row className={styles.fr}>
 				  		<Button type="primary" className={styles.mR10} onClick={this.goAddGoods}>新增商品</Button>
-				  		<Button className={styles.mR10} onClick={savePruOrder.bind(this,'save','')} loading={saveLoading}>暂存</Button>
-				  		<Button className={styles.mR10} onClick={savePruOrder.bind(this,'submit','')} loading={submitLoading}>提交</Button>
+				  		<Button className={styles.mR10} onClick={savePruOrder.bind(this,'save')}>暂存</Button>
+				  		<Button className={styles.mR10} onClick={savePruOrder.bind(this,'submit')}>提交</Button>
 				  		<Button onClick={deletePruOrder}>放弃</Button>
 			  		</Row>
 				</div>
