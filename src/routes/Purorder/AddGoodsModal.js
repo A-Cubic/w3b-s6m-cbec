@@ -111,6 +111,12 @@ export default class AddGoodsModal extends Component {
 			  key: 'id',
 			},
 			{
+			  title: '图片',
+			  dataIndex: 'slt',
+			  key: 'slt',
+			  render : (text, record) => <img src={`${text}`} style={{width:100,height:100}}/>
+			},
+			{
 			  title: '商品名称',
 			  dataIndex: 'goodsname',
 			  key: 'goodsname',
@@ -138,12 +144,7 @@ export default class AddGoodsModal extends Component {
   			  	}
 			  }
 			  	
-			}/*,{
-			  title: '图片',
-			  dataIndex: 'content',
-			  key: 'content',
-			  render : (text, record) => <img src={`${text}`} style={{width:100}}/>
-			}*/];
+			}];
 		const goodsDataSource = [
 			{
 				key : '1',
@@ -194,14 +195,14 @@ export default class AddGoodsModal extends Component {
 	  		    goodsSelections=selectedRows;
 	  		  },
 	  		  getCheckboxProps: record => ({
-	  		    disabled: record.name === 'Disabled User',
-	  		    name: record.name
+	  		    disabled: record.id === 'Disabled User',
+	  		    name: record.id
 	  		  })
 	  	};
 
 	return(
 		<Modal
-		  width={"60%"}
+		  width={"80%"}
           title="添加采购商品"
           visible={this.props.visible}
           onOk={this.handleOk}

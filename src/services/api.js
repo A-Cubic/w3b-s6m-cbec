@@ -226,3 +226,21 @@ export async function getSendType(params) {
   });
 }
 
+export async function savePurOrder(params) {
+  return request(`${apiUrl}/llback/purchase/add`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function addPurGoods(params) {
+  return request(`${apiUrl}/llback/purchase/goods/add`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function splitPurGoods(params) {
+  return request(`${apiUrl}/llback/purchase/split `, {
+    method: 'POST',
+    body: params,
+  });
+}
