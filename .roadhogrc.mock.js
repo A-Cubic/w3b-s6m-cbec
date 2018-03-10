@@ -171,6 +171,11 @@ const proxy = {
   'POST /llback/purchase/add': 'http://api.llwell.net/',
   'POST /llback/purchase/goods/add': 'http://api.llwell.net/',
   'POST /llback/purchase/split': 'http://api.llwell.net/',
+  'POST /llback/purchase/chat/list': 'http://api.llwell.net/',
+  'POST /llback/purchase/chat/send': 'http://api.llwell.net/',
+  'POST /llback/goods/supplier/updateoffer': 'http://api.llwell.net/',
+  'POST /llback/goods/supplier/updateofferflag': 'http://api.llwell.net/',
+  'POST /llback/goods/supplier/offerbyid': 'http://api.llwell.net/',
 };
 
 
