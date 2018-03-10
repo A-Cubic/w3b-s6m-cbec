@@ -258,3 +258,10 @@ export async function sendChat(params) {
     body: params,
   });
 }
+
+export async function updatePurchaseStatus(params) {
+  return request(`${apiUrl}/llback/purchase/update`, {
+    method: 'POST',
+    body: params,
+  });
+}

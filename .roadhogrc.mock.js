@@ -176,6 +176,7 @@ const proxy = {
   'POST /llback/goods/supplier/updateoffer': 'http://api.llwell.net/',
   'POST /llback/goods/supplier/updateofferflag': 'http://api.llwell.net/',
   'POST /llback/goods/supplier/offerbyid': 'http://api.llwell.net/',
+  'POST /llback/purchase/update': 'http://api.llwell.net/',
 };
 
 

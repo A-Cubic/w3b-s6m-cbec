@@ -1,6 +1,6 @@
 import { getPurOrderListOfOperate, getPurGoodsListOfOperate,
   getPurInfoDetailsOfOperate, updateFeeOfOperate, updatePriceOfOperate,
-  supplyListOfOperate,updateSupplyFlagOfOperate,listChat,sendChat } from '../services/api';
+  supplyListOfOperate,updateSupplyFlagOfOperate,listChat,sendChat,updatePurchaseStatus } from '../services/api';
 
 export default {
   namespace: 'purchaseOperate',
@@ -79,6 +79,12 @@ export default {
     },
     *sendChat({ payload, callback }, { call }) {
       const response = yield call(sendChat, payload);
+      if (response !== undefined) {
+        callback(response);
+      }
+    },
+    *submitPur({ payload, callback }, { call }) {
+      const response = yield call(updatePurchaseStatus, payload);
       if (response !== undefined) {
         callback(response);
       }

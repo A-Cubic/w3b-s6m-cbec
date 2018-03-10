@@ -491,17 +491,40 @@ export default class PurDetailsOfOperate extends Component {
     });
   }
 
+  submitPur = () => {
+    const { purchaseOperate: { purchase } }  = this.props;
+    this.props.dispatch({
+      type: 'purchaseOperate/submitPur',
+      payload: {
+        purchasesn: purchase.purchasesn,
+        status: '4',
+      },
+      callback: this.submitPurChatCallback,
+    });
+  }
+  submitPurChatCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      message.error('确认采购单失败');
+    }else {
+      message.success('确认采购单成功');
+      this.props.dispatch(routerRedux.push('/trade/order-o/list'));
+    }
+  }
+
+
+
   render() {
     const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage } = this.state;
     const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting }  = this.props;
 
-    const menu = (
-      <Menu>
-        <Menu.Item key="1">选项一</Menu.Item>
-        <Menu.Item key="2">选项二</Menu.Item>
-        <Menu.Item key="3">选项三</Menu.Item>
-      </Menu>
-    );
+    // const menu = (
+    //   <Menu>
+    //     <Menu.Item key="1">选项一</Menu.Item>
+    //     <Menu.Item key="2">选项二</Menu.Item>
+    //     <Menu.Item key="3">选项三</Menu.Item>
+    //   </Menu>
+    // );
 
     const action = (
       <div>
@@ -512,7 +535,7 @@ export default class PurDetailsOfOperate extends Component {
             {/*<Button><Icon type="ellipsis" /></Button>*/}
           {/*</Dropdown>*/}
         </ButtonGroup>
-        <Button type="primary">确认采购单</Button>
+        <Button type="primary" onClick={this.submitPur}>确认采购单</Button>
       </div>
     );
 
@@ -698,7 +721,7 @@ export default class PurDetailsOfOperate extends Component {
     return (
       <PageHeaderLayout
         title={`采购单号：${purchase.purchasesn}`}
-        logo={<img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" />}
+        logo={<img alt="" src="http://ecc-product.oss-cn-beijing.aliyuncs.com/back/purlogo.png" />}
         action={action}
         content={description}
         extraContent={extra}
