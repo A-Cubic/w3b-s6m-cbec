@@ -31,47 +31,55 @@ export default class AddGoodsModal extends Component {
 			current : 1,
 			pageSize :2,
 			total:3
-		}
+		},
+		selectedRowKeys : []
 	}
 
 	handleOk = (e) => {
 	  if(this.props.handleOk){
 		this.props.handleOk(goodsSelections);
   	  }
+  	  this.setState({
+  	  	selectedRowKeys:[]
+  	  })
 	}
 	handleCancel = (e) => {
 	  if(this.props.handleCancel){
 		this.props.handleCancel();
 	  }
+	  this.setState({
+	  	selectedRowKeys:[]
+	  })
 	}
 	handleSearchGoods = () =>{
 		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
+		const { dispatch, addPurOrder:{ goodsList:{ pagination } } } = this.props;
 		var values = getFieldsValue();
-		console.log(values);
-		/*this.props.dispatch({
-			type : '',
-			payload : {
-				...values,
-			}
-		})*/
+		var search = values.goodsId !==undefined ? values.goodsId : '' + ' '+ values.goodsnames !==undefined ?  values.goodsnames : '' ;
+		this.getGoodsList(search,1,pagination.pageSize)
 	}
 	resetSearch = () => {
 		const { resetFields } = this.props.form;
+		const { addPurOrder:{ goodsList:{ pagination } } } = this.props;
 		resetFields();
+		this.getGoodsList('',1,pagination.pageSize)
 	}
 	changGoodsPage = (page, filters, sorter) =>{
 		console.log(page)
 		const { getFieldsValue } = this.props.form;
 		const values = getFieldsValue();
+		this.getGoodsList('',page.current,page.pageSize)
+	}	
+	getGoodsList(search,current,pageSize){
 		this.props.dispatch({
 			type:'addPurOrder/goodsList',
 			payload:{
-				search : '',
-				pageNumber:page.current,
-				pageSize:page.pageSize
+				search : search,
+				current:current,
+				pageSize:pageSize
 			}
 		});
-	}	
+	}
 
 	addGoods = () => {
   			const { purList } = this.state; 
@@ -95,12 +103,18 @@ export default class AddGoodsModal extends Component {
 
 	render(){
 		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
-		const { pagination } = this.state;
+		const { selectedRowKeys } = this.state;
 		const goodsColumns = [
 			{
 			  title: '商品编号',
 			  dataIndex: 'id',
 			  key: 'id',
+			},
+			{
+			  title: '图片',
+			  dataIndex: 'slt',
+			  key: 'slt',
+			  render : (text, record) => <img src={`${text}`} style={{width:100,height:100}}/>
 			},
 			{
 			  title: '商品名称',
@@ -119,14 +133,17 @@ export default class AddGoodsModal extends Component {
 			  dataIndex: 'sendtype',
 			  key: 'sendtype',
 			  render : (text, record) => {
-
+  			  	if (record.ifXG) {
+  			  		return '香港自提'
+  			  	}else if (record.ifHW) {
+  			  		return '海外自提'
+  			  	}else if (record.ifBS) {
+  			  		return '保税备货'
+  			  	}else if (record.ifMY) {
+  			  		return '一般贸易'
+  			  	}
 			  }
 			  	
-			},{
-			  title: '图片',
-			  dataIndex: 'content',
-			  key: 'content',
-			  render : (text, record) => <img src="text"/>
 			}];
 		const goodsDataSource = [
 			{
@@ -171,20 +188,21 @@ export default class AddGoodsModal extends Component {
 		]
 		
 		const rowSelection = {
+			  selectedRowKeys,
 	  		  onChange: (selectedRowKeys, selectedRows) => {
 	  		    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+	  		    this.setState({selectedRowKeys})
 	  		    goodsSelections=selectedRows;
-	  		    console.log(goodsSelections);
 	  		  },
 	  		  getCheckboxProps: record => ({
-	  		    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-	  		    name: record.name
+	  		    disabled: record.id === 'Disabled User',
+	  		    name: record.id
 	  		  })
 	  	};
 
 	return(
 		<Modal
-		  width={"60%"}
+		  width={"80%"}
           title="添加采购商品"
           visible={this.props.visible}
           onOk={this.handleOk}

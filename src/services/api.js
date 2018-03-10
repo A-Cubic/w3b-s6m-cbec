@@ -219,22 +219,42 @@ export async function goodsList(params) {
     body: params,
   });
 }
-export async function updateOfferOfSupplier(params) {
-  return request(`${apiUrl}/llback/goods/supplier/updateoffer`, {
-    method: 'POST',
-    body: params,
-  });
-}
-export async function updateOfferflagOfSupplier(params) {
-  return request(`${apiUrl}/llback/goods/supplier/updateofferflag`, {
-    method: 'POST',
-    body: params,
-  });
-}
-export async function offerbyid(params) {
-  return request(`${apiUrl}/llback/goods/supplier/offerbyid`, {
+export async function getSendType(params) {
+  return request(`${apiUrl}/llback/goods/sendtype`, {
     method: 'POST',
     body: params,
   });
 }
 
+export async function savePurOrder(params) {
+  return request(`${apiUrl}/llback/purchase/add`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function addPurGoods(params) {
+  return request(`${apiUrl}/llback/purchase/goods/add`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function splitPurGoods(params) {
+  return request(`${apiUrl}/llback/purchase/split `, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function listChat(params) {
+  return request(`${apiUrl}/llback/purchase/chat/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function sendChat(params) {
+  return request(`${apiUrl}/llback/purchase/chat/send`, {
+    method: 'POST',
+    body: params,
+  });
+}
