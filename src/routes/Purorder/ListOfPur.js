@@ -5,6 +5,7 @@ import { Input,Button,Table,Card,Form,Row,Col,Select,Pagination,Badge,notificati
 import styles from '../../utils/utils.less'
 import styles1 from '../List/TableList.less';
 import moment from 'moment';
+import { getToken } from '../../utils/Global';
 
 const { RangePicker, MonthPicker } = DatePicker;
 const Option = Select.Option;
@@ -13,6 +14,7 @@ const flagMap = ['error','default', 'processing','processing', 'processing', 'su
 const flag = ['取消','普通','处理中','询价结束','等待确认','完成'];
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
+const usercode = getToken().userId;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -109,6 +111,7 @@ export default class ListOfPur extends Component {
       payload: {
         ...formValues,
         ...pagination,
+        usercode:usercode,
       },
     });
   }
@@ -126,6 +129,7 @@ export default class ListOfPur extends Component {
     const params = {
       current: pagination.current,
       pageSize: pagination.pageSize,
+      usercode:usercode,
       ...formValues,
       // ...filters,
     };
@@ -160,6 +164,7 @@ export default class ListOfPur extends Component {
         payload: {
           ...values,
           ...pagination,
+          usercode:usercode,
         },
       });
     });
@@ -177,6 +182,7 @@ export default class ListOfPur extends Component {
       type: 'purchasePurchasers/list',
       payload: {
         ...pagination,
+        usercode:usercode,
       },
     });
   }
