@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Input, Button, Table, Card, Form, Row, Col ,InputNumber} from 'antd';
 import styles from '../../utils/utils.less';
-
+import { routerRedux } from 'dva/router';
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -90,11 +90,11 @@ export default class QuoteMod extends Component {
       });
       console.log(values);
       dispatch({
-        type: 'quote/list',
+        type: 'quote/updateOffer',
         payload: {
           ...values,
-          ...pagination,
         },
+        callback:this.onUpdateOfferCallback,
       });
     });
   }
@@ -109,13 +109,6 @@ export default class QuoteMod extends Component {
     });
     const { formValues, pagination } = this.state;
 
-    this.props.dispatch({
-      type: 'quote/info',
-      payload: {
-        id: this.props.match.params.id,
-      },
-      callback: this.onGetOfferCallback,
-    });
   }
 
   onGetOfferCallback = (params) => {
@@ -124,6 +117,13 @@ export default class QuoteMod extends Component {
     this.setState({
       data: params,
     });
+  }
+  onUpdateOfferCallback = (params) => {
+    if(params.type==1){
+      this.props.dispatch(routerRedux.push('/goods/quote/list'));
+    }else{
+
+    }
   }
 
 
@@ -156,7 +156,7 @@ export default class QuoteMod extends Component {
                               {...formItemLayout}
                               label={item.label}
                             >
-                              {getFieldDecorator(`type-${item.key}`,{
+                              {getFieldDecorator(`${item.key}`,{
                                 initialValue: this.state.data ? this.state.data[item.key] : ''
                               })(
                                 <InputNumber />
@@ -171,7 +171,7 @@ export default class QuoteMod extends Component {
                               {...formItemLayout}
                               label={item.label}
                             >
-                              {getFieldDecorator(`type-${item.key}`,{
+                              {getFieldDecorator(`${item.key}`,{
                                 initialValue: this.state.data ? this.state.data[item.key] : ''
                               })(
                                 <Input />
@@ -186,7 +186,7 @@ export default class QuoteMod extends Component {
                               {...formItemLayout}
                               label={item.label}
                             >
-                              {getFieldDecorator(`type-${item.key}`,{
+                              {getFieldDecorator(`${item.key}`,{
                                 initialValue: this.state.data ? this.state.data[item.key] : ''
                               })(
                                 <Input disabled />
