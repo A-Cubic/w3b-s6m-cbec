@@ -27,23 +27,22 @@ const formItemLayout2 = {
 };
 
 const data = {
-  "id": 1,
-  "userCode": "admin",
-  "company": "BGN",
-  "goodsId": 1,
-  "barcode": 123,
-  "goodsName": "ces",
-  "offer": 33.32,
+  "id": "",
+  "userCode": "",
+  "company": "",
+  "goodsId": "",
+  "barcode": "",
+  "goodsName": "",
+  "offer": "",
   "remark": "",
-  "flag": 1,
-  "slt": "https://avatars0.githubusercontent.com/u/35676474?s=88&v=4",
+  "flag": "",
+  "slt": "",
 }
 
 const formItemsName = [
   {label: '缩略图', key: 'slt'},
   {label: '序号', key: 'id'},
-  // {label: '供应商code', key: 'userCode'},
-  {label: '公司名', key: 'company'},
+  // {label: '公司名', key: 'company'},
   {label: '商品条码', key: 'barcode'},
   {label: '商品名称（中文）', key: 'goodsName'},
   {label: '报价', key: 'offer'},
@@ -59,20 +58,20 @@ const formItemsName = [
 
 export default class QuoteMod extends Component {
   state = {
-    formValues: {
-
-    }
+    formValues: {},
+    data: {},
   }
 
 
   componentDidMount() {
-    const { formValues, pagination } = this.state;
-
+    const { formValues, data } = this.state;
+    console.log(123);
     this.props.dispatch({
       type: 'quote/info',
       payload: {
         id: this.props.match.params.id,
       },
+      callback: this.onGetOfferCallback,
     });
   }
   handleSubmit = e => {
@@ -100,21 +99,6 @@ export default class QuoteMod extends Component {
     });
   }
 
-  handleDelete = e => {
-    e.preventDefault();
-    const { id } = this.state.data;
-    console.log(id);
-  }
-
-  handleChange = e => {
-    e.preventDefault();
-    this.setState({
-      data: {
-        ...this.state.data,
-        offer: e.target.value
-      }
-    })
-  }
 
   componentWillMount () {
     let goodsTm = this.props.match.params.id;
@@ -123,8 +107,24 @@ export default class QuoteMod extends Component {
     this.setState({
       data: data
     });
+    const { formValues, pagination } = this.state;
+
+    this.props.dispatch({
+      type: 'quote/info',
+      payload: {
+        id: this.props.match.params.id,
+      },
+      callback: this.onGetOfferCallback,
+    });
   }
 
+  onGetOfferCallback = (params) => {
+    const { data } = this.state;
+    const { dispatch } = this.props;
+    this.setState({
+      data: params,
+    });
+  }
 
 
   render () {
@@ -145,7 +145,7 @@ export default class QuoteMod extends Component {
                               {...formItemLayout2}
                               label={item.label}
                             >
-                              <img src={this.state.data[item.key]}  style={{width: 90, height: 90, background: '#f3f3f3', border: 'solid 1px #aaa'}}></img>
+                              <img src={this.state.data[item.key]}  style={{width: 200, height: 200, background: '#f3f3f3', border: 'solid 1px #aaa'}}></img>
                             </FormItem>
                           </Col>
                         );
@@ -204,7 +204,7 @@ export default class QuoteMod extends Component {
                     style={{marginLeft: '8%'}}
                   >
                     <Button type='primary' className={styles.mR10} htmlType="submit">保存</Button>
-                    <Button href={'/goods/quote/list'}>放弃</Button>
+                    <Button href={'#/goods/quote/list'}>放弃</Button>
                   </FormItem>
                 </Col>
               </Row>

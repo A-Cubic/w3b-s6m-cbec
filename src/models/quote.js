@@ -26,9 +26,17 @@ export default {
         callback(response);
       }
     },
-    *info({ payload, callback }, { call }) {
-      const response = yield call(getOfferOfSupplier, payload);
+    *info({ payload, callback }, { call ,put}) {
+      const response = yield call(offerbyid, payload);
       if (response !== undefined) {
+        callback(response);
+      }
+    },
+    *updateStatus({ payload, callback }, { call }) {
+      const response = yield call(updateOfferflagOfSupplier, payload);
+      if (response === undefined) {
+
+      } else {
         callback(response);
       }
     },
