@@ -80,7 +80,7 @@ const columns = [
     key: 'operate',
     render: (text, record) => (
       <Fragment>
-        <Link to={`/trade/order-p/info/${record.purchasesn}`}>处理</Link>
+        <Link to={`/trade/order-p/mod/${record.purchasesn}`}>处理</Link>
       </Fragment>
     ),
   }];
