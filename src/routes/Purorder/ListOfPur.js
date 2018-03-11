@@ -247,13 +247,6 @@ export default class ListOfPur extends Component {
               )}
             </FormItem>
           </Col>
-          {/*<Col md={8} sm={24}>*/}
-            {/*<FormItem {...formItemLayout} label="采购账号">*/}
-              {/*{getFieldDecorator('userCode')(*/}
-                {/*<Input placeholder="请输入采购商账号" />*/}
-              {/*)}*/}
-            {/*</FormItem>*/}
-          {/*</Col>*/}
           <Col md={8} sm={24}>
             <FormItem {...formItemLayout} label="询价状态">
               {getFieldDecorator('status',{initialValue: ""})(
