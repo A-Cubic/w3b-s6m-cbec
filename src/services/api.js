@@ -292,6 +292,19 @@ export async function getPurInfoDetailsOfSupplier(params) {
     body: params,
   });
 }
+export async function getPurGoodsListOfSupplier(params) {
+  return request(`${apiUrl}/llback/purchase/supplier/inquiry`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function updatePriceOfSupplier(params) {
+  return request(`${apiUrl}/llback/purchase/supplier/update/price`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 ///////////////////////////////////////////////////////////////////////////////// 采购单 部分  end/////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////// 商品报价 部分 begin /////////////////////////////////////////////////////////////////////////
 export async function getOfferOfSupplier(params) {

@@ -751,7 +751,7 @@ export default class PurDetailsOfPur extends Component {
           visible={purVisible}
           // style={{top: 20}}
           width="50%"
-          title={purchase.userCode}
+          title="流连优选（高级客服经理）"
           footer={null}
           onCancel={this.handlePurModalCancel} >
           <div id="purchat" style={{ height:'300px',

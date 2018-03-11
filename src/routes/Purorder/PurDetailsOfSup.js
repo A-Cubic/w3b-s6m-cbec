@@ -25,7 +25,7 @@ const getWindowWidth = () => (window.innerWidth || document.documentElement.clie
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
 const breadcrumbList = [{
   title: '采购单管理',
-  href: '/trade/order-p/list',
+  href: '/trade/order-s/list',
 }, {
   title: '采购单详情',
 }];
@@ -39,12 +39,12 @@ const EditableCell = ({ editable, value, onChange }) => (
   </div>
 );
 
-@connect(({ purchasePurchasers, loading }) => ({
-  purchasePurchasers,
-  submitting: loading.effects['purchasePurchasers/goodslist'],
+@connect(({ purchaseSupplier, loading }) => ({
+  purchaseSupplier,
+  submitting: loading.effects['purchaseSupplier/goodslist'],
 }))
 
-export default class PurDetailsOfPur extends Component {
+export default class PurDetailsOfSup extends Component {
   state = {
     pagination: {
       current: 1,
@@ -75,7 +75,7 @@ export default class PurDetailsOfPur extends Component {
     const { dispatch } = this.props;
     const { pagination } = this.state;
     dispatch({
-      type: 'purchasePurchasers/goodslist',
+      type: 'purchaseSupplier/goodslist',
       payload: {
         purchasesn: this.props.match.params.id,
         ...pagination,
@@ -95,21 +95,16 @@ export default class PurDetailsOfPur extends Component {
         sum=params.list[0].sum;
       }
     }
-    let fee = '';
-    if(params.bean.waybillfee){
-      fee = params.bean.waybillfee;
-    }
-    const price = fee*1+sum*1;
-    let able = true;
-    if(params.bean.status==='4'){
-      able = false;
+
+    let able = false;
+    if(params.bean.status==='0' || params.bean.status==='4'){
+      able = true;
     }
     this.cacheData = params.list.map(item => ({ ...item }));
     this.setState({
-      waybillfeeValue: fee,
       listGoods:params.list,
       goodsSum:sum,
-      totalPrice: price===0?'0.00':price,
+      totalPrice: sum,
       btnDisabled: able,
     });
   }
@@ -150,7 +145,7 @@ export default class PurDetailsOfPur extends Component {
     }
 
     dispatch({
-      type: 'purchasePurchasers/goodslist',
+      type: 'purchaseSupplier/goodslist',
       payload: {
         purchasesn: this.props.match.params.id,
         ...params,
@@ -166,7 +161,7 @@ export default class PurDetailsOfPur extends Component {
         });
       }else{
         this.props.dispatch({
-          type: 'purchasePurchasers/updateFee',
+          type: 'purchaseSupplier/updateFee',
           payload: {
             purchasesn: this.props.match.params.id,
             waybillfeeValue: e,
@@ -232,85 +227,14 @@ export default class PurDetailsOfPur extends Component {
     }
   }
 
-  // onCellChange = (key, dataIndex) => {
-  //   return (value) => {
-  //     const dataSource = [...this.state.listGoods];
-  //     const totalPrice = this.state.totalPrice;
-  //     const goodsSum = this.state.goodsSum;
-  //
-  //     const target = dataSource.find(item => item.id === key);
-  //
-  //     if (target) {
-  //       const matchPrice = totalPrice*1-(target[dataIndex]*1-value*1);
-  //       const matchSum = goodsSum*1-(target[dataIndex]*1-value*1);
-  //       target[dataIndex] = value;
-  //       this.props.dispatch({
-  //         type: 'purchasePurchasers/updatePrice',
-  //         payload: {
-  //           id: key,
-  //           realprice: value,
-  //         },
-  //         callback: this.updatePriceCallback,
-  //       });
-  //
-  //       this.setState({ dataSource ,totalPrice:matchPrice,goodsSum:matchSum });
-  //     }
-  //   };
-  // }
-
-  showModal = (record) => {
-    this.setState({
-      visible: true,
-    });
-    this.props.dispatch({
-      type: 'purchasePurchasers/supplyList',
-      payload: {
-        purchasesn: record.purchasesn,
-        goodsid: record.goodsid,
-      },
-    });
-  }
-
-  handleModalCancel = () => {
-    this.setState({
-      visible: false,
-      sendMessage: '',
-      chatList:[],
-      chatTitle:'聊天内容',
-      selectedRow:{},
-    });
-  }
-
-  handleUpdateSupplyFlag = (record) => {
-    this.props.dispatch({
-      type: 'purchasePurchasers/updateSupplyFlag',
-      payload: {
-        id: record.id+'',
-        flag: record.flag==='1'?'2':'1',
-      },
-      callback: this.UpdateSupplyFlagCallback,
-    });
-  }
-
-  UpdateSupplyFlagCallback = (params) => {
-    const msg = params.msg;
-    if(params.type==="0"){
-      message.error(msg);
-    }else {
-      message.success(msg);
-    }
-  }
-
   handleSendMessage = (e) => {
     e.preventDefault();
     const { sendMessage,selectedRow } = this.state;
     if ( sendMessage.trim() === '') {
       message.warning("不能发送空白信息");
-    } else if(selectedRow ==null || selectedRow.usercode==null || selectedRow.usercode=='') {
-      message.warning("请选择聊天对象");
     } else {
       this.props.dispatch({
-        type: 'purchasePurchasers/sendChat',
+        type: 'purchaseSupplier/sendChat',
         payload: {
           purchasesn: selectedRow.purchasesn,
           inquiry_id: selectedRow.id,
@@ -328,7 +252,7 @@ export default class PurDetailsOfPur extends Component {
     }else {
       const { selectedRow } = this.state;
       this.props.dispatch({
-        type: 'purchasePurchasers/listChat',
+        type: 'purchaseSupplier/listChat',
         payload: {
           purchasesn: selectedRow.purchasesn,
           inquiry_id: selectedRow.id,
@@ -355,7 +279,7 @@ export default class PurDetailsOfPur extends Component {
       selectedRow: e,
     });
     this.props.dispatch({
-      type: 'purchasePurchasers/listChat',
+      type: 'purchaseSupplier/listChat',
       payload: {
         purchasesn: e.purchasesn,
         inquiry_id: e.id,
@@ -375,16 +299,16 @@ export default class PurDetailsOfPur extends Component {
   }
 
 
-  showPurModal = () => {
+  showPurModal = (e) => {
     this.setState({
       purVisible: true,
     });
-    const { purchasePurchasers: { purchase } }  = this.props;
 
     this.props.dispatch({
-      type: 'purchasePurchasers/listChat',
+      type: 'purchaseSupplier/listChat',
       payload: {
-        purchasesn: purchase.purchasesn,
+        purchasesn: e.purchasesn,
+        inquiry_id: e.id,
       },
       callback: this.listChatCallback,
     });
@@ -402,12 +326,12 @@ export default class PurDetailsOfPur extends Component {
   handleSendPurMessage = (e) => {
     e.preventDefault();
     const { sendPurMessage } = this.state;
-    const { purchasePurchasers: { purchase } }  = this.props;
+    const { purchaseSupplier: { purchase } }  = this.props;
     if ( sendPurMessage.trim() === '') {
       message.warning("不能发送空白信息");
     }  else {
       this.props.dispatch({
-        type: 'purchasePurchasers/sendChat',
+        type: 'purchaseSupplier/sendChat',
         payload: {
           purchasesn: purchase.purchasesn,
           content: sendPurMessage,
@@ -417,14 +341,14 @@ export default class PurDetailsOfPur extends Component {
     }
   }
   sendPurChatCallback = (params) => {
-    const { purchasePurchasers: { purchase } }  = this.props;
+    const { purchaseSupplier: { purchase } }  = this.props;
     const msg = params.msg;
     if(params.type==="0"){
       message.error(msg);
     }else {
       const { selectedRow } = this.state;
       this.props.dispatch({
-        type: 'purchasePurchasers/listChat',
+        type: 'purchaseSupplier/listChat',
         payload: {
           purchasesn: purchase.purchasesn,
         },
@@ -453,9 +377,9 @@ export default class PurDetailsOfPur extends Component {
   }
 
   submitPur = (e) => {
-    const { purchasePurchasers: { purchase } }  = this.props;
+    const { purchaseSupplier: { purchase } }  = this.props;
     this.props.dispatch({
-      type: 'purchasePurchasers/submitPur',
+      type: 'purchaseSupplier/submitPur',
       payload: {
         purchasesn: purchase.purchasesn,
         status: e,
@@ -469,7 +393,7 @@ export default class PurDetailsOfPur extends Component {
       message.error('提交失败');
     }else {
       message.success('提交成功');
-      this.props.dispatch(routerRedux.push('/trade/order-p/list'));
+      this.props.dispatch(routerRedux.push('/trade/order-s/list'));
     }
   }
 
@@ -505,10 +429,10 @@ export default class PurDetailsOfPur extends Component {
     const target = newData.filter(item => key === item.id)[0];
     if (target) {
       this.props.dispatch({
-        type: 'purchasePurchasers/updatePrice',
+        type: 'purchaseSupplier/updatePrice',
         payload: {
           id: key,
-          expectprice: target.expectprice,
+          price: target.price,
           total: target.total,
         },
         callback: this.updatePriceCallback,
@@ -531,16 +455,15 @@ export default class PurDetailsOfPur extends Component {
 ////////////////////////可编辑行end//////////////////////////
 
   render() {
-    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled } = this.state;
-    const { purchasePurchasers: { listGoods, paginationGoods, purchase }, submitting }  = this.props;
+    const { stepDirection, searchDisable, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled } = this.state;
+    const { purchaseSupplier: { listGoods, paginationGoods, purchase }, submitting }  = this.props;
 
     const action = (
       <div>
-        <ButtonGroup>
-          <Button onClick={this.showPurModal}>聊天</Button>
-          <Button onClick={()=>this.submitPur('2')} disabled={btnDisabled}>退回询价</Button>
-        </ButtonGroup>
-        <Button type="primary" onClick={()=>this.submitPur('5')} disabled={btnDisabled}>完成采购单</Button>
+        {/*<ButtonGroup>*/}
+          {/*<Button onClick={this.showPurModal}>聊天</Button>*/}
+        {/*</ButtonGroup>*/}
+        <Button type="primary" onClick={()=>this.submitPur('5')} disabled={btnDisabled}>完成报价</Button>
       </div>
     );
 
@@ -559,13 +482,13 @@ export default class PurDetailsOfPur extends Component {
 
     const description = (
       <DescriptionList className={styles.headerList} size="small" col="2">
-        <Description term="创建人">{purchase.userCode}</Description>
+        {/*<Description term="创建人">{purchase.userCode}</Description>*/}
         <Description term="创建时间">{moment(purchase.createtime).format('YYYY-MM-DD HH:mm:ss')}</Description>
         <Description term="取货方式">{purchase.sendtypename}</Description>
         <Description term="目的地">{purchase.address}</Description>
         <Description term="纳期">{purchase.deliverytime}</Description>
         <Description term="币种">{purchase.currency}</Description>
-        <Description term="备注">{purchase.remark}</Description>
+        {/*<Description term="备注">{purchase.remark}</Description>*/}
       </DescriptionList>
     );
 
@@ -620,40 +543,12 @@ export default class PurDetailsOfPur extends Component {
         key: 'total',
         width: '10%',
         render: (text, record) => this.renderColumns(text, record, 'total'),
-      },
-      // {
-      //   title: '其他费用',
-      //   dataIndex: 'otherprice',
-      //   key: 'otherprice',
-      //   width: '10%',
-      // },
-      // {
-      //   title: '商品价格',
-      //   dataIndex: 'price',
-      //   key: 'price',
-      //   width: '10%',
-      // },
-      {
-        title: '期望价格',
-        dataIndex: 'expectprice',
-        key: 'expectprice',
-        width: '10%',
-        render: (text, record) => this.renderColumns(text, record, 'expectprice'),
       },{
-        title: '实际价格',
-        dataIndex: 'realprice',
-        key: 'realprice',
+        title: '商品价格',
+        dataIndex: 'price',
+        key: 'price',
         width: '10%',
-        // render: (text, record) => {
-        //     if(!btnDisabled) {
-        //       return(<EditableCell
-        //         value={text}
-        //         onChange={this.onCellChange(record.id, 'realprice')}
-        //       />);
-        //     }else{
-        //       return(<div>{record.realprice}</div>);
-        //     }
-        // },
+        render: (text, record) => this.renderColumns(text, record, 'price'),
       },{
         title: '操作',
         dataIndex: 'operate',
@@ -668,50 +563,25 @@ export default class PurDetailsOfPur extends Component {
                   <span>
                   <a onClick={() => this.save(record.id)}>保存</a>
                     <a onClick={() => this.cancel(record.id)}>取消</a>
-                    {/*<Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.id)}>*/}
-                    {/*<a>取消</a>*/}
-                    {/*</Popconfirm>*/}
                 </span>
                   : <a onClick={() => this.edit(record.id)} disabled={btnDisabled}>编辑</a>
               }
             </div>
           );
         },
-      }];
-
-
-    ////////////////////////////////////////////////////////////////  弹出部分  //////////////////////////////////////////////////////////////
-    const supplyColumns = [
-      {
-        title: '报价账号',
-        dataIndex: 'usercode',
-        key: 'usercode',
       },{
-        title: '公司名称',
-        dataIndex: 'company',
-        key: 'company',
-      },{
-        title: '商品数量',
-        dataIndex: 'total',
-        key: 'total',
-      },{
-        title: '商品价格',
-        dataIndex: 'price',
-        key: 'price',
-      },{
-        title: '敲定价格',
-        dataIndex: 'operate',
-        key: 'operate',
+        title: '沟通',
+        dataIndex: 'chat',
+        key: 'chat',
+        width: '8%',
         render: (text, record) => (
-          <Fragment>
-            <Switch checkedChildren="是"
-                    unCheckedChildren="否"
-                    defaultChecked={record.flag==="2"?false:true}
-                    onChange={()=>this.handleUpdateSupplyFlag(record)}/>
-          </Fragment>
+          <div>
+            <Button type="primary" size="small" ghost onClick={()=>{this.showPurModal(record)}} disabled={btnDisabled}>
+              反馈
+            </Button>
+          </div>
         ),
       }];
-
 
     return (
       <PageHeaderLayout
@@ -740,18 +610,12 @@ export default class PurDetailsOfPur extends Component {
                  loading={submitting}
                  footer={this.tableFooterSum}/>
         </Card>
-        <Card title="物流信息" style={{ marginBottom: 24 }} bordered={false}>
-          <div style={{ textAlign:'center' }}>
-            <div style={{fontSize:'17px'}}>运费：{waybillfeeValue}</div>
-          </div>
-        </Card>
-
 
         <Modal
           visible={purVisible}
           // style={{top: 20}}
           width="50%"
-          title={purchase.userCode}
+          title="流连优选（高级客服经理）"
           footer={null}
           onCancel={this.handlePurModalCancel} >
           <div id="purchat" style={{ height:'300px',

@@ -156,7 +156,7 @@ export default class PurDetailsOfOperate extends Component {
     window.addEventListener('resize', this.setStepDirection);
   }
 
-  getGoodsCallback = (params) => { 
+  getGoodsCallback = (params) => {
     const { basicMsg } = this.state;
     let sum = '0.00';
     let bean = params.bean;
@@ -589,7 +589,7 @@ export default class PurDetailsOfOperate extends Component {
         data.push(...val);
       }
     });
-    
+
     if(arr.length > 0){
       console.log(data);
       this.setState({
@@ -629,9 +629,9 @@ export default class PurDetailsOfOperate extends Component {
 
 
 
-  render() { 
+  render() {
     console.log(this.state)
-    
+
     const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled,basicMsg,addGoodsVisible,selectedRowKeys  } = this.state;
     const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting,addPurOrder:{goodsList:{ list,pagination }} }  = this.props;
 
@@ -794,7 +794,7 @@ export default class PurDetailsOfOperate extends Component {
             }
           })
         });
-        
+
         this.setState({
           listGoods : data
         })

@@ -1,6 +1,5 @@
-import { getPurOrderListOfSupplier, getPurGoodsListOfOperate,
-  getPurInfoDetailsOfOperate, updateFeeOfOperate, updatePriceOfOperate,
-  supplyListOfOperate,updateSupplyFlagOfOperate,listChat,sendChat,updatePurchaseStatus } from '../services/api';
+import { getPurOrderListOfSupplier, getPurGoodsListOfSupplier,
+  getPurInfoDetailsOfSupplier,updatePriceOfSupplier,listChat,sendChat,updatePurchaseStatus } from '../services/api';
 
 export default {
   namespace: 'purchaseSupplier',
@@ -24,8 +23,8 @@ export default {
       }
     },
     *goodslist({ payload,callback }, { call, put }) {
-      const response1 = yield call(getPurInfoDetailsOfOperate, payload);
-      const response = yield call(getPurGoodsListOfOperate, payload);
+      const response1 = yield call(getPurInfoDetailsOfSupplier, payload);
+      const response = yield call(getPurGoodsListOfSupplier, payload);
       if (response1 !== undefined) {
         yield put({
           type: 'queryDetails',
@@ -44,13 +43,7 @@ export default {
       }
     },
     *updatePrice({ payload, callback }, { call }) {
-      const response = yield call(updatePriceOfOperate, payload);
-      if (response !== undefined) {
-          callback(response);
-      }
-    },
-    *updateSupplyFlag({ payload, callback }, { call }) {
-      const response = yield call(updateSupplyFlagOfOperate, payload);
+      const response = yield call(updatePriceOfSupplier, payload);
       if (response !== undefined) {
           callback(response);
       }
