@@ -207,7 +207,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['addPurOrder'], () => import('../routes/Purorder/NewPurOrder')),
     },
     '/trade/order-p/mod/:id': {
-      component: dynamicWrapper(app, [], () => import('../routes/Purorder/ModPurOrder')),
+      component: dynamicWrapper(app, ['purchaseOperate','addPurOrder'], () => import('../routes/Purorder/ModPurOrder')),
     },
     '/trade/order-o/list': {
       component: dynamicWrapper(app, ['purchaseOperate'], () => import('../routes/Purorder/ListOfOperate')),

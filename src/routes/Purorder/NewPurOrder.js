@@ -108,7 +108,12 @@ export default class NewPurOrder extends Component {
 	  }
 	  handleOk = (arr) => {
 	  	const { purList, purList:{ purDataSource } } = this.state;
-	  	var data = [...purDataSource,...arr];
+	  	var data = [];
+	  	arr.forEach((val,i)=>{
+	      if (val !== undefined) {
+	        data.push(...val);
+	      }
+	    });
 	  	//添加空sendtype
   		data.forEach((item,index)=>{
   			item['sendtype'] = this.getSendType(item);
@@ -476,6 +481,7 @@ export default class NewPurOrder extends Component {
 							 handleCancel={this.handleCancel}
 							 list={list}
 							 pagination={pagination}
+							 choosenGoods={purList.purDataSource}
 				 />
 		 	</div>
 			)

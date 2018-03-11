@@ -7,10 +7,12 @@ import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Ta
 import classNames from 'classnames';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import DescriptionList from '../../components/DescriptionList';
+import  AddGoodsModal  from './AddGoodsModal';
 import styles from '../Profile/AdvancedProfile.less';
 import ustyle from '../../utils/utils.less';
 import moment from 'moment';
 import { getToken } from '../../utils/Global';
+
 
 const { Step } = Steps;
 const { Description } = DescriptionList;
@@ -29,7 +31,7 @@ const breadcrumbList = [{
 }, {
   title: '采购单详情',
 }];
-
+let GoodsSelections = [];
 class EditableCell extends Component {
   state = {
     value: this.props.value,
@@ -93,8 +95,9 @@ class EditableCell extends Component {
   }
 }
 
-@connect(({ purchaseOperate, loading }) => ({
+@connect(({ purchaseOperate,addPurOrder, loading }) => ({
   purchaseOperate,
+  addPurOrder,
   submitting: loading.effects['purchaseOperate/goodslist'],
 }))
 
@@ -123,6 +126,18 @@ export default class PurDetailsOfOperate extends Component {
     purChatList: [],
     chatTitle:'聊天内容',
     btnDisabled: false,
+    basicMsg : {
+      msgDisabled : '',
+      userCode : '',
+      createtime : '',
+      sendtypename : '',
+      address : '',
+      deliverytime : '',
+      currency : '',
+      remark : ''
+    },
+    addGoodsVisible:false,
+    selectedRowKeys : []
   }
 
   componentDidMount() {
@@ -141,30 +156,51 @@ export default class PurDetailsOfOperate extends Component {
     window.addEventListener('resize', this.setStepDirection);
   }
 
-  getGoodsCallback = (params) => {
+  getGoodsCallback = (params) => { 
+    const { basicMsg } = this.state;
     let sum = '0.00';
-
+    let bean = params.bean;
+    let pagination = params.pagination;
     if(params.list.length){
       if(params.list[0].sum){
         sum=params.list[0].sum;
       }
     }
     let fee = '';
-    if(params.bean.waybillfee){
-      fee = params.bean.waybillfee;
+    if(bean.waybillfee){
+      fee =bean.waybillfee;
     }
     const price = fee*1+sum*1;
     let able = false;
-    if(params.bean.status==='0' || params.bean.status==='4'){
+    let msgDisabled = true;
+    if(bean.status==='5'){
       able = true;
+    }
+    if (bean.status =='1' || bean.status =='3' || bean.status == '4') {
+      msgDisabled = false;
     }
 
     this.setState({
+       pagination: {
+        current: pagination.current,
+        total: pagination.total,
+        pageSize: pagination.pageSize,
+      },
       waybillfeeValue: fee,
       listGoods:params.list,
       goodsSum:sum,
       totalPrice: price===0?'0.00':price,
       btnDisabled: able,
+      basicMsg : {
+        msgDisabled : msgDisabled,
+        userCode : bean.userCode,
+        createtime : bean.createtime,
+        sendtypename : bean.sendtypename,
+        address : bean.address,
+        deliverytime : bean.deliverytime,
+        currency : bean.currency,
+        remark : bean.remark
+      }
     });
   }
 
@@ -526,12 +562,78 @@ export default class PurDetailsOfOperate extends Component {
       this.props.dispatch(routerRedux.push('/trade/order-o/list'));
     }
   }
+  handleChangeBasicMsg =(e) =>{
+    const { basicMsg } = this.state;
+    var key = e.target.getAttribute('data-id');
+    var value = e.target.value;
+    console.log(key,value);
+
+    this.setState({
+      basicMsg : {
+        ...basicMsg,
+        [key] : value
+      }
+    })
+
+  }
+  showModal = () => {
+      this.setState({
+        addGoodsVisible: true,
+      });
+    }
+  handleOk = (arr) => {
+    const { listGoods,pagination } = this.state;
+    var data = [...listGoods];
+    arr.forEach((val,i)=>{
+      if (val !== undefined) {
+        data.push(...val);
+      }
+    });
+    
+    if(arr.length > 0){
+      console.log(data);
+      this.setState({
+        listGoods : data
+      })
+  }
+   /* this.setState({
+      addGoodsVisible: false,
+    });*/
+
+    this.setState({
+      pagination : {
+        ...pagination,
+        total : data.length
+      },
+      addGoodsVisible: false,
+    });
+
+
+  }
+  handleCancel = (e) => {
+    this.setState({
+      addGoodsVisible: false,
+    });
+  }
+  goAddGoods = () =>{
+    const { dispatch } = this.props;
+    dispatch({
+      type:'addPurOrder/goodsList',
+      payload:{
+        pageNumber:1,
+        pageSize:10
+      }
+    });
+    this.showModal();
+  }
 
 
 
-  render() {
-    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled } = this.state;
-    const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting }  = this.props;
+  render() { 
+    console.log(this.state)
+    
+    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled,basicMsg,addGoodsVisible,selectedRowKeys  } = this.state;
+    const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting,addPurOrder:{goodsList:{ list,pagination }} }  = this.props;
 
     // const menu = (
     //   <Menu>
@@ -544,11 +646,8 @@ export default class PurDetailsOfOperate extends Component {
     const action = (
       <div>
         <ButtonGroup>
-          {/*<Button >操作</Button>*/}
           <Button onClick={this.showPurModal}>聊天</Button>
-          {/*<Dropdown overlay={menu} placement="bottomRight">*/}
-            {/*<Button><Icon type="ellipsis" /></Button>*/}
-          {/*</Dropdown>*/}
+          <Button>保存修改</Button>
         </ButtonGroup>
         <Button type="primary" onClick={this.submitPur} disabled={btnDisabled}>确认采购单</Button>
       </div>
@@ -569,13 +668,13 @@ export default class PurDetailsOfOperate extends Component {
 
     const description = (
       <DescriptionList className={styles.headerList} size="small" col="2">
-        <Description term="创建人">{purchase.userCode}</Description>
-        <Description term="创建时间">{moment(purchase.createtime).format('YYYY-MM-DD HH:mm:ss')}</Description>
-        <Description term="取货方式">{purchase.sendtypename}</Description>
-        <Description term="目的地">{purchase.address}</Description>
-        <Description term="纳期">{purchase.deliverytime}</Description>
-        <Description term="币种">{purchase.currency}</Description>
-        <Description term="备注">{purchase.remark}</Description>
+        <Description term="创建人"><Input value={basicMsg.userCode} data-id='userCode' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        <Description term="创建时间"><Input value={moment(basicMsg.createtime).format('YYYY-MM-DD HH:mm:ss')} data-id='createtime' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        <Description term="取货方式"><Input value={basicMsg.sendtypename} data-id='sendtypename' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        <Description term="目的地"><Input value={basicMsg.address} data-id='address' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        <Description term="纳期"><Input value={basicMsg.deliverytime} data-id='deliverytime' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        <Description term="币种"><Input value={basicMsg.currency} data-id='currency' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        <Description term="备注"><Input value={basicMsg.remark} data-id='remark' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
       </DescriptionList>
     );
 
@@ -677,7 +776,29 @@ export default class PurDetailsOfOperate extends Component {
           // </Fragment>
         ),
       }];
-
+    const rowSelection = {
+        selectedRowKeys,
+          onChange: (selectedRowKeys, selectedRows) => {
+            // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            this.setState({selectedRowKeys})
+            GoodsSelections = [...selectedRows];
+          }
+      };
+      const deleteGoods = () => {
+        var data;
+        data =  [...this.state.listGoods];
+        GoodsSelections.forEach((value,index)=>{
+          data.forEach((val,i)=>{
+            if (value.id == val.id) {
+              data.splice(i,1);
+            }
+          })
+        });
+        
+        this.setState({
+          listGoods : data
+        })
+      }
 
     ////////////////////////////////////////////////////////////////  弹出部分  //////////////////////////////////////////////////////////////
     const supplyColumns = [
@@ -731,28 +852,22 @@ export default class PurDetailsOfOperate extends Component {
           </Steps>
         </Card>
         <Card title="商品列表" style={{ marginBottom: 24 }} bordered={false}>
+          <Button type='primary' className={ustyle.mR10} disabled={basicMsg.msgDisabled} onClick={this.goAddGoods}>添加商品</Button>
+          <Button disabled={basicMsg.msgDisabled} onClick={deleteGoods}>删除</Button>
           <Table dataSource={this.state.listGoods}
                  columns={goodsColumns}
-                 pagination={paginationGoods}
+                 pagination={this.state.pagination}
                  rowKey={record => record.id}
+                 rowSelection={rowSelection}
                  onChange={this.handleStandardTableChange}
                  loading={submitting}
-                 footer={this.tableFooterSum}/>
+                 footer={this.tableFooterSum}
+                 className={ustyle.mT10}
+                 />
         </Card>
         <Card title="物流信息" style={{ marginBottom: 24 }} bordered={false}>
           <div style={{ textAlign:'center' }}>
-            {
-              btnDisabled?<div style={{fontSize:'17px'}}>运费：{waybillfeeValue}</div>
-                :<Search addonBefore="运费："
-                         placeholder="请填写运费"
-                         enterButton={searchDisable?"修改":"确定"}
-                         size="large"
-                         style={{width:'30%'}}
-                         disabled={searchDisable}
-                         onSearch={this.handleBtnOnChange}
-                         onChange={this.handleWaybillfeeOnChange}
-                         value={waybillfeeValue}/>
-            }
+            <div style={{fontSize:'17px'}}>运费：{waybillfeeValue ? waybillfeeValue : '待添加'}</div>
           </div>
         </Card>
         <Modal
@@ -868,6 +983,14 @@ export default class PurDetailsOfOperate extends Component {
 
 
         </Modal>
+        <AddGoodsModal
+               visible={addGoodsVisible}
+               handleOk={this.handleOk}
+               handleCancel={this.handleCancel}
+               list={list}
+               pagination={pagination}
+               choosenGoods={this.state.listGoods}
+         />
       </PageHeaderLayout>
     );
   }
