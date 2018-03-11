@@ -1,6 +1,5 @@
-import { getPurOrderListOfPurchasers, getPurGoodsListOfOperate,
-  getPurInfoDetailsOfOperate, updateFeeOfOperate, updatePriceOfOperate,
-  supplyListOfOperate,updateSupplyFlagOfOperate,listChat,sendChat,updatePurchaseStatus } from '../services/api';
+import { getPurOrderListOfPurchasers, getPurGoodsListOfPurchasers,
+  getPurInfoDetailsOfPurchasers, updatePriceOfPurchasers,listChat,sendChat,updatePurchaseStatus } from '../services/api';
 
 export default {
   namespace: 'purchasePurchasers',
@@ -8,7 +7,7 @@ export default {
   state: {
     list: [],
     pagination: {},
-    listGoods: [],
+    data: [],
     paginationGoods: {},
     purchase: {},
   },
@@ -24,8 +23,8 @@ export default {
       }
     },
     *goodslist({ payload,callback }, { call, put }) {
-      const response1 = yield call(getPurInfoDetailsOfOperate, payload);
-      const response = yield call(getPurGoodsListOfOperate, payload);
+      const response1 = yield call(getPurInfoDetailsOfPurchasers, payload);
+      const response = yield call(getPurGoodsListOfPurchasers, payload);
       if (response1 !== undefined) {
         yield put({
           type: 'queryDetails',
@@ -44,7 +43,7 @@ export default {
       }
     },
     *updatePrice({ payload, callback }, { call }) {
-      const response = yield call(updatePriceOfOperate, payload);
+      const response = yield call(updatePriceOfPurchasers, payload);
       if (response !== undefined) {
           callback(response);
       }

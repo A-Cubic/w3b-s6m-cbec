@@ -200,8 +200,14 @@ export const getRouterData = (app) => {
     '/trade/order-s/list': {
       component: dynamicWrapper(app, ['purchaseSupplier'], () => import('../routes/Purorder/ListOfSup')),
     },
+    '/trade/order-s/info/:id': {
+      component: dynamicWrapper(app, ['purchaseSupplier'], () => import('../routes/Purorder/PurDetailsOfSup')),
+    },
     '/trade/order-p/list': {
       component: dynamicWrapper(app, ['purchasePurchasers'], () => import('../routes/Purorder/ListOfPur')),
+    },
+    '/trade/order-p/info/:id': {
+      component: dynamicWrapper(app, ['purchasePurchasers'], () => import('../routes/Purorder/PurDetailsOfPur')),
     },
     '/trade/order-p/add': {
       component: dynamicWrapper(app, ['addPurOrder'], () => import('../routes/Purorder/NewPurOrder')),

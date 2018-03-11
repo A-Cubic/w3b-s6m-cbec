@@ -29,24 +29,22 @@ const columns = [
     title: '采购单号',
     dataIndex: 'purchasesn',
     key: 'purchasesn',
-  }, {
-    title: '采购单阶段',
-    dataIndex: 'stage',
-    key: 'stage',
-    render(val) {
-      return <span>{status[val]}</span>
-    },
-  }, {
+  },
+  // {
+  //   title: '采购单阶段',
+  //   dataIndex: 'stage',
+  //   key: 'stage',
+  //   render(val) {
+  //     return <span>{status[val]}</span>
+  //   },
+  // },
+  {
     title: '询价状态',
     dataIndex: 'status',
     key: 'status',
     render(val) {
       return <Badge status={flagMap[val]} text={flag[val]} />;
     },
-  },{
-    title: '主要商品名称',
-    dataIndex: 'goodsnames',
-    key: 'goodsnames',
   },{
     title: '取货方式',
     dataIndex: 'sendtypename',
@@ -69,16 +67,12 @@ const columns = [
     key: 'createtime',
     render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
   },{
-    title: '备注',
-    dataIndex: 'remark',
-    key: 'remark',
-  },{
     title: '操作',
     dataIndex: 'operate',
     key: 'operate',
     render: (text, record) => (
       <Fragment>
-        <Link to={'#'}>处理</Link>
+        <Link to={`/trade/order-s/info/${record.purchasesn}`}>处理</Link>
       </Fragment>
     ),
   }];
@@ -200,9 +194,17 @@ export default class ListOfSup extends Component {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem {...formItemLayout} label="采购商账号">
-              {getFieldDecorator('userCode')(
-                <Input placeholder="请输入采购商账号" />
+            <FormItem {...formItemLayout} label="询价状态">
+              {getFieldDecorator('status',{initialValue: ""})(
+                <Select placeholder='请选择询价状态'>
+                  <Option value={""}>全部</Option>
+                  <Option value={0}>取消</Option>
+                  <Option value={1}>普通</Option>
+                  <Option value={2}>处理中</Option>
+                  <Option value={3}>询价结束</Option>
+                  <Option value={4}>等待确认</Option>
+                  <Option value={5}>意向完成</Option>
+                </Select>
               )}
             </FormItem>
           </Col>
@@ -234,32 +236,6 @@ export default class ListOfSup extends Component {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem {...formItemLayout} label="采购账号">
-              {getFieldDecorator('userCode')(
-                <Input placeholder="请输入采购商账号" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem {...formItemLayout} label="采购阶段">
-              {getFieldDecorator('stage',{initialValue: ""})(
-                <Select placeholder='请选择采购单阶段'>
-                  <Option value={""}>全部</Option>
-                  <Option value={0}>关闭</Option>
-                  <Option value={1}>询价</Option>
-                  <Option value={2}>待付款</Option>
-                  <Option value={3}>备货中</Option>
-                  <Option value={4}>已出港</Option>
-                  <Option value={5}>已入港</Option>
-                  <Option value={6}>完成</Option>
-                  <Option value={9}>暂存</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
             <FormItem {...formItemLayout} label="询价状态">
               {getFieldDecorator('status',{initialValue: ""})(
                 <Select placeholder='请选择询价状态'>
@@ -287,6 +263,8 @@ export default class ListOfSup extends Component {
               )}
             </FormItem>
           </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem {...formItemLayout} label ='开始时间'>
               {getFieldDecorator('times')(
@@ -308,8 +286,7 @@ export default class ListOfSup extends Component {
               ) }
             </FormItem>
           </Col>
-        </Row>
-        <div style={{ overflow: 'hidden' }}>
+          <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
@@ -317,7 +294,9 @@ export default class ListOfSup extends Component {
               收起 <Icon type="up" />
             </a>
           </span>
-        </div>
+          </div>
+        </Row>
+
       </Form>
     );
   }
