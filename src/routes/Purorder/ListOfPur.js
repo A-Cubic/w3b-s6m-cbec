@@ -111,7 +111,7 @@ export default class ListOfPur extends Component {
       payload: {
         ...formValues,
         ...pagination,
-        usercode:usercode,
+        userCode:usercode,
       },
     });
   }
@@ -129,7 +129,7 @@ export default class ListOfPur extends Component {
     const params = {
       current: pagination.current,
       pageSize: pagination.pageSize,
-      usercode:usercode,
+      userCode:usercode,
       ...formValues,
       // ...filters,
     };
@@ -164,7 +164,7 @@ export default class ListOfPur extends Component {
         payload: {
           ...values,
           ...pagination,
-          usercode:usercode,
+          userCode:usercode,
         },
       });
     });
@@ -182,7 +182,7 @@ export default class ListOfPur extends Component {
       type: 'purchasePurchasers/list',
       payload: {
         ...pagination,
-        usercode:usercode,
+        userCode:usercode,
       },
     });
   }
