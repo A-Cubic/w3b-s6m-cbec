@@ -1,4 +1,7 @@
-import {getOfferOfSupplier, updateOfferflagOfSupplier,offerbyid,updateOfferOfSupplier} from '../services/api';
+import {
+  getOfferOfSupplier, updateOfferflagOfSupplier, offerbyid, updateOfferOfSupplier,
+  goodsListOfSupplier,insertOfferOfSupplier
+} from '../services/api';
 
 export default {
   namespace: 'quote',
@@ -6,6 +9,10 @@ export default {
   state: {
     list: [],
     pagination:{},
+    goodsList: {
+      list: [],
+      pagination: {},
+    },
   },
 
   effects: {
@@ -40,9 +47,31 @@ export default {
         callback(response);
       }
     },
+    *goodsList({ payload }, { call, put }) {
+      const response = yield call(goodsListOfSupplier, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+    },
+    *insertOffer({ payload, callback }, { call }) {
+      console.log(payload.list);
+      const response = yield call(insertOfferOfSupplier, payload.list);
+      if (response === undefined) {
+
+      } else {
+        callback(response);
+      }
+    },
   },
 
   reducers: {
+    save(state, action) {
+      return {
+        ...state,
+        goodsList: action.payload,
+      };
+    },
     queryList(state, action) {
       return {
         ...state,

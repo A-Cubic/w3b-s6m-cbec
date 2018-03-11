@@ -253,6 +253,12 @@ export async function goodsList(params) {
     body: params,
   });
 }
+export async function goodsListOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function savePurOrder(params) {
   return request(`${apiUrl}/llback/purchase/add`, {
     method: 'POST',
@@ -335,6 +341,12 @@ export async function updatePurchaseStatus(params) {
 }
 export async function updateOfferOfSupplier(params) {
   return request(`${apiUrl}/llback/goods/supplier/updateoffer`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function insertOfferOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/offer`, {
     method: 'POST',
     body: params,
   });
