@@ -197,8 +197,11 @@ export const getRouterData = (app) => {
     '/goods/quote/add': {
       component: dynamicWrapper(app, [], () => import('../routes/Quote/QuoteAdd')),
     },
+    '/trade/order-s/list': {
+      component: dynamicWrapper(app, ['purchaseOperate'], () => import('../routes/Purorder/ListOfSup')),
+    },
     '/trade/order-p/list': {
-      component: dynamicWrapper(app, [], () => import('../routes/Purorder/List')),
+      component: dynamicWrapper(app, ['purchaseOperate'], () => import('../routes/Purorder/ListOfPur')),
     },
     '/trade/order-p/add': {
       component: dynamicWrapper(app, ['addPurOrder'], () => import('../routes/Purorder/NewPurOrder')),
