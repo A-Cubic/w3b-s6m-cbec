@@ -195,7 +195,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['quote'], () => import('../routes/Quote/QuoteMod')),
     },
     '/goods/quote/add': {
-      component: dynamicWrapper(app, [], () => import('../routes/Quote/QuoteAdd')),
+      component: dynamicWrapper(app, ['quote'], () => import('../routes/Quote/AddGoodsModal')),
     },
     '/trade/order-s/list': {
       component: dynamicWrapper(app, ['purchaseSupplier'], () => import('../routes/Purorder/ListOfSup')),

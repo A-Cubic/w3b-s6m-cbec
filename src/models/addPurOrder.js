@@ -27,6 +27,7 @@ export default {
       });
     },
     *savePurOrder({ payload,callback }, { call, put }) {
+      console.log(payload);
       const response = yield call(savePurOrder, payload);
       if ('purchasesn' in response) {
         if(callback) callback(response.purchasesn);
