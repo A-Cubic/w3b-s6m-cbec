@@ -25,7 +25,7 @@ const getWindowWidth = () => (window.innerWidth || document.documentElement.clie
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
 const breadcrumbList = [{
   title: '采购单管理',
-  href: '/trade/order-o/list',
+  href: '/trade/order-s/list',
 }, {
   title: '采购单详情',
 }];
@@ -93,12 +93,12 @@ class EditableCell extends Component {
   }
 }
 
-@connect(({ purchaseOperate, loading }) => ({
-  purchaseOperate,
-  submitting: loading.effects['purchaseOperate/goodslist'],
+@connect(({ purchaseSupplier, loading }) => ({
+  purchaseSupplier,
+  submitting: loading.effects['purchaseSupplier/goodslist'],
 }))
 
-export default class PurDetailsOfOperate extends Component {
+export default class PurDetailsOfSup extends Component {
   state = {
     pagination: {
       current: 1,
@@ -129,7 +129,7 @@ export default class PurDetailsOfOperate extends Component {
     const { dispatch } = this.props;
     const { pagination } = this.state;
     dispatch({
-      type: 'purchaseOperate/goodslist',
+      type: 'purchaseSupplier/goodslist',
       payload: {
         purchasesn: this.props.match.params.id,
         ...pagination,
@@ -204,7 +204,7 @@ export default class PurDetailsOfOperate extends Component {
     }
 
     dispatch({
-      type: 'purchaseOperate/goodslist',
+      type: 'purchaseSupplier/goodslist',
       payload: {
         purchasesn: this.props.match.params.id,
         ...params,
@@ -220,7 +220,7 @@ export default class PurDetailsOfOperate extends Component {
         });
       }else{
         this.props.dispatch({
-          type: 'purchaseOperate/updateFee',
+          type: 'purchaseSupplier/updateFee',
           payload: {
             purchasesn: this.props.match.params.id,
             waybillfeeValue: e,
@@ -299,7 +299,7 @@ export default class PurDetailsOfOperate extends Component {
         const matchSum = goodsSum*1-(target[dataIndex]*1-value*1);
         target[dataIndex] = value;
         this.props.dispatch({
-          type: 'purchaseOperate/updatePrice',
+          type: 'purchaseSupplier/updatePrice',
           payload: {
             id: key,
             realprice: value,
@@ -317,7 +317,7 @@ export default class PurDetailsOfOperate extends Component {
       visible: true,
     });
     this.props.dispatch({
-      type: 'purchaseOperate/supplyList',
+      type: 'purchaseSupplier/supplyList',
       payload: {
         purchasesn: record.purchasesn,
         goodsid: record.goodsid,
@@ -337,7 +337,7 @@ export default class PurDetailsOfOperate extends Component {
 
   handleUpdateSupplyFlag = (record) => {
     this.props.dispatch({
-      type: 'purchaseOperate/updateSupplyFlag',
+      type: 'purchaseSupplier/updateSupplyFlag',
       payload: {
         id: record.id+'',
         flag: record.flag==='1'?'2':'1',
@@ -364,7 +364,7 @@ export default class PurDetailsOfOperate extends Component {
       message.warning("请选择聊天对象");
     } else {
       this.props.dispatch({
-        type: 'purchaseOperate/sendChat',
+        type: 'purchaseSupplier/sendChat',
         payload: {
           purchasesn: selectedRow.purchasesn,
           inquiry_id: selectedRow.id,
@@ -382,7 +382,7 @@ export default class PurDetailsOfOperate extends Component {
     }else {
       const { selectedRow } = this.state;
       this.props.dispatch({
-        type: 'purchaseOperate/listChat',
+        type: 'purchaseSupplier/listChat',
         payload: {
           purchasesn: selectedRow.purchasesn,
           inquiry_id: selectedRow.id,
@@ -409,7 +409,7 @@ export default class PurDetailsOfOperate extends Component {
       selectedRow: e,
     });
     this.props.dispatch({
-      type: 'purchaseOperate/listChat',
+      type: 'purchaseSupplier/listChat',
       payload: {
         purchasesn: e.purchasesn,
         inquiry_id: e.id,
@@ -436,7 +436,7 @@ export default class PurDetailsOfOperate extends Component {
     const { purchaseOperate: { purchase } }  = this.props;
 
     this.props.dispatch({
-      type: 'purchaseOperate/listChat',
+      type: 'purchaseSupplier/listChat',
       payload: {
         purchasesn: purchase.purchasesn,
       },
@@ -461,7 +461,7 @@ export default class PurDetailsOfOperate extends Component {
       message.warning("不能发送空白信息");
     }  else {
       this.props.dispatch({
-        type: 'purchaseOperate/sendChat',
+        type: 'purchaseSupplier/sendChat',
         payload: {
           purchasesn: purchase.purchasesn,
           content: sendPurMessage,
@@ -478,7 +478,7 @@ export default class PurDetailsOfOperate extends Component {
     }else {
       const { selectedRow } = this.state;
       this.props.dispatch({
-        type: 'purchaseOperate/listChat',
+        type: 'purchaseSupplier/listChat',
         payload: {
           purchasesn: purchase.purchasesn,
         },
@@ -509,7 +509,7 @@ export default class PurDetailsOfOperate extends Component {
   submitPur = () => {
     const { purchaseOperate: { purchase } }  = this.props;
     this.props.dispatch({
-      type: 'purchaseOperate/submitPur',
+      type: 'purchaseSupplier/submitPur',
       payload: {
         purchasesn: purchase.purchasesn,
         status: '4',
@@ -523,7 +523,7 @@ export default class PurDetailsOfOperate extends Component {
       message.error('确认采购单失败');
     }else {
       message.success('确认采购单成功');
-      this.props.dispatch(routerRedux.push('/trade/order-o/list'));
+      this.props.dispatch(routerRedux.push('/trade/order-s/list'));
     }
   }
 
@@ -531,7 +531,7 @@ export default class PurDetailsOfOperate extends Component {
 
   render() {
     const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled } = this.state;
-    const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting }  = this.props;
+    const { purchaseSupplier: { listGoods, paginationGoods, purchase }, submitting }  = this.props;
 
     // const menu = (
     //   <Menu>

@@ -229,6 +229,12 @@ export async function getPurOrderListOfPurchasers(params) {
     body: params,
   });
 }
+export async function getPurInfoDetailsOfPurchasers(params) {
+  return request(`${apiUrl}/llback/purchase/purchasers/info/details`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function goodsList(params) {
   return request(`${apiUrl}/llback/goods/purchasers/list`, {
     method: 'POST',
@@ -262,17 +268,22 @@ export async function splitPurGoods(params) {
   });
 }
 ///////////////////////////////////////////////////////////////////////////////// 供应商 /////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////// 采购单 部分  end/////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////// 商品报价 部分 begin /////////////////////////////////////////////////////////////////////////
-export async function getOfferOfSupplier(params) {
-  return request(`${apiUrl}/llback/goods/supplier/offerinfo`, {
+export async function getPurOrderListOfSupplier(params) {
+  return request(`${apiUrl}/llback/purchase/supplier/list`, {
     method: 'POST',
     body: params,
   });
 }
-export async function getPurOrderListOfSupplier(params) {
-  return request(`${apiUrl}/llback/purchase/supplier/list`, {
+export async function getPurInfoDetailsOfSupplier(params) {
+  return request(`${apiUrl}/llback/purchase/supplier/info/details`, {
+    method: 'POST',
+    body: params,
+  });
+}
+///////////////////////////////////////////////////////////////////////////////// 采购单 部分  end/////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////// 商品报价 部分 begin /////////////////////////////////////////////////////////////////////////
+export async function getOfferOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/offerinfo`, {
     method: 'POST',
     body: params,
   });

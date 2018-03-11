@@ -1,5 +1,5 @@
 import { getPurOrderListOfPurchasers, getPurGoodsListOfOperate,
-  getPurInfoDetailsOfOperate, updateFeeOfOperate, updatePriceOfOperate,
+  getPurInfoDetailsOfPurchasers, updateFeeOfOperate, updatePriceOfOperate,
   supplyListOfOperate,updateSupplyFlagOfOperate,listChat,sendChat,updatePurchaseStatus } from '../services/api';
 
 export default {
@@ -8,7 +8,7 @@ export default {
   state: {
     list: [],
     pagination: {},
-    listGoods: [],
+    data: [],
     paginationGoods: {},
     purchase: {},
   },
@@ -24,7 +24,7 @@ export default {
       }
     },
     *goodslist({ payload,callback }, { call, put }) {
-      const response1 = yield call(getPurInfoDetailsOfOperate, payload);
+      const response1 = yield call(getPurInfoDetailsOfPurchasers, payload);
       const response = yield call(getPurGoodsListOfOperate, payload);
       if (response1 !== undefined) {
         yield put({
