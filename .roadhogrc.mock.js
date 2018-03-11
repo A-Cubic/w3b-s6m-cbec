@@ -181,6 +181,9 @@ const proxy = {
   'POST /llback/purchase/supplier/list': 'http://api.llwell.net/',
   'POST /llback/purchase/purchasers/info/details': 'http://api.llwell.net/',
   'POST /llback/purchase/supplier/info/details': 'http://api.llwell.net/',
+  'POST /llback/purchase/purchasers/goods': 'http://api.llwell.net/',
+  'POST /llback/purchase/purchasers/update/price': 'http://api.llwell.net/',
+
   'POST /llback/goods/supplier/list': 'http://api.llwell.net/',
   'POST /llback/goods/supplier/offer': 'http://api.llwell.net/',
 

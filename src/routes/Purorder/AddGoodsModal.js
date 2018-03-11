@@ -24,6 +24,7 @@ var goodsSelections = [];
 @connect(({ addPurOrder, loading }) => ({
   addPurOrder,
   loading: loading.models.addPurOrder,
+  submitting: loading.effects['addPurOrder/goodsList'],
 }))
 export default class AddGoodsModal extends Component {
 	state = {
@@ -101,8 +102,9 @@ export default class AddGoodsModal extends Component {
 			});
 	  		}
 
-	render(){
+	render(){ 
 		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
+		const { submitting } = this.props; 
 		const { selectedRowKeys } = this.state;
 		const goodsColumns = [
 			{
@@ -145,60 +147,28 @@ export default class AddGoodsModal extends Component {
 			  }
 			  	
 			}];
-		const goodsDataSource = [
-			{
-				key : '1',
-				id : '1',
-				goodsnames : '1',
-				price : '1',
-				sendtype :'1',
-				slt : '1',
-				goodsTm : '1'
-			},
-			{
-				key : '2',
-				id : '2',
-				goodsnames : '1',
-				price : '1',
-				sendtype : '1',
-				slt : '1',
-				goodsTm :'1'
-
-			},
-			{
-				key : '3',
-				id : '3',
-				goodsnames : '1',
-				price : '1',
-				sendtype : '1',
-				slt : '1',
-				goodsTm : '1'
-
-			},
-			{
-				key : '4',
-				id : '3',
-				goodsnames : '1',
-				price : '1',
-				sendtype : '1',
-				slt : '1',
-				goodsTm : '1'
-
-			}
-		]
-		
 		const rowSelection = {
 			  selectedRowKeys,
 	  		  onChange: (selectedRowKeys, selectedRows) => {
+	  		  	const { current } = this.props.pagination
 	  		    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
 	  		    this.setState({selectedRowKeys})
-	  		    goodsSelections=selectedRows;
+	  		    goodsSelections[current] = [...selectedRows];
 	  		  },
 	  		  getCheckboxProps: record => ({
-	  		    disabled: record.id === 'Disabled User',
+	  		    disabled: getRes(record),
 	  		    name: record.id
 	  		  })
 	  	};
+	  	const getRes = (record) =>{
+	  		let res = false
+	  		this.props.choosenGoods.forEach((Item,index)=>{
+	  			if (Item.id == record.id) {
+	  				res = true
+	  			}
+	  		});
+	  		return res;
+	  	}
 
 	return(
 		<Modal
@@ -248,6 +218,7 @@ export default class AddGoodsModal extends Component {
 					rowSelection = {rowSelection}
 					pagination={this.props.pagination}
 					onChange={this.changGoodsPage}
+					loading={submitting}
 					/>
 					
 			</div>
