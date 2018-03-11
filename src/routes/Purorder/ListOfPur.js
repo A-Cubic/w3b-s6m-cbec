@@ -5,6 +5,7 @@ import { Input,Button,Table,Card,Form,Row,Col,Select,Pagination,Badge,notificati
 import styles from '../../utils/utils.less'
 import styles1 from '../List/TableList.less';
 import moment from 'moment';
+import { getToken } from '../../utils/Global';
 
 const { RangePicker, MonthPicker } = DatePicker;
 const Option = Select.Option;
@@ -13,6 +14,7 @@ const flagMap = ['error','default', 'processing','processing', 'processing', 'su
 const flag = ['取消','普通','处理中','询价结束','等待确认','完成'];
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
+const usercode = getToken().userId;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -83,14 +85,14 @@ const columns = [
     ),
   }];
 
-@connect(({ purchaseOperate, loading }) => ({
-  purchaseOperate,
-  submitting: loading.effects['purchaseOperate/list'],
+@connect(({ purchasePurchasers, loading }) => ({
+  purchasePurchasers,
+  submitting: loading.effects['purchasePurchasers/list'],
 }))
 
 @Form.create()
 
-export default class ListOfOperate extends Component {
+export default class ListOfPur extends Component {
   state = {
     formValues: {},
     pagination: {
@@ -105,10 +107,11 @@ export default class ListOfOperate extends Component {
     const { formValues, pagination } = this.state;
 
     this.props.dispatch({
-      type: 'purchaseOperate/list',
+      type: 'purchasePurchasers/list',
       payload: {
         ...formValues,
         ...pagination,
+        userCode:usercode,
       },
     });
   }
@@ -126,6 +129,7 @@ export default class ListOfOperate extends Component {
     const params = {
       current: pagination.current,
       pageSize: pagination.pageSize,
+      userCode:usercode,
       ...formValues,
       // ...filters,
     };
@@ -134,7 +138,7 @@ export default class ListOfOperate extends Component {
     }
 
     dispatch({
-      type: 'purchaseOperate/list',
+      type: 'purchasePurchasers/list',
       payload: params,
     });
   }
@@ -156,10 +160,11 @@ export default class ListOfOperate extends Component {
       });
 
       dispatch({
-        type: 'purchaseOperate/list',
+        type: 'purchasePurchasers/list',
         payload: {
           ...values,
           ...pagination,
+          userCode:usercode,
         },
       });
     });
@@ -174,9 +179,10 @@ export default class ListOfOperate extends Component {
       formValues: {},
     });
     dispatch({
-      type: 'purchaseOperate/list',
+      type: 'purchasePurchasers/list',
       payload: {
         ...pagination,
+        userCode:usercode,
       },
     });
   }
@@ -331,7 +337,7 @@ export default class ListOfOperate extends Component {
 
   render(){
     const { getFieldDecorator } = this.props.form;
-    const { purchaseOperate: { list, pagination }, submitting }  = this.props;
+    const { purchasePurchasers: { list, pagination }, submitting }  = this.props;
 
     return(
       <div>

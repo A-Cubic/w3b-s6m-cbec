@@ -95,7 +95,7 @@ export async function realAccountLogin(params) {
     body: params,
   });
 }
-
+///////////////////////////////////////////////////////////////////////////////// 注册 部分 /////////////////////////////////////////////////////////////////////////
 export async function realRegisterCdoe(params) {
   return request(`${apiUrl}/llback/user/register/code`, {
     method: 'POST',
@@ -136,7 +136,7 @@ export async function getRegisterCheckUsers(params) {
     body: params,
   });
 }
-
+///////////////////////////////////////////////////////////////////////////////// member 部分 /////////////////////////////////////////////////////////////////////////
 export async function getMemberInfoList(params) {
   return request(`${apiUrl}/llback/user/member/info/list`, {
     method: 'POST',
@@ -157,7 +157,29 @@ export async function getMemberInfoDetails(params) {
     body: params,
   });
 }
+///////////////////////////////////////////////////////////////////////////////// 采购单 部分  start/////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////// 总接口 /////////////////////////////////////////////////////////////////////////
+export async function listChat(params) {
+  return request(`${apiUrl}/llback/purchase/chat/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
+export async function sendChat(params) {
+  return request(`${apiUrl}/llback/purchase/chat/send`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updatePurchaseStatus(params) {
+  return request(`${apiUrl}/llback/purchase/update`, {
+    method: 'POST',
+    body: params,
+  });
+}
+///////////////////////////////////////////////////////////////////////////////// 客服 /////////////////////////////////////////////////////////////////////////
 export async function getPurOrderListOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/operate/list`, {
     method: 'POST',
@@ -207,8 +229,9 @@ export async function updateSupplyFlagOfOperate(params) {
   });
 }
 
-export async function getOfferOfSupplier(params) {
-  return request(`${apiUrl}/llback/goods/supplier/offerinfo`, {
+///////////////////////////////////////////////////////////////////////////////// 采购商 /////////////////////////////////////////////////////////////////////////
+export async function getPurOrderListOfPurchasers(params) {
+  return request(`${apiUrl}/llback/purchase/purchasers/list`, {
     method: 'POST',
     body: params,
   });
@@ -219,13 +242,6 @@ export async function goodsList(params) {
     body: params,
   });
 }
-export async function getSendType(params) {
-  return request(`${apiUrl}/llback/goods/sendtype`, {
-    method: 'POST',
-    body: params,
-  });
-}
-
 export async function savePurOrder(params) {
   return request(`${apiUrl}/llback/purchase/add`, {
     method: 'POST',
@@ -238,30 +254,31 @@ export async function addPurGoods(params) {
     body: params,
   });
 }
+export async function getSendType(params) {
+  return request(`${apiUrl}/llback/goods/sendtype`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+
 export async function splitPurGoods(params) {
   return request(`${apiUrl}/llback/purchase/split `, {
     method: 'POST',
     body: params,
   });
 }
-
-export async function listChat(params) {
-  return request(`${apiUrl}/llback/purchase/chat/list`, {
+///////////////////////////////////////////////////////////////////////////////// 供应商 /////////////////////////////////////////////////////////////////////////
+export async function getOfferOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/offerinfo`, {
     method: 'POST',
     body: params,
   });
 }
-
-export async function sendChat(params) {
-  return request(`${apiUrl}/llback/purchase/chat/send`, {
+export async function getPurOrderListOfSupplier(params) {
+  return request(`${apiUrl}/llback/purchase/supplier/list`, {
     method: 'POST',
     body: params,
   });
 }
-
-export async function updatePurchaseStatus(params) {
-  return request(`${apiUrl}/llback/purchase/update`, {
-    method: 'POST',
-    body: params,
-  });
-}
+///////////////////////////////////////////////////////////////////////////////// 采购单 部分  end/////////////////////////////////////////////////////////////////////////
