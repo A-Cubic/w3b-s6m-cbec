@@ -1,4 +1,4 @@
-import {getOfferOfSupplier, updateOfferflagOfSupplier,offerbyid} from '../services/api';
+import {getOfferOfSupplier, updateOfferflagOfSupplier,offerbyid,updateOfferOfSupplier} from '../services/api';
 
 export default {
   namespace: 'quote',
@@ -26,9 +26,17 @@ export default {
         callback(response);
       }
     },
-    *info({ payload, callback }, { call }) {
-      const response = yield call(getOfferOfSupplier, payload);
+    *info({ payload, callback }, { call ,put}) {
+      const response = yield call(offerbyid, payload);
       if (response !== undefined) {
+        callback(response);
+      }
+    },
+    *updateOffer({ payload, callback }, { call }) {
+      const response = yield call(updateOfferOfSupplier, payload);
+      if (response === undefined) {
+
+      } else {
         callback(response);
       }
     },

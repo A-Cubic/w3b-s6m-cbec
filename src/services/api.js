@@ -172,13 +172,6 @@ export async function sendChat(params) {
     body: params,
   });
 }
-
-export async function updatePurchaseStatus(params) {
-  return request(`${apiUrl}/llback/purchase/update`, {
-    method: 'POST',
-    body: params,
-  });
-}
 ///////////////////////////////////////////////////////////////////////////////// 客服 /////////////////////////////////////////////////////////////////////////
 export async function getPurOrderListOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/operate/list`, {
@@ -269,6 +262,9 @@ export async function splitPurGoods(params) {
   });
 }
 ///////////////////////////////////////////////////////////////////////////////// 供应商 /////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////// 采购单 部分  end/////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////// 商品报价 部分 begin /////////////////////////////////////////////////////////////////////////
 export async function getOfferOfSupplier(params) {
   return request(`${apiUrl}/llback/goods/supplier/offerinfo`, {
     method: 'POST',
@@ -281,4 +277,30 @@ export async function getPurOrderListOfSupplier(params) {
     body: params,
   });
 }
-///////////////////////////////////////////////////////////////////////////////// 采购单 部分  end/////////////////////////////////////////////////////////////////////////
+
+export async function updateOfferflagOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/updateofferflag`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function offerbyid(params) {
+  return request(`${apiUrl}/llback/goods/supplier/offerbyid`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updatePurchaseStatus(params) {
+  return request(`${apiUrl}/llback/purchase/update`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function updateOfferOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/updateoffer`, {
+    method: 'POST',
+    body: params,
+  });
+}
+///////////////////////////////////////////////////////////////////////////////// 商品报价 部分  end/////////////////////////////////////////////////////////////////////////
