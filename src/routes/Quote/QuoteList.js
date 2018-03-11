@@ -168,7 +168,7 @@ export default class QuoteList extends Component {
      key: 'operate',
      render:(text, record)=>
        <div>
-         <Link to={`/goods/quote/mod/${record.barcode}`}>编辑</Link>
+         <Link to={`/goods/quote/mod/${record.id}`}>编辑</Link>
          <Divider type="vertical" />
          {/*<Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="cross" />} defaultChecked />*/}
 

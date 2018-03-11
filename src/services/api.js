@@ -308,4 +308,10 @@ export async function updatePurchaseStatus(params) {
     body: params,
   });
 }
+export async function updateOfferOfSupplier(params) {
+  return request(`${apiUrl}/llback/goods/supplier/updateoffer`, {
+    method: 'POST',
+    body: params,
+  });
+}
 ///////////////////////////////////////////////////////////////////////////////// 商品报价 部分  end/////////////////////////////////////////////////////////////////////////
