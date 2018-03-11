@@ -235,6 +235,18 @@ export async function getPurInfoDetailsOfPurchasers(params) {
     body: params,
   });
 }
+export async function updatePriceOfPurchasers(params) {
+  return request(`${apiUrl}/llback/purchase/purchasers/update/price`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function getPurGoodsListOfPurchasers(params) {
+  return request(`${apiUrl}/llback/purchase/purchasers/goods`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function goodsList(params) {
   return request(`${apiUrl}/llback/goods/purchasers/list`, {
     method: 'POST',

@@ -104,7 +104,7 @@ export default class PurDetailsOfPur extends Component {
     if(params.bean.status==='4'){
       able = false;
     }
-
+    this.cacheData = params.list.map(item => ({ ...item }));
     this.setState({
       waybillfeeValue: fee,
       listGoods:params.list,
@@ -379,7 +379,7 @@ export default class PurDetailsOfPur extends Component {
     this.setState({
       purVisible: true,
     });
-    const { purchaseOperate: { purchase } }  = this.props;
+    const { purchasePurchasers: { purchase } }  = this.props;
 
     this.props.dispatch({
       type: 'purchasePurchasers/listChat',
@@ -402,7 +402,7 @@ export default class PurDetailsOfPur extends Component {
   handleSendPurMessage = (e) => {
     e.preventDefault();
     const { sendPurMessage } = this.state;
-    const { purchaseOperate: { purchase } }  = this.props;
+    const { purchasePurchasers: { purchase } }  = this.props;
     if ( sendPurMessage.trim() === '') {
       message.warning("不能发送空白信息");
     }  else {
@@ -417,7 +417,7 @@ export default class PurDetailsOfPur extends Component {
     }
   }
   sendPurChatCallback = (params) => {
-    const { purchaseOperate: { purchase } }  = this.props;
+    const { purchasePurchasers: { purchase } }  = this.props;
     const msg = params.msg;
     if(params.type==="0"){
       message.error(msg);
@@ -452,13 +452,13 @@ export default class PurDetailsOfPur extends Component {
     });
   }
 
-  submitPur = () => {
-    const { purchaseOperate: { purchase } }  = this.props;
+  submitPur = (e) => {
+    const { purchasePurchasers: { purchase } }  = this.props;
     this.props.dispatch({
       type: 'purchasePurchasers/submitPur',
       payload: {
         purchasesn: purchase.purchasesn,
-        status: '4',
+        status: e,
       },
       callback: this.submitPurChatCallback,
     });
@@ -466,9 +466,9 @@ export default class PurDetailsOfPur extends Component {
   submitPurChatCallback = (params) => {
     const msg = params.msg;
     if(params.type==="0"){
-      message.error('确认采购单失败');
+      message.error('提交失败');
     }else {
-      message.success('确认采购单成功');
+      message.success('提交成功');
       this.props.dispatch(routerRedux.push('/trade/order-p/list'));
     }
   }
@@ -504,9 +504,19 @@ export default class PurDetailsOfPur extends Component {
     const newData = [...this.state.listGoods];
     const target = newData.filter(item => key === item.id)[0];
     if (target) {
+      this.props.dispatch({
+        type: 'purchasePurchasers/updatePrice',
+        payload: {
+          id: key,
+          expectprice: target.expectprice,
+          total: target.total,
+        },
+        callback: this.updatePriceCallback,
+      });
       delete target.editable;
       this.setState({ listGoods: newData });
       this.cacheData = newData.map(item => ({ ...item }));
+
     }
   }
   cancel(key) {
@@ -528,8 +538,9 @@ export default class PurDetailsOfPur extends Component {
       <div>
         <ButtonGroup>
           <Button onClick={this.showPurModal}>聊天</Button>
+          <Button onClick={()=>this.submitPur('2')} disabled={btnDisabled}>退回询价</Button>
         </ButtonGroup>
-        <Button type="primary" onClick={this.submitPur} disabled={btnDisabled}>确认采购单</Button>
+        <Button type="primary" onClick={()=>this.submitPur('5')} disabled={btnDisabled}>完成采购单</Button>
       </div>
     );
 
@@ -608,7 +619,7 @@ export default class PurDetailsOfPur extends Component {
         dataIndex: 'total',
         key: 'total',
         width: '10%',
-        render: (text, record) => this.renderColumns(text, record, 'name'),
+        render: (text, record) => this.renderColumns(text, record, 'total'),
       },
       // {
       //   title: '其他费用',
@@ -627,22 +638,22 @@ export default class PurDetailsOfPur extends Component {
         dataIndex: 'expectprice',
         key: 'expectprice',
         width: '10%',
-        render: (text, record) => this.renderColumns(text, record, 'name'),
+        render: (text, record) => this.renderColumns(text, record, 'expectprice'),
       },{
         title: '实际价格',
         dataIndex: 'realprice',
         key: 'realprice',
         width: '10%',
-        render: (text, record) => {
-            if(!btnDisabled) {
-              return(<EditableCell
-                value={text}
-                onChange={this.onCellChange(record.id, 'realprice')}
-              />);
-            }else{
-              return(<div>{record.realprice}</div>);
-            }
-        },
+        // render: (text, record) => {
+        //     if(!btnDisabled) {
+        //       return(<EditableCell
+        //         value={text}
+        //         onChange={this.onCellChange(record.id, 'realprice')}
+        //       />);
+        //     }else{
+        //       return(<div>{record.realprice}</div>);
+        //     }
+        // },
       },{
         title: '操作',
         dataIndex: 'operate',
@@ -651,16 +662,17 @@ export default class PurDetailsOfPur extends Component {
         render: (text, record) => {
           const { editable } = record;
           return (
-            <div className="editable-row-operations">
+            <div className={ustyle.editableRowOperations}>
               {
                 editable ?
                   <span>
-                  <a onClick={() => this.save(record.key)}>Save</a>
-                  <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.key)}>
-                    <a>Cancel</a>
-                  </Popconfirm>
+                  <a onClick={() => this.save(record.id)}>保存</a>
+                    <a onClick={() => this.cancel(record.id)}>取消</a>
+                  {/*<Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.id)}>*/}
+                    {/*<a>取消</a>*/}
+                  {/*</Popconfirm>*/}
                 </span>
-                  : <a onClick={() => this.edit(record.key)}>Edit</a>
+                  : <a onClick={() => this.edit(record.id)} disabled={btnDisabled}>编辑</a>
               }
             </div>
           );

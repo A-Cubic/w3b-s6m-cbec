@@ -206,9 +206,17 @@ export default class ListOfPur extends Component {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem {...formItemLayout} label="采购商账号">
-              {getFieldDecorator('userCode')(
-                <Input placeholder="请输入采购商账号" />
+            <FormItem {...formItemLayout} label="询价状态">
+              {getFieldDecorator('status',{initialValue: ""})(
+                <Select placeholder='请选择询价状态'>
+                  <Option value={""}>全部</Option>
+                  <Option value={0}>取消</Option>
+                  <Option value={1}>普通</Option>
+                  <Option value={2}>处理中</Option>
+                  <Option value={3}>询价结束</Option>
+                  <Option value={4}>等待确认</Option>
+                  <Option value={5}>意向完成</Option>
+                </Select>
               )}
             </FormItem>
           </Col>
@@ -239,10 +247,25 @@ export default class ListOfPur extends Component {
               )}
             </FormItem>
           </Col>
+          {/*<Col md={8} sm={24}>*/}
+            {/*<FormItem {...formItemLayout} label="采购账号">*/}
+              {/*{getFieldDecorator('userCode')(*/}
+                {/*<Input placeholder="请输入采购商账号" />*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
           <Col md={8} sm={24}>
-            <FormItem {...formItemLayout} label="采购账号">
-              {getFieldDecorator('userCode')(
-                <Input placeholder="请输入采购商账号" />
+            <FormItem {...formItemLayout} label="询价状态">
+              {getFieldDecorator('status',{initialValue: ""})(
+                <Select placeholder='请选择询价状态'>
+                  <Option value={""}>全部</Option>
+                  <Option value={0}>取消</Option>
+                  <Option value={1}>普通</Option>
+                  <Option value={2}>处理中</Option>
+                  <Option value={3}>询价结束</Option>
+                  <Option value={4}>等待确认</Option>
+                  <Option value={5}>意向完成</Option>
+                </Select>
               )}
             </FormItem>
           </Col>
@@ -265,21 +288,6 @@ export default class ListOfPur extends Component {
           </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem {...formItemLayout} label="询价状态">
-              {getFieldDecorator('status',{initialValue: ""})(
-                <Select placeholder='请选择询价状态'>
-                  <Option value={""}>全部</Option>
-                  <Option value={0}>取消</Option>
-                  <Option value={1}>普通</Option>
-                  <Option value={2}>处理中</Option>
-                  <Option value={3}>询价结束</Option>
-                  <Option value={4}>等待确认</Option>
-                  <Option value={5}>意向完成</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
           <Col md={8} sm={24}>
             <FormItem {...formItemLayout} label="取货方式">
               {getFieldDecorator('sendtype',{initialValue: ""})(
@@ -314,8 +322,7 @@ export default class ListOfPur extends Component {
               ) }
             </FormItem>
           </Col>
-        </Row>
-        <div style={{ overflow: 'hidden' }}>
+          <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
@@ -323,7 +330,9 @@ export default class ListOfPur extends Component {
               收起 <Icon type="up" />
             </a>
           </span>
-        </div>
+          </div>
+        </Row>
+
       </Form>
     );
   }
