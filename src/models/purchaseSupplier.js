@@ -1,5 +1,5 @@
 import { getPurOrderListOfSupplier, getPurGoodsListOfSupplier,
-  getPurInfoDetailsOfSupplier,updatePriceOfSupplier,listChat,sendChat,updatePurchaseStatus } from '../services/api';
+  getPurInfoDetailsOfSupplier,updatePriceOfSupplier,listChat,sendChat } from '../services/api';
 
 export default {
   namespace: 'purchaseSupplier',
@@ -38,7 +38,7 @@ export default {
         });
       }
       if(response !== undefined && response1 !== undefined) {
-        const result = {bean:response1,...response};
+        const result = {bean:response1,list:response};
         callback(result);
       }
     },
@@ -60,12 +60,7 @@ export default {
         callback(response);
       }
     },
-    *submitPur({ payload, callback }, { call }) {
-      const response = yield call(updatePurchaseStatus, payload);
-      if (response !== undefined) {
-        callback(response);
-      }
-    },
+
 
   },
 
@@ -80,8 +75,8 @@ export default {
       return {
         // ...action.payload,
         ...state,
-        listGoods:action.payload.list,
-        paginationGoods:action.payload.pagination,
+        listGoods:action.payload,
+        // paginationGoods:action.payload.pagination,
       };
     },
     queryDetails(state, action) {

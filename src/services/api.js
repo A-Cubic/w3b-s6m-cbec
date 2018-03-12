@@ -305,9 +305,10 @@ export async function getPurGoodsListOfSupplier(params) {
   });
 }
 export async function updatePriceOfSupplier(params) {
+  console.log(params.listGoods);
   return request(`${apiUrl}/llback/purchase/supplier/update/price`, {
     method: 'POST',
-    body: params,
+    body: params.listGoods,
   });
 }
 
