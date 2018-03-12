@@ -7,7 +7,7 @@ export default {
   state: {
     list: [],
     pagination: {},
-    data: [],
+    listGoods: [],
     paginationGoods: {},
     purchase: {},
   },
