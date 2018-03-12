@@ -38,7 +38,10 @@ export default {
         });
       }
       if(response !== undefined && response1 !== undefined) {
-        const result = {bean:response1,...response};
+        const result = {
+            bean:response1,
+            list : response
+          };
         callback(result);
       }
     },
@@ -80,8 +83,8 @@ export default {
       return {
         // ...action.payload,
         ...state,
-        listGoods:action.payload.list,
-        paginationGoods:action.payload.pagination,
+        listGoods:action.payload,
+        // paginationGoods:action.payload.pagination,
       };
     },
     queryDetails(state, action) {
