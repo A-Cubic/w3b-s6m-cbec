@@ -25,6 +25,8 @@ const savaData = [];
 
 const getWindowWidth = () => (window.innerWidth || document.documentElement.clientWidth);
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
+const flag = ['关闭', '等待报价', '报价反馈中', '已敲定价格'];
+const flagMap = ['default','warning','processing','success'];
 const breadcrumbList = [{
   title: '采购单管理',
   href: '/trade/order-s/list',
@@ -454,6 +456,14 @@ export default class PurDetailsOfSup extends Component {
 
     const goodsColumns = [
       {
+        title: '状态',
+        dataIndex: 'flag',
+        key: 'flag',
+        width: '10%',
+        render(val) {
+          return <Badge status={flagMap[val]} text={flag[val]} />;
+        },
+      },{
         title: '商品名称',
         dataIndex: 'goodsname',
         key: 'goodsname',
@@ -482,8 +492,10 @@ export default class PurDetailsOfSup extends Component {
         width: '8%',
         render: (text, record) => {
           const { editable } = record;
+          const disable = (record.flag==='0' || record.flag==='3')?false:true;
           return (
-            <div className={ustyle.editableRowOperations}>
+            disable?
+              <div className={ustyle.editableRowOperations}>
               {
                 editable ?
                   <span>
@@ -492,7 +504,7 @@ export default class PurDetailsOfSup extends Component {
                 </span>
                   : <a onClick={() => this.edit(record.id)} disabled={btnDisabled}>编辑</a>
               }
-            </div>
+              </div>:<div>不可编辑</div>
           );
         },
       },{
