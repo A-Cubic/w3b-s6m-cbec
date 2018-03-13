@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { routerRedux, Link, withRouter } from 'dva/router';
-import { Input, Button, notification,Table,Card,Form,Row, Col,Divider,Switch  } from 'antd';
-import styles from '../../utils/utils.less'
-import { getToken ,getAuthority} from '../../utils/Global';
-
+import { Input, Button, Table, Card, Form, Row, Col ,InputNumber,notification} from 'antd';
+import styles from '../../utils/utils.less';
+import { routerRedux } from 'dva/router';
 
 const FormItem = Form.Item;
-
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -18,40 +15,62 @@ const formItemLayout = {
     sm: { span: 16 },
   }
 };
+const formItemLayout2 = {
+  labelCol: {
+    xs: { span: 4 },
+    sm: { span: 4},
+  },
+  wrapperCol: {
+    xs: { span: 20 },
+    sm: { span: 20 },
+  }
+};
 
+const data = {
+  "id": "",
+  "barcode": "",
+  "goodsname": "",
+  "goodsNameE": "",
+  "brand": "",
+  "brandE": "",
+  "slt": "",
+}
 
+const formItemsName = [
+  {label: '缩略图', key: 'slt'},
+  {label: '序号', key: 'id'},
+  {label: '商品条码', key: 'barcode'},
+  {label: '商品名称（中文）', key: 'goodsname'},
+  {label: '商品名称（外文）', key: 'goodsNameE'},
+  {label: '品牌名称（中文）', key: 'brand'},
+  {label: '品牌名称（外文）', key: 'brandE'},
+];
 
 @connect(({ goods, loading }) => ({
   goods,
-  submitting: loading.effects['goods/list'],
+  submitting: loading.effects['goods/info'],
 }))
 
 @Form.create()
 
-export default class GoodsList extends Component {
+export default class goodsMod extends Component {
   state = {
-    formValues: {
-    },
-    pagination: {
-      current: 1,
-      total: 10,
-      pageSize: 10,
-    },
+    formValues: {},
+    data: {},
   }
+
 
   componentDidMount() {
-    const { formValues, pagination } = this.state;
-
+    const { formValues, data } = this.state;
     this.props.dispatch({
-      type: 'goods/list',
+      type: 'goods/info',
       payload: {
-        ...formValues,
-        ...pagination,
+        id: this.props.match.params.id,
       },
+      callback: this.onGetGoodsCallback,
     });
   }
-
-  handleSubmit = (e) => {
+  handleSubmit = e => {
     e.preventDefault();
     const { form, submitting, dispatch } = this.props;
     const { pagination } = this.state;
@@ -67,158 +86,136 @@ export default class GoodsList extends Component {
       });
       console.log(values);
       dispatch({
-        type: 'goods/list',
+        type: 'goods/update',
         payload: {
           ...values,
-          ...pagination,
         },
+        callback:this.onUpdateGoodsCallback,
       });
     });
+  }
+
+
+  componentWillMount () {
+    let goodsid = this.props.match.params.id;
+    console.log(goodsid);
+    //假装获取到数据
+    this.setState({
+      data: data
+    });
+    const { formValues, pagination } = this.state;
 
   }
 
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+  onGetGoodsCallback = (params) => {
+    const { data } = this.state;
     const { dispatch } = this.props;
-    const { formValues } = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      current: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      // ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    dispatch({
-      type: 'goods/list',
-      payload: params,
+    this.setState({
+      data: params,
     });
   }
-
-  handleChangeStatus= (record) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'goods/updateStatus',
-      payload: {
-        id: record.id,
-        flag: record.flag,
-      },
-      callback: this.onChangeStatusCallback,
-    });
-  }
-  onChangeStatusCallback = (params) => {
-    const { formValues,pagination } = this.state;
-    const { dispatch } = this.props;
-
-    const msg = params.msg;
-    if(params.type==="0"){
+  onUpdateGoodsCallback = (params) => {
+    if(params.type==="1"){
+      notification.success({
+        message: "提示",
+        description: "修改完成",
+      });
+      this.props.dispatch(routerRedux.push('/goods/info/list'));
+    }else{
       notification.error({
         message: "提示",
         description: msg,
       });
-    }else {
-      notification.success({
-        message: "提示",
-        description: msg,
-      });
     }
-
-    dispatch({
-      type: 'goods/list',
-      payload: {
-        ...formValues,
-        ...pagination,
-      },
-    });
   }
-  render(){
+
+
+  render () {
     const { getFieldDecorator } = this.props.form;
-    const { quote: { list, pagination }, submitting }  = this.props;
-    const columns = [
-      {
-        title: '商品编号',
-        dataIndex: 'id',
-        key: 'id',
-      },
-      {
-        title: '图片',
-        dataIndex: 'slt',
-        key: 'slt',
-        render : (text, record) => <img src={`${text}`} style={{width:100,height:100}}/>
-      },
-      {
-        title: '条码',
-        dataIndex: 'barcode',
-        key: 'barcode',
-      },
-      {
-        title: '商品名称',
-        dataIndex: 'goodsname',
-        key: 'goodsname',
-      },
-      {
-      title: '操作',
-      dataIndex: 'operate',
-      key: 'operate',
-      render:(text, record)=>
-        <div>
-          <Link to={`/goods/info/mod/${record.id}`}>编辑</Link>
-          <Divider type="vertical" />
-          {/*<Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="cross" />} defaultChecked />*/}
-
-          <Switch checkedChildren="上架"
-                  unCheckedChildren="下架"
-                  defaultChecked={record.flag==="0"?false:true}
-                  onChange={()=>this.handleChangeStatus(record)}/>
-        </div>
-
-    }];
-
-    return(
+    return (
       <div>
         <Card>
-          <Form onSubmit={this.handleSubmit}>
-            <Row>
+          <Row>
+            <Form onSubmit={this.handleSubmit}>
               <Row>
-                <Col  xs={24} sm={24} md={24} lg={24} xl={24} >
-                  <FormItem
-                    {...formItemLayout}
-                    label ='查询信息'
-                  >
-                    {getFieldDecorator('seach')(
-                      <Input  placeholder="请输入商品条码，商品名称或品牌名" />)
+                {
+                  formItemsName.map(item => {
+                    switch (item.key) {
+                      case 'slt':
+                        return (
+                          <Col md={24} lg={24} xl={24} key={item.key}>
+                            <FormItem
+                              {...formItemLayout2}
+                              label={item.label}
+                            >
+                              <img src={this.state.data[item.key]}  style={{width: 200, height: 200, background: '#f3f3f3', border: 'solid 1px #aaa'}}></img>
+                            </FormItem>
+                          </Col>
+                        );
+                      // case 'offer':
+                      //   return (
+                      //     <Col md={6} lg={8} xl={12} key={item.key}>
+                      //       <FormItem
+                      //         {...formItemLayout}
+                      //         label={item.label}
+                      //       >
+                      //         {getFieldDecorator(`${item.key}`,{
+                      //           initialValue: this.state.data ? this.state.data[item.key] : ''
+                      //         })(
+                      //           <InputNumber />
+                      //         )}
+                      //       </FormItem>
+                      //     </Col>
+                      //   );
+                      // case 'remark':
+                      //   return (
+                      //     <Col md={6} lg={8} xl={12} key={item.key}>
+                      //       <FormItem
+                      //         {...formItemLayout}
+                      //         label={item.label}
+                      //       >
+                      //         {getFieldDecorator(`${item.key}`,{
+                      //           initialValue: this.state.data ? this.state.data[item.key] : ''
+                      //         })(
+                      //           <Input />
+                      //         )}
+                      //       </FormItem>
+                      //     </Col>
+                      //   );
+                      default:
+                        return (
+                          <Col md={6} lg={8} xl={12} key={item.key}>
+                            <FormItem
+                              {...formItemLayout}
+                              label={item.label}
+                            >
+                              {getFieldDecorator(`${item.key}`,{
+                                initialValue: this.state.data ? this.state.data[item.key] : ''
+                              })(
+                                <Input disabled />
+                              )}
+                            </FormItem>
+                          </Col>
+                        );
                     }
+                  })
+                }
+              </Row>
+              <Row>
+                <Col>
+                  <FormItem
+                    style={{marginLeft: '8%'}}
+                  >
+                    <Button type='primary' className={styles.mR10} htmlType="submit">保存</Button>
+                    <Button href={'#/goods/info/list'}>放弃</Button>
                   </FormItem>
                 </Col>
               </Row>
-
-            </Row>
-            <Row>
-              <Col span={20}></Col>
-              <Col span={4}><Button type="primary"
-                                    className={styles.submit}
-                                    htmlType="submit">搜索</Button></Col>
-            </Row>
-          </Form>
-        </Card>
-        <Card className={styles.mT10}>
-          <Table dataSource={list}
-                 columns={columns}
-                 pagination={pagination}
-                 rowKey={record => record.id}
-                 onChange={this.handleStandardTableChange}
-                 loading={submitting}/>
+            </Form>
+          </Row>
         </Card>
       </div>
-    )
-
+    );
   }
 }
+

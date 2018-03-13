@@ -1,5 +1,5 @@
 import {
-  getGoodsListOfOperate, updateGoodsOfOperate
+  getGoodsListOfOperate, offerbyid, updateGoodsOfOperate,getGoodsById
 } from '../services/api';
 
 export default {
@@ -29,6 +29,12 @@ export default {
       if (response === undefined) {
 
       } else {
+        callback(response);
+      }
+    },
+    *info({ payload, callback }, { call ,put}) {
+      const response = yield call(getGoodsById, payload);
+      if (response !== undefined) {
         callback(response);
       }
     },

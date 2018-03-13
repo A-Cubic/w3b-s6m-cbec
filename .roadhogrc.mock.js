@@ -10,7 +10,7 @@ import { format, delay } from 'roadhog-api-doc';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
-const service_url =  'http://localhost:9999/';// 'http://api.llwell.net/'
+const service_url =  'http://api.llwell.net/';// 'http://api.llwell.net/'
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
   // 支持值为 Object 和 Array
@@ -192,6 +192,7 @@ const proxy = {
   'POST /llback/goods/supplier/offer': service_url,
   'POST /llback/goods/operate/list': service_url,
   'POST /llback/goods/operate/update': service_url,
+  'POST /llback/goods/operate/goodsbyid': service_url,
 };
 
 
