@@ -12,12 +12,13 @@ export default {
   },
 
   effects: {
-    *goodsList({ payload }, { call, put }) {
+    *goodsList({ payload,callback }, { call, put }) {
       const response = yield call(goodsList, payload);
       yield put({
         type: 'save',
         payload: response,
       });
+      callback(response)
     },
     *getSendType({ payload }, { call, put }) {
       const response = yield call(getSendType, payload);

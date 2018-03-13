@@ -105,6 +105,7 @@ export default class ModPurOrder extends Component {
     this.setStepDirection();
     window.addEventListener('resize', this.setStepDirection);
   }
+
   componentWillMount(){
     const { addPurOrder:{ sendTypeDate },dispatch } = this.props;
     if ( sendTypeDate.length == 0 ) {
@@ -114,15 +115,16 @@ export default class ModPurOrder extends Component {
       });
     }
   }
+
   getGoodsCallback = (params) => {
     const { basicMsg,basicMsg:{ msgDisabled } } = this.state;
     let sum = '0.00';
     let bean = params.bean;
-    if(params.list.length){
-      if(params.list[0].sum){
-        sum=params.list[0].sum;
-      }
-    }
+    let list = params.list;
+    list.forEach((item) => {
+      sum = sum*1 + item.expectprice*1;
+    });
+
     let fee = '';
     if(bean.waybillfee){
       fee =bean.waybillfee;
@@ -158,15 +160,17 @@ export default class ModPurOrder extends Component {
   }
 
   updatePriceCallback = (params) => {
-    console.log(params);
     if (params.type=='1') {
-      notification["success"]({
-        message: params.msg,
-      });
+      message.success(params.msg);
+      this.macthPrice();
+      // notification["success"]({
+      //   message: params.msg,
+      // });
     }else{
-       notification["error"]({
-        message: 请重新修改,
-      });
+      //  notification["error"]({
+      //   message: 请重新修改,
+      // });
+      message.error(params.msg);
     }
     /*this.setState({
       waybillfeeValue: params.bean.waybillfee,
@@ -182,6 +186,7 @@ export default class ModPurOrder extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    console.log(1);
     const { dispatch,purchasePurchasers:{ paginationGoods } } = this.props;
     const { formValues } = this.state;
 
@@ -207,9 +212,9 @@ export default class ModPurOrder extends Component {
       }
     })
     /*const oriPage = Math.ceil(paginationGoods.total/paginationGoods.pageSize);
-    
+
     if (pagination.current > oriPage) {
-      
+
     }else{
         dispatch({
           type: 'purchasePurchasers/goodslist',
@@ -219,55 +224,6 @@ export default class ModPurOrder extends Component {
           },
        });
     }*/
-  }
-  handleBtnOnChange = (e) => {
-    const { btnDisabled } = this.state;
-    if(!btnDisabled){
-      if(this.state.searchDisable){
-        this.setState({
-          searchDisable: false,
-        });
-      }else{
-        this.props.dispatch({
-          type: 'purchasePurchasers/updateFee',
-          payload: {
-            purchasesn: this.props.match.params.id,
-            waybillfeeValue: e,
-          },
-          callback: this.updateFeeCallback,
-        });
-        this.setState({
-          searchDisable: true,
-        });
-      }
-    }else{
-      notification.error({
-        message: "提示",
-        description: '此状态不可修改运单价格',
-      });
-    }
-  }
-  handleWaybillfeeOnChange = (e) => {
-    const { value } = e.target;
-    const fee = this.state.waybillfeeValue;
-    const total = this.state.totalPrice;
-    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-    if ((!isNaN(value) && reg.test(value)) || value === '') {
-      const matchTotal = total*1-(fee*1-value*1);
-      this.setState({
-        waybillfeeValue: value,
-        totalPrice: matchTotal,
-      });
-    }
-  }
-
-  updateFeeCallback = (params) => {
-    const msg = params.msg;
-    if(params.type==="0"){
-      message.error(msg);
-    }else {
-      message.success(msg);
-    }
   }
 
   tableFooterSum = (params) => {
@@ -290,32 +246,6 @@ export default class ModPurOrder extends Component {
         stepDirection: 'horizontal',
       });
     }
-  }
-
-  onCellChange = (key, dataIndex) => {
-    return (value) => {
-      const dataSource = [...this.state.listGoods];
-      const totalPrice = this.state.totalPrice;
-      const goodsSum = this.state.goodsSum;
-
-      const target = dataSource.find(item => item.id === key);
-
-      if (target) {
-        const matchPrice = totalPrice*1-(target[dataIndex]*1-value*1);
-        const matchSum = goodsSum*1-(target[dataIndex]*1-value*1);
-        target[dataIndex] = value;
-        this.props.dispatch({
-          type: 'purchasePurchasers/updatePrice',
-          payload: {
-            id: key,
-            realprice: value,
-          },
-          callback: this.updatePriceCallback,
-        });
-
-        this.setState({ dataSource ,totalPrice:matchPrice,goodsSum:matchSum });
-      }
-    };
   }
 
   showModal = (record) => {
@@ -550,8 +480,8 @@ export default class ModPurOrder extends Component {
           }else {
             message.success('确认成功');
             this.props.dispatch(routerRedux.push('/trade/order-p/list'));
-          } 
-         
+          }
+
         },
       });
   }
@@ -576,7 +506,7 @@ export default class ModPurOrder extends Component {
           }else {
             message.success('确认成功');
             this.props.dispatch(routerRedux.push('/trade/order-p/list'));
-          }       
+          }
         },
       });
   }
@@ -669,11 +599,16 @@ export default class ModPurOrder extends Component {
           payload:{
             pageNumber:1,
             pageSize:10
+          },
+          callback:(params)=>{
+            this.macthPrice();
           }
       });
     }
     this.showModal();
   }
+
+
   saveBasic = () =>{
     const { purchasePurchasers: { purchase },dispatch }  = this.props;
     const { basicMsg }  = this.state;
@@ -713,10 +648,13 @@ export default class ModPurOrder extends Component {
   }
   handleChange(value, key, column) {
     const newData = [...this.state.listGoods];
+    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     const target = newData.filter(item => key === item.id)[0];
     if (target) {
-      target[column] = value;
-      this.setState({ listGoods: newData });
+      if ((!isNaN(value) && reg.test(value))) {
+        target[column] = value;
+        this.setState({ listGoods: newData });
+      }
     }
   }
   edit(key) {
@@ -726,6 +664,19 @@ export default class ModPurOrder extends Component {
       target.editable = true;
       this.setState({ listGoods: newData });
     }
+  }
+  macthPrice(){
+    const {listGoods,totalPrice,goodsSum,waybillfeeValue} = this.state;
+    let total = 0;
+    let sum = 0;
+    listGoods.forEach((item) => {
+      sum = sum*1 + item.expectprice*1;
+    });
+    total = sum + waybillfeeValue*1;
+    this.setState({
+      goodsSum:sum,
+      totalPrice:total,
+    });
   }
   save(key) {
     const newData = [...this.state.listGoods];
@@ -741,10 +692,11 @@ export default class ModPurOrder extends Component {
         callback: this.updatePriceCallback,
       });
       delete target.editable;
-      this.setState({ listGoods: newData });
+      this.setState({ listGoods: newData});
       this.cacheData = newData.map(item => ({ ...item }));
     }
   }
+
   cancel(key) {
     const newData = [...this.state.listGoods];
     const target = newData.filter(item => key === item.id)[0];
@@ -773,7 +725,7 @@ export default class ModPurOrder extends Component {
           <Button disabled={msgDisabled} onClick={this.saveBasic}>保存修改</Button>
           <Button disabled={msgDisabled} onClick={this.submitPur}>确认采购单</Button>
         </ButtonGroup>
-          <Button className={purchase.status == '5' ? '' : ustyle.none} type='primary' onClick={this.passPurOrder}>审核通过</Button>
+          <Button className={purchase.status == '4' ? '' : ustyle.none} type='primary' onClick={this.passPurOrder}>最终确认</Button>
       </div>
     );
 
@@ -796,21 +748,21 @@ export default class ModPurOrder extends Component {
         <Description term="创建时间"><Input value={moment(basicMsg.createtime).format('YYYY-MM-DD HH:mm:ss')} data-id='createtime' onChange={this.handleChangeBasicMsg} disabled={true}/></Description>
         <Description term="取货方式">
           {/*<Input value={basicMsg.sendtypename} data-id='sendtypename' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/>*/}
-          <Select placeholder='请选择提货方式' 
-                  style={{ width: '100%' }} 
-                  value={basicMsg.sendtypename} 
+          <Select placeholder='请选择提货方式'
+                  style={{ width: '100%' }}
+                  value={basicMsg.sendtypename}
                   disabled={basicMsg.msgDisabled}
                   onChange={this.handleChangeBasicMsg.bind(this,'sendtypename')}>
-                  {sendTypeDate.map((val,index) => <Option value={val.id}>{val.typename}</Option>)}
+                  {sendTypeDate.map((val,index) => <Option key={index} value={val.id}>{val.typename}</Option>)}
             </Select>
         </Description>
         <Description term="目的地"><Input value={basicMsg.address} data-id='address' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
         <Description term="纳期"><Input value={basicMsg.deliverytime} data-id='deliverytime' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
         <Description term="币种">
                 {/*<Input value={basicMsg.currency}  onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/>*/}
-                 <Select placeholder='请选择币种'  
-                         value={basicMsg.currency} 
-                         style={{ width: '100%' }} 
+                 <Select placeholder='请选择币种'
+                         value={basicMsg.currency}
+                         style={{ width: '100%' }}
                          onChange={this.handleChangeBasicMsg.bind(this,'currency')}
                          disabled={basicMsg.msgDisabled}>
 
@@ -906,7 +858,9 @@ export default class ModPurOrder extends Component {
         width: '8%',
          render: (text, record) => {
           const { editable } = record;
+           const { btnDisabled } = this.state;
           return (
+            !btnDisabled?
             <div className={ustyle.editableRowOperations}>
               {
                 editable ?
@@ -916,7 +870,7 @@ export default class ModPurOrder extends Component {
                 </span>
                   : <a onClick={() => this.edit(record.id)} >编辑</a>
               }
-            </div>
+            </div>:<div>X</div>
           );
         },
       }];
@@ -945,7 +899,7 @@ export default class ModPurOrder extends Component {
             }
           })
         });
-        
+
       var idArr = GoodsSelections.map((item)=>{
         return {
           id : item.id
@@ -956,51 +910,25 @@ export default class ModPurOrder extends Component {
         payload:idArr,
         callback:(params) => {
           if (params.type=='1') {
-             message.success('删除成功')
+             message.success('删除成功');
              this.setState({
               listGoods : data,
               selectedRowKeys : keys
-            })
+            });
+            setTimeout(() => {
+              this.macthPrice();
+            }, 0);
+
           }else{
              message.error('删除失败')
           }
-         
+
         }
       })
-        
+
       }
 
-    ////////////////////////////////////////////////////////////////  弹出部分  //////////////////////////////////////////////////////////////
-    const supplyColumns = [
-      {
-        title: '报价账号',
-        dataIndex: 'usercode',
-        key: 'usercode',
-      },{
-        title: '公司名称',
-        dataIndex: 'company',
-        key: 'company',
-      },{
-        title: '商品数量',
-        dataIndex: 'total',
-        key: 'total',
-      },{
-        title: '商品价格',
-        dataIndex: 'price',
-        key: 'price',
-      },{
-        title: '敲定价格',
-        dataIndex: 'operate',
-        key: 'operate',
-        render: (text, record) => (
-          <Fragment>
-            <Switch checkedChildren="是"
-                    unCheckedChildren="否"
-                    defaultChecked={record.flag==="2"?false:true}
-                    onChange={()=>this.handleUpdateSupplyFlag(record)}/>
-          </Fragment>
-        ),
-      }];
+
 
 
     return (
@@ -1039,66 +967,6 @@ export default class ModPurOrder extends Component {
             <div style={{fontSize:'17px'}}>运费：{waybillfeeValue ? waybillfeeValue : '待添加'}</div>
           </div>
         </Card>
-        <Modal
-          visible={visible}
-          style={{top: 20}}
-          width="60%"
-          title="供应商反馈列表"
-          footer={null}
-          onCancel={this.handleModalCancel} >
-          <Table dataSource={supplyList}
-                 columns={supplyColumns}
-                 pagination={false}
-                 rowKey={record => record.goodsid}
-                 loading={submitting}
-                 onRow = {(record) => {
-                   return {
-                     onClick: () => {this.onRowClick(record)},
-                   };
-                 }}
-                 style={{maxHeight:'300px'}}/>
-          <div style={{ marginBottom: 0,marginTop:20,height:'50px',border:'1px solid #F5F5F5' }}>
-            <div className={ustyle.mydiv}>{chatTitle}</div>
-          </div>
-          <div id="chat" style={{ height:'300px',
-            overflowY:'auto',
-            backgroundColor:'#F5F5F5' }}>
-            {
-              chatList.map(function(item,i) {
-                if(item.sender===usercode){
-                  return (<div key={i} className={ustyle.rightd}>
-                            <span className={ustyle.rightd_h}>
-                              <img src={item.avatar}/>
-                            </span>
-                            <div className={ibClass}>
-                              {item.content}
-                            </div>
-                          </div>);
-                }else{
-                  return (<div key={i} className={ustyle.leftd}>
-                            <span className={ustyle.leftd_h}>
-                              <img src={item.avatar}/>
-                            </span>
-                          <div className={iaClass}>
-                            {item.content}
-                          </div>
-                        </div>);
-                }
-              })
-            }
-          </div>
-
-          <div style={{position:'relative'}}>
-            <TextArea
-                      style={{ height:'100px',resize:'none'}}
-                      onChange={this.handleSendMessageOnChange}
-                      value={sendMessage}
-                      onPressEnter={this.handleSendMessage}/>
-            <div style={{position:'absolute',right:0,bottom:0,margin:'0 10px 10px 0'}} >
-              <Button  type="primary"  onClick={this.handleSendMessage} >发送(S)</Button>
-            </div>
-          </div>
-        </Modal>
 
 
         <Modal
