@@ -172,6 +172,13 @@ export async function sendChat(params) {
     body: params,
   });
 }
+export async function updateStage(params) {
+  return request(`${apiUrl}/llback/purchase/update/stage`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 ///////////////////////////////////////////////////////////////////////////////// 客服 /////////////////////////////////////////////////////////////////////////
 export async function getPurOrderListOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/operate/list`, {

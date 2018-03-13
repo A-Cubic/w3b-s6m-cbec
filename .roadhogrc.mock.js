@@ -178,6 +178,7 @@ const proxy = {
   'POST /llback/purchase/purchasers/info/details': service_url,
   'POST /llback/purchase/purchasers/goods': service_url,
   'POST /llback/purchase/purchasers/update/price': service_url,
+  'POST /llback/purchase/update/stage': service_url,
   'POST /llback/purchase/supplier/list': service_url,
   'POST /llback/purchase/supplier/info/details': service_url,
   'POST /llback/purchase/supplier/inquiry': service_url,

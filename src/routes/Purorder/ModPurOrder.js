@@ -545,12 +545,38 @@ export default class ModPurOrder extends Component {
           status: '2',
         },
         callback:(params)=>{
-          if (params.type=='1') {
-             notification['success'](confirmSuccessMsg);
-           }else{
-              notification['error'](confirmErrorMsg);
-           }
+          if(params.type==="0"){
+            message.error('确认失败.');
+          }else {
+            message.success('确认成功');
+            this.props.dispatch(routerRedux.push('/trade/order-p/list'));
+          } 
          
+        },
+      });
+  }
+  passPurOrder = () => {
+    const { purchasePurchasers: { purchase },dispatch }  = this.props;
+      dispatch({
+        type: 'purchasePurchasers/submitPur',
+        payload: {
+          purchasesn: purchase.purchasesn,
+          status: '5',
+        }
+      });
+    dispatch({
+        type: 'purchasePurchasers/updateStage',
+        payload: {
+          purchasesn: purchase.purchasesn,
+          stage: '2',
+        },
+        callback:(params)=>{
+          if(params.type==="0"){
+            message.error('确认失败.');
+          }else {
+            message.success('确认成功');
+            this.props.dispatch(routerRedux.push('/trade/order-p/list'));
+          }       
         },
       });
   }
@@ -609,7 +635,6 @@ export default class ModPurOrder extends Component {
         barcode:item.barcode == undefined ? '' : item.barcode
       }
     })
-    console.log(data);
     if(arr.length > 0){
        this.props.dispatch({
           type: 'purchasePurchasers/addPurNewGoods',
@@ -618,11 +643,11 @@ export default class ModPurOrder extends Component {
             list : data
           },
           callback:(params)=>{
-              console.log(params);
               if (params.length>0) {
                  this.setState({
                   listGoods : params
-                })
+                });
+                message.success('添加成功');
               }
           }
       });
@@ -652,7 +677,6 @@ export default class ModPurOrder extends Component {
   saveBasic = () =>{
     const { purchasePurchasers: { purchase },dispatch }  = this.props;
     const { basicMsg }  = this.state;
-    console.log(basicMsg);
     dispatch({
       type:'purchasePurchasers/submitPur',
       payload:{
@@ -742,15 +766,14 @@ export default class ModPurOrder extends Component {
     //     <Menu.Item key="3">选项三</Menu.Item>
     //   </Menu>
     // );
-
     const action = (
       <div>
         <ButtonGroup>
           <Button onClick={this.showPurModal}>聊天</Button>
           <Button disabled={msgDisabled} onClick={this.saveBasic}>保存修改</Button>
-          {/*<Button disabled={msgDisabled}>退回询价</Button>*/}
+          <Button disabled={msgDisabled} onClick={this.submitPur}>确认采购单</Button>
         </ButtonGroup>
-        <Button type="primary" onClick={this.submitPur} disabled={msgDisabled}>确认采购单</Button>
+          <Button className={purchase.status == '5' ? '' : ustyle.none} type='primary' onClick={this.passPurOrder}>审核通过</Button>
       </div>
     );
 
@@ -909,6 +932,7 @@ export default class ModPurOrder extends Component {
         const { dispatch } = this.props;
         var data =  [...this.state.listGoods];
         var keys = [...selectedRowKeys];
+
         GoodsSelections.forEach((value,index)=>{
           data.forEach((val,i)=>{
             if (value.id == val.id) {
@@ -916,7 +940,7 @@ export default class ModPurOrder extends Component {
             }
           });
           keys.forEach((item,j)=>{
-            if (value.key == item) {
+            if (value.goodsid == item) {
               keys.splice(j,1);
             }
           })
@@ -927,15 +951,20 @@ export default class ModPurOrder extends Component {
           id : item.id
         }
       })
-      console.log(idArr);
       dispatch({
         type:'purchasePurchasers/delPurGoods',
         payload:idArr,
         callback:(params) => {
-          this.setState({
-            listGoods : data,
-            selectedRowKeys : keys
-          })
+          if (params.type=='1') {
+             message.success('删除成功')
+             this.setState({
+              listGoods : data,
+              selectedRowKeys : keys
+            })
+          }else{
+             message.error('删除失败')
+          }
+         
         }
       })
         
@@ -998,7 +1027,7 @@ export default class ModPurOrder extends Component {
           <Table dataSource={this.state.listGoods}
                  columns={goodsColumns}
                  pagination={this.state.pagination}
-                 rowKey={record => record.barcode}
+                 rowKey={record => record.goodsid}
                  rowSelection={rowSelection}
                  loading={submitting}
                  footer={this.tableFooterSum}
