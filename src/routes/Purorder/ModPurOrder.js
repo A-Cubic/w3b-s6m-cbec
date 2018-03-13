@@ -3,7 +3,7 @@ import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider,Input,notification,message,Modal,Switch,Avatar } from 'antd';
+import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider,Input,Select,notification,message,Modal,Switch,Avatar } from 'antd';
 import classNames from 'classnames';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import DescriptionList from '../../components/DescriptionList';
@@ -13,7 +13,7 @@ import ustyle from '../../utils/utils.less';
 import moment from 'moment';
 import { getToken } from '../../utils/Global';
 
-
+const Option = Select.Option;
 const { Step } = Steps;
 const { Description } = DescriptionList;
 const ButtonGroup = Button.Group;
@@ -27,85 +27,35 @@ const getWindowWidth = () => (window.innerWidth || document.documentElement.clie
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
 const breadcrumbList = [{
   title: '采购单管理',
-  href: '/trade/order-o/list',
+  href: '/trade/order-p/list',
 }, {
   title: '采购单详情',
 }];
+const successMsg={message: '采购单修改',description: '修改成功'}
+const errorMsg={message: '采购单修改',description: '修改失败'}
+const confirmSuccessMsg={message: '采购单确认',description: '确认成功'}
+const confirmErrorMsg={message: '采购单失败',description: '确认失败'}
 let GoodsSelections = [];
-class EditableCell extends Component {
-  state = {
-    value: this.props.value,
-    editable: false,
-    backValue: this.props.value,
-  }
-  handleChange = (e) => {
-    const value = e.target.value;
-    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-    if ((!isNaN(value) && reg.test(value))) {
-      this.setState({ value });
-    }
-  }
-  check = () => {
-    this.setState({ editable: false });
-    if (this.props.onChange) {
-      this.props.onChange(this.state.value);
-    }
-  }
-  close = () => {
-    this.setState({ editable: false, value:this.state.backValue});
-  }
-  edit = () => {
-    this.setState({ editable: true });
-  }
-  render() {
-    const { value, editable } = this.state;
-    return (
-      <div className={ustyle.editableCell}>
-        {
-          editable ?
-            <div className={ustyle.editableCIW}>
-              <Input
-                value={value}
-                onChange={this.handleChange}
-                onPressEnter={this.check}
-                style={{width:'85%'}}
-              />
-              <Icon
-                type="check"
-                className={ustyle.editableCIC}
-                onClick={this.check}
-              />
-              <Icon type="close"
-                className={ustyle.editableCIE}
-                onClick={this.close}
-              />
-            </div>
-            :
-            <div className={ustyle.editableCTW}>
-              {value || ' '}
-              <Icon
-                type="edit"
-                className={ustyle.editableCI}
-                onClick={this.edit}
-              />
-            </div>
-        }
-      </div>
-    );
-  }
-}
+let cacheData=[];
 
-@connect(({ purchaseOperate,addPurOrder, loading }) => ({
-  purchaseOperate,
+const EditableCell = ({ editable, value, onChange }) => (
+  <div>
+    {editable
+      ? <Input style={{ margin: '-5px 0' }} value={value} onChange={e => onChange(e.target.value)} />
+      : value
+    }
+  </div>
+);
+
+@connect(({ purchasePurchasers,addPurOrder, loading }) => ({
+  purchasePurchasers,
   addPurOrder,
-  submitting: loading.effects['purchaseOperate/goodslist'],
+  submitting: loading.effects['purchasePurchasers/goodslist'],
 }))
 
-export default class PurDetailsOfOperate extends Component {
+export default class ModPurOrder extends Component {
   state = {
     pagination: {
-      current: 1,
-      total: 10,
       pageSize: 5,
     },
     stepDirection: 'horizontal',
@@ -127,9 +77,10 @@ export default class PurDetailsOfOperate extends Component {
     chatTitle:'聊天内容',
     btnDisabled: false,
     basicMsg : {
-      msgDisabled : '',
+      msgDisabled : true,
       userCode : '',
       createtime : '',
+      sendtype : '',
       sendtypename : '',
       address : '',
       deliverytime : '',
@@ -144,10 +95,9 @@ export default class PurDetailsOfOperate extends Component {
     const { dispatch } = this.props;
     const { pagination } = this.state;
     dispatch({
-      type: 'purchaseOperate/goodslist',
+      type: 'purchasePurchasers/goodslist',
       payload: {
-        purchasesn: this.props.match.params.id,
-        ...pagination,
+        purchasesn: this.props.match.params.id
       },
       callback:this.getGoodsCallback,
     });
@@ -155,12 +105,19 @@ export default class PurDetailsOfOperate extends Component {
     this.setStepDirection();
     window.addEventListener('resize', this.setStepDirection);
   }
-
+  componentWillMount(){
+    const { addPurOrder:{ sendTypeDate },dispatch } = this.props;
+    if ( sendTypeDate.length == 0 ) {
+      dispatch({
+        type:'addPurOrder/getSendType',
+        payload:{}
+      });
+    }
+  }
   getGoodsCallback = (params) => {
-    const { basicMsg } = this.state;
+    const { basicMsg,basicMsg:{ msgDisabled } } = this.state;
     let sum = '0.00';
     let bean = params.bean;
-    let pagination = params.pagination;
     if(params.list.length){
       if(params.list[0].sum){
         sum=params.list[0].sum;
@@ -172,29 +129,25 @@ export default class PurDetailsOfOperate extends Component {
     }
     const price = fee*1+sum*1;
     let able = false;
-    let msgDisabled = true;
+    let msgModDisabled = msgDisabled;
     if(bean.status==='5'){
       able = true;
     }
-    if (bean.status =='1' || bean.status =='3' || bean.status == '4') {
-      msgDisabled = false;
+    if (bean.stage == '9' || bean.status == '4') {
+      msgModDisabled = false;
     }
-
+    this.cacheData = params.list.map(item => ({ ...item }));
     this.setState({
-       pagination: {
-        current: pagination.current,
-        total: pagination.total,
-        pageSize: pagination.pageSize,
-      },
       waybillfeeValue: fee,
       listGoods:params.list,
       goodsSum:sum,
       totalPrice: price===0?'0.00':price,
       btnDisabled: able,
       basicMsg : {
-        msgDisabled : msgDisabled,
+        msgDisabled : msgModDisabled,
         userCode : bean.userCode,
         createtime : bean.createtime,
+        sendtype : bean.sendtype,
         sendtypename : bean.sendtypename,
         address : bean.address,
         deliverytime : bean.deliverytime,
@@ -205,13 +158,22 @@ export default class PurDetailsOfOperate extends Component {
   }
 
   updatePriceCallback = (params) => {
-    // console.log(params);
-    // this.setState({
-    //   waybillfeeValue: params.bean.waybillfee,
-    //   listGoods:params.list,
-    //   goodsSum:params.list[0].sum?params.list[0].sum:'0.00',
-    //   totalPrice: params.bean.waybillfee*1+params.list[0].sum*1,
-    // });
+    console.log(params);
+    if (params.type=='1') {
+      notification["success"]({
+        message: params.msg,
+      });
+    }else{
+       notification["error"]({
+        message: 请重新修改,
+      });
+    }
+    /*this.setState({
+      waybillfeeValue: params.bean.waybillfee,
+      listGoods:params.list,
+      goodsSum:params.list[0].sum?params.list[0].sum:'0.00',
+      totalPrice: params.bean.waybillfee*1+params.list[0].sum*1,
+    });*/
   }
 
   componentWillUnmount() {
@@ -220,7 +182,7 @@ export default class PurDetailsOfOperate extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
+    const { dispatch,purchasePurchasers:{ paginationGoods } } = this.props;
     const { formValues } = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -238,14 +200,25 @@ export default class PurDetailsOfOperate extends Component {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-
-    dispatch({
-      type: 'purchaseOperate/goodslist',
-      payload: {
-        purchasesn: this.props.match.params.id,
-        ...params,
-      },
-    });
+    this.setState({
+      pagination : {
+        ...this.state.pagination,
+        current : pagination.current
+      }
+    })
+    /*const oriPage = Math.ceil(paginationGoods.total/paginationGoods.pageSize);
+    
+    if (pagination.current > oriPage) {
+      
+    }else{
+        dispatch({
+          type: 'purchasePurchasers/goodslist',
+          payload: {
+            purchasesn: this.props.match.params.id,
+            ...params,
+          },
+       });
+    }*/
   }
   handleBtnOnChange = (e) => {
     const { btnDisabled } = this.state;
@@ -256,7 +229,7 @@ export default class PurDetailsOfOperate extends Component {
         });
       }else{
         this.props.dispatch({
-          type: 'purchaseOperate/updateFee',
+          type: 'purchasePurchasers/updateFee',
           payload: {
             purchasesn: this.props.match.params.id,
             waybillfeeValue: e,
@@ -273,9 +246,6 @@ export default class PurDetailsOfOperate extends Component {
         description: '此状态不可修改运单价格',
       });
     }
-
-
-
   }
   handleWaybillfeeOnChange = (e) => {
     const { value } = e.target;
@@ -335,7 +305,7 @@ export default class PurDetailsOfOperate extends Component {
         const matchSum = goodsSum*1-(target[dataIndex]*1-value*1);
         target[dataIndex] = value;
         this.props.dispatch({
-          type: 'purchaseOperate/updatePrice',
+          type: 'purchasePurchasers/updatePrice',
           payload: {
             id: key,
             realprice: value,
@@ -353,7 +323,7 @@ export default class PurDetailsOfOperate extends Component {
       visible: true,
     });
     this.props.dispatch({
-      type: 'purchaseOperate/supplyList',
+      type: 'purchasePurchasers/supplyList',
       payload: {
         purchasesn: record.purchasesn,
         goodsid: record.goodsid,
@@ -373,7 +343,7 @@ export default class PurDetailsOfOperate extends Component {
 
   handleUpdateSupplyFlag = (record) => {
     this.props.dispatch({
-      type: 'purchaseOperate/updateSupplyFlag',
+      type: 'purchasePurchasers/updateSupplyFlag',
       payload: {
         id: record.id+'',
         flag: record.flag==='1'?'2':'1',
@@ -400,7 +370,7 @@ export default class PurDetailsOfOperate extends Component {
       message.warning("请选择聊天对象");
     } else {
       this.props.dispatch({
-        type: 'purchaseOperate/sendChat',
+        type: 'purchasePurchasers/sendChat',
         payload: {
           purchasesn: selectedRow.purchasesn,
           inquiry_id: selectedRow.id,
@@ -418,7 +388,7 @@ export default class PurDetailsOfOperate extends Component {
     }else {
       const { selectedRow } = this.state;
       this.props.dispatch({
-        type: 'purchaseOperate/listChat',
+        type: 'purchasePurchasers/listChat',
         payload: {
           purchasesn: selectedRow.purchasesn,
           inquiry_id: selectedRow.id,
@@ -445,7 +415,7 @@ export default class PurDetailsOfOperate extends Component {
       selectedRow: e,
     });
     this.props.dispatch({
-      type: 'purchaseOperate/listChat',
+      type: 'purchasePurchasers/listChat',
       payload: {
         purchasesn: e.purchasesn,
         inquiry_id: e.id,
@@ -469,10 +439,10 @@ export default class PurDetailsOfOperate extends Component {
     this.setState({
       purVisible: true,
     });
-    const { purchaseOperate: { purchase } }  = this.props;
+    const { purchasePurchasers: { purchase } }  = this.props;
 
     this.props.dispatch({
-      type: 'purchaseOperate/listChat',
+      type: 'purchasePurchasers/listChat',
       payload: {
         purchasesn: purchase.purchasesn,
       },
@@ -492,12 +462,12 @@ export default class PurDetailsOfOperate extends Component {
   handleSendPurMessage = (e) => {
     e.preventDefault();
     const { sendPurMessage } = this.state;
-    const { purchaseOperate: { purchase } }  = this.props;
+    const { purchasePurchasers: { purchase } }  = this.props;
     if ( sendPurMessage.trim() === '') {
       message.warning("不能发送空白信息");
     }  else {
       this.props.dispatch({
-        type: 'purchaseOperate/sendChat',
+        type: 'purchasePurchasers/sendChat',
         payload: {
           purchasesn: purchase.purchasesn,
           content: sendPurMessage,
@@ -507,14 +477,14 @@ export default class PurDetailsOfOperate extends Component {
     }
   }
   sendPurChatCallback = (params) => {
-    const { purchaseOperate: { purchase } }  = this.props;
+    const { purchasePurchasers: { purchase } }  = this.props;
     const msg = params.msg;
     if(params.type==="0"){
       message.error(msg);
     }else {
       const { selectedRow } = this.state;
       this.props.dispatch({
-        type: 'purchaseOperate/listChat',
+        type: 'purchasePurchasers/listChat',
         payload: {
           purchasesn: purchase.purchasesn,
         },
@@ -543,15 +513,46 @@ export default class PurDetailsOfOperate extends Component {
   }
 
   submitPur = () => {
-    const { purchaseOperate: { purchase } }  = this.props;
-    this.props.dispatch({
-      type: 'purchaseOperate/submitPur',
-      payload: {
-        purchasesn: purchase.purchasesn,
-        status: '4',
-      },
-      callback: this.submitPurChatCallback,
-    });
+    const { purchasePurchasers: { purchase },dispatch }  = this.props;
+    if (purchase.stage == '9') {
+        //拆单
+        dispatch({
+        type:'addPurOrder/splitPurGoods',
+        payload:{
+          purchasesn : purchase.purchasesn
+        },
+        callback:(response)=>{
+          if (response.type=='1') {
+              this.submitPurOrder();
+          }else{
+            notification['error']({
+              message: '确认失败',
+              description: response.msg
+            });
+          }
+        }
+      })
+    }else{
+      this.submitPurOrder();
+    }
+  }
+  submitPurOrder = () => {
+    const { purchasePurchasers: { purchase },dispatch }  = this.props;
+    dispatch({
+        type: 'purchasePurchasers/submitPur',
+        payload: {
+          purchasesn: purchase.purchasesn,
+          status: '2',
+        },
+        callback:(params)=>{
+          if (params.type=='1') {
+             notification['success'](confirmSuccessMsg);
+           }else{
+              notification['error'](confirmErrorMsg);
+           }
+         
+        },
+      });
   }
   submitPurChatCallback = (params) => {
     const msg = params.msg;
@@ -559,19 +560,25 @@ export default class PurDetailsOfOperate extends Component {
       message.error('确认采购单失败');
     }else {
       message.success('确认采购单成功');
-      this.props.dispatch(routerRedux.push('/trade/order-o/list'));
+      this.props.dispatch(routerRedux.push('/trade/order-p/list'));
     }
   }
-  handleChangeBasicMsg =(e) =>{
+  handleChangeBasicMsg =(e,changeVal,aa) =>{
     const { basicMsg } = this.state;
-    var key = e.target.getAttribute('data-id');
-    var value = e.target.value;
-    console.log(key,value);
-
+    var key;
+    var value;
+    if (changeVal == undefined ) {
+       key = e.target.getAttribute('data-id');
+       value = e.target.value
+    }else{
+      value = aa.props.children;
+      key = e;
+    }
     this.setState({
       basicMsg : {
         ...basicMsg,
-        [key] : value
+        [key] : value,
+        sendtype:aa == undefined ? basicMsg.sendtype :  aa.props.value
       }
     })
 
@@ -583,58 +590,151 @@ export default class PurDetailsOfOperate extends Component {
     }
   handleOk = (arr) => {
     const { listGoods,pagination } = this.state;
-    var data = [...listGoods];
+    const { purchasePurchasers: { purchase } }  = this.props;
+    // var data = [...listGoods];
+    var data = [];
     arr.forEach((val,i)=>{
       if (val !== undefined) {
         data.push(...val);
       }
     });
-
+    data = data.map((item)=>{
+      return {
+        goodsid:item.id == undefined ? '' : item.id,
+        goodsname: item.goodsname == undefined ? '' : item.goodsname,
+        price:item.price == undefined ? '' : item.price,
+        deliverytype:0,
+        expectprice:0,
+        total:0,
+        barcode:item.barcode == undefined ? '' : item.barcode
+      }
+    })
+    console.log(data);
     if(arr.length > 0){
-      console.log(data);
-      this.setState({
-        listGoods : data
-      })
-  }
-   /* this.setState({
-      addGoodsVisible: false,
-    });*/
-
+       this.props.dispatch({
+          type: 'purchasePurchasers/addPurNewGoods',
+          payload: {
+            purchasesn : purchase.purchasesn,
+            list : data
+          },
+          callback:(params)=>{
+              console.log(params);
+              if (params.length>0) {
+                 this.setState({
+                  listGoods : params
+                })
+              }
+          }
+      });
+    }
     this.setState({
-      pagination : {
-        ...pagination,
-        total : data.length
-      },
       addGoodsVisible: false,
     });
-
-
   }
   handleCancel = (e) => {
     this.setState({
       addGoodsVisible: false,
     });
   }
-  goAddGoods = () =>{
-    const { dispatch } = this.props;
-    dispatch({
-      type:'addPurOrder/goodsList',
-      payload:{
-        pageNumber:1,
-        pageSize:10
-      }
-    });
+  goAddGoods = () => {
+    const { dispatch,addPurOrder:{goodsList:{ list }} } = this.props;
+    if (list.length==0) {
+        dispatch({
+          type:'addPurOrder/goodsList',
+          payload:{
+            pageNumber:1,
+            pageSize:10
+          }
+      });
+    }
     this.showModal();
   }
+  saveBasic = () =>{
+    const { purchasePurchasers: { purchase },dispatch }  = this.props;
+    const { basicMsg }  = this.state;
+    console.log(basicMsg);
+    dispatch({
+      type:'purchasePurchasers/submitPur',
+      payload:{
+        // ...purchase,
+        purchasesn : purchase.purchasesn,
+        sendtype:basicMsg.sendtype,
+        sendtypename:basicMsg.sendtypename,
+        address:basicMsg.address,
+        deliverytime:basicMsg.deliverytime,
+        currency:basicMsg.currency,
+        remark:basicMsg.remark,
+        // waybillfee:''
+      },
+      callback:(params)=>{
+        console.log(params);
+        if (params.type=='1') {
+            notification["success"](successMsg);
+        }else{
+          notification["error"](errorMsg);
+        }
+      }
+    });
+  }
 
-
+   ////////////////////////可编辑行start//////////////////////////
+  renderColumns(text, record, column) {
+    return (
+      <EditableCell
+        editable={record.editable}
+        value={text}
+        onChange={value => this.handleChange(value, record.id, column)}
+      />
+    );
+  }
+  handleChange(value, key, column) {
+    const newData = [...this.state.listGoods];
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {
+      target[column] = value;
+      this.setState({ listGoods: newData });
+    }
+  }
+  edit(key) {
+    const newData = [...this.state.listGoods];
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {
+      target.editable = true;
+      this.setState({ listGoods: newData });
+    }
+  }
+  save(key) {
+    const newData = [...this.state.listGoods];
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {
+      this.props.dispatch({
+        type: 'purchasePurchasers/updatePrice',
+        payload: {
+          id: key,
+          expectprice: target.expectprice,
+          total: target.total,
+        },
+        callback: this.updatePriceCallback,
+      });
+      delete target.editable;
+      this.setState({ listGoods: newData });
+      this.cacheData = newData.map(item => ({ ...item }));
+    }
+  }
+  cancel(key) {
+    const newData = [...this.state.listGoods];
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {
+      Object.assign(target, this.cacheData.filter(item => key === item.id)[0]);
+      delete target.editable;
+      this.setState({ listGoods: newData });
+    }
+  }
+////////////////////////可编辑行end//////////////////////////
 
   render() {
-    console.log(this.state)
-
-    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled,basicMsg,addGoodsVisible,selectedRowKeys  } = this.state;
-    const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting,addPurOrder:{goodsList:{ list,pagination }} }  = this.props;
-
+    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled,basicMsg,basicMsg:{msgDisabled},addGoodsVisible,selectedRowKeys  } = this.state;
+    const { purchasePurchasers: { listGoods, paginationGoods, purchase, supplyList }, submitting,addPurOrder:{sendTypeDate,goodsList:{ list,pagination }} }  = this.props;
     // const menu = (
     //   <Menu>
     //     <Menu.Item key="1">选项一</Menu.Item>
@@ -647,9 +747,10 @@ export default class PurDetailsOfOperate extends Component {
       <div>
         <ButtonGroup>
           <Button onClick={this.showPurModal}>聊天</Button>
-          <Button>保存修改</Button>
+          <Button disabled={msgDisabled} onClick={this.saveBasic}>保存修改</Button>
+          {/*<Button disabled={msgDisabled}>退回询价</Button>*/}
         </ButtonGroup>
-        <Button type="primary" onClick={this.submitPur} disabled={btnDisabled}>确认采购单</Button>
+        <Button type="primary" onClick={this.submitPur} disabled={msgDisabled}>确认采购单</Button>
       </div>
     );
 
@@ -668,12 +769,36 @@ export default class PurDetailsOfOperate extends Component {
 
     const description = (
       <DescriptionList className={styles.headerList} size="small" col="2">
-        <Description term="创建人"><Input value={basicMsg.userCode} data-id='userCode' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
-        <Description term="创建时间"><Input value={moment(basicMsg.createtime).format('YYYY-MM-DD HH:mm:ss')} data-id='createtime' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
-        <Description term="取货方式"><Input value={basicMsg.sendtypename} data-id='sendtypename' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        <Description term="创建人"><Input value={basicMsg.userCode} data-id='userCode' onChange={this.handleChangeBasicMsg} disabled={true}/></Description>
+        <Description term="创建时间"><Input value={moment(basicMsg.createtime).format('YYYY-MM-DD HH:mm:ss')} data-id='createtime' onChange={this.handleChangeBasicMsg} disabled={true}/></Description>
+        <Description term="取货方式">
+          {/*<Input value={basicMsg.sendtypename} data-id='sendtypename' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/>*/}
+          <Select placeholder='请选择提货方式' 
+                  style={{ width: '100%' }} 
+                  value={basicMsg.sendtypename} 
+                  disabled={basicMsg.msgDisabled}
+                  onChange={this.handleChangeBasicMsg.bind(this,'sendtypename')}>
+                  {sendTypeDate.map((val,index) => <Option value={val.id}>{val.typename}</Option>)}
+            </Select>
+        </Description>
         <Description term="目的地"><Input value={basicMsg.address} data-id='address' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
         <Description term="纳期"><Input value={basicMsg.deliverytime} data-id='deliverytime' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
-        <Description term="币种"><Input value={basicMsg.currency} data-id='currency' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        <Description term="币种">
+                {/*<Input value={basicMsg.currency}  onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/>*/}
+                 <Select placeholder='请选择币种'  
+                         value={basicMsg.currency} 
+                         style={{ width: '100%' }} 
+                         onChange={this.handleChangeBasicMsg.bind(this,'currency')}
+                         disabled={basicMsg.msgDisabled}>
+
+                  <Option value='CNY人民币'>人民币(CNY)</Option>
+                  <Option value='HKD港币'>港币(HKD)</Option>
+                  <Option value='KRW韩元'>韩元(KRW)</Option>
+                  <Option value='USD美元'>美元(USD)</Option>
+                  <Option value='EUR欧元'>欧元(EUR)</Option>
+                  <Option value='JPY日元'>日元(JPY)</Option>
+                </Select>
+        </Description>
         <Description term="备注"><Input value={basicMsg.remark} data-id='remark' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
       </DescriptionList>
     );
@@ -724,11 +849,6 @@ export default class PurDetailsOfOperate extends Component {
         key: 'barcode',
         width: '12%',
       },{
-        title: '商品数量',
-        dataIndex: 'total',
-        key: 'total',
-        width: '10%',
-      },{
         title: '其他费用',
         dataIndex: 'otherprice',
         key: 'otherprice',
@@ -738,43 +858,44 @@ export default class PurDetailsOfOperate extends Component {
         dataIndex: 'price',
         key: 'price',
         width: '10%',
-      },{
+      },
+      {
+        title: '商品数量',
+        dataIndex: 'total',
+        key: 'total',
+        width: '10%',
+        render: (text, record) => this.renderColumns(text, record, 'total'),
+      }, {
         title: '期望价格',
         dataIndex: 'expectprice',
         key: 'expectprice',
         width: '10%',
+        render: (text, record) => this.renderColumns(text, record, 'expectprice'),
       },{
         title: '实际价格',
         dataIndex: 'realprice',
         key: 'realprice',
         width: '10%',
-        render: (text, record) => {
-            if(!btnDisabled) {
-              return(<EditableCell
-                value={text}
-                onChange={this.onCellChange(record.id, 'realprice')}
-              />);
-            }else{
-              return(<div>{record.realprice}</div>);
-            }
-        },
       },{
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
         width: '8%',
-        render: (text, record) => (
-          <div>
-            <Button type="primary" size="small" ghost onClick={()=>{this.showModal(record)}} disabled={btnDisabled}>
-              反馈
-            </Button>
-          </div>
-          // <Fragment>
-          //   {/*<Link to={`/trade/order-o/info/${record.purchasesn}`}>编辑</Link>*/}
-          //   {/*<Divider type="vertical" />*/}
-          //   <Link to={`/trade/order-o/info/${record.purchasesn}`}>反馈</Link>
-          // </Fragment>
-        ),
+         render: (text, record) => {
+          const { editable } = record;
+          return (
+            <div className={ustyle.editableRowOperations}>
+              {
+                editable ?
+                  <span>
+                  <a onClick={() => this.save(record.id)}>保存</a>
+                    <a onClick={() => this.cancel(record.id)}>取消</a>
+                </span>
+                  : <a onClick={() => this.edit(record.id)} >编辑</a>
+              }
+            </div>
+          );
+        },
       }];
     const rowSelection = {
         selectedRowKeys,
@@ -785,19 +906,39 @@ export default class PurDetailsOfOperate extends Component {
           }
       };
       const deleteGoods = () => {
-        var data;
-        data =  [...this.state.listGoods];
+        const { dispatch } = this.props;
+        var data =  [...this.state.listGoods];
+        var keys = [...selectedRowKeys];
         GoodsSelections.forEach((value,index)=>{
           data.forEach((val,i)=>{
             if (value.id == val.id) {
               data.splice(i,1);
             }
+          });
+          keys.forEach((item,j)=>{
+            if (value.key == item) {
+              keys.splice(j,1);
+            }
           })
         });
-
-        this.setState({
-          listGoods : data
-        })
+        
+      var idArr = GoodsSelections.map((item)=>{
+        return {
+          id : item.id
+        }
+      })
+      console.log(idArr);
+      dispatch({
+        type:'purchasePurchasers/delPurGoods',
+        payload:idArr,
+        callback:(params) => {
+          this.setState({
+            listGoods : data,
+            selectedRowKeys : keys
+          })
+        }
+      })
+        
       }
 
     ////////////////////////////////////////////////////////////////  弹出部分  //////////////////////////////////////////////////////////////
@@ -857,9 +998,8 @@ export default class PurDetailsOfOperate extends Component {
           <Table dataSource={this.state.listGoods}
                  columns={goodsColumns}
                  pagination={this.state.pagination}
-                 rowKey={record => record.id}
+                 rowKey={record => record.barcode}
                  rowSelection={rowSelection}
-                 onChange={this.handleStandardTableChange}
                  loading={submitting}
                  footer={this.tableFooterSum}
                  className={ustyle.mT10}
@@ -880,7 +1020,7 @@ export default class PurDetailsOfOperate extends Component {
           <Table dataSource={supplyList}
                  columns={supplyColumns}
                  pagination={false}
-                 rowKey={record => record.id}
+                 rowKey={record => record.goodsid}
                  loading={submitting}
                  onRow = {(record) => {
                    return {

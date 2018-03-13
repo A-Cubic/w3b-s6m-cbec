@@ -11,6 +11,7 @@ import styles from '../Profile/AdvancedProfile.less';
 import ustyle from '../../utils/utils.less';
 import moment from 'moment';
 import { getToken } from '../../utils/Global';
+import {insertOfferOfSupplier, updateFeeOfOperate} from "../../services/api";
 
 const { Step } = Steps;
 const { Description } = DescriptionList;
@@ -20,9 +21,12 @@ const { TextArea } = Input;
 const iaClass = classNames(ustyle.speech , ustyle.left);
 const ibClass = classNames(ustyle.speech , ustyle.right);
 const usercode = getToken().userId;
+const savaData = [];
 
 const getWindowWidth = () => (window.innerWidth || document.documentElement.clientWidth);
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
+const flag = ['关闭', '等待报价', '报价反馈中', '已敲定价格'];
+const flagMap = ['default','warning','processing','success'];
 const breadcrumbList = [{
   title: '采购单管理',
   href: '/trade/order-s/list',
@@ -49,7 +53,7 @@ export default class PurDetailsOfSup extends Component {
     pagination: {
       current: 1,
       total: 10,
-      pageSize: 5,
+      pageSize: 10,
     },
     stepDirection: 'horizontal',
     searchDisable:true,
@@ -96,9 +100,9 @@ export default class PurDetailsOfSup extends Component {
       }
     }
 
-    let able = false;
-    if(params.bean.status==='0' || params.bean.status==='4'){
-      able = true;
+    let able = true;
+    if(params.bean.status==='2'){
+      able = false;
     }
     this.cacheData = params.list.map(item => ({ ...item }));
     this.setState({
@@ -124,86 +128,6 @@ export default class PurDetailsOfSup extends Component {
     this.setStepDirection.cancel();
   }
 
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
-    const { formValues } = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      current: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      // ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    dispatch({
-      type: 'purchaseSupplier/goodslist',
-      payload: {
-        purchasesn: this.props.match.params.id,
-        ...params,
-      },
-    });
-  }
-  handleBtnOnChange = (e) => {
-    const { btnDisabled } = this.state;
-    if(!btnDisabled){
-      if(this.state.searchDisable){
-        this.setState({
-          searchDisable: false,
-        });
-      }else{
-        this.props.dispatch({
-          type: 'purchaseSupplier/updateFee',
-          payload: {
-            purchasesn: this.props.match.params.id,
-            waybillfeeValue: e,
-          },
-          callback: this.updateFeeCallback,
-        });
-        this.setState({
-          searchDisable: true,
-        });
-      }
-    }else{
-      notification.error({
-        message: "提示",
-        description: '此状态不可修改运单价格',
-      });
-    }
-
-
-
-  }
-  handleWaybillfeeOnChange = (e) => {
-    const { value } = e.target;
-    const fee = this.state.waybillfeeValue;
-    const total = this.state.totalPrice;
-    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-    if ((!isNaN(value) && reg.test(value)) || value === '') {
-      const matchTotal = total*1-(fee*1-value*1);
-      this.setState({
-        waybillfeeValue: value,
-        totalPrice: matchTotal,
-      });
-    }
-  }
-
-  updateFeeCallback = (params) => {
-    const msg = params.msg;
-    if(params.type==="0"){
-      message.error(msg);
-    }else {
-      message.success(msg);
-    }
-  }
 
   tableFooterSum = (params) => {
     return (
@@ -278,25 +202,25 @@ export default class PurDetailsOfSup extends Component {
       chatTitle: e.usercode,
       selectedRow: e,
     });
-    this.props.dispatch({
-      type: 'purchaseSupplier/listChat',
-      payload: {
-        purchasesn: e.purchasesn,
-        inquiry_id: e.id,
-      },
-      callback: this.onRowClickCallback,
-    });
+    // this.props.dispatch({
+    //   type: 'purchaseSupplier/listChat',
+    //   payload: {
+    //     purchasesn: e.purchasesn,
+    //     inquiry_id: e.id,
+    //   },
+    //   callback: this.onRowClickCallback,
+    // });
   }
 
-  onRowClickCallback = (params) => {
-    this.setState({
-      chatList: params.length?params:[],
-    });
-    setTimeout(() => {
-      const div = document.getElementById("chat");
-      div.scrollTop = div.scrollHeight;
-    }, 0);
-  }
+  // onRowClickCallback = (params) => {
+  //   this.setState({
+  //     purChatList: params.length?params:[],
+  //   });
+  //   setTimeout(() => {
+  //     const div = document.getElementById("purchat");
+  //     div.scrollTop = div.scrollHeight;
+  //   }, 0);
+  // }
 
 
   showPurModal = (e) => {
@@ -325,15 +249,15 @@ export default class PurDetailsOfSup extends Component {
 
   handleSendPurMessage = (e) => {
     e.preventDefault();
-    const { sendPurMessage } = this.state;
-    const { purchaseSupplier: { purchase } }  = this.props;
+    const { sendPurMessage,selectedRow } = this.state;
     if ( sendPurMessage.trim() === '') {
       message.warning("不能发送空白信息");
-    }  else {
+    } else {
       this.props.dispatch({
         type: 'purchaseSupplier/sendChat',
         payload: {
-          purchasesn: purchase.purchasesn,
+          purchasesn: selectedRow.purchasesn,
+          inquiry_id:selectedRow.id,
           content: sendPurMessage,
         },
         callback: this.sendPurChatCallback,
@@ -341,7 +265,6 @@ export default class PurDetailsOfSup extends Component {
     }
   }
   sendPurChatCallback = (params) => {
-    const { purchaseSupplier: { purchase } }  = this.props;
     const msg = params.msg;
     if(params.type==="0"){
       message.error(msg);
@@ -350,7 +273,8 @@ export default class PurDetailsOfSup extends Component {
       this.props.dispatch({
         type: 'purchaseSupplier/listChat',
         payload: {
-          purchasesn: purchase.purchasesn,
+          purchasesn: selectedRow.purchasesn,
+          inquiry_id: selectedRow.id,
         },
         callback: this.listChatCallback,
       });
@@ -376,13 +300,12 @@ export default class PurDetailsOfSup extends Component {
     });
   }
 
-  submitPur = (e) => {
-    const { purchaseSupplier: { purchase } }  = this.props;
+  submitPur = () => {
+    const { listGoods }  = this.state;
     this.props.dispatch({
-      type: 'purchaseSupplier/submitPur',
+      type: 'purchaseSupplier/updatePrice',
       payload: {
-        purchasesn: purchase.purchasesn,
-        status: e,
+       listGoods,
       },
       callback: this.submitPurChatCallback,
     });
@@ -390,9 +313,9 @@ export default class PurDetailsOfSup extends Component {
   submitPurChatCallback = (params) => {
     const msg = params.msg;
     if(params.type==="0"){
-      message.error('提交失败');
+      message.error(msg);
     }else {
-      message.success('提交成功');
+      message.success('报价成功');
       this.props.dispatch(routerRedux.push('/trade/order-s/list'));
     }
   }
@@ -409,11 +332,20 @@ export default class PurDetailsOfSup extends Component {
   }
   handleChange(value, key, column) {
     const newData = [...this.state.listGoods];
-    console.log(newData);
     const target = newData.filter(item => key === item.id)[0];
+    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if (target) {
-      target[column] = value;
-      this.setState({ listGoods: newData });
+      if ((!isNaN(value) && reg.test(value))) {
+        let totalPrice = this.state.totalPrice;
+        let goodsSum = this.state.goodsSum;
+        if(column==='price'){
+          totalPrice = totalPrice*1-(target[column]*1-value*1);
+          goodsSum = goodsSum*1-(target[column]*1-value*1);
+        }
+        target[column] = value;
+
+        this.setState({ listGoods: newData,totalPrice:totalPrice,goodsSum:goodsSum });
+      }
     }
   }
   edit(key) {
@@ -426,21 +358,17 @@ export default class PurDetailsOfSup extends Component {
   }
   save(key) {
     const newData = [...this.state.listGoods];
+
     const target = newData.filter(item => key === item.id)[0];
     if (target) {
-      this.props.dispatch({
-        type: 'purchaseSupplier/updatePrice',
-        payload: {
-          id: key,
-          price: target.price,
-          total: target.total,
-        },
-        callback: this.updatePriceCallback,
-      });
-      delete target.editable;
-      this.setState({ listGoods: newData });
-      this.cacheData = newData.map(item => ({ ...item }));
-
+      if(target.flag==='0' || target.flag==='3'){
+        delete target.editable;
+      }else{
+        delete target.editable;
+        savaData.push(target);
+        this.setState({ listGoods: newData });
+        this.cacheData = newData.map(item => ({ ...item }));
+      }
     }
   }
   cancel(key) {
@@ -455,7 +383,7 @@ export default class PurDetailsOfSup extends Component {
 ////////////////////////可编辑行end//////////////////////////
 
   render() {
-    const { stepDirection, searchDisable, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled } = this.state;
+    const { stepDirection, searchDisable, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled,pagination } = this.state;
     const { purchaseSupplier: { listGoods, paginationGoods, purchase }, submitting }  = this.props;
 
     const action = (
@@ -463,7 +391,7 @@ export default class PurDetailsOfSup extends Component {
         {/*<ButtonGroup>*/}
           {/*<Button onClick={this.showPurModal}>聊天</Button>*/}
         {/*</ButtonGroup>*/}
-        <Button type="primary" onClick={()=>this.submitPur('5')} disabled={btnDisabled}>完成报价</Button>
+        <Button type="primary" onClick={this.submitPur} disabled={btnDisabled}>确认报价</Button>
       </div>
     );
 
@@ -528,6 +456,14 @@ export default class PurDetailsOfSup extends Component {
 
     const goodsColumns = [
       {
+        title: '状态',
+        dataIndex: 'flag',
+        key: 'flag',
+        width: '10%',
+        render(val) {
+          return <Badge status={flagMap[val]} text={flag[val]} />;
+        },
+      },{
         title: '商品名称',
         dataIndex: 'goodsname',
         key: 'goodsname',
@@ -556,8 +492,10 @@ export default class PurDetailsOfSup extends Component {
         width: '8%',
         render: (text, record) => {
           const { editable } = record;
+          const disable = (record.flag==='0' || record.flag==='3')?false:true;
           return (
-            <div className={ustyle.editableRowOperations}>
+            disable?
+              <div className={ustyle.editableRowOperations}>
               {
                 editable ?
                   <span>
@@ -566,7 +504,7 @@ export default class PurDetailsOfSup extends Component {
                 </span>
                   : <a onClick={() => this.edit(record.id)} disabled={btnDisabled}>编辑</a>
               }
-            </div>
+              </div>:<div>不可编辑</div>
           );
         },
       },{
@@ -604,9 +542,14 @@ export default class PurDetailsOfSup extends Component {
         <Card title="商品列表" style={{ marginBottom: 24 }} bordered={false}>
           <Table dataSource={this.state.listGoods}
                  columns={goodsColumns}
-                 pagination={paginationGoods}
+                 pagination={pagination}
                  rowKey={record => record.id}
-                 onChange={this.handleStandardTableChange}
+                 onRow = {(record) => {
+                   return {
+                     onClick: () => {this.onRowClick(record)},
+                   };
+                 }}
+                 // onChange={this.handleStandardTableChange}
                  loading={submitting}
                  footer={this.tableFooterSum}/>
         </Card>

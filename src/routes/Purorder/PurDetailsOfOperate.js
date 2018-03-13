@@ -340,7 +340,7 @@ export default class PurDetailsOfOperate extends Component {
       type: 'purchaseOperate/updateSupplyFlag',
       payload: {
         id: record.id+'',
-        flag: record.flag==='1'?'2':'1',
+        flag: record.flag==='3'?'2':'3',
       },
       callback: this.UpdateSupplyFlagCallback,
     });
@@ -705,7 +705,7 @@ export default class PurDetailsOfOperate extends Component {
           <Fragment>
             <Switch checkedChildren="是"
                     unCheckedChildren="否"
-                    defaultChecked={record.flag==="2"?false:true}
+                    defaultChecked={record.flag==="3"?false:true}
                     onChange={()=>this.handleUpdateSupplyFlag(record)}/>
           </Fragment>
         ),

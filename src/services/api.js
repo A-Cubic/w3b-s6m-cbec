@@ -285,6 +285,18 @@ export async function splitPurGoods(params) {
     body: params,
   });
 }
+export async function addPurNewGoods(params) {
+  return request(`${apiUrl}/llback/purchase/goods/addnew`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function delPurGoods(params) {
+  return request(`${apiUrl}/llback/purchase/goods/del`, {
+    method: 'POST',
+    body: params,
+  });
+}
 ///////////////////////////////////////////////////////////////////////////////// 供应商 /////////////////////////////////////////////////////////////////////////
 export async function getPurOrderListOfSupplier(params) {
   return request(`${apiUrl}/llback/purchase/supplier/list`, {
@@ -305,9 +317,10 @@ export async function getPurGoodsListOfSupplier(params) {
   });
 }
 export async function updatePriceOfSupplier(params) {
+  console.log(params.listGoods);
   return request(`${apiUrl}/llback/purchase/supplier/update/price`, {
     method: 'POST',
-    body: params,
+    body: params.listGoods,
   });
 }
 

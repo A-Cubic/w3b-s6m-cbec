@@ -34,7 +34,7 @@ export default {
       }
     },
     *addPurGoods({ payload,callback }, { call, put }) {
-      const response = yield call(addPurGoods, payload);
+      const response = yield call(addPurGoods, payload);console.log(response);
       if(callback)callback(response);
     },
     *splitPurGoods({ payload,callback }, { call, put }) {

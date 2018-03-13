@@ -1,5 +1,5 @@
 import { getPurOrderListOfPurchasers, getPurGoodsListOfPurchasers,
-  getPurInfoDetailsOfPurchasers, updatePriceOfPurchasers,listChat,sendChat,updatePurchaseStatus } from '../services/api';
+  getPurInfoDetailsOfPurchasers, updatePriceOfPurchasers,listChat,sendChat,updatePurchaseStatus,addPurNewGoods,delPurGoods } from '../services/api';
 
 export default {
   namespace: 'purchasePurchasers',
@@ -7,7 +7,7 @@ export default {
   state: {
     list: [],
     pagination: {},
-    data: [],
+    listGoods: [],
     paginationGoods: {},
     purchase: {},
   },
@@ -38,7 +38,10 @@ export default {
         });
       }
       if(response !== undefined && response1 !== undefined) {
-        const result = {bean:response1,...response};
+        const result = {
+            bean:response1,
+            list : response
+          };
         callback(result);
       }
     },
@@ -66,7 +69,18 @@ export default {
         callback(response);
       }
     },
-
+    *addPurNewGoods({ payload, callback }, { call }) {
+      const response = yield call(addPurNewGoods, payload);
+      if (response !== undefined) {
+        callback(response);
+      }
+    },
+    *delPurGoods({ payload, callback }, { call }) {
+      const response = yield call(delPurGoods, payload);
+      if (response !== undefined) {
+        callback(response);
+      }
+    }
   },
 
   reducers: {
@@ -80,8 +94,8 @@ export default {
       return {
         // ...action.payload,
         ...state,
-        listGoods:action.payload.list,
-        paginationGoods:action.payload.pagination,
+        listGoods:action.payload,
+        // paginationGoods:action.payload.pagination,
       };
     },
     queryDetails(state, action) {

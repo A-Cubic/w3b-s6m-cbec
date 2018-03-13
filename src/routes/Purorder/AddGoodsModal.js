@@ -156,14 +156,14 @@ export default class AddGoodsModal extends Component {
 	  		    goodsSelections[current] = [...selectedRows];
 	  		  },
 	  		  getCheckboxProps: record => ({
-	  		    disabled: getRes(record),
-	  		    name: record.id
+	  		    disabled: getRes(record,'barcode'),
+	  		    name: record.barcode
 	  		  })
 	  	};
-	  	const getRes = (record) =>{
-	  		let res = false
+	  	const getRes = (record,param) =>{
+	  		let res = false;
 	  		this.props.choosenGoods.forEach((Item,index)=>{
-	  			if (Item.id == record.id) {
+	  			if (Item[param] == record[param]) {
 	  				res = true
 	  			}
 	  		});
