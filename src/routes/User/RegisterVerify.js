@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress,Steps,notification,Upload,Icon   } from 'antd';
+import { Form, Input, Button, Select, Row, Col, Popover, Progress,Steps,notification,Upload,Icon ,message  } from 'antd';
 import styles from './Register.less';
 import { getAuthority } from '../../utils/Global';
 import { getCurrentUrl } from '../../services/api'
@@ -121,7 +121,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img1')(
-	                             	<Upload {...props} >
+	                             	<Upload {...props} beforeUpload={this.beforeUpload} >
 	                             	    <Button>
 	                             	      <Icon type="upload"/> 营业执照
 	                             	    </Button>
@@ -133,7 +133,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img2')(
-	                             	<Upload {...props}>
+	                             	<Upload {...props} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
 	                             	      <Icon type="upload" /> 组织机构代码
 	                             	    </Button>
@@ -147,7 +147,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img3')(
-	                             	<Upload {...props} >
+	                             	<Upload {...props} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
 	                             	      <Icon type="upload"/> 税务登记证
 	                             	    </Button>
@@ -159,7 +159,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img4')(
-	                             	<Upload {...props}>
+	                             	<Upload {...props} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
 	                             	      <Icon type="upload" /> 营业执照（三证合一）
 	                             	    </Button>
@@ -209,6 +209,21 @@ export default class RegisterVerify extends Component {
 	          break;
 	  }
 	}
+
+  beforeUpload(file) {
+    const isJPG = file.type;
+    let bolImg = true;
+    if (isJPG !=='image/jpg' && isJPG !=='image/jpeg'&& isJPG !=='image/png') {
+      message.error('只允许上传图片!');
+      bolImg= false;
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('图片大小不得超过 2MB!');
+    }
+    return bolImg && isLt2M;
+  }
+
 	handleVerify = (e) => {
 	    e.preventDefault();
 	    this.props.form.validateFields({ force: true }, (err, values) => {
