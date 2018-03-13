@@ -11,11 +11,11 @@ const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 4 },
+    sm: { span: 8 },
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 18 },
+    sm: { span: 16 },
   }
 };
 
@@ -35,7 +35,7 @@ export default class GoodsList extends Component {
     pagination: {
       current: 1,
       total: 10,
-      pageSize: 20,
+      pageSize: 10,
     },
   }
 
@@ -103,34 +103,13 @@ export default class GoodsList extends Component {
     });
   }
 
-  handleChangeB2B= (record) => {
+  handleChangeStatus= (record) => {
     const { dispatch } = this.props;
-    if(record.ifB2B==="1"){
-      record.ifB2B="0";
-    }else{
-      record.ifB2B="1";
-    }
     dispatch({
-      type: 'goods/update',
+      type: 'goods/updateStatus',
       payload: {
         id: record.id,
-        ifB2B: record.ifB2B,
-      },
-      callback: this.onChangeStatusCallback,
-    });
-  }
-  handleChangeBBC= (record) => {
-    const { dispatch } = this.props;
-    if(record.ifBBC==="1"){
-      record.ifBBC="0";
-    }else{
-      record.ifBBC="1";
-    }
-    dispatch({
-      type: 'goods/update',
-      payload: {
-        id: record.id,
-        ifBBC: record.ifBBC,
+        flag: record.flag,
       },
       callback: this.onChangeStatusCallback,
     });
@@ -148,21 +127,21 @@ export default class GoodsList extends Component {
     }else {
       notification.success({
         message: "提示",
-        description: "修改完成",
+        description: msg,
       });
     }
 
-    // dispatch({
-    //   type: 'goods/list',
-    //   payload: {
-    //     ...formValues,
-    //     ...pagination,
-    //   },
-    // });
+    dispatch({
+      type: 'goods/list',
+      payload: {
+        ...formValues,
+        ...pagination,
+      },
+    });
   }
   render(){
     const { getFieldDecorator } = this.props.form;
-    const { goods: { list, pagination }, submitting }  = this.props;
+    const { quote: { list, pagination }, submitting }  = this.props;
     const columns = [
       {
         title: '商品编号',
@@ -195,14 +174,10 @@ export default class GoodsList extends Component {
           <Divider type="vertical" />
           {/*<Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="cross" />} defaultChecked />*/}
 
-          <Switch checkedChildren="B2B上架"
-                  unCheckedChildren="B2B下架"
-                  defaultChecked={record.ifB2B==="0"?false:true}
-                  onChange={()=>this.handleChangeB2B(record)}/>
-          <Switch checkedChildren="BBC上架"
-                  unCheckedChildren="BBC下架"
-                  defaultChecked={record.ifBBC==="0"?false:true}
-                  onChange={()=>this.handleChangeBBC(record)}/>
+          <Switch checkedChildren="上架"
+                  unCheckedChildren="下架"
+                  defaultChecked={record.flag==="0"?false:true}
+                  onChange={()=>this.handleChangeStatus(record)}/>
         </div>
 
     }];
@@ -212,14 +187,22 @@ export default class GoodsList extends Component {
         <Card>
           <Form onSubmit={this.handleSubmit}>
             <Row>
-              <Col span={20}> <FormItem
-                {...formItemLayout}
-                label ='查询信息'
-              >
-                {getFieldDecorator('search')(
-                  <Input  placeholder="请输入商品条码，商品名称或品牌名" />)
-                }
-              </FormItem></Col>
+              <Row>
+                <Col  xs={24} sm={24} md={24} lg={24} xl={24} >
+                  <FormItem
+                    {...formItemLayout}
+                    label ='查询信息'
+                  >
+                    {getFieldDecorator('seach')(
+                      <Input  placeholder="请输入商品条码，商品名称或品牌名" />)
+                    }
+                  </FormItem>
+                </Col>
+              </Row>
+
+            </Row>
+            <Row>
+              <Col span={20}></Col>
               <Col span={4}><Button type="primary"
                                     className={styles.submit}
                                     htmlType="submit">搜索</Button></Col>
