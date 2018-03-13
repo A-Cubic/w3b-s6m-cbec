@@ -161,6 +161,8 @@ const proxy = {
   'POST /llback/user/member/update/status': service_url,
   'POST /llback/purchase/add': service_url,
   'POST /llback/purchase/goods/add': service_url,
+  'POST /llback/purchase/goods/addnew': service_url,
+  'POST /llback/purchase/goods/del': service_url,
   'POST /llback/purchase/split': service_url,
   'POST /llback/purchase/chat/list': service_url,
   'POST /llback/purchase/chat/send': service_url,

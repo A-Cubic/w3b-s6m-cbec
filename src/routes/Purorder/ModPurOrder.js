@@ -31,6 +31,10 @@ const breadcrumbList = [{
 }, {
   title: '采购单详情',
 }];
+const successMsg={message: '采购单修改',description: '修改成功'}
+const errorMsg={message: '采购单修改',description: '修改失败'}
+const confirmSuccessMsg={message: '采购单确认',description: '确认成功'}
+const confirmErrorMsg={message: '采购单失败',description: '确认失败'}
 let GoodsSelections = [];
 let cacheData=[];
 
@@ -76,6 +80,7 @@ export default class ModPurOrder extends Component {
       msgDisabled : true,
       userCode : '',
       createtime : '',
+      sendtype : '',
       sendtypename : '',
       address : '',
       deliverytime : '',
@@ -142,6 +147,7 @@ export default class ModPurOrder extends Component {
         msgDisabled : msgModDisabled,
         userCode : bean.userCode,
         createtime : bean.createtime,
+        sendtype : bean.sendtype,
         sendtypename : bean.sendtypename,
         address : bean.address,
         deliverytime : bean.deliverytime,
@@ -507,15 +513,46 @@ export default class ModPurOrder extends Component {
   }
 
   submitPur = () => {
-    const { purchasePurchasers: { purchase } }  = this.props;
-    this.props.dispatch({
-      type: 'purchasePurchasers/submitPur',
-      payload: {
-        purchasesn: purchase.purchasesn,
-        status: '4',
-      },
-      callback: this.submitPurChatCallback,
-    });
+    const { purchasePurchasers: { purchase },dispatch }  = this.props;
+    if (purchase.stage == '9') {
+        //拆单
+        dispatch({
+        type:'addPurOrder/splitPurGoods',
+        payload:{
+          purchasesn : purchase.purchasesn
+        },
+        callback:(response)=>{
+          if (response.type=='1') {
+              this.submitPurOrder();
+          }else{
+            notification['error']({
+              message: '确认失败',
+              description: response.msg
+            });
+          }
+        }
+      })
+    }else{
+      this.submitPurOrder();
+    }
+  }
+  submitPurOrder = () => {
+    const { purchasePurchasers: { purchase },dispatch }  = this.props;
+    dispatch({
+        type: 'purchasePurchasers/submitPur',
+        payload: {
+          purchasesn: purchase.purchasesn,
+          status: '2',
+        },
+        callback:(params)=>{
+          if (params.type=='1') {
+             notification['success'](confirmSuccessMsg);
+           }else{
+              notification['error'](confirmErrorMsg);
+           }
+         
+        },
+      });
   }
   submitPurChatCallback = (params) => {
     const msg = params.msg;
@@ -526,22 +563,22 @@ export default class ModPurOrder extends Component {
       this.props.dispatch(routerRedux.push('/trade/order-p/list'));
     }
   }
-  handleChangeBasicMsg =(e,changeVal) =>{
+  handleChangeBasicMsg =(e,changeVal,aa) =>{
     const { basicMsg } = this.state;
     var key;
     var value;
-
     if (changeVal == undefined ) {
        key = e.target.getAttribute('data-id');
        value = e.target.value
     }else{
-      value = changeVal;
+      value = aa.props.children;
       key = e;
     }
     this.setState({
       basicMsg : {
         ...basicMsg,
-        [key] : value
+        [key] : value,
+        sendtype:aa == undefined ? basicMsg.sendtype :  aa.props.value
       }
     })
 
@@ -553,27 +590,43 @@ export default class ModPurOrder extends Component {
     }
   handleOk = (arr) => {
     const { listGoods,pagination } = this.state;
-    var data = [...listGoods];
+    const { purchasePurchasers: { purchase } }  = this.props;
+    // var data = [...listGoods];
+    var data = [];
     arr.forEach((val,i)=>{
       if (val !== undefined) {
         data.push(...val);
       }
     });
-
+    data = data.map((item)=>{
+      return {
+        goodsid:item.id == undefined ? '' : item.id,
+        goodsname: item.goodsname == undefined ? '' : item.goodsname,
+        price:item.price == undefined ? '' : item.price,
+        deliverytype:0,
+        expectprice:0,
+        total:0,
+        barcode:item.barcode == undefined ? '' : item.barcode
+      }
+    })
+    console.log(data);
     if(arr.length > 0){
-     console.log(data);
-      /* this.props.dispatch({
-          type: 'addPurOrder/addPurGoods',
-          payload: data,
+       this.props.dispatch({
+          type: 'purchasePurchasers/addPurNewGoods',
+          payload: {
+            purchasesn : purchase.purchasesn,
+            list : data
+          },
           callback:(params)=>{
               console.log(params);
-
+              if (params.length>0) {
+                 this.setState({
+                  listGoods : params
+                })
+              }
           }
-      });*/
+      });
     }
-    /*this.setState({
-                listGoods : data
-              })*/
     this.setState({
       addGoodsVisible: false,
     });
@@ -597,18 +650,29 @@ export default class ModPurOrder extends Component {
     this.showModal();
   }
   saveBasic = () =>{
-    const { purchasePurchasers: { purchase } }  = this.props;
+    const { purchasePurchasers: { purchase },dispatch }  = this.props;
+    const { basicMsg }  = this.state;
+    console.log(basicMsg);
     dispatch({
       type:'purchasePurchasers/submitPur',
       payload:{
+        // ...purchase,
         purchasesn : purchase.purchasesn,
-        stage:'',
-        status:'',
-        sendtype:'',
-        address:'',
-        deliverytime:'',
-        currency:'',
-        remark:''
+        sendtype:basicMsg.sendtype,
+        sendtypename:basicMsg.sendtypename,
+        address:basicMsg.address,
+        deliverytime:basicMsg.deliverytime,
+        currency:basicMsg.currency,
+        remark:basicMsg.remark,
+        // waybillfee:''
+      },
+      callback:(params)=>{
+        console.log(params);
+        if (params.type=='1') {
+            notification["success"](successMsg);
+        }else{
+          notification["error"](errorMsg);
+        }
       }
     });
   }
@@ -686,7 +750,7 @@ export default class ModPurOrder extends Component {
           <Button disabled={msgDisabled} onClick={this.saveBasic}>保存修改</Button>
           {/*<Button disabled={msgDisabled}>退回询价</Button>*/}
         </ButtonGroup>
-        <Button type="primary" onClick={this.submitPur} disabled={btnDisabled}>确认采购单</Button>
+        <Button type="primary" onClick={this.submitPur} disabled={msgDisabled}>确认采购单</Button>
       </div>
     );
 
@@ -705,8 +769,8 @@ export default class ModPurOrder extends Component {
 
     const description = (
       <DescriptionList className={styles.headerList} size="small" col="2">
-        <Description term="创建人"><Input value={basicMsg.userCode} data-id='userCode' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
-        <Description term="创建时间"><Input value={moment(basicMsg.createtime).format('YYYY-MM-DD HH:mm:ss')} data-id='createtime' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        <Description term="创建人"><Input value={basicMsg.userCode} data-id='userCode' onChange={this.handleChangeBasicMsg} disabled={true}/></Description>
+        <Description term="创建时间"><Input value={moment(basicMsg.createtime).format('YYYY-MM-DD HH:mm:ss')} data-id='createtime' onChange={this.handleChangeBasicMsg} disabled={true}/></Description>
         <Description term="取货方式">
           {/*<Input value={basicMsg.sendtypename} data-id='sendtypename' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/>*/}
           <Select placeholder='请选择提货方式' 
@@ -842,6 +906,7 @@ export default class ModPurOrder extends Component {
           }
       };
       const deleteGoods = () => {
+        const { dispatch } = this.props;
         var data =  [...this.state.listGoods];
         var keys = [...selectedRowKeys];
         GoodsSelections.forEach((value,index)=>{
@@ -856,11 +921,24 @@ export default class ModPurOrder extends Component {
             }
           })
         });
-
-        this.setState({
-          listGoods : data,
-          selectedRowKeys : keys
-        })
+        
+      var idArr = GoodsSelections.map((item)=>{
+        return {
+          id : item.id
+        }
+      })
+      console.log(idArr);
+      dispatch({
+        type:'purchasePurchasers/delPurGoods',
+        payload:idArr,
+        callback:(params) => {
+          this.setState({
+            listGoods : data,
+            selectedRowKeys : keys
+          })
+        }
+      })
+        
       }
 
     ////////////////////////////////////////////////////////////////  弹出部分  //////////////////////////////////////////////////////////////
