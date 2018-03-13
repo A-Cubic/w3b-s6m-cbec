@@ -186,26 +186,37 @@ export default class GoodsList extends Component {
         key: 'goodsname',
       },
       {
-      title: '操作',
-      dataIndex: 'operate',
-      key: 'operate',
-      render:(text, record)=>
-        <div>
-          <Link to={`/goods/info/mod/${record.id}`}>编辑</Link>
-          <Divider type="vertical" />
-          {/*<Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="cross" />} defaultChecked />*/}
+        title: '',
+        dataIndex: 'operate1',
+        key: 'operate1',
+        render:(text, record)=>
+          <div>
+            <Divider type="vertical" />
+            {/*<Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="cross" />} defaultChecked />*/}
 
-          <Switch checkedChildren="B2B上架"
-                  unCheckedChildren="B2B下架"
-                  defaultChecked={record.ifB2B==="0"?false:true}
-                  onChange={()=>this.handleChangeB2B(record)}/>
-          <Switch checkedChildren="BBC上架"
-                  unCheckedChildren="BBC下架"
-                  defaultChecked={record.ifBBC==="0"?false:true}
-                  onChange={()=>this.handleChangeBBC(record)}/>
-        </div>
+            <Switch checkedChildren="B2B上架"
+                    unCheckedChildren="B2B下架"
+                    defaultChecked={record.ifB2B==="0"?false:true}
+                    onChange={()=>this.handleChangeB2B(record)}/>
+            <Divider type="vertical" />
+            <Switch checkedChildren="BBC上架"
+                    unCheckedChildren="BBC下架"
+                    defaultChecked={record.ifBBC==="0"?false:true}
+                    onChange={()=>this.handleChangeBBC(record)}/>
+          </div>
 
-    }];
+      },
+      {
+        title: '编辑',
+        dataIndex: 'operate2',
+        key: 'operate2',
+        render:(text, record)=>
+          <div>
+            <Link to={`/goods/info/mod/${record.id}`}>编辑</Link>
+
+          </div>
+
+      }];
 
     return(
       <div>
