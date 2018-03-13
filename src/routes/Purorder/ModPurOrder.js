@@ -186,7 +186,6 @@ export default class ModPurOrder extends Component {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    console.log(1);
     const { dispatch,purchasePurchasers:{ paginationGoods } } = this.props;
     const { formValues } = this.state;
 
@@ -626,7 +625,6 @@ export default class ModPurOrder extends Component {
         // waybillfee:''
       },
       callback:(params)=>{
-        console.log(params);
         if (params.type=='1') {
             notification["success"](successMsg);
         }else{
@@ -693,7 +691,10 @@ export default class ModPurOrder extends Component {
       });
       delete target.editable;
       this.setState({ listGoods: newData});
-      this.cacheData = newData.map(item => ({ ...item }));
+      const newCachaData = [...this.cacheData];
+      const targetCachaData = newCachaData.filter(item => key === item.id)[0];
+      Object.assign(targetCachaData, target);
+      // this.cacheData = newData.map(item => ({ ...item }));
     }
   }
 
@@ -704,6 +705,18 @@ export default class ModPurOrder extends Component {
       Object.assign(target, this.cacheData.filter(item => key === item.id)[0]);
       delete target.editable;
       this.setState({ listGoods: newData });
+      setTimeout(() => {
+        let total = 0;
+        let sum = 0;
+        newData.forEach((item) => {
+          sum = sum*1 + item.expectprice*1;
+        });
+        total = sum + this.state.waybillfeeValue*1;
+        this.setState({
+          goodsSum:sum,
+          totalPrice:total,
+        });
+      }, 0);
     }
   }
 ////////////////////////可编辑行end//////////////////////////

@@ -336,25 +336,38 @@ export default class PurDetailsOfSup extends Component {
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if (target) {
       if ((!isNaN(value) && reg.test(value))) {
-        let totalPrice = this.state.totalPrice;
-        let goodsSum = this.state.goodsSum;
-        if(column==='price'){
-          totalPrice = totalPrice*1-(target[column]*1-value*1);
-          goodsSum = goodsSum*1-(target[column]*1-value*1);
-        }
+        // let totalPrice = this.state.totalPrice;
+        // let goodsSum = this.state.goodsSum;
+        // if(column==='price'){
+        //   totalPrice = totalPrice*1-(target[column]*1-value*1);
+        //   goodsSum = goodsSum*1-(target[column]*1-value*1);
+        // }
         target[column] = value;
-
-        this.setState({ listGoods: newData,totalPrice:totalPrice,goodsSum:goodsSum });
+        // this.cacheData = newData.map(item => ({ ...item }));
+        this.setState({ listGoods: newData });
       }
     }
   }
   edit(key) {
     const newData = [...this.state.listGoods];
+    // console.log(newData);
     const target = newData.filter(item => key === item.id)[0];
     if (target) {
       target.editable = true;
       this.setState({ listGoods: newData });
     }
+  }
+
+  macthPrice(list){
+    let total = 0;
+    let sum = 0;
+    list.forEach((item) => {
+      sum = sum*1 + item.price*1;
+    });
+    this.setState({
+      goodsSum:sum,
+      totalPrice:sum,
+    });
   }
   save(key) {
     const newData = [...this.state.listGoods];
@@ -366,8 +379,11 @@ export default class PurDetailsOfSup extends Component {
       }else{
         delete target.editable;
         savaData.push(target);
+        this.macthPrice(newData);
         this.setState({ listGoods: newData });
-        this.cacheData = newData.map(item => ({ ...item }));
+        const newCachaData = [...this.cacheData];
+        const targetCachaData = newCachaData.filter(item => key === item.id)[0];
+        Object.assign(targetCachaData, target);
       }
     }
   }
@@ -378,6 +394,10 @@ export default class PurDetailsOfSup extends Component {
       Object.assign(target, this.cacheData.filter(item => key === item.id)[0]);
       delete target.editable;
       this.setState({ listGoods: newData });
+      setTimeout(() => {
+        this.macthPrice(newData);
+      }, 0);
+
     }
   }
 ////////////////////////可编辑行end//////////////////////////
