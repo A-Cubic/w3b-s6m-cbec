@@ -1,5 +1,5 @@
 import { getPurOrderListOfPurchasers, getPurGoodsListOfPurchasers,
-  getPurInfoDetailsOfPurchasers, updatePriceOfPurchasers,listChat,sendChat,updatePurchaseStatus,addPurNewGoods,delPurGoods } from '../services/api';
+  getPurInfoDetailsOfPurchasers, updatePriceOfPurchasers,listChat,sendChat,updatePurchaseStatus,addPurNewGoods,delPurGoods,updateStage } from '../services/api';
 
 export default {
   namespace: 'purchasePurchasers',
@@ -66,7 +66,7 @@ export default {
     *submitPur({ payload, callback }, { call }) {
       const response = yield call(updatePurchaseStatus, payload);
       if (response !== undefined) {
-        callback(response);
+        if(callback)callback(response);
       }
     },
     *addPurNewGoods({ payload, callback }, { call }) {
@@ -80,7 +80,14 @@ export default {
       if (response !== undefined) {
         callback(response);
       }
+    },
+    *updateStage({ payload, callback }, { call }) {
+      const response = yield call(updateStage, payload);
+      if (response !== undefined) {
+        if(callback)callback(response);
+      }
     }
+    
   },
 
   reducers: {

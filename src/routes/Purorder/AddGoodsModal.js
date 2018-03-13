@@ -38,11 +38,13 @@ export default class AddGoodsModal extends Component {
 
 	handleOk = (e) => {
 	  if(this.props.handleOk){
+	  	console.log("goodsSelections",goodsSelections)
 		this.props.handleOk(goodsSelections);
   	  }
   	  this.setState({
   	  	selectedRowKeys:[]
-  	  })
+  	  });
+  	  goodsSelections = [];
 	}
 	handleCancel = (e) => {
 	  if(this.props.handleCancel){
@@ -50,7 +52,8 @@ export default class AddGoodsModal extends Component {
 	  }
 	  this.setState({
 	  	selectedRowKeys:[]
-	  })
+	  });
+	  goodsSelections = [];
 	}
 	handleSearchGoods = () =>{
 		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
@@ -156,14 +159,14 @@ export default class AddGoodsModal extends Component {
 	  		    goodsSelections[current] = [...selectedRows];
 	  		  },
 	  		  getCheckboxProps: record => ({
-	  		    disabled: getRes(record,'barcode'),
-	  		    name: record.barcode
+	  		    disabled: getRes(record,'goodsid','id'),
+	  		    name: record.goodsid
 	  		  })
 	  	};
-	  	const getRes = (record,param) =>{
+	  	const getRes = (record,param,param2) =>{
 	  		let res = false;
 	  		this.props.choosenGoods.forEach((Item,index)=>{
-	  			if (Item[param] == record[param]) {
+	  			if (Item[param] == record[param2]) {
 	  				res = true
 	  			}
 	  		});
