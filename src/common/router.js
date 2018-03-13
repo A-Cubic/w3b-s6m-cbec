@@ -191,6 +191,12 @@ export const getRouterData = (app) => {
     '/goods/info/add': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/UploadGoods')),
     },
+    '/goods/info/list': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsList')),
+    },
+    '/goods/info/mod/:id': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsMod')),
+    },
     '/goods/quote/list': {
       component: dynamicWrapper(app, ['quote'], () => import('../routes/Quote/QuoteList')),
     },

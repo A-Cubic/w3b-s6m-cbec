@@ -1,10 +1,9 @@
 import {
-  getOfferOfSupplier, updateOfferflagOfSupplier, offerbyid, updateOfferOfSupplier,
-  goodsListOfSupplier,insertOfferOfSupplier
+  getGoodsListOfOperate, updateGoodsOfOperate
 } from '../services/api';
 
 export default {
-  namespace: 'quote',
+  namespace: 'goods',
 
   state: {
     list: [],
@@ -17,7 +16,7 @@ export default {
 
   effects: {
     *list({ payload }, { call, put }) {
-      const response = yield call(getOfferOfSupplier, payload);
+      const response = yield call(getGoodsListOfOperate, payload);
       if (response !== undefined) {
         yield put({
           type: 'queryList',
@@ -25,38 +24,8 @@ export default {
         });
       }
     },
-    *updateStatus({ payload, callback }, { call }) {
-      const response = yield call(updateOfferflagOfSupplier, payload);
-      if (response === undefined) {
-
-      } else {
-        callback(response);
-      }
-    },
-    *info({ payload, callback }, { call ,put}) {
-      const response = yield call(offerbyid, payload);
-      if (response !== undefined) {
-        callback(response);
-      }
-    },
-    *updateOffer({ payload, callback }, { call }) {
-      const response = yield call(updateOfferOfSupplier, payload);
-      if (response === undefined) {
-
-      } else {
-        callback(response);
-      }
-    },
-    *goodsList({ payload }, { call, put }) {
-      const response = yield call(goodsListOfSupplier, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-    },
-    *insertOffer({ payload, callback }, { call }) {
-      console.log(payload.list);
-      const response = yield call(insertOfferOfSupplier, payload.list);
+    *update({ payload, callback }, { call }) {
+      const response = yield call(updateGoodsOfOperate, payload);
       if (response === undefined) {
 
       } else {

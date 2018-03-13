@@ -371,4 +371,16 @@ export async function insertOfferOfSupplier(params) {
     body: params,
   });
 }
+export async function getGoodsListOfOperate(params) {
+  return request(`${apiUrl}/llback/goods/operate/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function updateGoodsOfOperate(params) {
+  return request(`${apiUrl}/llback/goods/operate/update`, {
+    method: 'POST',
+    body: params,
+  });
+}
 ///////////////////////////////////////////////////////////////////////////////// 商品报价 部分  end/////////////////////////////////////////////////////////////////////////
