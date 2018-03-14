@@ -115,9 +115,16 @@ export default class NewPurOrder extends Component {
 	      }
 	    });
 	  	//添加空sendtype
-  		data.forEach((item,index)=>{
+  		// data.forEach((item,index)=>{
+  			
+  		// });
+  		data = data.map((item,index)=>{
   			item['sendtype'] = this.getSendType(item);
-  		});
+  			return {
+  				...item,
+  				goodsid : item.id
+  			}
+  		})
 		if(arr.length > 0){
 			this.setState({
 				purList : {
@@ -174,7 +181,7 @@ export default class NewPurOrder extends Component {
 		  	const { addPurOrder:{goodsList:{ list,pagination },sendTypeDate},dispatch } = this.props;
 			const purColumns = [
 				{
-				  title: '序号',
+				  title: '商品id',
 				  dataIndex: 'id',
 				  key: 'id',
 				},
