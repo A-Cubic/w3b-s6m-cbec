@@ -597,7 +597,7 @@ export default class ModPurOrder extends Component {
           type:'addPurOrder/goodsList',
           payload:{
             pageNumber:1,
-            pageSize:10
+            pageSize:5
           },
           callback:(params)=>{
             this.macthPrice();

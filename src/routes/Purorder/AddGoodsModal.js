@@ -172,9 +172,6 @@ export default class AddGoodsModal extends Component {
 	  		});
 	  		return res;
 	  	}
-
-	  	{console.log('choosenGoods',this.props.choosenGoods)}
-
 	return(
 		<Modal
 		  style={{top:10}}
