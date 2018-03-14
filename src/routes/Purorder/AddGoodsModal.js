@@ -175,6 +175,7 @@ export default class AddGoodsModal extends Component {
 
 	return(
 		<Modal
+		  style={{top:10}}
 		  width={"80%"}
           title="添加采购商品"
           visible={this.props.visible}

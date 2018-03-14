@@ -108,7 +108,7 @@ export default class NewPurOrder extends Component {
 	  }
 	  handleOk = (arr) => {
 	  	const { purList, purList:{ purDataSource } } = this.state;
-	  	var data = [];
+	  	var data = [...purDataSource];
 	  	arr.forEach((val,i)=>{
 	      if (val !== undefined) {
 	        data.push(...val);
@@ -143,7 +143,7 @@ export default class NewPurOrder extends Component {
 			type:'addPurOrder/goodsList',
 			payload:{
 				pageNumber:1,
-				pageSize:10
+				pageSize:5
 			}
 		});
 		this.showModal();
@@ -207,7 +207,7 @@ export default class NewPurOrder extends Component {
 	    			  	}
 	    			  	return(
 	    			  		<Select placeholder='请选择提货方式' style={{ width: '100%' }} defaultValue={value} onChange={handleChangeSendtype.bind(this,index)}>
-						      {sendTypeDate.map((val,index) => <Option value={val.id}>{val.typename}</Option>)}
+						      {sendTypeDate.map((val,index) => <Option key={index} value={val.id}>{val.typename}</Option>)}
 						    </Select>
 	    			  	)
 	  			  }				  
@@ -402,7 +402,7 @@ export default class NewPurOrder extends Component {
 							>
 							  {getFieldDecorator('sendtype',{rules: [{ required: true, message: '请选择提货方式' }]})(
 							    <Select placeholder='请选择提货方式' style={{ width: '100%' }}>
-							      {sendTypeDate.map((val,index) => <Option value={val.id}>{val.typename}</Option>)}
+							      {sendTypeDate.map((val,index) => <Option key={index} value={val.id}>{val.typename}</Option>)}
 							    </Select>
 							  )}
 							</FormItem>

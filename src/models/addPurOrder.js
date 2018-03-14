@@ -18,7 +18,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      callback(response)
+      if(callback)callback(response);
     },
     *getSendType({ payload }, { call, put }) {
       const response = yield call(getSendType, payload);
