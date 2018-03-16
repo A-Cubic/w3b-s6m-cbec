@@ -122,12 +122,12 @@ export default class QuoteList extends Component {
      if(params.type==="0"){
        notification.error({
          message: "提示",
-         description: msg,
+         description: "报价状态切换失败，请刷新页面后重试",
        });
      }else {
        notification.success({
          message: "提示",
-         description: msg,
+         description: "报价状态切换成功",
        });
      }
 
@@ -143,25 +143,27 @@ export default class QuoteList extends Component {
 		const { getFieldDecorator } = this.props.form;
     const { quote: { list, pagination }, submitting }  = this.props;
     const columns = [{
+      title: '商品编号',
+      dataIndex: 'goodsid',
+      key: 'goodsid',
+    },
+    {
+      title: '图片',
+      dataIndex: 'slt',
+      key: 'slt',
+      render : (text, record) => <img src={`${text}`} style={{width:100,height:100}}/>
+    },{
+      title: '商品名称',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
+    },{
      title: '商品条码',
      dataIndex: 'barcode',
      key: 'barcode',
-    }, {
-     title: '商品编号',
-     dataIndex: 'goodsid',
-     key: 'goodsid',
-    }, {
-     title: '商品名称',
-     dataIndex: 'goodsName',
-     key: 'goodsName',
-    },{
+    },  {
      title: '商品报价',
      dataIndex: 'offer',
      key: 'offer',
-    },{
-     title: '供应商',
-     dataIndex: 'company',
-     key: 'company',
     },{
      title: '操作',
      dataIndex: 'operate',
@@ -186,7 +188,7 @@ export default class QuoteList extends Component {
           <Form onSubmit={this.handleSubmit}>
 					<Row>
 							<Row>
-								<Col  xs={24} sm={12} md={8} lg={8} xl={8} >
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
 									<FormItem
 									{...formItemLayout}
 									  label ='商品条码'
@@ -196,7 +198,7 @@ export default class QuoteList extends Component {
 									}
 									</FormItem>
 								</Col>
-								<Col xs={24} sm={12} md={8} lg={8} xl={8}>
+								<Col xs={24} sm={24} md={8} lg={8} xl={8}>
 									<FormItem
 									{...formItemLayout}
 									  label ='商品名称'
@@ -206,24 +208,18 @@ export default class QuoteList extends Component {
 									}
 									</FormItem>
 								</Col>
-								{/*<Col xs={24} sm={12} md={8} lg={8} xl={8}>*/}
-									{/*<FormItem*/}
-									{/*{...formItemLayout}*/}
-									  {/*label ='供应商'*/}
-									{/*>*/}
-									  {/*{getFieldDecorator('company')(*/}
-									  	{/*<Input placeholder="请输入供应商" />)*/}
-									{/*}*/}
-									{/*</FormItem>*/}
-								{/*</Col>*/}
+                <Col span={2}></Col>
+                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                  <Button type="primary"
+                          className={styles.submit}
+                          htmlType="submit">搜索</Button>
+                </Col>
 							</Row>
 
 					</Row>
 					<Row>
 						<Col span={20}></Col>
-						<Col span={4}><Button type="primary"
-                                  className={styles.submit}
-                                  htmlType="submit">搜索</Button></Col>
+
 					</Row>
         </Form>
 				</Card>

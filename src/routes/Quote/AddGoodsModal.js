@@ -154,22 +154,6 @@ export default class AddGoodsModal extends Component {
 			  title: '商品单价',
 			  dataIndex: 'price',
 			  key: 'price',
-			},{
-			  title: '提货方式',
-			  dataIndex: 'sendtype',
-			  key: 'sendtype',
-			  render : (text, record) => {
-  			  	if (record.ifXG) {
-  			  		return '香港自提'
-  			  	}else if (record.ifHW) {
-  			  		return '海外自提'
-  			  	}else if (record.ifBS) {
-  			  		return '保税备货'
-  			  	}else if (record.ifMY) {
-  			  		return '一般贸易'
-  			  	}
-			  }
-
 			}];
 		// const goodsDataSource = [
 		// 	{

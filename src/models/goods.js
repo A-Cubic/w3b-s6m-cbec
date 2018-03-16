@@ -32,7 +32,7 @@ export default {
         callback(response);
       }
     },
-    *info({ payload, callback }, { call ,put}) {
+    *info({ payload, callback }, { call }) {
       const response = yield call(getGoodsById, payload);
       if (response !== undefined) {
         callback(response);

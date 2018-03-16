@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Input, Button, Table, Card, Form, Row, Col ,InputNumber} from 'antd';
+import { Input, Button, Table, Card, Form, Row, Col ,InputNumber,notification} from 'antd';
 import styles from '../../utils/utils.less';
 import { routerRedux } from 'dva/router';
 
@@ -79,11 +79,24 @@ export default class QuoteMod extends Component {
     const { form, submitting, dispatch } = this.props;
     const { pagination } = this.state;
     form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
+      if (err){
+        notification.success({
+          message: "提示",
+          description: "发生错误",
+        });
+        return;
+      }
+      if(fieldsValue.offer<0||fieldsValue.offer>99999){
+        notification.success({
+          message: "提示",
+          description: "报价错误，请录入合适的数值！",
+        });
+        return;
+      }
       const values = {
         ...fieldsValue,
       };
+
 
       this.setState({
         formValues: values,
