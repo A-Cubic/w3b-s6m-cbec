@@ -116,7 +116,7 @@ export default class NewPurOrder extends Component {
 	    });
 	  	//添加空sendtype
   		// data.forEach((item,index)=>{
-  			
+
   		// });
   		data = data.map((item,index)=>{
   			item['sendtype'] = this.getSendType(item);
@@ -143,7 +143,7 @@ export default class NewPurOrder extends Component {
 	      visible: false,
 	    });
 	  }
-	 
+
 	goAddGoods = () =>{
 		const { dispatch } = this.props;
 		dispatch({
@@ -175,7 +175,7 @@ export default class NewPurOrder extends Component {
 			});
 		}
 	}
-	render(){  
+	render(){
 		  	const { getFieldDecorator,getFieldsValue,validateFields,setFields,resetFields } = this.props.form;
 		  	const { purList,visible,selectedRowKeys,loading  } = this.state;
 		  	const { addPurOrder:{goodsList:{ list,pagination },sendTypeDate},dispatch } = this.props;
@@ -217,7 +217,7 @@ export default class NewPurOrder extends Component {
 						      {sendTypeDate.map((val,index) => <Option key={index} value={val.id}>{val.typename}</Option>)}
 						    </Select>
 	    			  	)
-	  			  }				  
+	  			  }
 				},{
 				  title: '期望价格',
 				  dataIndex: 'expectprice',
@@ -238,7 +238,7 @@ export default class NewPurOrder extends Component {
 				            onChange={onCellChange(record.key, 'total')}
 				          />
 			        )
-				}];		
+				}];
 			const rowSelection = {
 				  selectedRowKeys,
 		  		  onChange: (selectedRowKeys, selectedRows) => {
@@ -250,13 +250,13 @@ export default class NewPurOrder extends Component {
 			const onCellChange = (key, dataIndex) => {
 			    return (value) => {
 			      const dataSource = [...purList.purDataSource];
-			      
+
 			      const target = dataSource.find(item => item.key === key);
 			      // console.log('target:',target);
 			      console.log(dataSource);
 			      if (target) {
 			        target[dataIndex] = value;
-			        this.setState({ 
+			        this.setState({
 		        		purList : {
 		        			...purList,
 		        			purDataSource : dataSource
@@ -378,7 +378,8 @@ export default class NewPurOrder extends Component {
 	  										  this.setState({loading:false});
 	  										}
 	  									}
-		  							});	  								
+		  							});
+                    this.props.dispatch(routerRedux.push('/trade/order-p/list'));
 	  							}
 	  						}
 	  					})
@@ -414,7 +415,7 @@ export default class NewPurOrder extends Component {
 							  )}
 							</FormItem>
 						</Col>
-						
+
 						<Col xs={24} sm={12} md={8} lg={8} xl={8}>
 							<FormItem
 							{...formItemLayout}
@@ -462,12 +463,12 @@ export default class NewPurOrder extends Component {
 							  )}
 							</FormItem>
 						</Col>
-					</Row>	
+					</Row>
 				  </Form>
-					
-					<Table 
-						dataSource={purList.purDataSource} 
-						columns={purColumns} 
+
+					<Table
+						dataSource={purList.purDataSource}
+						columns={purColumns}
 						pagination={purList.pagination}
 						rowSelection = {rowSelection}
 						onChange={changPurPage}
@@ -480,7 +481,7 @@ export default class NewPurOrder extends Component {
 				  		<Button onClick={deletePruOrder}>放弃</Button>
 			  		</Row>
 				</div>
-					
+
 				</Card>
 				 <AddGoodsModal
 			 				 visible={visible}

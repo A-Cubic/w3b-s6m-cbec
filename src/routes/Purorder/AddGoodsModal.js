@@ -59,7 +59,7 @@ export default class AddGoodsModal extends Component {
 		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
 		const { dispatch, addPurOrder:{ goodsList:{ pagination } } } = this.props;
 		var values = getFieldsValue();
-		var search = values.goodsId !==undefined ? values.goodsId : '' + ' '+ values.goodsnames !==undefined ?  values.goodsnames : '' ;
+		var search = values.goodsId !==undefined ? values.goodsId : ''  ;
 		this.getGoodsList(search,1,pagination.pageSize)
 	}
 	resetSearch = () => {
@@ -73,7 +73,7 @@ export default class AddGoodsModal extends Component {
 		const { getFieldsValue } = this.props.form;
 		const values = getFieldsValue();
 		this.getGoodsList('',page.current,page.pageSize)
-	}	
+	}
 	getGoodsList(search,current,pageSize){
 		this.props.dispatch({
 			type:'addPurOrder/goodsList',
@@ -86,7 +86,7 @@ export default class AddGoodsModal extends Component {
 	}
 
 	addGoods = () => {
-  			const { purList } = this.state; 
+  			const { purList } = this.state;
   			var data = purList.purDataSource.slice(0);
   			console.log('add....................');
   			console.log(goodsSelections);
@@ -105,9 +105,9 @@ export default class AddGoodsModal extends Component {
 			});
 	  		}
 
-	render(){ 
+	render(){
 		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
-		const { submitting } = this.props; 
+		const { submitting } = this.props;
 		const { selectedRowKeys } = this.state;
 		const goodsColumns = [
 			{
@@ -148,7 +148,7 @@ export default class AddGoodsModal extends Component {
   			  		return '一般贸易'
   			  	}
 			  }
-			  	
+
 			}];
 		const rowSelection = {
 			  selectedRowKeys,
@@ -187,46 +187,46 @@ export default class AddGoodsModal extends Component {
 						<Col  xs={24} sm={12} md={6} lg={6} xl={6} >
 							<FormItem
 							{...formItemLayout}
-							  label ='商品条码'
+							  label ='查询商品'
 							>
 							  {getFieldDecorator('goodsId')(
-							    <Input placeholder="商品条码"/>
+							    <Input placeholder="请输入商品条码，商品名，品牌名信息"/>
 							  )}
 							</FormItem>
-						</Col>
-						
-						<Col xs={24} sm={12} md={6} lg={6} xl={6}>
-							<FormItem
-							{...formItemLayout}
-							  label ='商品名称'
-							>
-							  {getFieldDecorator('goodsnames')(
-							    <Input placeholder="商品名称"/>
-							  )}
-							</FormItem>
-						</Col>
-						<Col className={styles.fr}>
-							<Button type="primary" htmlType="submit" className={styles.mR10}>搜索</Button>
-							<Button onClick={this.resetSearch}>重置</Button>
 						</Col>
 
-					</Row>	
-													
+						{/*<Col xs={24} sm={12} md={6} lg={6} xl={6}>*/}
+							{/*<FormItem*/}
+							{/*{...formItemLayout}*/}
+							  {/*label ='商品名称'*/}
+							{/*>*/}
+							  {/*{getFieldDecorator('goodsnames')(*/}
+							    {/*<Input placeholder="商品名称"/>*/}
+							  {/*)}*/}
+							{/*</FormItem>*/}
+						{/*</Col>*/}
+						<Col className={styles.fr}>
+							<Button type="primary" htmlType="submit" className={styles.mL20}>搜索</Button>
+							<Button className={styles.mL10} onClick={this.resetSearch}>重置</Button>
+						</Col>
+
+					</Row>
+
 				</Form>
 			</Row>
 			<div>
-				<Table 
-					dataSource={this.props.list} 
-					columns={goodsColumns} 
+				<Table
+					dataSource={this.props.list}
+					columns={goodsColumns}
 					rowSelection = {rowSelection}
 					pagination={this.props.pagination}
 					onChange={this.changGoodsPage}
 					loading={submitting}
 					/>
-					
+
 			</div>
 		</Modal>
 		)
-			
+
 	}
 }

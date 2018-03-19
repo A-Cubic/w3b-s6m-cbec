@@ -80,7 +80,7 @@ export default class AddGoodsModal extends Component {
 		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
 		const { dispatch, quote:{ goodsList:{ pagination } } } = this.props;
 		var values = getFieldsValue();
-		var search = values.goodsId !==undefined ? values.goodsId : '' + ' '+ values.goodsnames !==undefined ?  values.goodsnames : '' ;
+		var search = values.goodsId !==undefined ? values.goodsId : ''  ;
 		this.getGoodsList(search,1,10)
 	}
 	// resetSearch = () => {
@@ -155,47 +155,6 @@ export default class AddGoodsModal extends Component {
 			  dataIndex: 'price',
 			  key: 'price',
 			}];
-		// const goodsDataSource = [
-		// 	{
-		// 		key : '1',
-		// 		id : '1',
-		// 		goodsnames : '1',
-		// 		price : '1',
-		// 		sendtype :'1',
-		// 		slt : '1',
-		// 		goodsTm : '1'
-		// 	},
-		// 	{
-		// 		key : '2',
-		// 		id : '2',
-		// 		goodsnames : '1',
-		// 		price : '1',
-		// 		sendtype : '1',
-		// 		slt : '1',
-		// 		goodsTm :'1'
-        //
-		// 	},
-		// 	{
-		// 		key : '3',
-		// 		id : '3',
-		// 		goodsnames : '1',
-		// 		price : '1',
-		// 		sendtype : '1',
-		// 		slt : '1',
-		// 		goodsTm : '1'
-        //
-		// 	},
-		// 	{
-		// 		key : '4',
-		// 		id : '3',
-		// 		goodsnames : '1',
-		// 		price : '1',
-		// 		sendtype : '1',
-		// 		slt : '1',
-		// 		goodsTm : '1'
-        //
-		// 	}
-		// ]
 
 		const rowSelection = {
 			  selectedRowKeys,
@@ -221,30 +180,30 @@ export default class AddGoodsModal extends Component {
 			<Row>
 				<Form onSubmit={this.handleSearchGoods}>
 					<Row>
-						<Col  xs={24} sm={12} md={6} lg={6} xl={6} >
+						<Col  xs={24} sm={12} md={12} lg={12} xl={12} >
 							<FormItem
 							{...formItemLayout}
-							  label ='商品条码'
+							  label ='查询商品'
 							>
 							  {getFieldDecorator('goodsId')(
-							    <Input placeholder="商品条码"/>
+							    <Input placeholder="请输入商品条码，商品名，品牌名信息"/>
 							  )}
 							</FormItem>
 						</Col>
 
-						<Col xs={24} sm={12} md={6} lg={6} xl={6}>
-							<FormItem
-							{...formItemLayout}
-							  label ='商品名称'
-							>
-							  {getFieldDecorator('goodsnames')(
-							    <Input placeholder="商品名称"/>
-							  )}
-							</FormItem>
-						</Col>
-						<Col className={styles.fr}>
-							<Button type="primary" htmlType="submit" className={styles.mR10}>搜索</Button>
-							<Button onClick={this.handleOk}>报价</Button>
+						{/*<Col xs={24} sm={12} md={6} lg={6} xl={6}>*/}
+							{/*<FormItem*/}
+							{/*{...formItemLayout}*/}
+							  {/*label ='商品名称'*/}
+							{/*>*/}
+							  {/*{getFieldDecorator('goodsnames')(*/}
+							    {/*<Input placeholder="商品名称"/>*/}
+							  {/*)}*/}
+							{/*</FormItem>*/}
+						{/*</Col>*/}
+						<Col className={styles.mL10}>
+							<Button type="primary" htmlType="submit" className={styles.mL20}>搜索</Button>
+							<Button className={styles.mL10} onClick={this.handleOk}>报价</Button>
 						</Col>
 
 					</Row>
