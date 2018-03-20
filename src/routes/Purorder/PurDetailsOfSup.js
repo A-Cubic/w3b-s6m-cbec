@@ -489,7 +489,7 @@ export default class PurDetailsOfSup extends Component {
         key: 'goodsname',
         width: '30%',
       },{
-        title: '产品条码',
+        title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
         width: '12%',
@@ -544,7 +544,7 @@ export default class PurDetailsOfSup extends Component {
     return (
       <PageHeaderLayout
         title={`采购单号：${purchase.purchasesn}`}
-        logo={<img alt="" src="http://ecc-product.oss-cn-beijing.aliyuncs.com/back/purlogo.png" />}
+        //logo={<img alt="" src="http://ecc-product.oss-cn-beijing.aliyuncs.com/back/purlogo.png" />}
         action={action}
         content={description}
         extraContent={extra}

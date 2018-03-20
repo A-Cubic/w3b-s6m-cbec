@@ -10,7 +10,7 @@ const { RangePicker, MonthPicker } = DatePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const flagMap = ['error','default', 'processing','processing', 'processing', 'success'];
-const flag = ['取消','普通','处理中','询价结束','等待确认','完成'];
+const flag = ['取消','未处理','处理中','询价结束','等待确认','完成'];
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 const formItemLayout = {
@@ -36,6 +36,7 @@ const columns = [
     render(val) {
       return <span>{status[val]}</span>
     },
+    sorter: (a, b) => a.stage - b.stage,
   }, {
     title: '询价状态',
     dataIndex: 'status',
@@ -59,6 +60,7 @@ const columns = [
     title: '纳期',
     dataIndex: 'deliverytime',
     key: 'deliverytime',
+    sorter: (a, b) => a.deliverytime - b.deliverytime,
   },{
     title: '币种',
     dataIndex: 'currency',
@@ -68,6 +70,7 @@ const columns = [
     dataIndex: 'createtime',
     key: 'createtime',
     render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    sorter: (a, b) => a.createtime - b.createtime,
   },{
     title: '备注',
     dataIndex: 'remark',
@@ -265,11 +268,11 @@ export default class ListOfOperate extends Component {
                 <Select placeholder='请选择询价状态'>
                   <Option value={""}>全部</Option>
                   <Option value={0}>取消</Option>
-                  <Option value={1}>普通</Option>
+                  <Option value={1}>未处理</Option>
                   <Option value={2}>处理中</Option>
                   <Option value={3}>询价结束</Option>
                   <Option value={4}>等待确认</Option>
-                  <Option value={5}>意向完成</Option>
+                  <Option value={5}>完成</Option>
                 </Select>
               )}
             </FormItem>

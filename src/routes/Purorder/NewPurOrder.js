@@ -21,69 +21,79 @@ const formItemLayout = {
 		sm: { span: 16 },
 	}
 };
-class EditableCell extends Component {
-  state = {
-    value: this.props.value,
-    editable: false,
-    backValue: this.props.value,
-  }
-  handleChange = (e) => {
-    const value = e.target.value;
-    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-    if ((!isNaN(value) && reg.test(value))) {
-      this.setState({ value });
+const EditableCell = ({ editable, value, onChange }) => (
+  <div>
+    {editable
+      ? <Input style={{ margin: '-5px 0' }} value={value} onChange={e => onChange(e.target.value)} />
+      : value
     }
-  }
-  check = () => {
-    this.setState({ editable: false });
-    if (this.props.onChange) {
-      this.props.onChange(this.state.value);
-    }
-  }
-  close = () => {
-    this.setState({ editable: false, value:this.state.backValue});
-  }
-  edit = () => {
-    this.setState({ editable: true });
-  }
-  render() {
-    const { value, editable } = this.state;
-    return (
-      <div className={ustyle.editableCell}>
-        {
-          editable ?
-            <div className={ustyle.editableCIW}>
-              <Input
-                value={value}
-                onChange={this.handleChange}
-                onPressEnter={this.check}
-                style={{width:'85%'}}
-              />
-              <Icon
-                type="check"
-                className={ustyle.editableCIC}
-                onClick={this.check}
-              />
-              <Icon type="close"
-                className={ustyle.editableCIE}
-                onClick={this.close}
-              />
-            </div>
-            :
-            <div className={ustyle.editableCTW}>
-              {value || ' '}
-              <Icon
-                type="edit"
-                className={ustyle.editableCI}
-                onClick={this.edit}
-              />
-            </div>
-        }
-      </div>
-    );
-  }
+  </div>
+);
+// class EditableCell extends Component {
+//   state = {
+//     value: this.props.value,
+//     editable: false,
+//     backValue: this.props.value,
+//   }
+//   handleChange = (e) => {
+//     const value = e.target.value;
+//     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+//     if ((!isNaN(value) && reg.test(value))) {
+//       this.setState({ value });
+//     }
+//   }
+//   check = () => {
+//     this.setState({ editable: false });
+//     if (this.props.onChange) {
+//       this.props.onChange(this.state.value);
+//     }
+//   }
+//   close = () => {
+//     this.setState({ editable: false, value:this.state.backValue});
+//   }
+//   edit = () => {
+//     this.setState({ editable: true });
+//   }
+//   render() {
+//     const { value, editable } = this.state;
+//     return (
+//       <div className={ustyle.editableCell}>
+//         {
+//           editable ?
+//             <div className={ustyle.editableCIW}>
+//               <Input
+//                 value={value}
+//                 onChange={this.handleChange}
+//                 onPressEnter={this.check}
+//                 style={{width:'85%'}}
+//               />
+//               <Icon
+//                 type="check"
+//                 className={ustyle.editableCIC}
+//                 onClick={this.check}
+//               />
+//               <Icon type="close"
+//                 className={ustyle.editableCIE}
+//                 onClick={this.close}
+//               />
+//             </div>
+//             :
+//             <div className={ustyle.editableCTW}>
+//               {value || ' '}
+//               <Icon
+//                 type="edit"
+//                 className={ustyle.editableCI}
+//                 onClick={this.edit}
+//               />
+//             </div>
+//         }
+//       </div>
+//     );
+//   }
+// }
+function onChangeDate(date, dateString) {
+  console.log(date, dateString);
 }
-
 @connect(({ addPurOrder, loading }) => ({
   addPurOrder,
   loading: loading.models.addPurOrder,
@@ -99,11 +109,13 @@ export default class NewPurOrder extends Component {
 			},
 			purDataSource : []
 		},
-		loading : false
+		loading : false,
+    btnDisabled: false,
 	}
 	showModal = () => {
 	    this.setState({
 	      visible: true,
+        btnDisabled: false,
 	    });
 	  }
 	  handleOk = (arr) => {
@@ -175,13 +187,68 @@ export default class NewPurOrder extends Component {
 			});
 		}
 	}
+  edit(key) {
+    const newData = [...this.state.purList.purDataSource];
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {
+      target.editable = true;
+      this.setState({purDataSource : newData});
+    }
+  }
+  save(key) {
+     const newData = [...this.state.purList.purDataSource];
+     const target = newData.filter(item => key === item.id)[0];
+    // if (target) {
+    //   this.props.dispatch({
+    //     type: 'purchasePurchasers/updatePrice',
+    //     payload: {
+    //       id: key,
+    //       expectprice: target.expectprice,
+    //       total: target.total,
+    //     },
+    //     callback: this.updatePriceCallback,
+    //   });
+       delete target.editable;
+       this.setState({purDataSource : newData});
+       this.cacheData = newData.map(item => ({ ...item }));
+    //
+    // }
+  }
+  cancel(key) {
+    const newData = [...this.state.purList.purDataSource];
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {
+      Object.assign(target, this.cacheData.filter(item => key === item.id)[0]);
+      delete target.editable;
+      this.setState({purDataSource : newData});
+    }
+  }
+  renderColumns(text, record, column) {
+    return (
+      <EditableCell
+        editable={record.editable}
+        value={text}
+        onChange={value => this.handleChange2(value, record.id, column)}
+      />
+    );
+  }
+  handleChange2(value, key, column) {
+    const newData = [...this.state.purList.purDataSource];
+    console.log(newData);
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {
+      target[column] = value;
+      this.setState({purDataSource : newData});
+    }
+  }
 	render(){
 		  	const { getFieldDecorator,getFieldsValue,validateFields,setFields,resetFields } = this.props.form;
-		  	const { purList,visible,selectedRowKeys,loading  } = this.state;
+		  	const { purList,visible,selectedRowKeys,loading,btnDisabled  } = this.state;
 		  	const { addPurOrder:{goodsList:{ list,pagination },sendTypeDate},dispatch } = this.props;
+
 			const purColumns = [
 				{
-				  title: '商品id',
+				  title: '商品序号',
 				  dataIndex: 'id',
 				  key: 'id',
 				},
@@ -197,48 +264,75 @@ export default class NewPurOrder extends Component {
 				  title: '商品单价',
 				  dataIndex: 'price',
 				  key: 'price',
-				},{
-				  title: '提货方式',
-				  dataIndex: 'sendtype',
-				  key: 'sendtype',
-	  			  render : (text, record,index) => {
-	  			  		var value='';
-	    			  	if (record.ifXG) {
-	    			  		value = '香港自提'
-	    			  	}else if (record.ifHW) {
-	    			  		value = '海外自提'
-	    			  	}else if (record.ifBS) {
-	    			  		value = '保税备货'
-	    			  	}else if (record.ifMY) {
-	    			  		value = '一般贸易'
-	    			  	}
-	    			  	return(
-	    			  		<Select placeholder='请选择提货方式' style={{ width: '100%' }} defaultValue={value} onChange={handleChangeSendtype.bind(this,index)}>
-						      {sendTypeDate.map((val,index) => <Option key={index} value={val.id}>{val.typename}</Option>)}
-						    </Select>
-	    			  	)
-	  			  }
-				},{
+				},
+        // {
+			// 	  title: '提货方式',
+			// 	  dataIndex: 'sendtype',
+			// 	  key: 'sendtype',
+	  	// 		  render : (text, record,index) => {
+	  	// 		  		var value='';
+	    	// 		  	if (record.ifXG) {
+	    	// 		  		value = '香港自提'
+	    	// 		  	}else if (record.ifHW) {
+	    	// 		  		value = '海外自提'
+	    	// 		  	}else if (record.ifBS) {
+	    	// 		  		value = '保税备货'
+	    	// 		  	}else if (record.ifMY) {
+	    	// 		  		value = '一般贸易'
+	    	// 		  	}
+	    	// 		  	return(
+	    	// 		  		<Select placeholder='请选择提货方式' style={{ width: '100%' }} defaultValue={value} onChange={handleChangeSendtype.bind(this,index)}>
+			// 			      {sendTypeDate.map((val,index) => <Option key={index} value={val.id}>{val.typename}</Option>)}
+			// 			    </Select>
+	    	// 		  	)
+	  	// 		  }
+			// 	},
+        {
 				  title: '期望价格',
 				  dataIndex: 'expectprice',
 				  key: 'expectprice',
-				  render: (text, record) => (
-				          <EditableCell
-				            value={text}
-				            onChange={onCellChange(record.key, 'expectprice')}
-				          />
-			        )
+          render: (text, record) => this.renderColumns(text, record, 'expectprice'),
+				  // render: (text, record) => (
+				  //         <EditableCell
+				  //           value={text}
+				  //           onChange={onCellChange(record.key, 'expectprice')}
+				  //         />
+			       //  )
 				},{
 				  title: '商品数量',
 				  dataIndex: 'total',
 				  key: 'total',
-				  render: (text, record) => (
-				          <EditableCell
-				            value={text}
-				            onChange={onCellChange(record.key, 'total')}
-				          />
-			        )
-				}];
+          render: (text, record) => this.renderColumns(text, record, 'total'),
+				  // render: (text, record) => (
+				  //         <EditableCell
+				  //           value={text}
+				  //           onChange={onCellChange(record.key, 'total')}
+				  //         />
+			       //  )
+				},{
+          title: '操作',
+          dataIndex: 'operate',
+          key: 'operate',
+          width: '8%',
+          render: (text, record) => {
+            const { editable } = record;
+            return (
+              <div className={ustyle.editableRowOperations}>
+                {
+                  editable ?
+                    <span>
+                  <a onClick={() => this.save(record.id)}>保存</a>
+                    {/*<a onClick={() => this.cancel(record.id)}>取消</a>*/}
+                      {/*<Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.id)}>*/}
+                      {/*<a>取消</a>*/}
+                      {/*</Popconfirm>*/}
+                </span>
+                    : <a onClick={() => this.edit(record.id)} disabled={btnDisabled}>编辑</a>
+                }
+              </div>
+            );
+          },
+        }];
 			const rowSelection = {
 				  selectedRowKeys,
 		  		  onChange: (selectedRowKeys, selectedRows) => {
@@ -328,7 +422,8 @@ export default class NewPurOrder extends Component {
   												price:item.price,
   												barcode:item.barcode,
   												expectprice:item.expectprice,
-  												deliverytype:item.sendtype,
+                          deliverytype:data.sendtype,
+                          // deliverytype:item.sendtype,
   												total:item.total
   											}
   										}),
@@ -432,7 +527,8 @@ export default class NewPurOrder extends Component {
 							  label ='纳期'
 							>
 							  {getFieldDecorator('deliverytime',{rules: [{ required: true, message: '请输入纳期' }]})(
-							    <Input placeholder="纳期"/>
+                  /*<Input placeholder="纳期"/>*/
+                  <DatePicker onChange={onChangeDate} />
 							  )}
 							</FormItem>
 						</Col>
