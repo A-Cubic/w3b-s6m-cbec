@@ -830,22 +830,22 @@ export default class ModPurOrder extends Component {
         title: '商品名称',
         dataIndex: 'goodsname',
         key: 'goodsname',
-        width: '30%',
+        width: '40%',
       },{
         title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
-        width: '12%',
-      },{
-        title: '其他费用',
-        dataIndex: 'otherprice',
-        key: 'otherprice',
-        width: '10%',
-      },{
-        title: '商品价格',
-        dataIndex: 'price',
-        key: 'price',
-        width: '10%',
+        width: '17%',
+      // },{
+      //   title: '其他费用',
+      //   dataIndex: 'otherprice',
+      //   key: 'otherprice',
+      //   width: '10%',
+      // },{
+      //   title: '商品价格',
+      //   dataIndex: 'price',
+      //   key: 'price',
+      //   width: '10%',
       },
       {
         title: '商品数量',
@@ -868,7 +868,7 @@ export default class ModPurOrder extends Component {
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
-        width: '8%',
+        width: '13%',
          render: (text, record) => {
           const { editable } = record;
            const { btnDisabled } = this.state;

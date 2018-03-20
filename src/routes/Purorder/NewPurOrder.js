@@ -124,6 +124,7 @@ export default class NewPurOrder extends Component {
 	  	arr.forEach((val,i)=>{
 	      if (val !== undefined) {
 	        data.push(...val);
+
 	      }
 	    });
 	  	//添加空sendtype
@@ -137,6 +138,7 @@ export default class NewPurOrder extends Component {
   				goodsid : item.id
   			}
   		})
+
 		if(arr.length > 0){
 			this.setState({
 				purList : {
@@ -196,8 +198,8 @@ export default class NewPurOrder extends Component {
     }
   }
   save(key) {
-     const newData = [...this.state.purList.purDataSource];
-     const target = newData.filter(item => key === item.id)[0];
+    const newData = [...this.state.purList.purDataSource];
+    const target = newData.filter(item => key === item.id)[0];
     // if (target) {
     //   this.props.dispatch({
     //     type: 'purchasePurchasers/updatePrice',
@@ -208,20 +210,31 @@ export default class NewPurOrder extends Component {
     //     },
     //     callback: this.updatePriceCallback,
     //   });
-       delete target.editable;
-       this.setState({purDataSource : newData});
-       this.cacheData = newData.map(item => ({ ...item }));
+    delete target.editable;
+    this.setState({purDataSource : newData});
+    this.cacheData = newData.map(item => ({ ...item }));
     //
     // }
   }
-  cancel(key) {
+  del(key) {
+    const { purList, purList:{ purDataSource } } = this.state;
     const newData = [...this.state.purList.purDataSource];
-    const target = newData.filter(item => key === item.id)[0];
-    if (target) {
-      Object.assign(target, this.cacheData.filter(item => key === item.id)[0]);
-      delete target.editable;
-      this.setState({purDataSource : newData});
+    newData.map(function(item, i, array){
+      if(item.id===key){
+        newData.splice(i,1);
+      }
+    });
+    if(newData.length > 0){
+      this.setState({
+        purList : {
+          ...purList,
+          purDataSource : newData
+        }
+      })
     }
+    // this.setState({purDataSource : newData});
+    //
+    // }
   }
   renderColumns(text, record, column) {
     return (
@@ -288,17 +301,6 @@ export default class NewPurOrder extends Component {
 	  	// 		  }
 			// 	},
         {
-				  title: '期望价格',
-				  dataIndex: 'expectprice',
-				  key: 'expectprice',
-          render: (text, record) => this.renderColumns(text, record, 'expectprice'),
-				  // render: (text, record) => (
-				  //         <EditableCell
-				  //           value={text}
-				  //           onChange={onCellChange(record.key, 'expectprice')}
-				  //         />
-			       //  )
-				},{
 				  title: '商品数量',
 				  dataIndex: 'total',
 				  key: 'total',
@@ -310,7 +312,18 @@ export default class NewPurOrder extends Component {
 				  //         />
 			       //  )
 				},{
-          title: '操作',
+          title: '期望价格',
+          dataIndex: 'expectprice',
+          key: 'expectprice',
+          render: (text, record) => this.renderColumns(text, record, 'expectprice'),
+          // render: (text, record) => (
+          //         <EditableCell
+          //           value={text}
+          //           onChange={onCellChange(record.key, 'expectprice')}
+          //         />
+          //  )
+        },{
+          title: '操作1',
           dataIndex: 'operate',
           key: 'operate',
           width: '8%',
@@ -332,6 +345,15 @@ export default class NewPurOrder extends Component {
               </div>
             );
           },
+        },{
+          title: '操作2',
+          dataIndex: 'operate',
+          key: 'operate',
+          render:(text, record)=>
+            <div>
+              <a onClick={() => this.del(record.id)}>删除</a>
+            </div>
+
         }];
 			const rowSelection = {
 				  selectedRowKeys,
@@ -386,7 +408,32 @@ export default class NewPurOrder extends Component {
 	  				stage : '9',
 	  				status : '1'
 	  			};
+          var goodsdata = [...purDataSource];
+          var goodserr1=true;
+          var goodserr2=true;
+          goodsdata.map(function(item, i, array){
+            if(item.expectprice===undefined||item.total===undefined||item.expectprice.trim()===""||item.total.trim()===""){
 
+              goodserr1 = false;
+            }
+            if(isNaN(item.expectprice)||isNaN(item.total)){
+              goodserr2=false;
+            }
+          });
+          if(!goodserr1){
+            notification['error']({
+              message: '采购单通知',
+              description: '有商品没添加期望价格和商品数量！'
+            });
+            return false;
+          }
+          if(!goodserr2){
+            notification['error']({
+              message: '采购单通知',
+              description: '有商品期望价格和商品数量录入不正确，请录入数字！'
+            });
+            return false;
+          }
 	  			validateFields((err,fieldsValue)=>{
 	  				if(!err){
 	  					this.setState({loading:true})
@@ -441,6 +488,7 @@ export default class NewPurOrder extends Component {
   										  	  	  description: '创建成功',
   										  	  	});
   										  	  	this.setState({loading:false});
+                              this.props.dispatch(routerRedux.push('/trade/order-p/list'));
   										  	  }else if (btn !== undefined && btn=='submit'){
   										  	  	//拆单
   										  	  	dispatch({
@@ -461,6 +509,7 @@ export default class NewPurOrder extends Component {
 									  	  					});
 									  	  				}
 									  	  				this.setState({loading:false});
+                                this.props.dispatch(routerRedux.push('/trade/order-p/list'));
 									  	  			}
 									  	  		})
   										  	  }
@@ -471,10 +520,10 @@ export default class NewPurOrder extends Component {
 	  										    description: `创建成功，商品未添加  ${response.msg}`,
 	  										  });
 	  										  this.setState({loading:false});
+                          this.props.dispatch(routerRedux.push('/trade/order-p/list'));
 	  										}
 	  									}
 		  							});
-                    this.props.dispatch(routerRedux.push('/trade/order-p/list'));
 	  							}
 	  						}
 	  					})

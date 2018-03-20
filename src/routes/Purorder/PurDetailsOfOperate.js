@@ -629,16 +629,16 @@ export default class PurDetailsOfOperate extends Component {
         dataIndex: 'total',
         key: 'total',
         width: '10%',
-      },{
-        title: '其他费用',
-        dataIndex: 'otherprice',
-        key: 'otherprice',
-        width: '10%',
-      },{
-        title: '商品价格',
-        dataIndex: 'price',
-        key: 'price',
-        width: '10%',
+      // },{
+      //   title: '其他费用',
+      //   dataIndex: 'otherprice',
+      //   key: 'otherprice',
+      //   width: '10%',
+      // },{
+      //   title: '商品价格',
+      //   dataIndex: 'price',
+      //   key: 'price',
+      //   width: '10%',
       },{
         title: '期望价格',
         dataIndex: 'expectprice',
