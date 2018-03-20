@@ -500,7 +500,7 @@ export default class PurDetailsOfSup extends Component {
         width: '10%',
         render: (text, record) => this.renderColumns(text, record, 'total'),
       },{
-        title: '商品价格',
+        title: '商品总价',
         dataIndex: 'price',
         key: 'price',
         width: '10%',
@@ -535,7 +535,7 @@ export default class PurDetailsOfSup extends Component {
         render: (text, record) => (
           <div>
             <Button type="primary" size="small" ghost onClick={()=>{this.showPurModal(record)}} disabled={btnDisabled}>
-              反馈
+              与客服沟通
             </Button>
           </div>
         ),

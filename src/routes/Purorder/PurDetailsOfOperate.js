@@ -123,6 +123,7 @@ export default class PurDetailsOfOperate extends Component {
     purChatList: [],
     chatTitle:'聊天内容',
     btnDisabled: false,
+    donebtnDisabled: false,
   }
 
   componentDidMount() {
@@ -155,16 +156,21 @@ export default class PurDetailsOfOperate extends Component {
     }
     const price = fee*1+sum*1;
     let able = false;
-    if(params.bean.status==='0' || params.bean.status==='4'){
+    let able1 = false;
+    // if(params.bean.status==='0' || params.bean.status==='4'){
+    if(params.bean.status!=='2'){
       able = true;
     }
-
+    if(params.bean.status!=='5'){
+      able1 = true;
+    }
     this.setState({
       waybillfeeValue: fee,
       listGoods:params.list,
       goodsSum:sum,
       totalPrice: price===0?'0.00':price,
       btnDisabled: able,
+      donebtnDisabled: able1,
     });
   }
 
@@ -212,8 +218,8 @@ export default class PurDetailsOfOperate extends Component {
     });
   }
   handleBtnOnChange = (e) => {
-    const { btnDisabled } = this.state;
-    if(!btnDisabled){
+    const { donebtnDisabled } = this.state;
+    if(!donebtnDisabled){
       if(this.state.searchDisable){
         this.setState({
           searchDisable: false,
@@ -530,7 +536,7 @@ export default class PurDetailsOfOperate extends Component {
 
 
   render() {
-    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled } = this.state;
+    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled,donebtnDisabled } = this.state;
     const { purchaseOperate: { listGoods, paginationGoods, purchase, supplyList }, submitting }  = this.props;
 
     // const menu = (
@@ -545,7 +551,7 @@ export default class PurDetailsOfOperate extends Component {
       <div>
         <ButtonGroup>
           {/*<Button >操作</Button>*/}
-          <Button onClick={this.showPurModal}>聊天</Button>
+          <Button onClick={this.showPurModal}>与采购商沟通</Button>
           {/*<Dropdown overlay={menu} placement="bottomRight">*/}
             {/*<Button><Icon type="ellipsis" /></Button>*/}
           {/*</Dropdown>*/}
@@ -640,12 +646,12 @@ export default class PurDetailsOfOperate extends Component {
       //   key: 'price',
       //   width: '10%',
       },{
-        title: '期望价格',
+        title: '期望总价',
         dataIndex: 'expectprice',
         key: 'expectprice',
         width: '10%',
       },{
-        title: '实际价格',
+        title: '实际总价',
         dataIndex: 'realprice',
         key: 'realprice',
         width: '10%',
@@ -667,7 +673,7 @@ export default class PurDetailsOfOperate extends Component {
         render: (text, record) => (
           <div>
             <Button type="primary" size="small" ghost onClick={()=>{this.showModal(record)}} disabled={btnDisabled}>
-              反馈
+              与供应商沟通
             </Button>
           </div>
           // <Fragment>
@@ -694,11 +700,11 @@ export default class PurDetailsOfOperate extends Component {
         dataIndex: 'total',
         key: 'total',
       },{
-        title: '商品价格',
+        title: '商品总价',
         dataIndex: 'price',
         key: 'price',
       },{
-        title: '敲定价格',
+        title: '敲定总价',
         dataIndex: 'operate',
         key: 'operate',
         render: (text, record) => (
@@ -742,7 +748,7 @@ export default class PurDetailsOfOperate extends Component {
         <Card title="物流信息" style={{ marginBottom: 24 }} bordered={false}>
           <div style={{ textAlign:'center' }}>
             {
-              btnDisabled?<div style={{fontSize:'17px'}}>运费：{waybillfeeValue}</div>
+              donebtnDisabled?<div style={{fontSize:'17px'}}>运费：{waybillfeeValue}</div>
                 :<Search addonBefore="运费："
                          placeholder="请填写运费"
                          enterButton={searchDisable?"修改":"确定"}

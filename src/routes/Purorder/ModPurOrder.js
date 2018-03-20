@@ -854,13 +854,13 @@ export default class ModPurOrder extends Component {
         width: '10%',
         render: (text, record) => this.renderColumns(text, record, 'total'),
       }, {
-        title: '期望价格',
+        title: '期望总价',
         dataIndex: 'expectprice',
         key: 'expectprice',
         width: '10%',
         render: (text, record) => this.renderColumns(text, record, 'expectprice'),
       },{
-        title: '实际价格',
+        title: '实际总价',
         dataIndex: 'realprice',
         key: 'realprice',
         width: '10%',

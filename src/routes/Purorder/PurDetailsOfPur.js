@@ -537,7 +537,7 @@ export default class PurDetailsOfPur extends Component {
     const action = (
       <div>
         <ButtonGroup>
-          <Button onClick={this.showPurModal}>聊天</Button>
+          <Button onClick={this.showPurModal}>与客服沟通</Button>
           <Button onClick={()=>this.submitPur('2')} disabled={btnDisabled}>退回询价</Button>
         </ButtonGroup>
         <Button type="primary" onClick={()=>this.submitPur('5')} disabled={btnDisabled}>完成采购单</Button>
@@ -634,13 +634,13 @@ export default class PurDetailsOfPur extends Component {
       //   width: '10%',
       // },
       {
-        title: '期望价格',
+        title: '期望总价',
         dataIndex: 'expectprice',
         key: 'expectprice',
         width: '10%',
         render: (text, record) => this.renderColumns(text, record, 'expectprice'),
       },{
-        title: '实际价格',
+        title: '实际总价',
         dataIndex: 'realprice',
         key: 'realprice',
         width: '10%',
@@ -695,11 +695,11 @@ export default class PurDetailsOfPur extends Component {
         dataIndex: 'total',
         key: 'total',
       },{
-        title: '商品价格',
+        title: '商品总价',
         dataIndex: 'price',
         key: 'price',
       },{
-        title: '敲定价格',
+        title: '敲定总价',
         dataIndex: 'operate',
         key: 'operate',
         render: (text, record) => (
