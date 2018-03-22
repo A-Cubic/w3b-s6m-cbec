@@ -362,7 +362,7 @@ export default class PurDetailsOfSup extends Component {
     let total = 0;
     let sum = 0;
     list.forEach((item) => {
-      sum = sum*1 + item.price*1;
+      sum = sum*1 + (item.price*1) * (item.total*1);
     });
     this.setState({
       goodsSum:sum,
@@ -448,7 +448,7 @@ export default class PurDetailsOfSup extends Component {
     const desc2 = (
       <div className={styles.stepDescription}>
         <div>
-          等待供应商回馈报价
+          等待供应商fan馈报价
         </div>
       </div>
     );
@@ -494,13 +494,18 @@ export default class PurDetailsOfSup extends Component {
         key: 'barcode',
         width: '12%',
       },{
+        title: '需求数量',
+        dataIndex: 'demand',
+        key: 'demand',
+        width: '12%',
+      },{
         title: '商品数量',
         dataIndex: 'total',
         key: 'total',
         width: '10%',
         render: (text, record) => this.renderColumns(text, record, 'total'),
       },{
-        title: '商品总价',
+        title: '商品单价',
         dataIndex: 'price',
         key: 'price',
         width: '10%',

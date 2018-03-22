@@ -3,7 +3,7 @@ import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider,Input,Select,notification,message,Modal,Switch,Avatar } from 'antd';
+import { Button, Menu, Dropdown, Icon, Row, Col,DatePicker, Steps, Card, Popover, Badge, Table, Tooltip, Divider,Input,Select,notification,message,Modal,Switch,Avatar } from 'antd';
 import classNames from 'classnames';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import DescriptionList from '../../components/DescriptionList';
@@ -63,6 +63,7 @@ export default class ModPurOrder extends Component {
     waybillfeeValue:'',
     goodsSum:'0.00',
     listGoods: [],
+    priceStatus:'期望',
     totalPrice:'0.00',
     loading: false,
     visible: false,
@@ -121,9 +122,18 @@ export default class ModPurOrder extends Component {
     let sum = '0.00';
     let bean = params.bean;
     let list = params.list;
-    list.forEach((item) => {
-      sum = sum*1 + item.expectprice*1;
-    });
+    let pstatus='期望';
+//3-22新增询价状态为采购商确认和询价完成的时候显示实际单价*数量。其他时候为期望价格*数量
+    if (bean.status == '4' || bean.status == '5') {
+      pstatus='实际';
+      list.forEach((item) => {
+        sum = sum*1 + (item.realprice*1) * (item.total*1);
+      });
+    }else{
+      list.forEach((item) => {
+        sum = sum*1 + (item.expectprice*1) * (item.total*1);
+      });
+    }
 
     let fee = '';
     if(bean.waybillfee){
@@ -143,6 +153,7 @@ export default class ModPurOrder extends Component {
       waybillfeeValue: fee,
       listGoods:params.list,
       goodsSum:sum,
+      priceStatus:pstatus,
       totalPrice: price===0?'0.00':price,
       btnDisabled: able,
       basicMsg : {
@@ -518,6 +529,21 @@ export default class ModPurOrder extends Component {
       this.props.dispatch(routerRedux.push('/trade/order-p/list'));
     }
   }
+  handleChangeD =(e,changeVal,aa) =>{
+    const { basicMsg } = this.state;
+    var key;
+    var value;
+    value = changeVal;
+    key = "deliverytime";
+    this.setState({
+      basicMsg : {
+        ...basicMsg,
+        [key] : value,
+        sendtype:aa == undefined ? basicMsg.sendtype :  aa.props.value
+      }
+    })
+
+  }
   handleChangeBasicMsg =(e,changeVal,aa) =>{
     const { basicMsg } = this.state;
     var key;
@@ -668,7 +694,7 @@ export default class ModPurOrder extends Component {
     let total = 0;
     let sum = 0;
     listGoods.forEach((item) => {
-      sum = sum*1 + item.expectprice*1;
+      sum = sum*1 + (item.expectprice*1) * (item.total*1);
     });
     total = sum + waybillfeeValue*1;
     this.setState({
@@ -709,7 +735,7 @@ export default class ModPurOrder extends Component {
         let total = 0;
         let sum = 0;
         newData.forEach((item) => {
-          sum = sum*1 + item.expectprice*1;
+          sum = sum*1 + (item.expectprice*1) * (item.total*1);
         });
         total = sum + this.state.waybillfeeValue*1;
         this.setState({
@@ -722,7 +748,7 @@ export default class ModPurOrder extends Component {
 ////////////////////////可编辑行end//////////////////////////
 
   render() {
-    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled,basicMsg,basicMsg:{msgDisabled},addGoodsVisible,selectedRowKeys  } = this.state;
+    const { stepDirection, searchDisable, waybillfeeValue, totalPrice, priceStatus,visible,purVisible, loading, content, sendMessage,chatList,chatTitle,purChatList,sendPurMessage,btnDisabled,basicMsg,basicMsg:{msgDisabled},addGoodsVisible,selectedRowKeys  } = this.state;
     const { purchasePurchasers: { listGoods, paginationGoods, purchase, supplyList }, submitting,addPurOrder:{sendTypeDate,goodsList:{ list,pagination }} }  = this.props;
     // const menu = (
     //   <Menu>
@@ -734,7 +760,7 @@ export default class ModPurOrder extends Component {
     const action = (
       <div>
         <ButtonGroup>
-          <Button onClick={this.showPurModal}>聊天</Button>
+          <Button onClick={this.showPurModal}>与客服沟通</Button>
           <Button disabled={msgDisabled} onClick={this.saveBasic}>保存修改</Button>
           <Button disabled={msgDisabled} onClick={this.submitPur}>确认采购单</Button>
         </ButtonGroup>
@@ -749,7 +775,7 @@ export default class ModPurOrder extends Component {
           <div className={styles.heading}>{status[purchase.stage]}</div>
         </Col>
         <Col xs={24} sm={12}>
-          <div className={styles.textSecondary}>总金额</div>
+          <div className={styles.textSecondary}>{priceStatus}总金额</div>
           <div className={styles.heading}>¥ {totalPrice}</div>
         </Col>
       </Row>
@@ -770,7 +796,8 @@ export default class ModPurOrder extends Component {
             </Select>
         </Description>
         <Description term="目的地"><Input value={basicMsg.address} data-id='address' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
-        <Description term="纳期"><Input value={basicMsg.deliverytime} data-id='deliverytime' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>
+        {/*<Description term="纳期"><Input value={basicMsg.deliverytime} data-id='deliverytime' onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/></Description>*/}
+        <Description term="纳期"><DatePicker value={moment(basicMsg.deliverytime,'YYYY-MM-DD')}  data-id='deliverytime' onChange={this.handleChangeD}  disabled={basicMsg.msgDisabled}/></Description>
         <Description term="币种">
                 {/*<Input value={basicMsg.currency}  onChange={this.handleChangeBasicMsg} disabled={basicMsg.msgDisabled}/>*/}
                  <Select placeholder='请选择币种'
@@ -854,13 +881,13 @@ export default class ModPurOrder extends Component {
         width: '10%',
         render: (text, record) => this.renderColumns(text, record, 'total'),
       }, {
-        title: '期望总价',
+        title: '期望单价',
         dataIndex: 'expectprice',
         key: 'expectprice',
         width: '10%',
         render: (text, record) => this.renderColumns(text, record, 'expectprice'),
       },{
-        title: '实际总价',
+        title: '实际单价',
         dataIndex: 'realprice',
         key: 'realprice',
         width: '10%',

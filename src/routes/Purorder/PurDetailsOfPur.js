@@ -577,7 +577,7 @@ export default class PurDetailsOfPur extends Component {
     const desc2 = (
       <div className={styles.stepDescription}>
         <div>
-          等待供应商回馈报价
+          等待供应商反馈报价
         </div>
       </div>
     );
@@ -634,13 +634,13 @@ export default class PurDetailsOfPur extends Component {
       //   width: '10%',
       // },
       {
-        title: '期望总价',
+        title: '期望单价',
         dataIndex: 'expectprice',
         key: 'expectprice',
         width: '10%',
         render: (text, record) => this.renderColumns(text, record, 'expectprice'),
       },{
-        title: '实际总价',
+        title: '实际单价',
         dataIndex: 'realprice',
         key: 'realprice',
         width: '10%',

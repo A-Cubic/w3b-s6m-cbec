@@ -10,7 +10,7 @@ const { RangePicker, MonthPicker } = DatePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const flagMap = ['error','default', 'processing','processing', 'processing', 'success'];
-const flag = ['取消','未处理','处理中','询价结束','等待确认','完成'];
+const flag = ['取消','未处理','处理中','询价结束','等待确认','询价完成'];
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 const formItemLayout = {
@@ -44,6 +44,7 @@ const columns = [
     render(val) {
       return <Badge status={flagMap[val]} text={flag[val]} />;
     },
+    sorter: (a, b) => a.status - b.status,
   },{
     title: '主要商品名称',
     dataIndex: 'goodsnames',
@@ -52,6 +53,7 @@ const columns = [
     title: '取货方式',
     dataIndex: 'sendtypename',
     key: 'sendtypename',
+    sorter: (a, b) => a.sendtypename - b.sendtypename,
   },{
     title: '目的地',
     dataIndex: 'address',
@@ -272,7 +274,7 @@ export default class ListOfOperate extends Component {
                   <Option value={2}>处理中</Option>
                   <Option value={3}>询价结束</Option>
                   <Option value={4}>等待确认</Option>
-                  <Option value={5}>完成</Option>
+                  <Option value={5}>询价完成</Option>
                 </Select>
               )}
             </FormItem>

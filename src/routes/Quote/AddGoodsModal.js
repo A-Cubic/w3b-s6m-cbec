@@ -34,14 +34,9 @@ export default class AddGoodsModal extends Component {
 		selectedRowKeys : []
 	}
 
-  // componentDidMount() {
-  //   const { getFieldsValue } = this.props.form;
-  //   const {  pagination } = this.state;
-  //
-  //   var values = getFieldsValue();
-  //   var search = values.goodsId !==undefined ? values.goodsId : '' + ' '+ values.goodsnames !==undefined ?  values.goodsnames : '' ;
-  //   this.getGoodsList(search,1,10)
-  // }
+  componentDidMount() {
+    this.handleSearchGoods();
+  }
 	handleOk = (e) => {
     const {  dispatch } = this.props;
     console.log(goodsSelections);
@@ -77,6 +72,7 @@ export default class AddGoodsModal extends Component {
 	  })
 	}
 	handleSearchGoods = () =>{
+    e.preventDefault();
 		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
 		const { dispatch, quote:{ goodsList:{ pagination } } } = this.props;
 		var values = getFieldsValue();
@@ -165,7 +161,7 @@ export default class AddGoodsModal extends Component {
 	  		  },
 	  		  getCheckboxProps: record => ({
 	  		    disabled: record.id === 'Disabled User',
-	  		    name: record.id
+	  		    name: record.id+""
 	  		  })
 	  	};
 

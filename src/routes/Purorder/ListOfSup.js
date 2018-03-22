@@ -10,7 +10,7 @@ const { RangePicker, MonthPicker } = DatePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const flagMap = ['error','default', 'processing','processing', 'processing', 'success'];
-const flag = ['取消','未处理','处理中','询价结束','等待确认','完成'];
+const flag = ['取消','未处理','处理中','询价结束','等待确认','询价完成'];
 const status = ['关闭', '询价', '待付款', '备货中', '已出港', '已入港', '完成', '','','暂存'];
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 const formItemLayout = {
@@ -29,15 +29,17 @@ const columns = [
     title: '采购单号',
     dataIndex: 'purchasesn',
     key: 'purchasesn',
+    sorter: (a, b) => a.purchasesn - b.purchasesn,
   },
-  // {
-  //   title: '采购单阶段',
-  //   dataIndex: 'stage',
-  //   key: 'stage',
-  //   render(val) {
-  //     return <span>{status[val]}</span>
-  //   },
-  // },
+  {
+    title: '采购单阶段',
+    dataIndex: 'stage',
+    key: 'stage',
+    render(val) {
+      return <span>{status[val]}</span>
+    },
+    sorter: (a, b) => a.stage - b.stage,
+  },
   {
     title: '询价状态',
     dataIndex: 'status',
@@ -45,10 +47,12 @@ const columns = [
     render(val) {
       return <Badge status={flagMap[val]} text={flag[val]} />;
     },
+    sorter: (a, b) => a.status - b.status,
   },{
     title: '取货方式',
     dataIndex: 'sendtypename',
     key: 'sendtypename',
+    sorter: (a, b) => a.sendtypename - b.sendtypename,
   },{
     title: '目的地',
     dataIndex: 'address',
@@ -241,15 +245,34 @@ export default class ListOfSup extends Component {
                 <Select placeholder='请选择询价状态'>
                   <Option value={""}>全部</Option>
                   <Option value={0}>取消</Option>
-                  <Option value={1}>普通</Option>
+                  <Option value={1}>未处理</Option>
                   <Option value={2}>处理中</Option>
                   <Option value={3}>询价结束</Option>
                   <Option value={4}>等待确认</Option>
-                  <Option value={5}>意向完成</Option>
+                  <Option value={5}>询价完成</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
+          <Col md={8} sm={24}>
+            <FormItem {...formItemLayout} label="采购阶段">
+              {getFieldDecorator('stage',{initialValue: ""})(
+                <Select placeholder='请选择采购单阶段'>
+                  <Option value={""}>全部</Option>
+                  <Option value={0}>关闭</Option>
+                  <Option value={1}>询价</Option>
+                  <Option value={2}>待付款</Option>
+                  <Option value={3}>备货中</Option>
+                  <Option value={4}>已出港</Option>
+                  <Option value={5}>已入港</Option>
+                  <Option value={6}>完成</Option>
+                  <Option value={9}>暂存</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem {...formItemLayout} label="取货方式">
               {getFieldDecorator('sendtype',{initialValue: ""})(
@@ -263,8 +286,6 @@ export default class ListOfSup extends Component {
               )}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem {...formItemLayout} label ='开始时间'>
               {getFieldDecorator('times')(

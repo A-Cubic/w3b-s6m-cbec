@@ -8,6 +8,7 @@ import { getToken ,getAuthority} from '../../utils/Global';
 
 const FormItem = Form.Item;
 
+ const b2bstatus = ['已下架', '已上架'];
 const formItemLayout = {
 	labelCol: {
 		xs: { span: 24 },
@@ -160,7 +161,14 @@ export default class QuoteList extends Component {
      title: '商品条码',
      dataIndex: 'barcode',
      key: 'barcode',
-    },  {
+    }, {
+        title: '状态',
+        dataIndex: 'ifB2B',
+        key: 'ifB2B',
+        render(val) {
+          return <span>{b2bstatus[val]}</span>
+        },
+      },  {
      title: '商品报价',
      dataIndex: 'offer',
      key: 'offer',

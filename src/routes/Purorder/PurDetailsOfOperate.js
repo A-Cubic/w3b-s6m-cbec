@@ -593,7 +593,7 @@ export default class PurDetailsOfOperate extends Component {
     const desc2 = (
       <div className={styles.stepDescription}>
         <div>
-          等待供应商回馈报价
+          等待供应商反馈报价
         </div>
       </div>
     );
@@ -646,12 +646,12 @@ export default class PurDetailsOfOperate extends Component {
       //   key: 'price',
       //   width: '10%',
       },{
-        title: '期望总价',
+        title: '期望单价',
         dataIndex: 'expectprice',
         key: 'expectprice',
         width: '10%',
       },{
-        title: '实际总价',
+        title: '实际单价',
         dataIndex: 'realprice',
         key: 'realprice',
         width: '10%',
@@ -700,11 +700,11 @@ export default class PurDetailsOfOperate extends Component {
         dataIndex: 'total',
         key: 'total',
       },{
-        title: '商品总价',
+        title: '商品单价',
         dataIndex: 'price',
         key: 'price',
       },{
-        title: '敲定总价',
+        title: '敲定单价',
         dataIndex: 'operate',
         key: 'operate',
         render: (text, record) => (
