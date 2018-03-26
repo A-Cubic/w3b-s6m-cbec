@@ -299,19 +299,35 @@ export default class PurDetailsOfOperate extends Component {
       const goodsSum = this.state.goodsSum;
 
       const target = dataSource.find(item => item.id === key);
-
+      var matchPrice=0;
+      var matchSum =0;
       if (target) {
-        const matchPrice = totalPrice*1-(target[dataIndex]*1-value*1);
-        const matchSum = goodsSum*1-(target[dataIndex]*1-value*1);
-        target[dataIndex] = value;
-        this.props.dispatch({
-          type: 'purchaseOperate/updatePrice',
-          payload: {
-            id: key,
-            realprice: value,
-          },
-          callback: this.updatePriceCallback,
-        });
+        if(dataIndex==="realprice"){
+          matchPrice = totalPrice*1-(target[dataIndex]*1-value*1)*target["total"]*1;
+          matchSum = goodsSum*1-(target[dataIndex]*1-value*1)*target["total"]*1;
+          target[dataIndex] = value;
+          this.props.dispatch({
+            type: 'purchaseOperate/updatePrice',
+            payload: {
+              id: key,
+              realprice: value,
+            },
+            callback: this.updatePriceCallback,
+          });
+        }else if(dataIndex==="total"){
+          matchPrice = totalPrice*1-(target[dataIndex]*1-value*1)*target["realprice"]*1;
+          matchSum = goodsSum*1-(target[dataIndex]*1-value*1)*target["realprice"]*1;
+          target[dataIndex] = value;
+          this.props.dispatch({
+            type: 'purchaseOperate/updatePrice',
+            payload: {
+              id: key,
+              total: value,
+            },
+            callback: this.updatePriceCallback,
+          });
+        }
+
 
         this.setState({ dataSource ,totalPrice:matchPrice,goodsSum:matchSum });
       }
@@ -635,6 +651,16 @@ export default class PurDetailsOfOperate extends Component {
         dataIndex: 'total',
         key: 'total',
         width: '10%',
+        render: (text, record) => {
+          if(!btnDisabled) {
+            return(<EditableCell
+              value={text}
+              onChange={this.onCellChange(record.id, 'total')}
+            />);
+          }else{
+            return(<div>{record.realprice}</div>);
+          }
+        },
       // },{
       //   title: '其他费用',
       //   dataIndex: 'otherprice',
@@ -711,7 +737,7 @@ export default class PurDetailsOfOperate extends Component {
           <Fragment>
             <Switch checkedChildren="是"
                     unCheckedChildren="否"
-                    defaultChecked={record.flag==="3"?false:true}
+                    defaultChecked={record.flag==="3"?true:false}
                     onChange={()=>this.handleUpdateSupplyFlag(record)}/>
           </Fragment>
         ),
