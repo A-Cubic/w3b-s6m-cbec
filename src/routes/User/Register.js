@@ -212,6 +212,21 @@ export default class Register extends Component {
           }
       });
   }
+  handleMail = (rule, value, callback) => {
+    var re = /^1\d{10}$/;
+    if (re.test(value)) {
+      callback();
+    } else {
+      var re1 = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+      if(re1.test(value)){
+        callback();
+      }else{
+        callback("填写错误，请填入正确的邮箱或者手机号码！");
+      }
+
+    }
+
+  }
   renderStep = (currentStep) => {
     const { form, submitting } = this.props;
     const { getFieldDecorator,getFieldsValue,getFieldValue } = form;
@@ -266,11 +281,14 @@ export default class Register extends Component {
                         {
                           required: true,
                           message: '请输入邮箱地址！',
-                        },
-                        {
-                          type: 'email',
-                          message: '邮箱地址格式错误！',
-                        },
+                        }, {
+                          validator: this.handleMail,
+                        }
+                        // ,
+                        // {
+                        //   type: 'email',
+                        //   message: '邮箱地址格式错误！',
+                        // }
                       ],
                     })(<Input size="large" placeholder="邮箱" />)}
                   </FormItem>

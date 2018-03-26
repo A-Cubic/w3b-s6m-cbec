@@ -274,9 +274,9 @@ export default class NewPurOrder extends Component {
 				  dataIndex: 'barcode',
 				  key: 'barcode',
 				},{
-				  title: '商品单价',
-				  dataIndex: 'price',
-				  key: 'price',
+				  title: '初始单价',
+          dataIndex: 'price',
+          key: 'price',
 				},
         // {
 			// 	  title: '提货方式',
