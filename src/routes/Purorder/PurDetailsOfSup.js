@@ -448,7 +448,7 @@ export default class PurDetailsOfSup extends Component {
     const desc2 = (
       <div className={styles.stepDescription}>
         <div>
-          等待供应商fan馈报价
+          等待供应商反馈报价
         </div>
       </div>
     );

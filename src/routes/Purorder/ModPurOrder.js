@@ -454,26 +454,31 @@ export default class ModPurOrder extends Component {
 
   submitPur = () => {
     const { purchasePurchasers: { purchase },dispatch }  = this.props;
-    if (purchase.stage == '9') {
+    var data =  [...this.state.listGoods];
+    if(data.length === 0){
+      message.error('请先添加商品！');
+    }else {
+      if (purchase.stage == '9') {
         //拆单
         dispatch({
-        type:'addPurOrder/splitPurGoods',
-        payload:{
-          purchasesn : purchase.purchasesn
-        },
-        callback:(response)=>{
-          if (response.type=='1') {
+          type: 'addPurOrder/splitPurGoods',
+          payload: {
+            purchasesn: purchase.purchasesn
+          },
+          callback: (response) => {
+            if (response.type == '1') {
               this.submitPurOrder();
-          }else{
-            notification['error']({
-              message: '确认失败',
-              description: response.msg
-            });
+            } else {
+              notification['error']({
+                message: '确认失败',
+                description: response.msg
+              });
+            }
           }
-        }
-      })
-    }else{
-      this.submitPurOrder();
+        })
+      } else {
+        this.submitPurOrder();
+      }
     }
   }
   submitPurOrder = () => {
@@ -637,28 +642,32 @@ export default class ModPurOrder extends Component {
   saveBasic = () =>{
     const { purchasePurchasers: { purchase },dispatch }  = this.props;
     const { basicMsg }  = this.state;
-    
-    dispatch({
-      type:'purchasePurchasers/submitPur',
-      payload:{
-        // ...purchase,
-        purchasesn : purchase.purchasesn,
-        sendtype:basicMsg.sendtype,
-        sendtypename:basicMsg.sendtypename,
-        address:basicMsg.address,
-        deliverytime:basicMsg.deliverytime,
-        currency:basicMsg.currency,
-        remark:basicMsg.remark,
-        // waybillfee:''
-      },
-      callback:(params)=>{
-        if (params.type=='1') {
+    var data =  [...this.state.listGoods];
+    if(data.length === 0){
+      message.error('请先添加商品！');
+    }else {
+      dispatch({
+        type:'purchasePurchasers/submitPur',
+        payload:{
+          // ...purchase,
+          purchasesn : purchase.purchasesn,
+          sendtype:basicMsg.sendtype,
+          sendtypename:basicMsg.sendtypename,
+          address:basicMsg.address,
+          deliverytime:basicMsg.deliverytime,
+          currency:basicMsg.currency,
+          remark:basicMsg.remark,
+          // waybillfee:''
+        },
+        callback:(params)=>{
+          if (params.type=='1') {
             notification["success"](successMsg);
-        }else{
-          notification["error"](errorMsg);
+          }else{
+            notification["error"](errorMsg);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
    ////////////////////////可编辑行start//////////////////////////
@@ -927,46 +936,49 @@ export default class ModPurOrder extends Component {
         const { dispatch } = this.props;
         var data =  [...this.state.listGoods];
         var keys = [...selectedRowKeys];
-
-        GoodsSelections.forEach((value,index)=>{
-          data.forEach((val,i)=>{
-            if (value.id == val.id) {
-              data.splice(i,1);
-            }
+        if(data.length>0&&keys.length>0){
+          GoodsSelections.forEach((value,index)=>{
+            data.forEach((val,i)=>{
+              if (value.id == val.id) {
+                data.splice(i,1);
+              }
+            });
+            keys.forEach((item,j)=>{
+              if (value.goodsid == item) {
+                keys.splice(j,1);
+              }
+            })
           });
-          keys.forEach((item,j)=>{
-            if (value.goodsid == item) {
-              keys.splice(j,1);
+          var idArr = GoodsSelections.map((item)=>{
+            return {
+              id : item.id
             }
           })
-        });
+          dispatch({
+            type:'purchasePurchasers/delPurGoods',
+            payload:idArr,
+            callback:(params) => {
+              if (params.type=='1') {
+                message.success('删除成功');
+                this.setState({
+                  listGoods : data,
+                  selectedRowKeys : keys
+                });
+                setTimeout(() => {
+                  this.macthPrice();
+                }, 0);
 
-      var idArr = GoodsSelections.map((item)=>{
-        return {
-          id : item.id
+              }else{
+                message.error('删除失败')
+              }
+
+            }
+          })
+        }else if(data.length===0){
+          message.error('请先添加商品！')
+        }else if(keys.length===0){
+          message.error('请选择想要删除的商品！')
         }
-      })
-      dispatch({
-        type:'purchasePurchasers/delPurGoods',
-        payload:idArr,
-        callback:(params) => {
-          if (params.type=='1') {
-             message.success('删除成功');
-             this.setState({
-              listGoods : data,
-              selectedRowKeys : keys
-            });
-            setTimeout(() => {
-              this.macthPrice();
-            }, 0);
-
-          }else{
-             message.error('删除失败')
-          }
-
-        }
-      })
-
       }
 
 

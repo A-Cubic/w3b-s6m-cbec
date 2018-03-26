@@ -312,7 +312,7 @@ export default class NewPurOrder extends Component {
 				  //         />
 			       //  )
 				},{
-          title: '期望总价',
+          title: '期望单价',
           dataIndex: 'expectprice',
           key: 'expectprice',
           render: (text, record) => this.renderColumns(text, record, 'expectprice'),
@@ -423,14 +423,14 @@ export default class NewPurOrder extends Component {
           if(!goodserr1){
             notification['error']({
               message: '采购单通知',
-              description: '有商品没添加期望总价和商品数量！'
+              description: '有商品没添加期望单价和商品数量！'
             });
             return false;
           }
           if(!goodserr2){
             notification['error']({
               message: '采购单通知',
-              description: '有商品期望总价和商品数量录入不正确，请录入数字！'
+              description: '有商品期望单价和商品数量录入不正确，请录入数字！'
             });
             return false;
           }
