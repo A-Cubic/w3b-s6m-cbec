@@ -71,7 +71,7 @@ export default class AddGoodsModal extends Component {
 	  	selectedRowKeys:[]
 	  })
 	}
-	handleSearchGoods = () =>{
+	handleSearchGoods = e =>{
     e.preventDefault();
 		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
 		const { dispatch, quote:{ goodsList:{ pagination } } } = this.props;
