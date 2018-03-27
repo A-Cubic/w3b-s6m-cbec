@@ -1,4 +1,4 @@
-import { realRegisterCode, realRegisterSubmit,realRenameCode } from '../services/api';
+import { realRegisterCode, realRegisterSubmit,realRenameCode,realRenameSubmit } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 import { notification } from 'antd'
@@ -28,7 +28,7 @@ export default {
       }
     },
     *rename({payload, callback}, { call, put }) {
-      const response = yield call(realRegisterSubmit,payload);
+      const response = yield call(realRenameSubmit,payload);
       if (response === undefined) {
 
       } else {

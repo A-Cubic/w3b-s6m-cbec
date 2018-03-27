@@ -114,6 +114,12 @@ export async function realRegisterSubmit(params) {
     body: params,
   });
 }
+export async function realRenameSubmit(params) {
+  return request(`${apiUrl}/llback/user/register/rename`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 export async function realRegisterUpload(params) {
   return request(`${apiUrl}/llback/user/register/upload`, {

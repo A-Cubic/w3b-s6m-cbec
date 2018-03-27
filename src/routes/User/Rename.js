@@ -121,7 +121,9 @@ export default class Register extends Component {
       message: "提示",
       description: msg,
     });
-
+    if(msg.type==="1"){
+      this.props.dispatch(routerRedux.push('/user/login'));
+    }
   }
 
   handleSubmit = (e) => {
@@ -130,7 +132,7 @@ export default class Register extends Component {
       if (!err) {
         console.log(values);
         this.props.dispatch({
-          type: 'register/submit',
+          type: 'register/rename',
           payload: {
             ...values,
             // type: 2,
@@ -271,7 +273,7 @@ export default class Register extends Component {
                         //   message: '邮箱地址格式错误！',
                         // }
                       ],
-                    })(<Input size="large" placeholder="邮箱" />)}
+                    })(<Input size="large" placeholder="请输入账号" />)}
                   </FormItem>
                   <FormItem
                     {...formItemLayout}
@@ -387,9 +389,7 @@ export default class Register extends Component {
   render() {
     return (
       <div>
-        <Steps current={this.state.currentStep} className={styles.steps}>
-          <Step title="修改密码"/>
-        </Steps>
+        <div className={styles.renametop}>修改密码</div>
         <div className={styles.main}>
           {this.renderStep(this.state.currentStep)}
       </div>

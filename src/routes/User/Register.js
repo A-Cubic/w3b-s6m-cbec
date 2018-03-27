@@ -280,7 +280,7 @@ export default class Register extends Component {
                       rules: [
                         {
                           required: true,
-                          message: '请输入邮箱地址！',
+                          message: '请输入邮箱地址或手机号！',
                         }, {
                           validator: this.handleMail,
                         }
@@ -290,7 +290,7 @@ export default class Register extends Component {
                         //   message: '邮箱地址格式错误！',
                         // }
                       ],
-                    })(<Input size="large" placeholder="邮箱" />)}
+                    })(<Input size="large" placeholder="邮箱/手机号" />)}
                   </FormItem>
                   <FormItem
                     {...formItemLayout}
