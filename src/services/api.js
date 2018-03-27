@@ -96,13 +96,18 @@ export async function realAccountLogin(params) {
   });
 }
 ///////////////////////////////////////////////////////////////////////////////// 注册 部分 /////////////////////////////////////////////////////////////////////////
-export async function realRegisterCdoe(params) {
+export async function realRegisterCode(params) {
   return request(`${apiUrl}/llback/user/register/code`, {
     method: 'POST',
     body: params,
   });
 }
-
+export async function realRenameCode(params) {
+  return request(`${apiUrl}/llback/user/register/renamecode`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function realRegisterSubmit(params) {
   return request(`${apiUrl}/llback/user/register/submit`, {
     method: 'POST',
