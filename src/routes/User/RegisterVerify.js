@@ -199,11 +199,12 @@ export default class RegisterVerify extends Component {
 	              <p>认证已提交成功，正在审核中...</p>
 	              <p>审核通过后，您会收到短信提示和邮件通知。</p>
 	              <p>请稍后，谢谢！</p>
-	              <Button size="large"
-	                      loading={submitting}
-	                      className={styles.step3btn}
-	                      type="primary"
-	                      >确定</Button>
+	              {/*<Button size="large"*/}
+	                      {/*loading={submitting}*/}
+	                      {/*className={styles.step3btn}*/}
+	                      {/*type="primary"*/}
+	                      {/*>确定</Button>*/}
+                <Link className={styles.font20} to={`/user/login`}>确定</Link>
 	            </div>
 	            );
 	          break;
