@@ -57,18 +57,18 @@ export default class AddGoodsModal extends Component {
 	}
 	handleSearchGoods = e =>{
     e.preventDefault();
-		const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
-		const { dispatch, addPurOrder:{ goodsList:{ pagination } } } = this.props;
-		var values = getFieldsValue();
-		var search = values.goodsId !==undefined ? values.goodsId : ''  ;
-		this.getGoodsList(search,1,pagination.pageSize)
-	}
-	resetSearch = () => {
-		const { resetFields } = this.props.form;
-		const { addPurOrder:{ goodsList:{ pagination } } } = this.props;
-		resetFields();
-		this.getGoodsList('',1,pagination.pageSize)
-	}
+    const { getFieldDecorator,getFieldsValue,validateFields,setFields } = this.props.form;
+    const { dispatch, addPurOrder:{ goodsList:{ pagination } } } = this.props;
+    var values = getFieldsValue();
+    var search = values.goodsId !==undefined ? values.goodsId : ''  ;
+    this.getGoodsList(search,1,pagination.pageSize)
+  }
+  resetSearch = () => {
+    const { resetFields } = this.props.form;
+    const { addPurOrder:{ goodsList:{ pagination } } } = this.props;
+    resetFields();
+    this.getGoodsList('',1,pagination.pageSize)
+  }
 	changGoodsPage = (page, filters, sorter) =>{
 		console.log(page)
 		const { getFieldsValue } = this.props.form;

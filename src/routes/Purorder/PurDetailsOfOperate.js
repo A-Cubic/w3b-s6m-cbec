@@ -215,6 +215,7 @@ export default class PurDetailsOfOperate extends Component {
         purchasesn: this.props.match.params.id,
         ...params,
       },
+      callback:this.getGoodsCallback,
     });
   }
   handleBtnOnChange = (e) => {
