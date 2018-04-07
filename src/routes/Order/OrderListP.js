@@ -1,0 +1,181 @@
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { routerRedux, Link, withRouter } from 'dva/router';
+import { Input, Button, notification,Table,Card,Form,Row, Col,Divider,Switch ,Select } from 'antd';
+import styles from '../../utils/utils.less'
+import { getToken ,getAuthority} from '../../utils/Global';
+import OrderGoods from "./OrderGoodsP";
+
+
+const FormItem = Form.Item;
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 4 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 18 },
+  }
+};
+
+
+
+@connect(({ order, loading }) => ({
+  order,
+  submitting: loading.effects['order/listp'],
+}))
+
+@Form.create()
+
+export default class OrderListP extends Component {
+  state = {
+    formValues: {
+    },
+    pagination: {
+      current: 1,
+      total: 10,
+      pageSize: 20,
+    },
+  }
+
+  componentDidMount() {
+    const { formValues, pagination } = this.state;
+
+    this.props.dispatch({
+      type: 'order/listp',
+      payload: {
+        ...formValues,
+        ...pagination,
+      },
+    });
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { form, submitting, dispatch } = this.props;
+    const { pagination } = this.state;
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        ...fieldsValue,
+      };
+
+      this.setState({
+        formValues: values,
+      });
+      console.log(values);
+      dispatch({
+        type: 'order/listp',
+        payload: {
+          ...values,
+          ...pagination,
+        },
+      });
+    });
+
+  }
+
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      current: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      // ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+
+    dispatch({
+      type: 'order/listp',
+      payload: params,
+    });
+  }
+
+
+  render(){
+    const { getFieldDecorator } = this.props.form;
+    const { order: { list, pagination }, submitting }  = this.props;
+    const columns = [
+      {
+        title: '订单编号',
+        dataIndex: 'merchantOrderId',
+        key: 'merchantOrderId',
+      },
+      {
+        title: '下单时间',
+        dataIndex: 'tradeTime',
+        key: 'tradeTime',
+      },
+      {
+        title: '订单金额',
+        dataIndex: 'goodsTotalAmount',
+        key: 'goodsTotalAmount',
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+      },
+      {
+        title: '查看',
+        dataIndex: 'operate2',
+        key: 'operate2',
+        render:(text, record)=>
+          <div>
+            <Link to={`/account/ordergoods-p/${record.merchantOrderId}`}>查看订单商品</Link>
+
+          </div>
+
+      }];
+
+    return(
+      <div>
+        <Card>
+          <Form onSubmit={this.handleSubmit}>
+            <Row>
+              <Col span={10}>
+                <FormItem {...formItemLayout} label="订单状态">
+                  {getFieldDecorator('status',{initialValue: ""})(
+                    <Select placeholder='请选择订单状态'>
+                      <Option value={"全部"}>全部</Option>
+                      <Option value={"新订单"}>新订单</Option>
+                      <Option value={"已发货"}>已发货</Option>
+                      <Option value={"已完成"}>已完成</Option>
+                      <Option value={"退货处理"}>退货处理</Option>
+                    </Select>
+                  )}
+                </FormItem>
+
+              </Col>
+              <Col span={4}><Button type="primary"
+                                    className={styles.submit}
+                                    htmlType="submit">搜索</Button></Col>
+            </Row>
+          </Form>
+        </Card>
+        <Card className={styles.mT10}>
+          <Table dataSource={list}
+                 columns={columns}
+                 pagination={pagination}
+                 rowKey={record => record.id}
+                 onChange={this.handleStandardTableChange}
+                 loading={submitting}/>
+        </Card>
+      </div>
+    )
+
+  }
+}

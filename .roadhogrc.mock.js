@@ -151,6 +151,8 @@ const proxy = {
   'POST /llback/user/message/list': service_url,
   'POST /llback/user/message/empty': service_url,
   'POST /llback/user/register/code': service_url,
+  'POST /llback/user/register/renamecode': service_url,
+  'POST /llback/user/register/rename': service_url,
   'POST /llback/user/register/submit': service_url,
   'POST /llback/user/register/upload': service_url,
   'POST /llback/user/register/status': service_url,
@@ -194,6 +196,10 @@ const proxy = {
   'POST /llback/goods/operate/list': service_url,
   'POST /llback/goods/operate/update': service_url,
   'POST /llback/goods/operate/goodsbyid': service_url,
+  'POST /llback/goods/goodsnum': service_url,
+  'POST /llback/order/list': service_url,
+  'POST /llback/order/goods': service_url,
+  'POST /llback/order/account': service_url,
 };
 
 

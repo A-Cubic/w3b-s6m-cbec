@@ -1,5 +1,5 @@
 import {
-  getGoodsListOfOperate, offerbyid, updateGoodsOfOperate,getGoodsById
+  getGoodsListOfOperate, updateGoodsOfOperate,getGoodsById,getGoodsNum
 } from '../services/api';
 
 export default {
@@ -17,6 +17,15 @@ export default {
   effects: {
     *list({ payload }, { call, put }) {
       const response = yield call(getGoodsListOfOperate, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'queryList',
+          payload: response,
+        });
+      }
+    },
+    *numlist({ payload }, { call, put }) {
+      const response = yield call(getGoodsNum, payload);
       if (response !== undefined) {
         yield put({
           type: 'queryList',

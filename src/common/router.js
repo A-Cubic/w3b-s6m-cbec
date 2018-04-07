@@ -191,11 +191,32 @@ export const getRouterData = (app) => {
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },
+    '/account/order-p': {
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListP')),
+    },
+    '/account/order-s': {
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListS')),
+    },
+    '/account/list-p': {
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/AccountP')),
+    },
+    '/account/list-s': {
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListP')),
+    },
+    '/account/ordergoods-p/:id': {
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsP')),
+    },
+    '/account/ordergoods-s/:id': {
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsS')),
+    },
     '/goods/info/add': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/UploadGoods')),
     },
     '/goods/info/list': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsList')),
+    },
+    '/goods/info/num': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsNum')),
     },
     '/goods/info/mod/:id': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsMod')),

@@ -391,6 +391,12 @@ export async function getGoodsListOfOperate(params) {
     body: params,
   });
 }
+export async function getGoodsNum(params) {
+  return request(`${apiUrl}/llback/goods/goodsnum`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function updateGoodsOfOperate(params) {
   return request(`${apiUrl}/llback/goods/operate/update`, {
     method: 'POST',
@@ -406,3 +412,28 @@ export async function getGoodsById(params) {
 
 
 ///////////////////////////////////////////////////////////////////////////////// 商品 部分  end/////////////////////////////////////////////////////////////////////////
+
+export async function getOrderListOfSupplier(params) {
+  return request(`${apiUrl}/llback/order/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function getOrderListOfPurchasers(params) {
+  return request(`${apiUrl}/llback/order/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function getOrderGoodsByOrderId(params) {
+  return request(`${apiUrl}/llback/order/goods`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function getAccount(params) {
+  return request(`${apiUrl}/llback/order/account`, {
+    method: 'POST',
+    body: params,
+  });
+}
