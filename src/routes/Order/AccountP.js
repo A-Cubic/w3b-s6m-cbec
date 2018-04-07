@@ -138,7 +138,7 @@ export default class OrderListP extends Component {
     return(
       <div>
         <Card>
-          <h2>¥ {totalPrice}</h2>
+          <h2>合计：¥ {totalPrice}</h2>
         </Card>
         <Card className={styles.mT10}>
           <Table dataSource={Account}
