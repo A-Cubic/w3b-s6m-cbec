@@ -1,5 +1,5 @@
 import {
-  getGoodsListOfOperate, updateGoodsOfOperate,getGoodsById,getGoodsNum
+  getGoodsListOfOperate, updateGoodsOfOperate,getGoodsById,getGoodsNum,updateGoodsNum
 } from '../services/api';
 
 export default {
@@ -24,17 +24,27 @@ export default {
         });
       }
     },
-    *numlist({ payload }, { call, put }) {
+    *numlist({ payload, callback }, { call, put }) {
       const response = yield call(getGoodsNum, payload);
       if (response !== undefined) {
         yield put({
           type: 'queryList',
           payload: response,
         });
+
+        callback(response);
       }
     },
     *update({ payload, callback }, { call }) {
       const response = yield call(updateGoodsOfOperate, payload);
+      if (response === undefined) {
+
+      } else {
+        callback(response);
+      }
+    },
+    *updateKC({ payload, callback }, { call }) {
+      const response = yield call(updateGoodsNum, payload);
       if (response === undefined) {
 
       } else {

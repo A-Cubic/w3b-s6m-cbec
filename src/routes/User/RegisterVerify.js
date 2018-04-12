@@ -84,7 +84,7 @@ export default class RegisterVerify extends Component {
 	                      rules: [
 	                        {
 	                          required: true,
-	                          message: '请输入联系人手机号码！',
+	                          message: '请输入联系人电话！',
 	                        }
 	                      ]
 	                    })(<Input size="large" placeholder="联系人手机号码" />)}
@@ -96,9 +96,10 @@ export default class RegisterVerify extends Component {
 	                      rules: [
 	                        {
 	                          required: true,
-	                          message: '请输入联系人手机号码！',
+	                          message: '请输入联系人邮箱！',
 	                        },{
-	                          type:'email'
+	                          type:'email',
+                            message: '请输入正确的邮箱！',
 	                        }
 	                      ]
 	                    })(<Input size="large" placeholder="联系人常用邮箱且能正常收发邮件" />)}
@@ -170,7 +171,8 @@ export default class RegisterVerify extends Component {
 	                      </Row>
 	                      <Row className={styles.uploadNote}>
 	                        中国境内供应商请提交营业执照（三证合一）或者营业执照+组织结构代码+税务登记证。<br/>
-	                        中国境内外供应商请提交营业执照。
+	                        中国境内外供应商请提交营业执照。<br/>
+                          **只支持jpeg,jpg,gif,png格式的图片文件
 	                      </Row>
 	                      </div>
 	                    )}
