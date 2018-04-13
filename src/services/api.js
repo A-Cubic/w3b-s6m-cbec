@@ -397,6 +397,12 @@ export async function getGoodsNum(params) {
     body: params,
   });
 }
+export async function getSellNum(params) {
+  return request(`${apiUrl}/llback/goods/getsellnum`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function updateGoodsNum(params) {
   return request(`${apiUrl}/llback/goods/updategoodsnum`, {
     method: 'POST',
