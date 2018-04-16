@@ -113,26 +113,31 @@ export default class OrderListP extends Component {
         title: '订单编号',
         dataIndex: 'merchantOrderId',
         key: 'merchantOrderId',
+        width: '30%',
       },
       {
         title: '商品名',
         dataIndex: 'skuBillName',
         key: 'skuBillName',
+        width: '30%',
       },
       {
         title: '供货价',
         dataIndex: 'offer',
         key: 'offer',
+        width: '15%',
       },
       {
         title: '数量',
         dataIndex: 'quantity',
         key: 'quantity',
+        width: '10%',
       },
       {
         title: '合计',
         dataIndex: 'sum',
         key: 'sum',
+        width: '15%',
       }];
 
     return(

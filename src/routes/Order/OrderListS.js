@@ -112,25 +112,30 @@ export default class OrderListS extends Component {
         title: '订单编号',
         dataIndex: 'merchantOrderId',
         key: 'merchantOrderId',
+        width: '20%',
       },
       {
         title: '下单时间',
         dataIndex: 'tradeTime',
         key: 'tradeTime',
+        width: '20%',
       },
       {
         title: '订单金额',
         dataIndex: 'goodsTotalAmount',
         key: 'goodsTotalAmount',
+        width: '20%',
       },
       {
         title: '状态',
         dataIndex: 'status',
         key: 'status',
+        width: '20%',
       },
       {
         title: '查看',
         dataIndex: 'operate2',
+        width: '20%',
         key: 'operate2',
         render:(text, record)=>
           <div>
@@ -145,21 +150,21 @@ export default class OrderListS extends Component {
         <Card>
           <Form onSubmit={this.handleSubmit}>
             <Row>
-              <Col span={10}>
+              <Col  xs={24} sm={8} md={8} lg={8} xl={8}>
                 <FormItem {...formItemLayout} label="订单状态">
                   {getFieldDecorator('status',{initialValue: ""})(
                     <Select placeholder='请选择订单状态'>
                       <Option value={"全部"}>全部</Option>
                       <Option value={"新订单"}>新订单</Option>
+                      <Option value={"准备出库"}>准备出库</Option>
                       <Option value={"已发货"}>已发货</Option>
-                      <Option value={"已完成"}>已完成</Option>
-                      <Option value={"退货处理"}>退货处理</Option>
+                      <Option value={"已回传"}>已回传</Option>
                     </Select>
                   )}
                 </FormItem>
 
               </Col>
-              <Col span={4}><Button type="primary"
+              <Col  xs={6} sm={6} md={6} lg={6} xl={6}><Button type="primary"
                                     className={styles.submit}
                                     htmlType="submit">搜索</Button></Col>
             </Row>

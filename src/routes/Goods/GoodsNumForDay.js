@@ -118,16 +118,19 @@ export default class GoodsList extends Component {
         title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
+        width: '35%',
       },
       {
         title: '商品名称',
         dataIndex: 'goodsname',
         key: 'goodsname',
+        width: '45%',
       },
       {
         title: '销售量',
         dataIndex: 'sellNum',
         key: 'sellNum',
+        width: '20%',
       }];
 
     return(

@@ -187,7 +187,7 @@ export default class GoodsList extends Component {
     const newData = [...this.state.listGoods];
     const target = newData.filter(item => key === item.barcode)[0];
     if (target) {
-      Object.assign(target, this.cacheData.filter(item => key === item.barcode)[0]);
+      //Object.assign(target, this.cacheData.filter(item => key === item.barcode)[0]);
       delete target.editable;
       this.setState({ listGoods: newData });
     }
@@ -215,11 +215,13 @@ export default class GoodsList extends Component {
         title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
+        width: '15%',
       },
       {
         title: '商品名称',
         dataIndex: 'goodsname',
         key: 'goodsname',
+        width: '20%',
       },
       {
         title: '日本仓',
@@ -300,7 +302,10 @@ export default class GoodsList extends Component {
                  pagination={this.state.pagination}
                  rowKey={record => record.barcode}
                  onChange={this.handleStandardTableChange}
-                 loading={submitting}/>
+                 loading={submitting}
+                 bordered={false}
+                 scroll={{x: 500 }}
+          />
         </Card>
       </div>
     )
