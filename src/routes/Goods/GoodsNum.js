@@ -303,7 +303,7 @@ export default class GoodsList extends Component {
                  rowKey={record => record.barcode}
                  onChange={this.handleStandardTableChange}
                  loading={submitting}
-                 bordered={false}
+                 size="small"
                  scroll={{x: 500 }}
           />
         </Card>

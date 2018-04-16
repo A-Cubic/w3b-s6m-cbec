@@ -6,7 +6,6 @@ import styles from '../../utils/utils.less'
 import { getToken ,getAuthority} from '../../utils/Global';
 
 
-const { Option } = Select;
 const FormItem = Form.Item;
 
 const formItemLayout = {
@@ -139,7 +138,7 @@ export default class OrderGoodsS extends Component {
     return(
       <div>
         <Card>
-        <h2>订单商品信息</h2><Button href={'#/account/order-s'}>返回</Button>
+        <h2>订单商品信息</h2><Button href={'#/account/order-w'}>返回</Button>
       </Card>
          <Card className={styles.mT10}>
           <Table dataSource={goodsList}

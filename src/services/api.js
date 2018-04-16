@@ -437,6 +437,12 @@ export async function getOrderListOfPurchasers(params) {
     body: params,
   });
 }
+export async function getOrderListOfWareHouse(params) {
+  return request(`${apiUrl}/llback/order/listofwarehouse`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function getOrderGoodsByOrderId(params) {
   return request(`${apiUrl}/llback/order/goods`, {
     method: 'POST',

@@ -51,6 +51,9 @@ export default {
             case 'unaudited-p':
               tUrl = '/user/register-verify';
               break;
+            case 'warehouse':
+              tUrl = '/dashboard-o';
+              break;
             case '':
               tUrl = '/user/login';
               break;

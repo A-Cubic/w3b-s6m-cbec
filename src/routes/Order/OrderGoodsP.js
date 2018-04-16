@@ -6,6 +6,7 @@ import styles from '../../utils/utils.less'
 import { getToken ,getAuthority} from '../../utils/Global';
 
 
+const { Option } = Select;
 const FormItem = Form.Item;
 
 const formItemLayout = {

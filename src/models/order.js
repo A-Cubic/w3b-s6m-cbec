@@ -1,5 +1,5 @@
 import {
-  getOrderListOfSupplier, getOrderListOfPurchasers,getOrderGoodsByOrderId,getAccount
+  getOrderListOfSupplier, getOrderListOfPurchasers,getOrderGoodsByOrderId,getAccount,getOrderListOfWareHouse
 } from '../services/api';
 
 export default {
@@ -25,6 +25,15 @@ export default {
     },
     *lists({ payload }, { call, put }) {
       const response = yield call(getOrderListOfSupplier, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'queryList',
+          payload: response,
+        });
+      }
+    },
+    *listw({ payload }, { call, put }) {
+      const response = yield call(getOrderListOfWareHouse, payload);
       if (response !== undefined) {
         yield put({
           type: 'queryList',
