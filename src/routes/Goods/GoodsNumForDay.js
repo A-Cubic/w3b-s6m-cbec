@@ -196,7 +196,8 @@ export default class GoodsList extends Component {
                  pagination={pagination}
                  rowKey={record => record.barcode}
                  onChange={this.handleStandardTableChange}
-                 loading={submitting}/>
+                 loading={submitting}
+                 scroll={{x: 500 }}/>
         </Card>
       </div>
     )

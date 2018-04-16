@@ -177,7 +177,8 @@ export default class OrderListP extends Component {
                  pagination={pagination}
                  rowKey={record => record.id}
                  onChange={this.handleStandardTableChange}
-                 loading={submitting}/>
+                 loading={submitting}
+                 scroll={{x: 500 }}/>
         </Card>
       </div>
     )
