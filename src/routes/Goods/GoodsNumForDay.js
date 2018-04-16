@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import { Input, Button,Table,Card,Form,Row, Col,DatePicker ,Select } from 'antd';
 import styles from '../../utils/utils.less'
-
+const { Option } = Select;
 const { RangePicker, MonthPicker } = DatePicker;
 
 const FormItem = Form.Item;
