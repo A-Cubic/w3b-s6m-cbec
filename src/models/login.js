@@ -40,7 +40,7 @@ export default {
               tUrl = '/dashboard-s';
               break;
             case 'purchasers':
-              tUrl = '/dashboard-p';
+              tUrl = '/account/order-p';
               break;
             case 'operate':
               tUrl = '/dashboard-o';

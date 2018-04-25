@@ -172,7 +172,7 @@ export default class OrderListP extends Component {
     return(
       <div>
         <Card>
-          <Radio.Group onChange={this.handleSizeChange}>
+          <Radio.Group onChange={this.handleSizeChange} size="small" defaultValue="all" >
             <Radio.Button value="all">全部</Radio.Button>
             <Radio.Button value="new">新订单</Radio.Button>
             <Radio.Button value="fh">已发货</Radio.Button>
@@ -203,15 +203,14 @@ export default class OrderListP extends Component {
           {/*</Form>*/}
         {/*</Card>*/}
         <Card className={styles.mT10}>
-          <h3>订单总金额：￥{total}  总佣金：￥{totalyj}</h3>
+          <h3>总金额：￥{total}  总佣金：￥{totalyj}</h3>
           <Table dataSource={list}
                  columns={columns}
                  pagination={pagination}
                  rowKey={record => record.id}
                  onChange={this.handleStandardTableChange}
                  loading={submitting}
-                 showHeader={false}
-                 scroll={{x: 500 }}/>
+                 showHeader={false}/>
         </Card>
       </div>
     )
