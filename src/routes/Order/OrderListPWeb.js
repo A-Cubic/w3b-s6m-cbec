@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link, withRouter } from 'dva/router';
-import { Input, Button, notification,Table,Card,Form,Row, Col,Divider,Switch ,Select ,List} from 'antd';
+import { Input, Button, notification,Table,Card,Form,Row, Col,Menu, Icon,Switch ,Select } from 'antd';
 import styles from '../../utils/utils.less'
 import { getToken ,getAuthority} from '../../utils/Global';
+import OrderGoods from "./OrderGoodsP";
 
-const { Option } = Select;
 
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 const FormItem = Form.Item;
 
 const formItemLayout = {
@@ -24,13 +26,14 @@ const formItemLayout = {
 
 @connect(({ order, loading }) => ({
   order,
-  submitting: loading.effects['order/listw'],
+  submitting: loading.effects['order/listp'],
 }))
 
 @Form.create()
 
-export default class OrderListW extends Component {
+export default class OrderListP extends Component {
   state = {
+    current:'mail',
     formValues: {
     },
     pagination: {
@@ -44,7 +47,7 @@ export default class OrderListW extends Component {
     const { formValues, pagination } = this.state;
 
     this.props.dispatch({
-      type: 'order/listw',
+      type: 'order/listp',
       payload: {
         ...formValues,
         ...pagination,
@@ -68,7 +71,7 @@ export default class OrderListW extends Component {
       });
       console.log(values);
       dispatch({
-        type: 'order/listw',
+        type: 'order/listp',
         payload: {
           ...values,
           ...pagination,
@@ -99,11 +102,17 @@ export default class OrderListW extends Component {
     }
 
     dispatch({
-      type: 'order/listw',
+      type: 'order/listp',
       payload: params,
     });
   }
 
+  handleClick = (e) => {
+    console.log('click ', e);
+    this.setState({
+      current: e.key,
+    });
+  }
 
   render(){
     const { getFieldDecorator } = this.props.form;
@@ -136,22 +145,41 @@ export default class OrderListW extends Component {
       {
         title: '查看',
         dataIndex: 'operate2',
-        width: '20%',
         key: 'operate2',
+        width: '20%',
         render:(text, record)=>
           <div>
-            <Link to={`/account/ordergoods-s/${record.merchantOrderId}`}>查看订单商品</Link>
+            <Link to={`/account/ordergoods-p/${record.merchantOrderId}`}>查看订单商品</Link>
 
           </div>
 
       }];
-
     return(
       <div>
         <Card>
+          <Menu
+            onClick={this.handleClick}
+            selectedKeys={[this.state.current]}
+            mode="horizontal"
+          >
+            <Menu.Item key="all">
+              <Icon type="all" />全部
+            </Menu.Item>
+            <Menu.Item key="new">
+              <Icon type="new" />准备出库
+            </Menu.Item>
+            <Menu.Item key="fahuo">
+              <Icon type="fahuo" />已发货
+            </Menu.Item>
+            <Menu.Item key="wancheng">
+              <Icon type="wancheng" />已完成
+            </Menu.Item>
+          </Menu>
+        </Card>
+        <Card>
           <Form onSubmit={this.handleSubmit}>
             <Row>
-              <Col  xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Col  xs={24} sm={8} md={8} lg={8} xl={8}>
                 <FormItem {...formItemLayout} label="订单状态">
                   {getFieldDecorator('status',{initialValue: ""})(
                     <Select placeholder='请选择订单状态'>
@@ -172,25 +200,13 @@ export default class OrderListW extends Component {
           </Form>
         </Card>
         <Card className={styles.mT10}>
-          <List
-            itemLayout="horizontal"
-            dataSource={list}
-            renderItem={item => (
-              <List.Item>
-                <List.Item.Meta
-                  title={<Link to={`/account/ordergoods-w/${item.merchantOrderId}`}>订单号：{item.merchantOrderId}</Link>}
-                  description={<Link to={`/account/ordergoods-w/${item.merchantOrderId}`}>下单时间:{item.tradeTime}<br/> 订单金额:{item.goodsTotalAmount}<br/> 订单状态:{item.status}</Link>}
-                />
-              </List.Item>
-            )}
-          />
-          {/*<Table dataSource={list}*/}
-                 {/*columns={columns}*/}
-                 {/*pagination={pagination}*/}
-                 {/*rowKey={record => record.id}*/}
-                 {/*onChange={this.handleStandardTableChange}*/}
-                 {/*loading={submitting}*/}
-                 {/*scroll={{x: 500 }}/>*/}
+          <Table dataSource={list}
+                 columns={columns}
+                 pagination={pagination}
+                 rowKey={record => record.id}
+                 onChange={this.handleStandardTableChange}
+                 loading={submitting}
+                 scroll={{x: 500 }}/>
         </Card>
       </div>
     )

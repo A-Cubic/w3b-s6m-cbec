@@ -1,5 +1,5 @@
 import {
-  getGoodsListOfOperate, updateGoodsOfOperate,getGoodsById,getGoodsNum,updateGoodsNum,getSellNum
+  getGoodsListOfOperate, updateGoodsOfOperate, getGoodsById, getGoodsNum, updateGoodsNum, getSellNum, getGoodsNumByBarcode
 } from '../services/api';
 
 export default {
@@ -64,6 +64,12 @@ export default {
           type: 'queryList',
           payload: response,
         });
+      }
+    },
+    *numinfo({ payload, callback }, { call ,put}) {
+      const response = yield call(getGoodsNumByBarcode, payload);
+      if (response !== undefined) {
+        callback(response);
       }
     },
   },

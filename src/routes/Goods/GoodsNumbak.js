@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link, withRouter } from 'dva/router';
-import { Input, Button, notification,Table,Card,Form,Row, Col,Divider,Switch ,Select,List } from 'antd';
+import { Input, Button, notification,Table,Card,Form,Row, Col,Divider,Switch ,Select } from 'antd';
 import styles from '../../utils/utils.less'
 import { getToken ,getAuthority} from '../../utils/Global';
 
 
- const FormItem = Form.Item;
+const FormItem = Form.Item;
 
 const formItemLayout = {
   labelCol: {
@@ -210,107 +210,58 @@ export default class GoodsList extends Component {
   render(){
     const { getFieldDecorator } = this.props.form;
     const { goods: { list, pagination }, submitting }  = this.props;
-    // const columns = [
-    //   {
-    //     title: '商品条码',
-    //     dataIndex: 'barcode',
-    //     key: 'barcode',
-    //     width: '15%',
-    //   },
-    //   {
-    //     title: '商品名称',
-    //     dataIndex: 'goodsname',
-    //     key: 'goodsname',
-    //     width: '20%',
-    //   },
-    //   {
-    //     title: '日本仓',
-    //     dataIndex: 'rb',
-    //     key: 'rb',
-    //     render: (text, record) => this.renderColumns(text, record, 'rb'),
-    //   },
-    //   {
-    //     title: '韩国仓',
-    //     dataIndex: 'hg',
-    //     key: 'hg',
-    //     render: (text, record) => this.renderColumns(text, record, 'hg'),
-    //   },
-    //   {
-    //     title: '国际仓',
-    //     dataIndex: 'gj',
-    //     key: 'gj',
-    //     render: (text, record) => this.renderColumns(text, record, 'gj'),
-    //   },{
-    //     title: '操作',
-    //     dataIndex: 'operate',
-    //     key: 'operate',
-    //     width: '13%',
-    //     render: (text, record) =>
-    //       <div>
-    //         <Link to={`/goods/info/nummod/${record.barcode}`}>编辑</Link>
-    //
-    //       </div>
-    //     // {
-    //     //   const { editable } = record;
-    //     //   return (
-    //     //       <div className={styles.editableRowOperations}>
-    //     //         {
-    //     //           editable ?
-    //     //             <span>
-    //     //           <a onClick={() => this.save(record.barcode)}>保存</a>
-    //     //             <a onClick={() => this.cancel(record.barcode)}>取消</a>
-    //     //         </span>
-    //     //             : <a onClick={() => this.edit(record.barcode)} >编辑</a>
-    //     //         }
-    //     //       </div>
-    //     //   );
-    //     // },
-    //   }];
     const columns = [
-      // {
-      //   title: '商品条码',
-      //   dataIndex: 'barcode',
-      //   key: 'barcode',
-      //   width: '15%',
-      // },
-      // {
-      //   title: '商品名称',
-      //   dataIndex: 'goodsname',
-      //   key: 'goodsname',
-      //   width: '20%',
-      // },
-      // {
-      //   title: '日本仓',
-      //   dataIndex: 'rb',
-      //   key: 'rb',
-      //   render: (text, record) => this.renderColumns(text, record, 'rb'),
-      // },
-      // {
-      //   title: '韩国仓',
-      //   dataIndex: 'hg',
-      //   key: 'hg',
-      //   render: (text, record) => this.renderColumns(text, record, 'hg'),
-      // },
-      // {
-      //   title: '国际仓',
-      //   dataIndex: 'gj',
-      //   key: 'gj',
-      //   render: (text, record) => this.renderColumns(text, record, 'gj'),
-      // },
       {
-        title: '',
+        title: '商品条码',
+        dataIndex: 'barcode',
+        key: 'barcode',
+        width: '15%',
+      },
+      {
+        title: '商品名称',
+        dataIndex: 'goodsname',
+        key: 'goodsname',
+        width: '20%',
+      },
+      {
+        title: '日本仓',
+        dataIndex: 'rb',
+        key: 'rb',
+        render: (text, record) => this.renderColumns(text, record, 'rb'),
+      },
+      {
+        title: '韩国仓',
+        dataIndex: 'hg',
+        key: 'hg',
+        render: (text, record) => this.renderColumns(text, record, 'hg'),
+      },
+      {
+        title: '国际仓',
+        dataIndex: 'gj',
+        key: 'gj',
+        render: (text, record) => this.renderColumns(text, record, 'gj'),
+      },{
+        title: '操作',
         dataIndex: 'operate',
         key: 'operate',
-        // width: '13%',
-        render: (text, record) =>
-          <div>
-            <h3>条码：{record.barcode}<br/>商品名：{record.goodsname}</h3>
-            <span>日本仓：{record.rb}</span><br/>
-            <span>韩国仓：{record.hg}</span><br/>
-            <span>国际仓：{record.gj}</span><br/>
-            <Link to={`/goods/info/nummod/${record.barcode}`}>编辑</Link>
-          </div>
+        width: '13%',
+        render: (text, record) => {
+          const { editable } = record;
+          return (
+              <div className={styles.editableRowOperations}>
+                {
+                  editable ?
+                    <span>
+                  <a onClick={() => this.save(record.barcode)}>保存</a>
+                    <a onClick={() => this.cancel(record.barcode)}>取消</a>
+                </span>
+                    : <a onClick={() => this.edit(record.barcode)} >编辑</a>
+                }
+              </div>
+          );
+        },
       }];
+
     return(
       <div>
         <Card>
@@ -346,18 +297,6 @@ export default class GoodsList extends Component {
           </Form>
         </Card>
         <Card className={styles.mT10}>
-          {/*<List*/}
-            {/*itemLayout="horizontal"*/}
-            {/*dataSource={this.state.listGoods}*/}
-            {/*renderItem={item => (*/}
-              {/*<List.Item>*/}
-                {/*<List.Item.Meta*/}
-                  {/*title={<h5>条码：{item.barcode} 订单号：{item.goodsname}</h5>}*/}
-                  {/*description={<span>日本仓:{item.rb}<br/> 韩国仓:{item.hg}<br/> 国际仓:{item.gj}</span>}*/}
-                {/*/>*/}
-              {/*</List.Item>*/}
-            {/*)}*/}
-          {/*/>*/}
           <Table dataSource={this.state.listGoods}
                  columns={columns}
                  pagination={this.state.pagination}

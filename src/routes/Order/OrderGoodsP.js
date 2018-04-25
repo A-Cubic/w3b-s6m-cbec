@@ -103,36 +103,63 @@ export default class OrderGoodsP extends Component {
       payload: params,
     });
   }
-
+  handleInfiniteOnLoad = () => {
+    let data = this.state.data;
+    this.setState({
+      loading: true,
+    });
+    if (data.length > 14) {
+      message.warning('Infinite List loaded all');
+      this.setState({
+        hasMore: false,
+        loading: false,
+      });
+      return;
+    }
+    this.getData((res) => {
+      data = data.concat(res.results);
+      this.setState({
+        data,
+        loading: false,
+      });
+    });
+  }
 
   render(){
     const { getFieldDecorator } = this.props.form;
     const { order: { goodsList, pagination }, submitting }  = this.props;
     const columns = [
-      {
-        title: '订单编号',
-        dataIndex: 'merchantOrderId',
-        key: 'merchantOrderId',
-      },
-      {
-        title: '条码',
-        dataIndex: 'barCode',
-        key: 'barCode',
-      },
-      {
-        title: '售价',
-        dataIndex: 'skuUnitPrice',
-        key: 'skuUnitPrice',
-      },
-      {
-        title: '数量',
-        dataIndex: 'quantity',
-        key: 'quantity',
-      },
+      // {
+      //   title: '订单编号',
+      //   dataIndex: 'merchantOrderId',
+      //   key: 'merchantOrderId',
+      // },
+      // {
+      //   title: '条码',
+      //   dataIndex: 'barCode',
+      //   key: 'barCode',
+      // },
+      // {
+      //   title: '售价',
+      //   dataIndex: 'skuUnitPrice',
+      //   key: 'skuUnitPrice',
+      // },
+      // {
+      //   title: '数量',
+      //   dataIndex: 'quantity',
+      //   key: 'quantity',
+      // },
       {
         title: '商品名',
         dataIndex: 'skuBillName',
         key: 'skuBillName',
+        render: (text, record) =>
+          <div>
+            <span>商品名：{record.skuBillName}</span><br/>
+            <span>售价：￥{record.skuUnitPrice}</span>
+            <span>佣金：￥{record.skuUnitPrice}</span><br/>
+            <span>数量：{record.quantity}</span><br/>
+          </div>
       }
     ];
 
@@ -143,6 +170,7 @@ export default class OrderGoodsP extends Component {
       </Card>
          <Card className={styles.mT10}>
           <Table dataSource={goodsList}
+                 showHeader={false}
                  columns={columns}
                  pagination={pagination}
                  rowKey={record => record.id}

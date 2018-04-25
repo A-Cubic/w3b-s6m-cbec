@@ -224,6 +224,9 @@ export const getRouterData = (app) => {
     '/goods/info/num': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsNum')),
     },
+    '/goods/info/nummod/:id': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsNumMod')),
+    },
     '/goods/info/mod/:id': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsMod')),
     },

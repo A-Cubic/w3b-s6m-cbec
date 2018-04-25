@@ -397,6 +397,12 @@ export async function getGoodsNum(params) {
     body: params,
   });
 }
+export async function getGoodsNumByBarcode(params) {
+  return request(`${apiUrl}/llback/goods/numbybarcode`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function getSellNum(params) {
   return request(`${apiUrl}/llback/goods/getsellnum`, {
     method: 'POST',

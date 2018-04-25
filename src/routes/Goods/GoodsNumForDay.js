@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import { Input, Button,Table,Card,Form,Row, Col,DatePicker ,Select } from 'antd';
 import styles from '../../utils/utils.less'
+import moment from 'moment';
 const { Option } = Select;
 const { RangePicker, MonthPicker } = DatePicker;
 
@@ -18,6 +19,7 @@ const formItemLayout = {
     sm: { span: 18 },
   }
 };
+const monthFormat = 'YYYY/MM';
 
 
 @connect(({ goods, loading }) => ({
@@ -156,34 +158,11 @@ export default class GoodsList extends Component {
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <FormItem {...formItemLayout} label ='开始时间'>
                   {getFieldDecorator('times')(
-                    <RangePicker
-                      format="YYYY-MM-DD"
-                      dateRender={(current) => {
-                        const style = {};
-                        if (current.date() === 1) {
-                          style.border = '1px solid #1890ff';
-                          style.borderRadius = '50%';
-                        }
-                        return (
-                          <div className="ant-calendar-date" style={style}>
-                            {current.date()}
-                          </div>
-                        );
-                      }}
-                    />
+                    <MonthPicker defaultValue={moment('2015/01', monthFormat)}   format={monthFormat}/>
                   ) }
                 </FormItem>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <FormItem
-                {...formItemLayout}
-                label ='查询信息'
-              >
-                {getFieldDecorator('search')(
-                  <Input  placeholder="请输入商品条码，商品名称" />)
-                }
-              </FormItem>
-              </Col>
+
               <Col span={4}><Button type="primary"
                                     className={styles.submit}
                                     htmlType="submit">搜索</Button></Col>

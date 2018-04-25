@@ -11,6 +11,8 @@ export default {
     goodsList:[],
     Account:[],
     totalPrice:"",
+    total:"",
+    totalyj:"",
   },
 
   effects: {
@@ -66,7 +68,9 @@ export default {
     queryList(state, action) {
       return {
         ...state,
-        ...action.payload,
+        total: action.payload.total,
+        totalyj: action.payload.totalyj,
+        list:action.payload.listOrder.list,
       };
     },
     goods(state, action) {
