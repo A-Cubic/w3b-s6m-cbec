@@ -367,6 +367,7 @@ export default class GoodsList extends Component {
                  onChange={this.handleStandardTableChange}
                  loading={submitting}
                  size="small"
+                 showHeader={false}
                  // scroll={{x: 500 }}
           />
         </Card>
