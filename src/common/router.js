@@ -198,7 +198,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListS')),
     },
     '/account/order-w': {
-      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListW')),
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListWH')),
     },
     '/account/list-p': {
       component: dynamicWrapper(app, ['order'], () => import('../routes/Order/AccountP')),
@@ -213,7 +213,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsS')),
     },
     '/account/ordergoods-w/:id': {
-      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsW')),
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsWH')),
     },
     '/goods/info/add': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/UploadGoods')),

@@ -24,12 +24,12 @@ const formItemLayout = {
 
 @connect(({ order, loading }) => ({
   order,
-  submitting: loading.effects['order/listp'],
+  submitting: loading.effects['order/listw'],
 }))
 
 @Form.create()
 
-export default class OrderListP extends Component {
+export default class OrderListWH extends Component {
   state = {
     formValues: {
     },
@@ -44,7 +44,7 @@ export default class OrderListP extends Component {
     const { formValues, pagination } = this.state;
 
     this.props.dispatch({
-      type: 'order/listp',
+      type: 'order/listw',
       payload: {
         ...formValues,
         ...pagination,
@@ -68,7 +68,7 @@ export default class OrderListP extends Component {
       });
       console.log(values);
       dispatch({
-        type: 'order/listp',
+        type: 'order/listw',
         payload: {
           ...values,
           ...pagination,
@@ -99,7 +99,7 @@ export default class OrderListP extends Component {
     }
 
     dispatch({
-      type: 'order/listp',
+      type: 'order/listw',
       payload: params,
     });
   }
@@ -110,7 +110,7 @@ export default class OrderListP extends Component {
 
     console.log(e.target.value);
     dispatch({
-      type: 'order/listp',
+      type: 'order/listw',
       payload: {
         status:e.target.value,
         ...pagination,
@@ -166,7 +166,7 @@ export default class OrderListP extends Component {
             <span>订单金额：￥{record.goodsTotalAmount}</span><br/>
             <span>佣金金额：￥{record.yjsum}</span><br/>
             <span>订单状态：{record.status}</span><br/>
-            <Link to={`/account/ordergoods-p/${record.merchantOrderId}`}>查看订单商品</Link>
+            <Link to={`/account/ordergoods-w/${record.merchantOrderId}`}>查看订单商品</Link>
           </div>
       }];
     return(
@@ -203,7 +203,7 @@ export default class OrderListP extends Component {
           {/*</Form>*/}
         {/*</Card>*/}
         <Card className={styles.mT10}>
-          <h3>总金额：￥{total}  总佣金：￥{totalyj}</h3>
+          <h3>订单总金额：￥{total}</h3>
           <Table dataSource={list}
                  columns={columns}
                  pagination={pagination}

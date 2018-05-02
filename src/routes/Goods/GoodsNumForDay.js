@@ -19,7 +19,7 @@ const formItemLayout = {
     sm: { span: 18 },
   }
 };
-const monthFormat = 'YYYY/MM';
+const monthFormat = 'YYYY-MM';
 
 
 @connect(({ goods, loading }) => ({
@@ -148,9 +148,11 @@ export default class GoodsList extends Component {
                   {getFieldDecorator('whid',{rules: [{ required: true, message: '请选择仓库' }]})(
                     <Select   placeholder='请选择仓库' style={{ width: '100%' }} >
                       <Option value='all'>全部仓库</Option>
-                      <Option value='15'>日本仓库</Option>
-                      <Option value='16'>韩国仓库</Option>
-                      <Option value='17'>国际仓库</Option>
+                      <Option value='HG_RC'>韩国仁川仓</Option>
+                      <Option value='RB_DB'>日本大阪仓(自营)</Option>
+                      <Option value='RB_GJ'>日本国际仓(自营)</Option>
+                      <Option value='HG_SE'>韩国首尔仓(自营)</Option>
+                      <Option value='HG_GJ'>韩国国际仓(自营)</Option>
                     </Select>
                   )}
                 </FormItem>
@@ -158,7 +160,7 @@ export default class GoodsList extends Component {
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <FormItem {...formItemLayout} label ='开始时间'>
                   {getFieldDecorator('times')(
-                    <MonthPicker defaultValue={moment('2015/01', monthFormat)}   format={monthFormat}/>
+                    <MonthPicker   format={monthFormat}/>
                   ) }
                 </FormItem>
               </Col>

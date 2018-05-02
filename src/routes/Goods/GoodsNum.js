@@ -324,9 +324,11 @@ export default class GoodsList extends Component {
                   {getFieldDecorator('warehouse',{rules: [{ required: true, message: '请选择仓库' }]})(
                     <Select  defaultValue='all' placeholder='请选择仓库' style={{ width: '100%' }} >
                       <Option value='all'>全部仓库</Option>
-                      <Option value='15'>日本仓库</Option>
-                      <Option value='16'>韩国仓库</Option>
-                      <Option value='17'>国际仓库</Option>
+                      <Option value='HG_RC'>韩国仁川仓</Option>
+                      <Option value='RB_DB'>日本大阪仓(自营)</Option>
+                      <Option value='RB_GJ'>日本国际仓(自营)</Option>
+                      <Option value='HG_SE'>韩国首尔仓(自营)</Option>
+                      <Option value='HG_GJ'>韩国国际仓(自营)</Option>
                     </Select>
                   )}
                 </FormItem>
