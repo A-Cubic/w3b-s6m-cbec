@@ -14,6 +14,7 @@ const noProxy = process.env.NO_PROXY === 'true';
 const service_url =  'http://api.llwell.net/';// http://api.llwell.net/  http://localhost:9999/
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
+  // ...
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
     $desc: '获取当前用户接口',
@@ -31,7 +32,8 @@ const proxy = {
     },
   },
   // GET POST 可省略
-  'GET /api/users': [{
+  'GET /api/users': [
+    {
     key: '1',
     name: 'John Brown',
     age: 32,
@@ -46,7 +48,8 @@ const proxy = {
     name: 'Joe Black',
     age: 32,
     address: 'Sidney No. 1 Lake Park',
-  }],
+  }
+  ],
   'GET /api/project/notice': getNotice,
   'GET /api/activities': getActivities,
   'GET /api/rule': getRule,
