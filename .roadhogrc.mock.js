@@ -197,12 +197,16 @@ const proxy = {
   'POST /llback/goods/operate/update': service_url,
   'POST /llback/goods/operate/goodsbyid': service_url,
   'POST /llback/goods/goodsnum': service_url,
+  'POST /llback/goods/numbybarcode': service_url,
   'POST /llback/goods/updategoodsnum': service_url,
   'POST /llback/goods/getsellnum': service_url,
   'POST /llback/order/list': service_url,
   'POST /llback/order/listofwarehouse': service_url,
   'POST /llback/order/goods': service_url,
   'POST /llback/order/account': service_url,
+  'POST /llback/daigou/ticketlist': service_url,
+  'POST /llback/daigou/ticket': service_url,
+  'POST /llback/daigou/updateStatus': service_url,
 };
 
 

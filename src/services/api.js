@@ -461,3 +461,24 @@ export async function getAccount(params) {
     body: params,
   });
 }
+
+///////////////////////////////////////////////////////////////////////////////// 代购  部分/////////////////////////////////////////////////////////////////////////
+
+export async function getTicketList(params) {
+  return request(`${apiUrl}/llback/daigou/ticketlist`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function getTicketForCode(params) {
+  return request(`${apiUrl}/llback/daigou/ticket`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function updateTicketStatus(params) {
+  return request(`${apiUrl}/llback/daigou/updateStatus`, {
+    method: 'POST',
+    body: params,
+  });
+}

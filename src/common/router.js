@@ -266,6 +266,12 @@ export const getRouterData = (app) => {
     '/trade/order-o/info/:id': {
       component: dynamicWrapper(app, ['purchaseOperate'], () => import('../routes/Purorder/PurDetailsOfOperate')),
     },
+    '/daigou/ticket': {
+      component: dynamicWrapper(app, ['daigou'], () => import('../routes/Daigou/TicketList')),
+    },
+    '/daigou/ticketmod/:id': {
+      component: dynamicWrapper(app, ['daigou'], () => import('../routes/Daigou/TicketMod')),
+    },
   };
   // const menuData = getFlatMenuData(getMenuData());
 
