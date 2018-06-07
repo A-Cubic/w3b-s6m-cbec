@@ -35,7 +35,6 @@ export default {
       }
     },
   },
-
   reducers: {
     queryList(state, action) {
       return {
