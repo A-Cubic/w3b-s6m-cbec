@@ -8,11 +8,11 @@ import { getToken ,getAuthority} from '../../utils/Global';
 
 const FormItem = Form.Item;
 
- const b2bstatus = ['已下架', '已上架'];
+const b2bstatus = ['已下架', '已上架'];
 const formItemLayout = {
 	labelCol: {
 		xs: { span: 24 },
-		sm: { span: 8 },
+		sm: { span: 6 },
 	},
 	wrapperCol: {
 		xs: { span: 24 },
@@ -194,9 +194,8 @@ export default class QuoteList extends Component {
 			<div>
 				<Card>
           <Form onSubmit={this.handleSubmit}>
-					<Row>
 							<Row>
-                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                <Col xs={24} sm={12} md={8} lg={8} xl={8}>
 									<FormItem
 									{...formItemLayout}
 									  label ='商品条码'
@@ -206,7 +205,7 @@ export default class QuoteList extends Component {
 									}
 									</FormItem>
 								</Col>
-								<Col xs={24} sm={24} md={8} lg={8} xl={8}>
+								<Col xs={24} sm={12} md={8} lg={8} xl={8}>
 									<FormItem
 									{...formItemLayout}
 									  label ='商品名称'
@@ -216,19 +215,17 @@ export default class QuoteList extends Component {
 									}
 									</FormItem>
 								</Col>
-                <Col span={2}></Col>
-                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-                  <Button type="primary"
-                          className={styles.submit}
-                          htmlType="submit">搜索</Button>
+                <Col xs={24} sm={24} md={5} lg={5} xl={5}>
+                  <div style={{ overflow: 'hidden' }}>
+                  <span style={{ float: 'right', marginBottom: 24, marginTop: 4}}>
+                    <Button type="primary" htmlType="submit">搜索</Button>
+                    <Button type="primary" ghost style={{ marginLeft: 8 }} onClick={()=>{
+                      this.props.dispatch(routerRedux.push('/goods/quote/add'));
+                    }}>新增报价</Button>
+                  </span>
+                  </div>
                 </Col>
 							</Row>
-
-					</Row>
-					<Row>
-						<Col span={20}></Col>
-
-					</Row>
         </Form>
 				</Card>
 				<Card className={styles.mT10}>
