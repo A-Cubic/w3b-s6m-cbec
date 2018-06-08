@@ -477,7 +477,7 @@ export async function getTicketForCode(params) {
   });
 }
 export async function updateTicketStatus(params) {
-  return request(`$/llback/Ticket/UpdateStatus`, {
+  return request(`/llback/Ticket/UpdateStatus`, {
     method: 'POST',
     body: params,
   });
