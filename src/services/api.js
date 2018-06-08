@@ -465,19 +465,19 @@ export async function getAccount(params) {
 ///////////////////////////////////////////////////////////////////////////////// 代购  部分/////////////////////////////////////////////////////////////////////////
 
 export async function getTicketList(params) {
-  return request(`${apiUrl}/llback/Ticket/TicketList`, {
+  return request(`/llback/Ticket/TicketList`, {
     method: 'POST',
     body: params,
   });
 }
 export async function getTicketForCode(params) {
-  return request(`${apiUrl}/llback/Ticket/Ticket`, {
+  return request(`/llback/Ticket/Ticket`, {
     method: 'POST',
     body: params,
   });
 }
 export async function updateTicketStatus(params) {
-  return request(`${apiUrl}/llback/Ticket/UpdateStatus`, {
+  return request(`$/llback/Ticket/UpdateStatus`, {
     method: 'POST',
     body: params,
   });
