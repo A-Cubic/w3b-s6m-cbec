@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link, withRouter } from 'dva/router';
-import { Input, Button, notification,Table,Card,Form,Row, Col,Divider,Switch  } from 'antd';
+import { Input,Select,TreeSelect, Button, notification,Table,Card,Form,Row, Col,Divider,Switch  } from 'antd';
 import styles from '../../utils/utils.less'
 import { getToken ,getAuthority} from '../../utils/Global';
 
-
+const Option = Select.Option;
 const FormItem = Form.Item;
-
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 4 },
+    sm: { span: 8 },
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 18 },
+    sm: { span: 16 },
   }
 };
 
@@ -30,6 +29,7 @@ const formItemLayout = {
 
 export default class GoodsList extends Component {
   state = {
+    treeValue:undefined,
     formValues: {
     },
     pagination: {
@@ -65,7 +65,7 @@ export default class GoodsList extends Component {
       this.setState({
         formValues: values,
       });
-      console.log(values);
+      // console.log(values);
       dispatch({
         type: 'goods/list',
         payload: {
@@ -186,6 +186,11 @@ export default class GoodsList extends Component {
         key: 'goodsname',
       },
       {
+        title: '是否有效',
+        dataIndex: 'effective',
+        key: 'effective',
+      },
+      {
         title: '',
         dataIndex: 'operate1',
         key: 'operate1',
@@ -213,27 +218,78 @@ export default class GoodsList extends Component {
         render:(text, record)=>
           <div>
             <Link to={`/goods/info/mod/${record.id}`}>编辑</Link>
-
           </div>
-
       }];
-
+    const treeData = [{
+      label: 'Node1',
+      value: '0-0',
+      key: '0-0',
+      children: [{
+        label: 'Child Node1',
+        value: '0-0-1',
+        key: '0-0-1',
+      }, {
+        label: 'Child Node2',
+        value: '0-0-2',
+        key: '0-0-2',
+      }],
+    }, {
+      label: 'Node2',
+      value: '0-1',
+      key: '0-1',
+    }];
     return(
       <div>
         <Card>
           <Form onSubmit={this.handleSubmit}>
-            <Row>
-              <Col span={20}> <FormItem
-                {...formItemLayout}
-                label ='查询信息'
-              >
-                {getFieldDecorator('search')(
-                  <Input  placeholder="请输入商品条码，商品名称或品牌名" />)
-                }
-              </FormItem></Col>
-              <Col span={4}><Button type="primary"
-                                    className={styles.submit}
-                                    htmlType="submit">搜索</Button></Col>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={7} sm={24}>
+                <FormItem label="查询信息" {...formItemLayout}>
+                  {getFieldDecorator('search')(
+                    <Input placeholder="请输入商品条码，名称或品牌名" />
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={7} sm={24}>
+                <FormItem label="商品分类" {...formItemLayout}>
+                  {getFieldDecorator('classify')(
+                    <TreeSelect
+                      // style={{ width: 300 }}
+                      value={this.state.treeValue}
+                      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                      treeData={treeData}
+                      placeholder="请选择分类"
+                      treeDefaultExpandAll
+                      // onChange={this.onChange}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={7} sm={24}>
+                <FormItem label="是否有效" {...formItemLayout}>
+                  {getFieldDecorator('effective')(
+                    <Select
+                      placeholder="请选择"
+                      optionFilterProp="label"
+                      // onChange={this.onSelectChange}
+                    >
+                      <Option value="0">无效</Option>
+                      <Option value="1">有效</Option>
+                      {/* {brandsData.map(val => <Option key={val.id} value={val.id} label={val.name}>{val.name}</Option>)} */}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col  md={3} sm={24}>
+                <Button type="primary" style={{marginTop:4}}
+              htmlType="submit">搜索</Button>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col >
+                <Button type="primary" >批量导入</Button>
+                <Button type="primary" ghost style={{marginLeft:8}}>下载导入模板</Button>
+              </Col>
             </Row>
           </Form>
         </Card>

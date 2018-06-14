@@ -272,6 +272,10 @@ export const getRouterData = (app) => {
     '/daigou/ticketmod/:id': {
       component: dynamicWrapper(app, ['daigou'], () => import('../routes/Daigou/TicketMod')),
     },
+
+    '/o2o/untreatedOrder': {
+      component: dynamicWrapper(app, [], () => import('../routes/O2O/untreatedOrder')),
+    },
   };
   // const menuData = getFlatMenuData(getMenuData());
 
