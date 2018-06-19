@@ -36,7 +36,7 @@ export default {
     },
     *orderCheck({ payload }, { call, put }) {
       const response = yield call(getO2OCheck, payload);
-      console.log('response',response)
+      // console.log('response',response)
       if (response !== undefined) {
         yield put({
           type: 'orderCheckR',
@@ -55,7 +55,7 @@ export default {
       };
     },
     orderCheckR(state, action) {
-      console.log('madel',action.payload)
+      // console.log('madel',action.payload)
       return {
         ...state,
         ModalUnteratedOrderdata:action.payload,

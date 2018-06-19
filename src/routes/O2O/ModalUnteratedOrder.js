@@ -75,6 +75,7 @@ export default class ModalUnteratedOrder extends React.PureComponent {
       <div>
         <Modal
           width={ '100%' }
+          style={{maxWidth:1500}}
           cancelText="关闭"
           title="查看订单详细信息"
 

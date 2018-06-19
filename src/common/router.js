@@ -276,6 +276,12 @@ export const getRouterData = (app) => {
     '/o2o/untreatedOrder': {
       component: dynamicWrapper(app, ['o2o'], () => import('../routes/O2O/untreatedOrder')),
     },
+    '/o2o/completedOrder': {
+      component: dynamicWrapper(app, ['o2o'], () => import('../routes/O2O/completeOrder')),
+    },
+    '/o2o/processedOrder': {
+      component: dynamicWrapper(app, ['o2o'], () => import('../routes/O2O/processedOrder')),
+    },
   };
   // const menuData = getFlatMenuData(getMenuData());
 
