@@ -274,7 +274,7 @@ export const getRouterData = (app) => {
     },
 
     '/o2o/untreatedOrder': {
-      component: dynamicWrapper(app, [], () => import('../routes/O2O/untreatedOrder')),
+      component: dynamicWrapper(app, ['o2o'], () => import('../routes/O2O/untreatedOrder')),
     },
   };
   // const menuData = getFlatMenuData(getMenuData());

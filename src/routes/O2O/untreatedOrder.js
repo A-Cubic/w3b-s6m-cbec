@@ -5,31 +5,78 @@ import { Input,Button,Table,Card,Form,Row,Col,Select,Pagination,Badge,notificati
 import ModalUnteratedOrder from './ModalUnteratedOrder';
 import styles from './untreatedOrder.less';
 import moment from 'moment';
-import { getToken } from '../../utils/Global';
-const { RangePicker, MonthPicker } = DatePicker;
+const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
-
 const FormItem = Form.Item;
-@connect(({SubjectManagementModel,  loading }) => ({
-  SubjectManagementModel,
-  // loading:loading.effects['SubjectManagementModel/fetchAlertManageProjectClassificationTable'],
-  // tableLoading:loading.effects['SubjectManagementModel/fetchSubjectManagementTable']
-  loading: loading.models.SubjectManagementModel,
+@connect(({o2o,  loading }) => ({
+  o2o,
+  loading: loading.effects['o2o/list'],
 }))
+
 @Form.create()
 export default class untreatedOrder extends Component {
   state={
     visible: false,
     formValues:{}
   }
-  handleVisible = (flag) => {
+  init(){
+    this.props.dispatch({
+      type: 'o2o/list',
+      payload: {
+        status:'新订单',
+      },
+    });
+  }
+  componentDidMount() {
+    this.init();
+  }
+  onSearch=(e)=>{
+    e.preventDefault();
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('values',fieldsValue)
 
+      if (err) return;
+      const rangeValue = fieldsValue['date'];
+      const values = rangeValue==undefined ? {
+        ...fieldsValue,
+      }:{
+        ...fieldsValue,
+        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+      };
+
+      this.setState({
+        formValues: values,
+      });
+      this.props.dispatch({
+        type: 'o2o/list',
+        payload: {
+          status:'新订单',
+          ...values,
+        },
+      });
+    });
+
+
+  }
+  handleFormReset =()=>{
+    this.props.form.resetFields();
+    this.init();
+  }
+  handleVisible = (flag) => {
     this.setState({
       visible:!!flag,
     });
   }
-  onSearch=(e)=>{
-    e.preventDefault();
+  handleChildrenCheck =(record)=>{
+    this.props.dispatch({
+      type: 'o2o/orderCheck',
+      payload: {
+        orderId:record.merchantOrderId,
+      },
+    });
+    setTimeout(()=>{
+      this.handleVisible(true);
+    },0)
   }
   renderAdvancedForm(){
     const { getFieldDecorator } = this.props.form;
@@ -38,7 +85,9 @@ export default class untreatedOrder extends Component {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="店铺名">
-              {getFieldDecorator('shop')(
+              {getFieldDecorator('shopId',{
+                initialValue :'S005'
+              })(
                 <Select
                   placeholder="请选择"
                   optionFilterProp="label"
@@ -52,7 +101,7 @@ export default class untreatedOrder extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="仓库">
-              {getFieldDecorator('warehouse')(
+              {getFieldDecorator('wcode')(
                 <Select
                   placeholder="请选择"
                   optionFilterProp="label"
@@ -68,7 +117,7 @@ export default class untreatedOrder extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="订单号">
-              {getFieldDecorator('orderNumber')(
+              {getFieldDecorator('orderId')(
                 <Input placeholder="请输入" />
               )}
             </FormItem>
@@ -76,27 +125,27 @@ export default class untreatedOrder extends Component {
 
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="订单状态">
-              {getFieldDecorator('orderStatus')(
-                <Select
-                  placeholder="请选择"
-                  optionFilterProp="label"
-                  // onChange={this.onSelectChange}
-                >
-                  <Option value="新订单">新订单</Option>
-                  <Option value="已导出">已导出</Option>
-                  <Option value="已录运单号">已录运单号</Option>
-                  <Option value="已完成">已完成</Option>
-                  {/* {brandsData.map(val => <Option key={val.id} value={val.id} label={val.name}>{val.name}</Option>)} */}
-                </Select>
-              )}
-            </FormItem>
-          </Col>
+          {/*<Col md={8} sm={24} style={{display:'none'}}>*/}
+            {/*<FormItem label="订单状态">*/}
+              {/*{getFieldDecorator('status')(*/}
+                {/*<Select*/}
+                  {/*placeholder="请选择"*/}
+                  {/*optionFilterProp="label"*/}
+                  {/*// onChange={this.onSelectChange}*/}
+                {/*>*/}
+                  {/*<Option value="新订单">新订单</Option>*/}
+                  {/*<Option value="已导出">已导出</Option>*/}
+                  {/*<Option value="已录运单号">已录运单号</Option>*/}
+                  {/*<Option value="已完成">已完成</Option>*/}
+                  {/*/!* {brandsData.map(val => <Option key={val.id} value={val.id} label={val.name}>{val.name}</Option>)} *!/*/}
+                {/*</Select>*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
           <Col md={8} sm={24}>
             <FormItem label="时段">
               {getFieldDecorator('date')(
-                <RangePicker style={{ width: '100%' }} placeholder={['起始时间', '终止时间']} />
+                <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
             </FormItem>
           </Col>
@@ -113,6 +162,8 @@ export default class untreatedOrder extends Component {
     );
   }
   render() {
+    // console.log('1',this.props)
+    const { o2o:{list, pagination} } = this.props;
     const dataSource = [
       {
       key: '1',
@@ -138,25 +189,25 @@ export default class untreatedOrder extends Component {
       key: 'status',
     }, {
       title: '订单号',
-      dataIndex: 'orderNumber',
-      key: 'orderNumber',
+      dataIndex: 'merchantOrderId',
+      key: 'merchantOrderId',
     }, {
       title: '运单号',
-      dataIndex: 'waybillNumber',
-      key: 'waybillNumber',
+      dataIndex: 'waybillno',
+      key: 'waybillno',
     }, {
       title: '下单时间',
-      dataIndex: 'orderTime',
-      key: 'orderTime',
+      dataIndex: 'tradeTime',
+      key: 'tradeTime',
     }, {
       title: '收件人姓名',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'consigneeName',
+      key: 'consigneeName',
     },{
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
-        render: (val,record) => <a href="javascript:;" onClick={()=>this.handleVisible(true)}>查看</a>
+        render: (val,record) => <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>查看</a>
       }
     ];
     const {visible} = this.state;
@@ -174,9 +225,10 @@ export default class untreatedOrder extends Component {
           </div>
         </Card>
         <Card className={styles.mT10}>
-          <Table dataSource={dataSource}
+          <Table dataSource={list}
+                 rowKey={record => record.id}
                  columns={columns}
-                 // pagination={pagination}
+                 pagination={pagination}
                  // rowKey={record => record.id}
                  // loading={submitting}
           />

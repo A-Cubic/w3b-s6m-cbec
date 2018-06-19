@@ -6,19 +6,15 @@ const apiUrl = process.env.NODE_ENV === 'development' ? '' : 'http://api.llwell.
 export function getCurrentUrl(oriUrl) {
   return `${apiUrl}${oriUrl}`;
 }
-
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
-
 export async function queryActivities() {
   return request('/api/activities');
 }
-
 export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);
 }
-
 export async function removeRule(params) {
   return request('/api/rule', {
     method: 'POST',
@@ -28,7 +24,6 @@ export async function removeRule(params) {
     },
   });
 }
-
 export async function addRule(params) {
   return request('/api/rule', {
     method: 'POST',
@@ -38,57 +33,46 @@ export async function addRule(params) {
     },
   });
 }
-
 export async function fakeSubmitForm(params) {
   return request('/api/forms', {
     method: 'POST',
     body: params,
   });
 }
-
 export async function fakeChartData() {
   return request('/api/fake_chart_data');
 }
-
 export async function queryTags() {
   return request('/api/tags');
 }
-
 export async function queryBasicProfile() {
   return request('/api/profile/basic');
 }
-
 export async function queryAdvancedProfile() {
   return request('/api/profile/advanced');
 }
-
 export async function queryFakeList(params) {
   return request(`/api/fake_list?${stringify(params)}`);
 }
-
 export async function fakeRegister(params) {
   return request('/api/register', {
     method: 'POST',
     body: params,
   });
 }
-
 export async function queryNotices() {
   return request('/api/notices');
 }
-
 export async function getNotices() {
   return request(`${apiUrl}/llback/user/message/list`, {
     method: 'POST',
   });
 }
-
 export async function getMenu() {
   return request(`${apiUrl}/llback/user/menu`, {
     method: 'POST',
   });
 }
-
 export async function realAccountLogin(params) {
   return request(`${apiUrl}/llback/user/validate`, {
     method: 'POST',
@@ -120,27 +104,23 @@ export async function realRenameSubmit(params) {
     body: params,
   });
 }
-
 export async function realRegisterUpload(params) {
   return request(`${apiUrl}/llback/user/register/upload`, {
     method: 'POST',
     body: params,
   });
 }
-
 export async function realRegisterStatus() {
   return request(`${apiUrl}/llback/user/register/status`, {
     method: 'POST',
   });
 }
-
 export async function realRegisterCheck(params) {
     return request(`${apiUrl}/llback/user/register/check`, {
       method: 'POST',
       body: params,
     });
 }
-
 export async function getRegisterCheckUsers(params) {
   return request(`${apiUrl}/llback/user/member/pagelist`, {
     method: 'POST',
@@ -154,14 +134,12 @@ export async function getMemberInfoList(params) {
     body: params,
   });
 }
-
 export async function updateUserStatus(params) {
   return request(`${apiUrl}/llback/user/member/update/status`, {
     method: 'POST',
     body: params,
   });
 }
-
 export async function getMemberInfoDetails(params) {
   return request(`${apiUrl}/llback/user/member/info/details`, {
     method: 'POST',
@@ -197,42 +175,36 @@ export async function getPurOrderListOfOperate(params) {
     body: params,
   });
 }
-
 export async function getPurGoodsListOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/operate/goods`, {
     method: 'POST',
     body: params,
   });
 }
-
 export async function getPurInfoDetailsOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/operate/info/details`, {
     method: 'POST',
     body: params,
   });
 }
-
 export async function updateFeeOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/operate/update/fee`, {
     method: 'POST',
     body: params,
   });
 }
-
 export async function updatePriceOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/operate/update/price`, {
     method: 'POST',
     body: params,
   });
 }
-
 export async function supplyListOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/operate/supply/list`, {
     method: 'POST',
     body: params,
   });
 }
-
 export async function updateSupplyFlagOfOperate(params) {
   return request(`${apiUrl}/llback/purchase/operate/supply/flag`, {
     method: 'POST',
@@ -478,6 +450,22 @@ export async function getTicketForCode(params) {
 }
 export async function updateTicketStatus(params) {
   return request(`/llback/Ticket/UpdateStatus`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+///////////////////////////////////////////////////////////////////////////////// O2O  部分/////////////////////////////////////////////////////////////////////////
+//待处理订单
+export async function getO2OList(params) {
+  return request('/llback/O2O/O2OOrderList', {
+    method: 'POST',
+    body: params,
+  });
+}
+//查看订单详情
+export async function getO2OCheck(params) {
+  return request('/llback/O2O/O2OOrder', {
     method: 'POST',
     body: params,
   });

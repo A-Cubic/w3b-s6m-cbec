@@ -212,6 +212,10 @@ const proxy = {
   'POST /llback/Ticket/TicketList': service_url2,
   'POST /llback/Ticket/Ticket': service_url2,
   'POST /llback/Ticket/UpdateStatus': service_url2,
+
+  //O2O
+  'POST /llback/O2O/O2OOrderList': service_url2,
+  'POST /llback/O2O/O2OOrder': service_url2,
 };
 
 
