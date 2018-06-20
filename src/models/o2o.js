@@ -19,7 +19,7 @@ export default {
       addrCity:'',
       addrDistrict:'',
       addrDetail:'',
-      o2oOrderGoods:[],
+      OrderGoods:[],
 
     }
   },

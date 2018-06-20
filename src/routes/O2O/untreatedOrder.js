@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
 import ModalUnteratedOrder from './ModalUnteratedOrder';
 import styles from './untreatedOrder.less';
 import moment from 'moment';
@@ -78,8 +78,33 @@ export default class untreatedOrder extends Component {
       this.handleVisible(true);
     },0)
   }
+  handleUploadChange=(info)=>{
+    console.log('info',info)
+    let fileList = info.fileList;
+
+
+    fileList = fileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response.url;
+      }
+      return file;
+    });
+
+      if (info.file.response) {
+        console.log('file.response',info.file.response)
+      }else{
+        console.log('上传失败')
+      }
+
+  }
   renderAdvancedForm(){
     const { getFieldDecorator } = this.props.form;
+    const props = {
+      action: '//jsonplaceholder.typicode.com/posts/',
+      onChange: this.handleUploadChange,
+      multiple: false,
+    };
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -155,7 +180,12 @@ export default class untreatedOrder extends Component {
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
             <Button style={{ marginLeft: 8 }} >导出订单</Button>
-            <Button style={{ marginLeft: 8 }} >导入运单</Button>
+            {/*<Button style={{ marginLeft: 8 }} >导入运单</Button>*/}
+            <Upload {...props} fileList={this.state.fileList}>
+              <Button style={{ marginLeft: 8 }}>
+                <Icon type="upload" /> 导入运单
+              </Button>
+            </Upload>
           </span>
         </div>
       </Form>

@@ -145,7 +145,7 @@ export default class ModalUnteratedOrder extends React.PureComponent {
             </div>
             <Table columns={columns}
                    rowKey={record => record.id}
-                   dataSource={ModalUnteratedOrderdata.o2oOrderGoods}
+                   dataSource={ModalUnteratedOrderdata.OrderGoods}
                    pagination={false}
                    />
           </div>
