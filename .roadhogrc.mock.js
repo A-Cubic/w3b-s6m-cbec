@@ -216,6 +216,7 @@ const proxy = {
   //O2O
   'POST /llback/O2O/O2OOrderList': service_url2,
   'POST /llback/O2O/O2OOrder': service_url2,
+  'POST /llback/O2O/UploadOrder': 'http://192.168.0.109:51186/',
 };
 
 

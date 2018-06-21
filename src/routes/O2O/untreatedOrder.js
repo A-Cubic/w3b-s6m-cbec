@@ -5,6 +5,7 @@ import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,not
 import ModalUnteratedOrder from './ModalUnteratedOrder';
 import styles from './untreatedOrder.less';
 import moment from 'moment';
+import { getCurrentUrl } from '../../services/api'
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -100,8 +101,10 @@ export default class untreatedOrder extends Component {
   }
   renderAdvancedForm(){
     const { getFieldDecorator } = this.props.form;
+    // const url = getCurrentUrl('/llback/user/validate');
+    const url = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
     const props = {
-      action: '//jsonplaceholder.typicode.com/posts/',
+      action: url,
       onChange: this.handleUploadChange,
       multiple: false,
     };
@@ -181,11 +184,20 @@ export default class untreatedOrder extends Component {
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
             <Button style={{ marginLeft: 8 }} >导出订单</Button>
             {/*<Button style={{ marginLeft: 8 }} >导入运单</Button>*/}
+
+
+
+            <FormItem label="">
+              {getFieldDecorator('upload')(
+
+
             <Upload {...props} fileList={this.state.fileList}>
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="upload" /> 导入运单
               </Button>
             </Upload>
+              )}
+            </FormItem>
           </span>
         </div>
       </Form>
