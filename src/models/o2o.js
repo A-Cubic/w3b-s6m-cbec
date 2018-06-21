@@ -1,4 +1,4 @@
-import { getO2OList,getO2OCheck  } from '../services/api';
+import {getO2OList, getO2OCheck, importUpload} from '../services/api';
 
 export default {
   namespace: 'o2o',
@@ -42,6 +42,15 @@ export default {
           type: 'orderCheckR',
           payload: response,
         });
+      }
+    },
+    *upload({payload, callback}, { call, put }) {
+      const response = yield call(importUpload, payload);
+      if (response === undefined) {
+
+      } else {
+
+        callback(response);
       }
     },
 

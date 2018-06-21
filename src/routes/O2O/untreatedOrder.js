@@ -17,6 +17,7 @@ const FormItem = Form.Item;
 @Form.create()
 export default class untreatedOrder extends Component {
   state={
+    fileList:[],
     visible: false,
     formValues:{}
   }
@@ -82,22 +83,35 @@ export default class untreatedOrder extends Component {
   handleUploadChange=(info)=>{
     console.log('info',info)
     let fileList = info.fileList;
+    this.setState({
+      fileList:info.fileList
+    })
 
-
-    fileList = fileList.map((file) => {
-      if (file.response) {
-        // Component will show file.url as link
-        file.url = file.response.url;
-      }
-      return file;
+    this.props.dispatch({
+      type: 'o2o/upload',
+      payload: {
+        fileList:info.fileList
+      },
+      callback: this.onUploadCallback,
     });
-
-      if (info.file.response) {
-        console.log('file.response',info.file.response)
-      }else{
-        console.log('上传失败')
-      }
-
+      this.setState({
+        fileList:[]
+      })
+  }
+  upload=(file)=>{}
+  onUploadCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      notification.error({
+        message: "提示",
+        description: msg,
+      });
+    }else {
+      notification.success({
+        message: "提示",
+        description: msg,
+      });
+    }
   }
   renderAdvancedForm(){
     const { getFieldDecorator } = this.props.form;
@@ -105,8 +119,11 @@ export default class untreatedOrder extends Component {
     const url = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
     const props = {
       action: url,
+      listType: 'picture',
+      // accept:'image/*',
       onChange: this.handleUploadChange,
       multiple: false,
+      customRequest:this.upload,
     };
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -187,17 +204,13 @@ export default class untreatedOrder extends Component {
 
 
 
-            <FormItem label="">
-              {getFieldDecorator('upload')(
-
 
             <Upload {...props} fileList={this.state.fileList}>
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="upload" /> 导入运单
               </Button>
             </Upload>
-              )}
-            </FormItem>
+
           </span>
         </div>
       </Form>

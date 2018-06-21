@@ -471,5 +471,10 @@ export async function getO2OCheck(params) {
   });
 }
 
-//上传
-
+//导入上传
+export async function importUpload(params) {
+  return request(`/llback/O2O/UploadOrder`, {
+    method: 'POST',
+    body: params,
+  });
+}
