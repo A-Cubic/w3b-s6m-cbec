@@ -219,7 +219,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/UploadGoods')),
     },
     '/goods/info/list': {
-      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsList')),
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAbout')),
     },
     '/goods/info/num': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsNum')),
