@@ -356,7 +356,25 @@ export async function insertOfferOfSupplier(params) {
 }
 ///////////////////////////////////////////////////////////////////////////////// 商品报价 部分  end/////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////// 商品 部分  begin/////////////////////////////////////////////////////////////////////////
-
+export async function getBrandData(params) {
+  return request(`/llback/Goods/GetBrand`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function getWareHouseData(params) {
+  return request(`/llback/Goods/GetWareHouse`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function getGoodsList(params) {
+  return request(`/llback/goods/operate/list`, {
+    method: 'POST',
+    body: params,
+  });
+}
+//==以上为新 以下为旧商品
 export async function getGoodsListOfOperate(params) {
   return request(`${apiUrl}/llback/goods/operate/list`, {
     method: 'POST',

@@ -2,30 +2,38 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-// import ModalUnteratedOrder from './ModalUnteratedOrder';
+import ModalGoodsAboutEdit from './ModalGoodsAboutEdit';
 import styles from './GoodsAbout.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../services/api'
+import {getToken} from "../../utils/Global";
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
-@connect(({o2o,  loading }) => ({
-  o2o,
-  loading: loading.effects['o2o/list'],
+const userId = getToken().userId;
+@connect(({goods,  loading }) => ({
+  goods,
+  loading: loading.effects['goods/goodslist'],
 }))
 
 @Form.create()
-export default class untreatedOrder extends Component {
+export default class GoodsAbout extends Component {
   state={
     fileList:[],
-    visible: false,
+    visible: true,
     formValues:{}
   }
   init(){
     this.props.dispatch({
-      type: 'o2o/list',
+      type: 'goods/getBrand',
       payload: {
-        status:'新订单',
+        userId:userId,
+      },
+    });
+    this.props.dispatch({
+      type: 'goods/getWareHouse',
+      payload: {
+        userId:userId,
       },
     });
   }
@@ -62,24 +70,14 @@ export default class untreatedOrder extends Component {
   }
   handleFormReset =()=>{
     this.props.form.resetFields();
-    this.init();
+    // this.init();
   }
   handleVisible = (flag) => {
     this.setState({
       visible:!!flag,
     });
   }
-  handleChildrenCheck =(record)=>{
-    this.props.dispatch({
-      type: 'o2o/orderCheck',
-      payload: {
-        orderId:record.merchantOrderId,
-      },
-    });
-    setTimeout(()=>{
-      this.handleVisible(true);
-    },0)
-  }
+
   handleUploadChange=(info)=>{
     console.log('info',info)
     let fileList = info.fileList;
@@ -114,6 +112,7 @@ export default class untreatedOrder extends Component {
     }
   }
   renderAdvancedForm(){
+    const { goods:{list, pagination,brandData,wareHouseData} } = this.props;
     const { getFieldDecorator } = this.props.form;
     // const url = getCurrentUrl('/llback/user/validate');
     const url = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
@@ -130,9 +129,7 @@ export default class untreatedOrder extends Component {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="状态">
-              {getFieldDecorator('status',{
-                initialValue :''
-              })(
+              {getFieldDecorator('status')(
                 <Select
                   placeholder="请选择"
                   optionFilterProp="label"
@@ -155,10 +152,10 @@ export default class untreatedOrder extends Component {
                   optionFilterProp="label"
                   // onChange={this.onSelectChange}
                 >
-                  <Option value="重庆仓库">重庆仓库</Option>
-                  <Option value="香港仓库">香港仓库</Option>
-                  <Option value="青岛仓库">青岛仓库</Option>
-                  {/* {brandsData.map(val => <Option key={val.id} value={val.id} label={val.name}>{val.name}</Option>)} */}
+                  {/*<Option value="重庆仓库">重庆仓库</Option>*/}
+                  {/*<Option value="香港仓库">香港仓库</Option>*/}
+                  {/*<Option value="青岛仓库">青岛仓库</Option>*/}
+                   {wareHouseData.map(val => <Option key={val.wid} value={val.wcode} label={val.wname}>{val.wname}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -181,8 +178,8 @@ export default class untreatedOrder extends Component {
                   optionFilterProp="label"
                   // onChange={this.onSelectChange}
                 >
-                  <Option value="品牌1">品牌1</Option>
-                  {/* {brandsData.map(val => <Option key={val.id} value={val.id} label={val.name}>{val.name}</Option>)} */}
+                  {/*<Option value="品牌1">品牌1</Option>*/}
+                   {brandData.map(val => <Option key={val.brand} value={val.brand} label={val.brand}>{val.brand}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -204,6 +201,8 @@ export default class untreatedOrder extends Component {
             <Button style={{ marginLeft: 8 }} type="primary" ghost>批量修改库存</Button>
             <Button style={{ marginLeft: 8 }} type="primary" ghost>下载库存模板</Button>
             <Button style={{ marginLeft: 8 }} type="primary" ghost>下载商品模板</Button>
+            <Button style={{ marginLeft: 8 }} type="primary" ghost>上传图片Zip包</Button>
+            <Button style={{ marginLeft: 8 }} type="primary" ghost>Zip包示例下载</Button>
           </span>
           <span style={{ float: 'right', marginBottom: 0 }}>
             <Button type="primary" htmlType="submit">查询</Button>
@@ -223,7 +222,7 @@ export default class untreatedOrder extends Component {
   }
   render() {
     // console.log('1',this.props)
-    const { o2o:{list, pagination} } = this.props;
+    const { goods:{list, pagination,brandData} } = this.props;
     const dataSource = [
       {
       key: '1',
@@ -328,6 +327,9 @@ export default class untreatedOrder extends Component {
                  // loading={submitting}
           />
         </Card>
+        <ModalGoodsAboutEdit
+          parent = {parent}
+        />
       </div>
     );
   }

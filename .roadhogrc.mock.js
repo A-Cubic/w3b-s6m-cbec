@@ -198,7 +198,11 @@ const proxy = {
   'POST /llback/goods/supplier/offerbyid': service_url,
   'POST /llback/goods/supplier/list': service_url,
   'POST /llback/goods/supplier/offer': service_url,
-  'POST /llback/goods/operate/list': service_url,
+  // 'POST /llback/goods/operate/list': service_url,
+  'POST /llback/goods/operate/list': {list:[],pagination:{}},
+  'POST /llback/Goods/GetBrand': [{brand:'BBLab'},{brand:'ANELLO'}],
+  'POST /llback/Goods/GetWareHouse': [{wid:'3',wcode:"CQ",wname: "重庆仓库"},{wid:'6',wcode:"XG",wname: "香港仓库"}],
+
   'POST /llback/goods/operate/update': service_url,
   'POST /llback/goods/operate/goodsbyid': service_url,
   'POST /llback/goods/goodsnum': service_url,
