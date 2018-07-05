@@ -374,6 +374,12 @@ export async function getGoodsList(params) {
     body: params,
   });
 }
+export async function getWareHouseList(params) {
+  return request(`/llback/Goods/GetWareHouseList`, {
+    method: 'POST',
+    body: params,
+  });
+}
 //==以上为新 以下为旧商品
 export async function getGoodsListOfOperate(params) {
   return request(`${apiUrl}/llback/goods/operate/list`, {
