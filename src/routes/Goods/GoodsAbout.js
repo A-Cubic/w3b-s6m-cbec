@@ -21,6 +21,7 @@ export default class GoodsAbout extends Component {
   state={
     fileList1:[],
     fileList2:[],
+    fileList3:[],
     visible: false,
     formValues:{}
   }
@@ -95,23 +96,59 @@ export default class GoodsAbout extends Component {
       payload: params,
     });
   }
-  handleUploadChange=(info)=>{
+  handleUploadChange1=(info)=>{
     console.log('info',info)
     let fileList = info.fileList;
     this.setState({
-      fileList:info.fileList
+      fileList1:info.fileList
     })
 
     this.props.dispatch({
       type: 'o2o/upload',
       payload: {
-        fileList:info.fileList
+        fileList1:info.fileList
       },
       callback: this.onUploadCallback,
     });
-      this.setState({
-        fileList:[]
-      })
+    this.setState({
+      fileList1:[]
+    })
+  }
+  handleUploadChange2=(info)=>{
+    console.log('info',info)
+    let fileList2 = info.fileList;
+    this.setState({
+      fileList2:info.fileList
+    })
+
+    this.props.dispatch({
+      type: 'o2o/upload',
+      payload: {
+        fileList2:info.fileList
+      },
+      callback: this.onUploadCallback,
+    });
+    this.setState({
+      fileList2:[]
+    })
+  }
+  handleUploadChange3=(info)=>{
+    console.log('info',info)
+    let fileList3 = info.fileList;
+    this.setState({
+      fileList3:info.fileList
+    })
+
+    this.props.dispatch({
+      type: 'o2o/upload',
+      payload: {
+        fileList3:info.fileList
+      },
+      callback: this.onUploadCallback,
+    });
+    this.setState({
+      fileList3:[]
+    })
   }
   upload=(file)=>{}
   onUploadCallback = (params) => {
@@ -132,20 +169,30 @@ export default class GoodsAbout extends Component {
     const { goods:{list, pagination,brandData,wareHouseData} } = this.props;
     const { getFieldDecorator } = this.props.form;
     // const url = getCurrentUrl('/llback/user/validate');
-    const url = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
+    const url1 = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
+    const url2 = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
+    const url3 = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
     const props1 = {
-      action: url,
+      action: url1,
       listType: 'picture',
       // accept:'image/*',
-      onChange: this.handleUploadChange,
+      onChange: this.handleUploadChange1,
       multiple: false,
       customRequest:this.upload,
     };
     const props2 = {
-      action: url,
+      action: url2,
       listType: 'picture',
       // accept:'image/*',
-      onChange: this.handleUploadChange,
+      onChange: this.handleUploadChange2,
+      multiple: false,
+      customRequest:this.upload,
+    };
+    const props3 = {
+      action: url3,
+      listType: 'picture',
+      // accept:'image/*',
+      onChange: this.handleUploadChange3,
       multiple: false,
       customRequest:this.upload,
     };
@@ -221,24 +268,21 @@ export default class GoodsAbout extends Component {
 
         </Row>
         <div style={{ overflow: 'hidden' }}>
-          <span style={{ float: 'left', marginBottom: 0,  }} className={styles.aaa}>
+          <span style={{ float: 'left', marginBottom: 0,  }} >
             <span>
-            <Upload {...props1} fileList={this.state.fileList1} >
-
-
-
+            <Upload {...props1} fileList={this.state.fileList1} className={styles.upload}>
               <Button style={{ marginLeft: 8 }} type="primary" ghost>批量新增商品</Button>
             </Upload>
             </span>
-            <Upload {...props2} fileList={this.state.fileList2}>
+            <Upload {...props2} fileList={this.state.fileList2} className={styles.upload}>
               <Button style={{ marginLeft: 8 }} type="primary" ghost>批量修改库存</Button>
             </Upload>
-            <Button style={{ marginLeft: 8 }} type="primary" ghost>下载库存模板</Button>
-            <Button style={{ marginLeft: 8 }} type="primary" ghost>下载商品模板</Button>
-            <Upload {...props2} fileList={this.state.fileList2}>
+            <Button style={{ marginLeft: 8 }} type="primary" ghost onClick={this.downloadStoreTemp}>下载库存模板</Button>
+            <Button style={{ marginLeft: 8 }} type="primary" ghost onClick={this.downloadGoodsTemp}>下载商品模板</Button>
+            <Upload {...props3} fileList={this.state.fileList3} className={styles.upload}>
               <Button style={{ marginLeft: 8 }} type="primary" ghost>上传图片Zip包</Button>
             </Upload>
-            <Button style={{ marginLeft: 8 }} type="primary" ghost>Zip包示例下载</Button>
+            <Button style={{ marginLeft: 8 }} type="primary" ghost onClick={this.downloadPicZip}>Zip包示例下载</Button>
           </span>
           <span style={{ float: 'right', marginBottom: 0 }}>
             <Button type="primary" htmlType="submit">查询</Button>
@@ -256,6 +300,31 @@ export default class GoodsAbout extends Component {
       </Form>
     );
   }
+  downloadStoreTemp=()=>{
+    this.props.dispatch({
+      type: 'goods/downloadStoreTemp',
+      payload: {
+        userId:userId,
+      },
+    })
+  }
+  downloadGoodsTemp=()=>{
+    this.props.dispatch({
+      type: 'goods/downloadGoodsTemp',
+      payload: {
+        userId:userId,
+      },
+    })
+  }
+  downloadPicZip=()=>{
+    this.props.dispatch({
+      type: 'goods/downloadPicZip',
+      payload: {
+        userId:userId,
+      },
+    })
+  }
+
   render() {
     // console.log('1',this.props)
     const { goods:{list, pagination,brandData} } = this.props;

@@ -201,6 +201,17 @@ const proxy = {
   'POST /llback/Goods/GetGoodsList': service_url2,
   'POST /llback/Goods/GetBrand': service_url2,
   'POST /llback/Goods/GetWareHouse': service_url2,
+  'POST /llback/Goods/GetWareHouseList': service_url2,
+  'POST /llback/Goods/downloadStoreTempUrl': {
+    url:'https://github.com/llwell/API-SERVER/issues/11'
+  },
+  'POST /llback/Goods/downloadGoodsTempUrl': {
+    url:'https://github.com/llwell/API-SERVER/issues/11'
+  },
+  'POST /llback/Goods/downloadPicZipUrl': {
+    url:'https://github.com/llwell/API-SERVER/issues/11'
+  },
+
   // 'POST /llback/goods/operate/list': service_url,
 
   // 'POST /llback/Goods/GetGoodsList': {

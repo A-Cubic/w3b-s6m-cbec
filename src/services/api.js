@@ -374,6 +374,25 @@ export async function getGoodsList(params) {
     body: params,
   });
 }
+export async function downloadStoreTempUrl(params) {
+  return request(`/llback/Goods/downloadStoreTempUrl`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function downloadGoodsTempUrl(params) {
+  return request(`/llback/Goods/downloadGoodsTempUrl`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function downloadPicZipUrl(params) {
+  return request(`/llback/Goods/downloadPicZipUrl`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function getWareHouseList(params) {
   return request(`/llback/Goods/GetWareHouseList`, {
     method: 'POST',

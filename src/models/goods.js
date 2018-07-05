@@ -1,8 +1,10 @@
 // import {
 //   getGoodsListOfOperate, updateGoodsOfOperate, getGoodsById, getGoodsNum, updateGoodsNum, getSellNum, getGoodsNumByBarcode
 // } from '../services/api';
+import { message} from 'antd';
+import {notification} from "antd/lib/index";
 import {
-  getGoodsList,getBrandData,getWareHouseData
+  getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl
 } from '../services/api';
 export default {
   namespace: 'goods',
@@ -44,7 +46,45 @@ export default {
         });
       }
     },
-
+    *downloadStoreTemp({ payload, callback }, { call, put }) {
+      const response = yield call(downloadStoreTempUrl, payload);
+      console.log(response);
+      if (response !== undefined) {
+        message.success('导出成功');
+        let downloadUrl = response.url;
+        window.location.href = downloadUrl;
+      }else{
+        notification.error({
+          message: response.error,
+        });
+      }
+    },
+    *downloadGoodsTemp({ payload, callback }, { call, put }) {
+      const response = yield call(downloadGoodsTempUrl, payload);
+      console.log(response);
+      if (response !== undefined) {
+        message.success('导出成功');
+        let downloadUrl = response.url;
+        window.location.href = downloadUrl;
+      }else{
+        notification.error({
+          message: response.error,
+        });
+      }
+    },
+    *downloadPicZip({ payload, callback }, { call, put }) {
+      const response = yield call(downloadPicZipUrl, payload);
+      console.log(response);
+      if (response !== undefined) {
+        message.success('导出成功');
+        let downloadUrl = response.url;
+        window.location.href = downloadUrl;
+      }else{
+        notification.error({
+          message: response.error,
+        });
+      }
+    },
 
 
     // *list({ payload }, { call, put }) {
