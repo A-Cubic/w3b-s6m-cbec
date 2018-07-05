@@ -27,7 +27,6 @@ export default {
     },
     *getWareHouse({ payload },{ call,put}){
       const response = yield call(getWareHouseData, payload);
-      console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getWareHouseR',
@@ -37,7 +36,7 @@ export default {
     },
     *goodslist({ payload },{ call,put}){
       const response = yield call(getGoodsList, payload);
-      console.log('~',response)
+      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'goodslistR',

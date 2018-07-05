@@ -369,7 +369,7 @@ export async function getWareHouseData(params) {
   });
 }
 export async function getGoodsList(params) {
-  return request(`/llback/goods/operate/list`, {
+  return request(`/llback/Goods/GetGoodsList`, {
     method: 'POST',
     body: params,
   });

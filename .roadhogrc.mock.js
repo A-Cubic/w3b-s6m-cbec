@@ -198,10 +198,32 @@ const proxy = {
   'POST /llback/goods/supplier/offerbyid': service_url,
   'POST /llback/goods/supplier/list': service_url,
   'POST /llback/goods/supplier/offer': service_url,
+  'POST /llback/Goods/GetGoodsList': service_url2,
+  'POST /llback/Goods/GetBrand': service_url2,
+  'POST /llback/Goods/GetWareHouse': service_url2,
   // 'POST /llback/goods/operate/list': service_url,
-  'POST /llback/goods/operate/list': {list:[],pagination:{}},
-  'POST /llback/Goods/GetBrand': [{brand:'BBLab'},{brand:'ANELLO'}],
-  'POST /llback/Goods/GetWareHouse': [{wid:'3',wcode:"CQ",wname: "重庆仓库"},{wid:'6',wcode:"XG",wname: "香港仓库"}],
+  // 'POST /llback/Goods/GetGoodsList': {
+  //   list:[{
+  //     id: "412",
+  //     brand: "品牌1",
+  //     goodsName: "Platinum Label 化妆水 1000ml",
+  //     barcode: "4549549770754",
+  //     slt: "http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4549549770754_cp_1.jpg",
+  //     source: "日本",
+  //     wname: "青岛仓库",
+  //     goodsnum: "959",
+  //     flag: "1",
+  //     week: 0,
+  //     month: 0,
+  //     status: "0"
+  //   }],pagination:{
+  //     current: 1,
+  //     total: 0,
+  //     pageSize: 10
+  //   }
+  //   },
+  // 'POST /llback/Goods/GetBrand': [{brand:'BBLab'},{brand:'ANELLO'}],
+  // 'POST /llback/Goods/GetWareHouse': [{wid:'3',wcode:"CQ",wname: "重庆仓库"},{wid:'6',wcode:"XG",wname: "香港仓库"}],
 
   'POST /llback/goods/operate/update': service_url,
   'POST /llback/goods/operate/goodsbyid': service_url,

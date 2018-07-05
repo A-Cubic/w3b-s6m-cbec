@@ -19,8 +19,9 @@ const userId = getToken().userId;
 @Form.create()
 export default class GoodsAbout extends Component {
   state={
-    fileList:[],
-    visible: true,
+    fileList1:[],
+    fileList2:[],
+    visible: false,
     formValues:{}
   }
   init(){
@@ -36,6 +37,12 @@ export default class GoodsAbout extends Component {
         userId:userId,
       },
     });
+    this.props.dispatch({
+      type: 'goods/goodslist',
+      payload: {
+        userId:userId,
+      },
+    });
   }
   componentDidMount() {
     this.init();
@@ -43,24 +50,20 @@ export default class GoodsAbout extends Component {
   onSearch=(e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
+      console.log('values',fieldsValue)
 
       if (err) return;
-      const rangeValue = fieldsValue['date'];
-      const values = rangeValue==undefined ? {
+      const values = {
         ...fieldsValue,
-      }:{
-        ...fieldsValue,
-        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
-      };
+      }
 
       this.setState({
         formValues: values,
       });
       this.props.dispatch({
-        type: 'o2o/list',
+        type: 'goods/goodslist',
         payload: {
-          status:'新订单',
+          userId:userId,
           ...values,
         },
       });
@@ -77,7 +80,21 @@ export default class GoodsAbout extends Component {
       visible:!!flag,
     });
   }
-
+  handleEdit=()=>{
+    this.handleVisible(true);
+  }
+  handleTableChange=(pagination, filtersArg, sorter)=>{
+    const params = {
+      ...pagination,
+      ...this.state.formValues,
+      userId:userId,
+    };
+    // console.log('params',params)
+    this.props.dispatch({
+      type: 'goods/goodslist',
+      payload: params,
+    });
+  }
   handleUploadChange=(info)=>{
     console.log('info',info)
     let fileList = info.fileList;
@@ -116,7 +133,15 @@ export default class GoodsAbout extends Component {
     const { getFieldDecorator } = this.props.form;
     // const url = getCurrentUrl('/llback/user/validate');
     const url = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
-    const props = {
+    const props1 = {
+      action: url,
+      listType: 'picture',
+      // accept:'image/*',
+      onChange: this.handleUploadChange,
+      multiple: false,
+      customRequest:this.upload,
+    };
+    const props2 = {
       action: url,
       listType: 'picture',
       // accept:'image/*',
@@ -146,7 +171,7 @@ export default class GoodsAbout extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="所属仓库">
-              {getFieldDecorator('wcode')(
+              {getFieldDecorator('wid')(
                 <Select
                   placeholder="请选择"
                   optionFilterProp="label"
@@ -155,14 +180,14 @@ export default class GoodsAbout extends Component {
                   {/*<Option value="重庆仓库">重庆仓库</Option>*/}
                   {/*<Option value="香港仓库">香港仓库</Option>*/}
                   {/*<Option value="青岛仓库">青岛仓库</Option>*/}
-                   {wareHouseData.map(val => <Option key={val.wid} value={val.wcode} label={val.wname}>{val.wname}</Option>)}
+                   {wareHouseData.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="商品名称">
-              {getFieldDecorator('orderId')(
+              {getFieldDecorator('goodsName')(
                 <Input placeholder="请输入" />
               )}
             </FormItem>
@@ -187,7 +212,7 @@ export default class GoodsAbout extends Component {
 
           <Col md={8} sm={24}>
             <FormItem label="商品编码">
-              {getFieldDecorator('orderId')(
+              {getFieldDecorator('barcode')(
                 <Input placeholder="请输入" />
               )}
             </FormItem>
@@ -196,12 +221,23 @@ export default class GoodsAbout extends Component {
 
         </Row>
         <div style={{ overflow: 'hidden' }}>
-          <span style={{ float: 'left', marginBottom: 0 }}>
-            <Button style={{ marginLeft: 8 }} type="primary" ghost>批量新增商品</Button>
-            <Button style={{ marginLeft: 8 }} type="primary" ghost>批量修改库存</Button>
+          <span style={{ float: 'left', marginBottom: 0,  }} className={styles.aaa}>
+            <span>
+            <Upload {...props1} fileList={this.state.fileList1} >
+
+
+
+              <Button style={{ marginLeft: 8 }} type="primary" ghost>批量新增商品</Button>
+            </Upload>
+            </span>
+            <Upload {...props2} fileList={this.state.fileList2}>
+              <Button style={{ marginLeft: 8 }} type="primary" ghost>批量修改库存</Button>
+            </Upload>
             <Button style={{ marginLeft: 8 }} type="primary" ghost>下载库存模板</Button>
             <Button style={{ marginLeft: 8 }} type="primary" ghost>下载商品模板</Button>
-            <Button style={{ marginLeft: 8 }} type="primary" ghost>上传图片Zip包</Button>
+            <Upload {...props2} fileList={this.state.fileList2}>
+              <Button style={{ marginLeft: 8 }} type="primary" ghost>上传图片Zip包</Button>
+            </Upload>
             <Button style={{ marginLeft: 8 }} type="primary" ghost>Zip包示例下载</Button>
           </span>
           <span style={{ float: 'right', marginBottom: 0 }}>
@@ -223,69 +259,61 @@ export default class GoodsAbout extends Component {
   render() {
     // console.log('1',this.props)
     const { goods:{list, pagination,brandData} } = this.props;
-    const dataSource = [
-      {
-      key: '1',
-      status: '新订单',
-      orderNumber: '12345646',
-      waybillNumber: '415646132',
-      orderTime:'2018-01-12 10:10:10',
-      name:'收件人a'
-    }, {
-      key: '2',
-      status: '新订单',
-      orderNumber: '12345646',
-      waybillNumber: '415646132',
-      orderTime:'2018-01-12 10:10:10',
-      name:'收件人b'
-    }
-    ];
-
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...pagination,
+    };
     const columns = [
       {
       title: '商品图片',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'slt',
+      key: 'slt',
+      render: (val) => (
+          <img src={ val} alt="" width={80} style={{float:'left',marginRight:8}}/>
+      )
     }, {
       title: '名称',
-      dataIndex: 'merchantOrderId',
-      key: 'merchantOrderId',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
     }, {
       title: '条码',
-      dataIndex: 'waybillno',
-      key: 'waybillno',
+      dataIndex: 'barcode',
+      key: 'barcode',
     }, {
       title: '品牌',
-      dataIndex: 'tradeTime',
-      key: 'tradeTime',
+      dataIndex: 'brand',
+      key: 'brand',
     }, {
       title: '产地',
-      dataIndex: 'consigneeName',
-      key: 'consigneeName',
+      dataIndex: 'source',
+      key: 'source',
     },{
         title: '所在仓',
-        dataIndex: 'a',
-        key: 'a',
+        dataIndex: 'wname',
+        key: 'wname',
       },{
         title: '库存',
-        dataIndex: 'b',
-        key: 'b',
-      },{
-        title: '发货方式',
-        dataIndex: 'c',
-        key: 'c',
+        dataIndex: 'goodsnum',
+        key: 'goodsnum',
+
       },{
         title: '商品状态',
-        dataIndex: 'd',
-        key: 'd',
+        dataIndex: 'status',
+        key: 'status',
+        render: (val) => {
+          return(<div>
+            {['正常','申请中','已驳回'][`${val}`]}
+          </div>)
+        }
       },{
         title: '周销',
-        dataIndex: 'e',
-        key: 'e',
+        dataIndex: 'week',
+        key: 'week',
       },{
         title: '月销',
-        dataIndex: 'e',
-        key: 'e',
+        dataIndex: 'month',
+        key: 'month',
       },{
         title: '操作',
         dataIndex: 'operate',
@@ -293,12 +321,17 @@ export default class GoodsAbout extends Component {
         render: (text, record, index) => {
           return (
             <Fragment>
-              <a href="javascript:;" onClick={(e) => this.handleBtnCheckCopy(e, record, index)}>编辑</a><br/>
-              <a href="javascript:;" >{
-                record.status == 0?
-                  <span onClick={(e) => this.handleBtnCheckEdit(e, record, index)}>申请上架</span>:
-                  <span onClick={(e) => this.handleBtnCheckOne(e, record, index)}>申请下架</span>
-              }</a><br/>
+              <a href="javascript:;" onClick={(e) => this.handleEdit(e, record, index)}>编辑</a><br/>
+              {/*<a href="javascript:;" >{*/}
+                {/*record.status == 1?'':(*/}
+                  {/*record.flag == 0?*/}
+                  {/*<span onClick={(e) => this.handleBtnCheckEdit(e, record, index)}>申请上架</span>:*/}
+                  {/*<span onClick={(e) => this.handleBtnCheckOne(e, record, index)}>申请下架</span>*/}
+                {/*)*/}
+              {/*}</a><br/>*/}
+              {/*<a href="javascript:;" >{*/}
+                {/*['正常','申请中','已驳回'][record.status]*/}
+              {/*}</a><br/>*/}
             </Fragment>
           )
         }
@@ -322,8 +355,8 @@ export default class GoodsAbout extends Component {
           <Table dataSource={list}
                  rowKey={record => record.id}
                  columns={columns}
-                 pagination={pagination}
-                 // rowKey={record => record.id}
+                 pagination={paginationProps}
+                 onChange={this.handleTableChange}
                  // loading={submitting}
           />
         </Card>
