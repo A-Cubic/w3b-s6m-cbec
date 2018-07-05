@@ -202,6 +202,7 @@ const proxy = {
   'POST /llback/goods/operate/list': {list:[],pagination:{}},
   'POST /llback/Goods/GetBrand': [{brand:'BBLab'},{brand:'ANELLO'}],
   'POST /llback/Goods/GetWareHouse': [{wid:'3',wcode:"CQ",wname: "重庆仓库"},{wid:'6',wcode:"XG",wname: "香港仓库"}],
+  'POST /llback/Goods/GetWareHouseList': service_url2,
 
   'POST /llback/goods/operate/update': service_url,
   'POST /llback/goods/operate/goodsbyid': service_url,
