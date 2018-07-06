@@ -22,7 +22,7 @@ export default class GoodsAbout extends Component {
     fileList1:[],
     fileList2:[],
     fileList3:[],
-    visible: false,
+    visible: true,
     formValues:{}
   }
   init(){
@@ -166,7 +166,7 @@ export default class GoodsAbout extends Component {
     }
   }
   renderAdvancedForm(){
-    const { goods:{list, pagination,brandData,wareHouseData} } = this.props;
+    const { goods:{goodsTable:{list, pagination},brandData,wareHouseData} } = this.props;
     const { getFieldDecorator } = this.props.form;
     // const url = getCurrentUrl('/llback/user/validate');
     const url1 = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
@@ -327,7 +327,7 @@ export default class GoodsAbout extends Component {
 
   render() {
     // console.log('1',this.props)
-    const { goods:{list, pagination,brandData} } = this.props;
+    const { goods:{goodsTable:{list, pagination},brandData} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

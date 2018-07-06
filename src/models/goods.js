@@ -4,17 +4,28 @@
 import { message} from 'antd';
 import {notification} from "antd/lib/index";
 import {
-  getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl
+  getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl,
+  getWarehouseList
 } from '../services/api';
 export default {
   namespace: 'goods',
 
   state: {
-    list: [],
-    pagination:{},
+    //商品
+    goodsTable:{
+      list: [],
+      pagination:{},
+    },
     brandData:[],
     wareHouseData:[],
-    ModalGoodsAboutEdit:{}
+    ModalGoodsAboutEdit:{},
+    //仓库
+    warehouseTable:{
+      list: [],
+      pagination:{},
+    },
+    //编辑仓库信息
+    ModalwarehouseEdit:{}
   },
 
   effects: {
@@ -82,6 +93,16 @@ export default {
       }else{
         notification.error({
           message: response.error,
+        });
+      }
+    },
+    *warehouseList({ payload },{ call,put}){
+      const response = yield call(getWarehouseList, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'warehouseListR',
+          payload: response,
         });
       }
     },
@@ -162,7 +183,13 @@ export default {
     goodslistR(state, action) {
       return {
         ...state,
-        ...action.payload,
+        goodsTable:action.payload,
+      };
+    },
+    warehouseListR(state, action) {
+      return {
+        ...state,
+        warehouseTable:action.payload,
       };
     },
     save(state, action) {
