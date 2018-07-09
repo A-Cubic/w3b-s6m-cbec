@@ -405,6 +405,13 @@ export async function getWarehouseList(params) {
     body: params,
   });
 }
+//上传step1
+export async function getStep1Upload(params) {
+  return request(`/llback/Goods/downloadPicZipUrl`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 
 

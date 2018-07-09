@@ -5,7 +5,8 @@ import { message} from 'antd';
 import {notification} from "antd/lib/index";
 import {
   getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl,
-  getWarehouseList,getgoodsDetail
+  getWarehouseList,getgoodsDetail,
+  getStep1Upload,
 } from '../services/api';
 export default {
   namespace: 'goods',
@@ -127,6 +128,18 @@ export default {
         });
       }
     },
+
+    *step1Upload({ payload },{ call,put}){
+      const response = yield call(getStep1Upload, payload);
+      console.log('~',response)
+      // if (response !== undefined) {
+      //   yield put({
+      //     type: 'warehouseListR',
+      //     payload: response,
+      //   });
+      // }
+    },
+
 
 
     // *list({ payload }, { call, put }) {
