@@ -55,7 +55,7 @@ export default class ModalGoodsAboutEdit extends React.PureComponent {
             <div style={{marginBottom:32}}>
               <Row style={{marginBottom:10}}>
                 <Col span={10}>
-                  <img style={{border:'1px solid #e8e8e8',width:'96%'}} src="http://llwell-wxapp.oss-cn-beijing.aliyuncs.com/A-test/goodtest.png" alt=""/>
+                  <img style={{border:'1px solid #e8e8e8',width:'96%'}} src={ModalGoodsAboutEdit.slt} alt=""/>
                 </Col>
                 <Col span={11} offset={1}>
                   <div>
@@ -109,7 +109,7 @@ export default class ModalGoodsAboutEdit extends React.PureComponent {
                       <span>{ModalGoodsAboutEdit.goodsnum}</span>
                     </div><div style={divRow}>
                     <label htmlFor="" style={labelWidth}>进价</label>
-                    <span>{ModalGoodsAboutEdit.inprice}</span>
+                    <span>{ModalGoodsAboutEdit.inprice}元</span>
                   </div>
 
                   </div>

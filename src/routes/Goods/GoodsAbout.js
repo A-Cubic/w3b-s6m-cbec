@@ -276,7 +276,7 @@ export default class GoodsAbout extends Component {
 
         </Row>
         <div style={{ overflow: 'hidden' }}>
-          <span style={{ float: 'left', marginBottom: 0,  }} >
+          <span style={{ float: 'left', marginBottom: 0,display:'none'  }} >
             <span>
             <Upload {...props1} fileList={this.state.fileList1} className={styles.upload}>
               <Button style={{ marginLeft: 8 }} type="primary" ghost>批量新增商品</Button>
