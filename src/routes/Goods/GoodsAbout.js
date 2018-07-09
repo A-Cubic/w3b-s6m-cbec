@@ -22,7 +22,7 @@ export default class GoodsAbout extends Component {
     fileList1:[],
     fileList2:[],
     fileList3:[],
-    visible: true,
+    visible: false,
     formValues:{}
   }
   init(){
@@ -81,7 +81,15 @@ export default class GoodsAbout extends Component {
       visible:!!flag,
     });
   }
-  handleEdit=()=>{
+  handleEdit=(e, record, index)=>{
+    // console.log(record)
+    this.props.dispatch({
+      type: 'goods/goodsDetail',
+      payload: {
+        userId:userId,
+        goodsId:record.id,
+      },
+    });
     this.handleVisible(true);
   }
   handleTableChange=(pagination, filtersArg, sorter)=>{
@@ -390,7 +398,7 @@ export default class GoodsAbout extends Component {
         render: (text, record, index) => {
           return (
             <Fragment>
-              <a href="javascript:;" onClick={(e) => this.handleEdit(e, record, index)}>编辑</a><br/>
+              <a href="javascript:;" onClick={(e) => this.handleEdit(e, record, index)}>详情</a><br/>
               {/*<a href="javascript:;" >{*/}
                 {/*record.status == 1?'':(*/}
                   {/*record.flag == 0?*/}

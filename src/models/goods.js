@@ -5,7 +5,7 @@ import { message} from 'antd';
 import {notification} from "antd/lib/index";
 import {
   getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl,
-  getWarehouseList
+  getWarehouseList,getgoodsDetail
 } from '../services/api';
 export default {
   namespace: 'goods',
@@ -25,7 +25,18 @@ export default {
       pagination:{},
     },
     //编辑仓库信息
-    ModalwarehouseEdit:{}
+    ModalwarehouseEdit:{},
+    // 商品入库
+    goodsPutaway:{
+      list: [],
+      pagination:{},
+    },
+    step: {
+      payAccount: 'ant-design@alipay.com',
+      receiverAccount: 'test@example.com',
+      receiverName: 'Alex',
+      amount: '500',
+    },
   },
 
   effects: {
@@ -53,6 +64,16 @@ export default {
       if (response !== undefined) {
         yield put({
           type: 'goodslistR',
+          payload: response,
+        });
+      }
+    },
+    *goodsDetail({ payload },{ call,put}){
+      const response = yield call(getgoodsDetail, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'goodsDetailR',
           payload: response,
         });
       }
@@ -184,6 +205,12 @@ export default {
       return {
         ...state,
         goodsTable:action.payload,
+      };
+    },
+    goodsDetailR(state, action) {
+      return {
+        ...state,
+        ModalGoodsAboutEdit:action.payload,
       };
     },
     warehouseListR(state, action) {

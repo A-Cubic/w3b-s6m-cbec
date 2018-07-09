@@ -374,6 +374,12 @@ export async function getGoodsList(params) {
     body: params,
   });
 }
+export async function getgoodsDetail(params) {
+  return request(`/llback/Goods/GetGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function downloadStoreTempUrl(params) {
   return request(`/llback/Goods/downloadStoreTempUrl`, {
     method: 'POST',

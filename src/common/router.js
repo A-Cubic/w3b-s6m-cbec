@@ -225,7 +225,26 @@ export const getRouterData = (app) => {
     '/goods/warehouse': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/Warehouse')),
     },
-
+    //商品入库
+    '/goods/putaway': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/Putaway')),
+    },
+    //商品入库表单
+    '/goods/step-form': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm')),
+    },
+    '/goods/step-form/info': {
+      // name: '分步表单（填写转账信息）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step1')),
+    },
+    '/goods/step-form/confirm': {
+      // name: '分步表单（确认转账信息）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step2')),
+    },
+    '/goods/step-form/result': {
+      // name: '分步表单（完成）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step3')),
+    },
 
     '/goods/info/num': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsNum')),

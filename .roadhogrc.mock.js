@@ -201,6 +201,7 @@ const proxy = {
   'POST /llback/Goods/GetGoodsList': service_url2,
   'POST /llback/Goods/GetBrand': service_url2,
   'POST /llback/Goods/GetWareHouse': service_url2,
+  'POST /llback/Goods/GetGoods': service_url2,
   // 'POST /llback/Goods/GetWareHouseList': service_url2,
   'POST /llback/Goods/GetWareHouseList': {
       list:[{
