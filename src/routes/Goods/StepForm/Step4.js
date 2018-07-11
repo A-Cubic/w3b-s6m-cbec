@@ -5,57 +5,99 @@ import { routerRedux } from 'dva/router';
 import styles from './style.less';
 
 class Step4 extends React.PureComponent {
-  render() {
+  state={
+    num1:'150',
+    success:false
+  }
+  constructor(props){
+    super(props)
+    this.setState({
+      success:props.match.params.isSuccess
+    })
+  }
+  renderSuccess(){
     const { dispatch, data } = this.props;
-    const onFinish = () => {
-      // dispatch(routerRedux.push('/goods/step-form'));
+    const onPrev = () => {
+      dispatch(routerRedux.push('/goods/putaway'));
     };
-    const information = (
-      <div className={styles.information}>
-        <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            付款账户：
-          </Col>
-          <Col xs={24} sm={16}>
-            {data.payAccount}
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            收款账户：
-          </Col>
-          <Col xs={24} sm={16}>
-            {data.receiverAccount}
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            收款人姓名：
-          </Col>
-          <Col xs={24} sm={16}>
-            {data.receiverName}
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            转账金额：
-          </Col>
-          <Col xs={24} sm={16}>
-            <span className={styles.money}>{data.amount}</span> 元
-          </Col>
-        </Row>
-      </div>
-    );
-    const actions = (
-      <Fragment>
-        <Button type="primary" onClick={onFinish}>
-          再转一笔
-        </Button>
-        <Button>查看账单</Button>
-      </Fragment>
-    );
+    const onValidateForm = e => {
+      e.preventDefault();
+      validateFields((err, values) => {
+        if (!err) {
+          dispatch({
+            type: 'form/submitStepForm',
+            payload: {
+              ...data,
+              ...values,
+            },
+          });
+        }
+      });
+    };
     return (
-      <div>aaa</div>
+
+      <div>
+        <div style={{marginBottom:10}}>
+          恭喜您！<br/>
+          您共上传了{`${this.state.num1}`}个SKU，已审核成功。
+        </div>
+
+        <div style={{marginTop:'30px'}}>
+
+          <Button onClick={onPrev} style={{ marginLeft: 8 }}>
+            返回
+          </Button>
+          <Button style={{marginLeft:8}} type="primary" onClick={onValidateForm} >
+            查看商品列表
+          </Button>
+        </div>
+
+      </div>
+
+    );
+  }
+  renderFail(){
+    const { dispatch, data } = this.props;
+    const onPrev = () => {
+      dispatch(routerRedux.push('/goods/putaway'));
+    };
+    function download() {
+      console.log('下载')
+    }
+    return (
+
+      <div>
+        <div style={{marginBottom:10}}>
+          您共上传了{`${this.state.num1}`}个SKU，其中30个SKU已成功入库，<br/>
+          5个SKU未成功入库的原因是：商品条码有误，请核对后重新上传。
+        </div>
+
+        <div style={{marginTop:'30px'}}>
+
+          <Button onClick={onPrev} style={{ marginLeft: 8 }}>
+            返回
+          </Button>
+          <Button style={{marginLeft:8}} type="primary" onClick={download} >
+          下载入库失败的商品信息
+          </Button>
+        </div>
+
+      </div>
+
+    );
+  }
+  render() {
+    console.log('1',this.props)
+
+    const { dispatch, data } = this.props;
+    const onPrev = () => {
+      dispatch(routerRedux.push('/goods/putaway'));
+    };
+    return (
+        <div style={{textAlign:'center',padding:'30px',maxWidth:'400px',margin:'auto'}}>
+          { this.state.success ? this.renderSuccess() : this.renderFail()}
+        </div>
+
     );
   }
 }

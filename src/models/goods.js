@@ -6,7 +6,7 @@ import {notification} from "antd/lib/index";
 import {
   getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl,
   getWarehouseList,getgoodsDetail,
-  getStep1Upload,
+  getStep1Upload,getGoodsPutaway
 } from '../services/api';
 export default {
   namespace: 'goods',
@@ -28,7 +28,7 @@ export default {
     //编辑仓库信息
     ModalwarehouseEdit:{},
     // 商品入库
-    goodsPutaway:{
+    goodsPutawayTable:{
       list: [],
       pagination:{},
     },
@@ -129,17 +129,23 @@ export default {
       }
     },
 
-    *step1Upload({ payload },{ call,put}){
+    *step1Upload({ payload,callback },{ call,put}){
       const response = yield call(getStep1Upload, payload);
       console.log('~',response)
-      // if (response !== undefined) {
-      //   yield put({
-      //     type: 'warehouseListR',
-      //     payload: response,
-      //   });
-      // }
+      if (response !== undefined) {
+        callback(response)
+      }
     },
-
+    *goodsPutaway({ payload },{ call,put}){
+      const response = yield call(getGoodsPutaway, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'goodsPutawayR',
+          payload: response,
+        });
+      }
+    },
 
 
     // *list({ payload }, { call, put }) {
@@ -242,6 +248,12 @@ export default {
       return {
         ...state,
         ...action.payload,
+      };
+    },
+    goodsPutawayR(state, action) {
+      return {
+        ...state,
+        goodsPutawayTable:action.payload,
       };
     },
   },

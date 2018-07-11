@@ -54,10 +54,34 @@ export default class Warehouse extends Component {
     const { goods:{warehouseTable:{ list, pagination }} } = this.props;
     const columns = [
       {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
+      title: '供应商',
+      dataIndex: 'a',
+      key: 'a',
     }, {
+        title: '所属仓库',
+        dataIndex: 'b',
+        key: 'b',
+      }, {
+        title: '税费',
+        dataIndex: 'c',
+        key: 'c',
+      }, {
+        title: '税费提档类别',
+        dataIndex: 'd',
+        key: 'd',
+      }, {
+        title: '税费提档线',
+        dataIndex: 'e',
+        key: 'e',
+      }, {
+        title: '提档税费',
+        dataIndex: 'f',
+        key: 'f',
+      }, {
+        title: '运费',
+        dataIndex: 'g',
+        key: 'g',
+      }, {
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',

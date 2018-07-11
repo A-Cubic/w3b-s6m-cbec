@@ -24,7 +24,7 @@ export default class GoodsAbout extends Component {
   init(){
 
     this.props.dispatch({
-      type: 'goods/goodslist',
+      type: 'goods/goodsPutaway',
       payload: {
         userId:userId,
       },
@@ -81,37 +81,53 @@ export default class GoodsAbout extends Component {
   onStartUpload=()=>{
     this.props.dispatch(routerRedux.push('/goods/step-form'));
   }
+  handleCheck=(e, record, index)=>{
+    console.log(record);
+    switch (record.status){
+      case '0':
+        console.log(record.status);
+        this.props.dispatch(routerRedux.push('/goods/step-form/confirm'));
+        break;
+      case '1':
+        console.log(record.status);
+        this.props.dispatch(routerRedux.push('/goods/step-form/wait'));
+
+        break;
+      case '2':
+        console.log(record.status);
+        this.props.dispatch(routerRedux.push('/goods/step-form/result/true'));
+        break;
+      case '3' :
+        console.log(record.status);
+        this.props.dispatch(routerRedux.push('/goods/step-form/result/false'));
+        break;
+      default:
+        break;
+    }
+  }
   render() {
 
     // console.log('1',this.props)
-    const { goods:{goodsTable:{list, pagination},brandData} } = this.props;
+    const { goods:{goodsPutawayTable:{list, pagination}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
       ...pagination,
     };
-    const url = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
-    const props = {
-      action: url,
-      listType: 'picture',
-      // accept:'image/*',
-      onChange: this.handleUploadChange,
-      multiple: false,
-      customRequest:this.upload,
-    };
+
     const columns = [
       {
       title: '上传时间',
-      dataIndex: 'slt',
-      key: 'slt',
+      dataIndex: 'uploadTime',
+      key: 'uploadTime',
     }, {
-      title: '入库商品',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
+      title: '入库商品数量',
+      dataIndex: 'uploadNum',
+      key: 'uploadNum',
     }, {
       title: '入库状态',
-      dataIndex: 'barcode',
-      key: 'barcode',
+      dataIndex: 'statusText',
+      key: 'statusText',
       },{
         title: '操作',
         dataIndex: 'operate',
@@ -119,7 +135,7 @@ export default class GoodsAbout extends Component {
         render: (text, record, index) => {
           return (
             <Fragment>
-              <a href="javascript:;" onClick={(e) => this.handleEdit(e, record, index)}>查看详情</a><br/>
+              <a href="javascript:;" onClick={(e) => this.handleCheck(e, record, index)}>查看详情</a><br/>
             </Fragment>
           )
         }

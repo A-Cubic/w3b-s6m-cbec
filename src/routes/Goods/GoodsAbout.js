@@ -392,7 +392,12 @@ export default class GoodsAbout extends Component {
         dataIndex: 'month',
         key: 'month',
       },{
+        title: '供应商',
+        dataIndex: 'supplier',
+        key: 'supplier',
+      },{
         title: '操作',
+        fixed: 'right',
         dataIndex: 'operate',
         key: 'operate',
         render: (text, record, index) => {
@@ -430,6 +435,7 @@ export default class GoodsAbout extends Component {
         </Card>
         <Card className={styles.mT10}>
           <Table dataSource={list}
+                 scroll={{ x: 1500}}
                  rowKey={record => record.id}
                  columns={columns}
                  pagination={paginationProps}

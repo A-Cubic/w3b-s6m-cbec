@@ -399,6 +399,7 @@ export async function downloadPicZipUrl(params) {
     body: params,
   });
 }
+//仓库列表
 export async function getWarehouseList(params) {
   return request(`/llback/Goods/GetWareHouseList`, {
     method: 'POST',
@@ -407,7 +408,14 @@ export async function getWarehouseList(params) {
 }
 //上传step1
 export async function getStep1Upload(params) {
-  return request(`/llback/Goods/downloadPicZipUrl`, {
+  return request(`/llback/Goods/UploadWarehouseGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
+//商品入库
+export async function getGoodsPutaway(params) {
+  return request(`/llback/Goods/UploadList`, {
     method: 'POST',
     body: params,
   });

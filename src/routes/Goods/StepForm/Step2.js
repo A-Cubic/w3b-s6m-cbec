@@ -24,6 +24,9 @@ class Step2 extends React.PureComponent {
     num2:'120',
     num2:'30'
   }
+  componentDidMount() {
+    
+  }
   handleUploadChange=(info)=>{
     console.log('info',info)
     let fileList = info.fileList;
@@ -97,7 +100,7 @@ class Step2 extends React.PureComponent {
       customRequest:this.upload,
     };
     const onPrev = () => {
-      dispatch(routerRedux.push('/goods/step-form'));
+      dispatch(routerRedux.push('/goods/putaway'));
     };
     const onValidateForm = e => {
       e.preventDefault();
@@ -116,20 +119,23 @@ class Step2 extends React.PureComponent {
     };
     return (
       <Form layout="horizontal" className={styles.stepForm}>
-        <div style={{textAlign:'center',padding:'30px',maxWidth:'400px',margin:'auto'}}>
+        <div style={{textAlign:'center',padding:'30px',maxWidth:'800px',margin:'auto'}}>
           <div style={{marginBottom:10}}>
             您成功上传了{`${this.state.num1}`}个SKU，<br/>
             已成功入库120SKU，<br/>
             还有30个新SKU需要上传图片。
           </div>
-          <Button style={{ marginBottom:10 }} type="primary" ghost onClick={this.downloadStoreTemp}>下载需上传图片的SKU列表文件</Button><br/>
-          <Button style={{ marginBottom: 10 }} type="primary" ghost onClick={this.downloadGoodsTemp}>下载商品信息模板</Button><br/>
-          <Upload {...props}>
-            <Button style={{marginBottom:10}} type="primary" ghost>上传商品信息模板</Button>
-          </Upload>
-          <Upload {...props2}>
-            <Button type="primary" ghost>上传商品图片Zip文件</Button>
-          </Upload>
+          <Button style={{ marginBottom:10 }} type="primary" ghost onClick={this.downloadStoreTemp}>下载需上传图片的SKU列表文件</Button>
+          <Button style={{ marginBottom: 10,marginLeft:8 }} type="primary" ghost onClick={this.downloadGoodsTemp}>下载商品信息模板</Button><br/>
+          <div style={{display:'inline-flex'}}>
+            <Upload {...props}>
+              <Button style={{marginBottom:10}} type="primary" ghost>上传商品信息模板</Button>
+            </Upload>
+            <Upload {...props2} style={{marginLeft:8}}>
+              <Button style={{marginBottom:10}} type="primary" ghost>上传商品图片Zip文件</Button>
+            </Upload>
+          </div>
+
           <div style={{marginTop:'30px'}}>
             <Button type="primary" onClick={onValidateForm} loading={submitting}>
               提交入库

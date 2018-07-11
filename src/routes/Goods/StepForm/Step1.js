@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Select,Upload, Divider } from 'antd';
+import { Form,message, Input, Button, Select,Upload, Divider } from 'antd';
 import { routerRedux } from 'dva/router';
 import styles from './style.less';
 import {notification} from "antd/lib/index";
-
+import {getToken} from "../../../utils/Global";
+const userId = getToken().userId;
 const { Option } = Select;
 
 @Form.create()
@@ -34,21 +35,24 @@ class Step1 extends React.PureComponent {
   onUploadCallback = (params) => {
     const msg = params.msg;
     if(params.type==="0"){
-      notification.error({
-        message: "提示",
-        description: msg,
-      });
+      message.error(msg);
+      // notification.error({
+      //   message: "提示",
+      //   description: msg,
+      // });
     }else {
-      notification.success({
-        message: "提示",
-        description: msg,
-      });
+      message.success(msg);
+      // notification.success({
+      //   message: "提示",
+      //   description: msg,
+      // });
+      this.props.dispatch(routerRedux.push('/goods/step-form/confirm'));
     }
   }
   render() {
     const { form, dispatch, data } = this.props;
     const { getFieldDecorator, validateFields } = form;
-    const url = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
+    const url = 'http://api.llwell.net/llback/user/validate'
     const props = {
       action: url,
       listType: 'picture',
@@ -58,22 +62,28 @@ class Step1 extends React.PureComponent {
       customRequest:this.upload,
     };
     const onValidateForm = () => {
-      this.props.dispatch({
-        type: 'goods/step1Upload',
-        payload: {
-          thumbUrl:this.state.thumbUrl
-        },
-        callback: this.onUploadCallback,
-      });
-      validateFields((err, values) => {
-        if (!err) {
-          dispatch({
-            type: 'goods/saveStepFormData',
-            payload: values,
-          });
-          dispatch(routerRedux.push('/goods/step-form/confirm'));
-        }
-      });
+      if(this.state.thumbUrl!==''){
+        this.props.dispatch({
+          type: 'goods/step1Upload',
+          payload: {
+            userId:userId,
+            byte64:this.state.thumbUrl
+          },
+          callback: this.onUploadCallback,
+        });
+      }else{
+        message.warning('请选择需要上传的.xlsx文件')
+      }
+
+      // validateFields((err, values) => {
+      //   if (!err) {
+      //     dispatch({
+      //       type: 'goods/saveStepFormData',
+      //       payload: values,
+      //     });
+      //     dispatch(routerRedux.push('/goods/step-form/confirm'));
+      //   }
+      // });
     };
     return (
       <Fragment>

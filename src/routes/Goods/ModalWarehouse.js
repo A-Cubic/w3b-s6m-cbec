@@ -1,7 +1,18 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Modal, Button, Table, Input, Form, Row, Col, Alert, Badge, Divider, Switch, Menu, Dropdown, Icon, message } from 'antd';
+import { Modal, Button, Table,Select, Input, Form, Row, Col, Alert, Badge, Divider, Switch, Menu, Dropdown, Icon, message } from 'antd';
 import { connect } from 'dva';
 const FormItem = Form.Item;
+const Option = Select.Option;
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 15 },
+  },
+};
 @connect(({ goods, loading }) => ({
   goods,
   loading: loading.effects['goods/warehouseList'],
@@ -13,7 +24,30 @@ export default class ModalUnteratedOrder extends React.PureComponent {
     this.props.parent.handleVisible();
     this.props.form.resetFields();
   }
+  handleOk=(e)=>{
+    e.preventDefault();
+    this.props.form.validateFields((err, fieldsValue) => {
+      console.log('values',fieldsValue)
 
+      // if (err) return;
+      // const values = {
+      //   ...fieldsValue,
+      // }
+      //
+      // this.setState({
+      //   formValues: values,
+      // });
+      // this.props.dispatch({
+      //   type: 'goods/goodslist',
+      //   payload: {
+      //     userId:userId,
+      //     ...values,
+      //   },
+      // });
+    });
+
+
+  }
   render() {
     const {goods:{ModalwarehouseEdit}} = this.props;
     const {getFieldDecorator, validateFields} = this.props.form;
@@ -75,79 +109,125 @@ export default class ModalUnteratedOrder extends React.PureComponent {
       <div>
         <Modal
           width={ '100%' }
-          style={{maxWidth:1500}}
+          style={{maxWidth:1000}}
           cancelText="关闭"
-          title="仓库信息"
+          okText="确认新增"
+          title="仓库基础信息"
 
           visible={this.props.parent.visible}
-          // onOk={this.handleOk}
+          onOk={this.handleOk}
           onCancel={this.handleCancel}
-          footer={[
-            <Button key="back" onClick={this.handleCancel}>关闭</Button>
-          ]}
+          // footer={[
+          //   <Button key="back" onClick={this.handleCancel}>关闭</Button>
+          // ]}
         >
           <div>
-            {/*<div style={{marginBottom:32}}>*/}
-              {/*<Row style={{marginBottom:10}}>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">状态 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.status}</span>*/}
-                {/*</Col>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">订单号 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.merchantOrderId}</span>*/}
-                {/*</Col>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">运单号 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.waybillno}</span>*/}
-                {/*</Col>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">下单时间 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.tradeTime}</span>*/}
-                {/*</Col>*/}
-              {/*</Row>*/}
-              {/*<Row style={{marginBottom:10}}>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">订单总金额 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.tradeAmount}</span>*/}
-                {/*</Col>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">收件人姓名 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.consigneeName}</span>*/}
-                {/*</Col>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">身份证号 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.idNumber}</span>*/}
-                {/*</Col>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">收货人电话 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.consigneeMobile}</span>*/}
-                {/*</Col>*/}
-              {/*</Row>*/}
-              {/*<Row style={{marginBottom:10}}>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">省份 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.addrProvince}</span>*/}
-                {/*</Col>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">城市 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.addrCity}</span>*/}
-                {/*</Col>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">县区 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.addrDistrict}</span>*/}
-                {/*</Col>*/}
-                {/*<Col span={6}>*/}
-                  {/*<label htmlFor="">详细地址 : </label>*/}
-                  {/*<span>{ModalUnteratedOrderdata.addrDetail}</span>*/}
-                {/*</Col>*/}
-              {/*</Row>*/}
-            {/*</div>*/}
-            {/*<Table columns={columns}*/}
-                   {/*rowKey={record => record.id}*/}
-                   {/*dataSource={ModalUnteratedOrderdata.OrderGoods}*/}
-                   {/*pagination={false}*/}
-                   {/*/>*/}
+            <Form>
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+
+                    label="供应商"
+                  >
+                    {getFieldDecorator('a', {
+                      rules: [{ required: true, message: '请输入供应商' }],
+                    })(
+                      <Input placeholder="请输入供应商账号/邮箱/手机号"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="所属仓库"
+                  >
+                    {getFieldDecorator('b', {
+                      rules: [{ required: true, message: '请输入仓库名称' }],
+                    })(
+                      <Input placeholder="请输入仓库名称"/>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="税费（%）"
+                  >
+                    {getFieldDecorator('note', {
+                      rules: [{ required: true, message: '请输入税费' }],
+                    })(
+                      <Input placeholder="请输入税费"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="税费提档类别"
+                  >
+                    {getFieldDecorator('genders',{
+                      initialValue: ['1'],
+                    }, {
+                      rules: [{ required: true, message: '请选择税费提档类别' }],
+                    })(
+                      <Select
+                        placeholder="请选择税费提档类别"
+                        onChange={this.handleSelectChange}
+                      >
+                        <Option value="1">元/克</Option>
+                        <Option value="2">商品总价</Option>
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="税费提档线（¥）"
+                  >
+                    {getFieldDecorator('note', {
+                      rules: [{ required: true, message: '请输入税费提档线' }],
+                    })(
+                      <Input placeholder="请输入税费提档线"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="提挡税费（%）"
+                  >
+                    {getFieldDecorator('gender', {
+                      rules: [{ required: true, message: '请输入提档税费' }],
+                    })(
+                      <Input placeholder="请输入提档税费"/>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="运费（¥）"
+                  >
+                    {getFieldDecorator('note', {
+                      rules: [{ required: true, message: '请输入运费' }],
+                    })(
+                      <Input placeholder="请输入运费"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={11} >
+
+                </Col>
+              </Row>
+            </Form>
           </div>
         </Modal>
       </div>
