@@ -127,10 +127,10 @@ export default class ModalUnteratedOrder extends React.PureComponent {
                 <Col span={11} >
                   <FormItem
                     {...formItemLayout}
-
                     label="供应商"
                   >
-                    {getFieldDecorator('a', {
+                    {getFieldDecorator('supplier', {
+                      initialValue: ModalwarehouseEdit.supplier,
                       rules: [{ required: true, message: '请输入供应商' }],
                     })(
                       <Input placeholder="请输入供应商账号/邮箱/手机号"/>
@@ -142,7 +142,8 @@ export default class ModalUnteratedOrder extends React.PureComponent {
                     {...formItemLayout}
                     label="所属仓库"
                   >
-                    {getFieldDecorator('b', {
+                    {getFieldDecorator('wcode', {
+                      initialValue: ModalwarehouseEdit.wcode,
                       rules: [{ required: true, message: '请输入仓库名称' }],
                     })(
                       <Input placeholder="请输入仓库名称"/>
@@ -154,27 +155,27 @@ export default class ModalUnteratedOrder extends React.PureComponent {
                 <Col span={11} >
                   <FormItem
                     {...formItemLayout}
-                    label="税费（%）"
+                    label="税率（%）"
                   >
-                    {getFieldDecorator('note', {
-                      rules: [{ required: true, message: '请输入税费' }],
+                    {getFieldDecorator('taxation', {
+                      initialValue: ModalwarehouseEdit.taxation,
+                      rules: [{ required: true, message: '请输入税率' }],
                     })(
-                      <Input placeholder="请输入税费"/>
+                      <Input placeholder="请输入税率"/>
                     )}
                   </FormItem>
                 </Col>
                 <Col span={11} >
                   <FormItem
                     {...formItemLayout}
-                    label="税费提档类别"
+                    label="税率提档类别"
                   >
-                    {getFieldDecorator('genders',{
-                      initialValue: ['1'],
-                    }, {
-                      rules: [{ required: true, message: '请选择税费提档类别' }],
+                    {getFieldDecorator('taxation2type',{
+                      initialValue: ModalwarehouseEdit.taxation2type,
+                      rules: [{ required: true, message: '请选择税率提档类别' }],
                     })(
                       <Select
-                        placeholder="请选择税费提档类别"
+                        placeholder="请选择税率提档类别"
                         onChange={this.handleSelectChange}
                       >
                         <Option value="1">元/克</Option>
@@ -188,24 +189,26 @@ export default class ModalUnteratedOrder extends React.PureComponent {
                 <Col span={11} >
                   <FormItem
                     {...formItemLayout}
-                    label="税费提档线（¥）"
+                    label="税率提档线（¥）"
                   >
-                    {getFieldDecorator('note', {
-                      rules: [{ required: true, message: '请输入税费提档线' }],
+                    {getFieldDecorator('taxation2line', {
+                      initialValue: ModalwarehouseEdit.taxation2line,
+                      rules: [{ required: true, message: '请输入税率提档线' }],
                     })(
-                      <Input placeholder="请输入税费提档线"/>
+                      <Input placeholder="请输入税率提档线"/>
                     )}
                   </FormItem>
                 </Col>
                 <Col span={11} >
                   <FormItem
                     {...formItemLayout}
-                    label="提挡税费（%）"
+                    label="提挡税率（%）"
                   >
-                    {getFieldDecorator('gender', {
-                      rules: [{ required: true, message: '请输入提档税费' }],
+                    {getFieldDecorator('taxation2', {
+                      initialValue: ModalwarehouseEdit.taxation2,
+                      rules: [{ required: true, message: '请输入提档税率' }],
                     })(
-                      <Input placeholder="请输入提档税费"/>
+                      <Input placeholder="请输入提档税率"/>
                     )}
                   </FormItem>
                 </Col>
@@ -216,7 +219,8 @@ export default class ModalUnteratedOrder extends React.PureComponent {
                     {...formItemLayout}
                     label="运费（¥）"
                   >
-                    {getFieldDecorator('note', {
+                    {getFieldDecorator('freight', {
+                      initialValue: ModalwarehouseEdit.freight,
                       rules: [{ required: true, message: '请输入运费' }],
                     })(
                       <Input placeholder="请输入运费"/>

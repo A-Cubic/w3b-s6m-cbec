@@ -26,7 +26,15 @@ export default {
       pagination:{},
     },
     //编辑仓库信息
-    ModalwarehouseEdit:{},
+    ModalwarehouseEdit:{
+      supplier:'',
+      wcode:'',
+      taxation:'',
+      taxation2type:['1'],
+      taxation2line:'',
+      taxation2:'',
+      freight:''
+    },
     // 商品入库
     goodsPutawayTable:{
       list: [],

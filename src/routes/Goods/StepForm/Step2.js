@@ -22,10 +22,10 @@ class Step2 extends React.PureComponent {
     fileList2:[],
     num1:'150',
     num2:'120',
-    num2:'30'
+    num3:'30'
   }
   componentDidMount() {
-    
+
   }
   handleUploadChange=(info)=>{
     console.log('info',info)

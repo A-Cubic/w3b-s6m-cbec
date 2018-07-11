@@ -401,7 +401,7 @@ export async function downloadPicZipUrl(params) {
 }
 //仓库列表
 export async function getWarehouseList(params) {
-  return request(`/llback/Goods/GetWareHouseList`, {
+  return request(`/llback/Goods/GetWarehouseList`, {
     method: 'POST',
     body: params,
   });

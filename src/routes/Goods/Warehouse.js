@@ -6,6 +6,8 @@ import ModalWarehouse from './ModalWarehouse';
 import styles from './Warehouse.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../services/api'
+import {getToken} from "../../utils/Global";
+const userId = getToken().userId;
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -25,7 +27,19 @@ export default class Warehouse extends Component {
     this.props.dispatch({
       type: 'goods/warehouseList',
       payload: {
+        userId:userId
       },
+    });
+  }
+  handleTableChange=(pagination, filtersArg, sorter)=>{
+    const params = {
+      ...pagination,
+      userId:userId,
+    };
+
+    this.props.dispatch({
+      type: 'goods/warehouseList',
+      payload: params
     });
   }
   componentDidMount() {
@@ -52,35 +66,47 @@ export default class Warehouse extends Component {
   render() {
     // console.log('1',this.props)
     const { goods:{warehouseTable:{ list, pagination }} } = this.props;
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...pagination,
+    }
     const columns = [
       {
       title: '供应商',
-      dataIndex: 'a',
-      key: 'a',
+      dataIndex: 'supplier',
+      key: 'supplier',
+      render:val=>val?val:''
+
     }, {
         title: '所属仓库',
-        dataIndex: 'b',
-        key: 'b',
+        dataIndex: 'wname',
+        key: 'wname',
       }, {
-        title: '税费',
-        dataIndex: 'c',
-        key: 'c',
+        title: '税率',
+        dataIndex: 'taxation',
+        key: 'taxation',
+        render:val=>val?val+'%':''
       }, {
-        title: '税费提档类别',
-        dataIndex: 'd',
-        key: 'd',
+        title: '税率提档类别',
+        dataIndex: 'taxation2type',
+        key: 'taxation2type',
+        render:val=>val?['','按总价提档','按元/克提档'][val]:''
       }, {
-        title: '税费提档线',
-        dataIndex: 'e',
-        key: 'e',
+        title: '税率提档线',
+        dataIndex: 'taxation2line',
+        key: 'taxation2line',
+        render:val=>val?val+'元':''
       }, {
-        title: '提档税费',
-        dataIndex: 'f',
-        key: 'f',
+        title: '提档税率',
+        dataIndex: 'taxation2',
+        key: 'taxation2',
+        render:val=>val?val+'%':''
       }, {
         title: '运费',
-        dataIndex: 'g',
-        key: 'g',
+        dataIndex: 'freight',
+        key: 'freight',
+        render:val=>val?val+'元':''
       }, {
         title: '操作',
         dataIndex: 'operate',
@@ -106,10 +132,10 @@ export default class Warehouse extends Component {
           <Button type="primary" ghost onClick={this.addWarehouse}>新增仓库</Button>
           <Table
             dataSource={list}
-                 rowKey={record => record.id}
-                 columns={columns}
-                 pagination={pagination}
-                 // rowKey={record => record.id}
+            rowKey={record => record.wid}
+            columns={columns}
+            pagination={paginationProps}
+            onChange={this.handleTableChange}
                  // loading={submitting}
           />
         </Card>

@@ -98,7 +98,6 @@ export default class GoodsAbout extends Component {
       ...this.state.formValues,
       userId:userId,
     };
-    // console.log('params',params)
     this.props.dispatch({
       type: 'goods/goodslist',
       payload: params,
