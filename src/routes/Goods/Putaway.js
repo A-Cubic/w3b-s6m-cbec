@@ -36,12 +36,11 @@ export default class GoodsAbout extends Component {
   handleTableChange=(pagination, filtersArg, sorter)=>{
     const params = {
       ...pagination,
-      ...this.state.formValues,
       userId:userId,
     };
     // console.log('params',params)
     this.props.dispatch({
-      type: 'goods/goodslist',
+      type: 'goods/goodsPutaway',
       payload: params,
     });
   }
@@ -82,28 +81,36 @@ export default class GoodsAbout extends Component {
     this.props.dispatch(routerRedux.push('/goods/step-form'));
   }
   handleCheck=(e, record, index)=>{
-    console.log(record);
-    switch (record.status){
-      case '0':
-        console.log(record.status);
-        this.props.dispatch(routerRedux.push('/goods/step-form/confirm'));
-        break;
-      case '1':
-        console.log(record.status);
-        this.props.dispatch(routerRedux.push('/goods/step-form/wait'));
+    const {dispatch}=this.props;
+    this.props.dispatch({
+      type:'goods/checkStepStatus',
+      payload:{
+        userId:userId,
+        logId:record.id
+      },
+      callback(params){
+        switch (params.status){
+          case '0':
+            dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
+            break;
+          case '1':
+            dispatch(routerRedux.push('/goods/step-form/wait/' + params.id));
+            break;
+          case '2':
+            dispatch(routerRedux.push('/goods/step-form/result/true/' + params.id));
+            break;
+          case '3' :
+            dispatch(routerRedux.push('/goods/step-form/result/false/'+ params.id));
+            break;
+          default:
+            break;
+        }
+      }
+    })
 
-        break;
-      case '2':
-        console.log(record.status);
-        this.props.dispatch(routerRedux.push('/goods/step-form/result/true'));
-        break;
-      case '3' :
-        console.log(record.status);
-        this.props.dispatch(routerRedux.push('/goods/step-form/result/false'));
-        break;
-      default:
-        break;
-    }
+  }
+  downloadStoreTemp=()=>{
+    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/b2b/goodsnum/warehouse.xlsx'
   }
   render() {
 

@@ -3,47 +3,54 @@ import { connect } from 'dva';
 import { Button, Row, Col } from 'antd';
 import { routerRedux } from 'dva/router';
 import styles from './style.less';
-
+import {getToken} from "../../../utils/Global";
+const userId = getToken().userId;
 class Step4 extends React.PureComponent {
-  state={
-    num1:'150',
-    success:false
-  }
-  constructor(props){
-    super(props)
-    this.setState({
-      success:props.match.params.isSuccess
+  componentDidMount() {
+    const {match,dispatch}=this.props;
+    this.props.dispatch({
+      type:'goods/checkStepStatusIn',
+      payload:{
+        userId:userId,
+        logId:match.params.id,
+        status:match.params.isSuccess=='true'?'2':'3'
+      },
+      callback:function () {
+        if (match.params.isSuccess=="true"){
+          dispatch({
+            type:'goods/step4TrueSupplement',
+            payload:{
+              userId:userId,
+              logId:match.params.id
+            }
+          })
+        } else{
+          dispatch({
+            type:'goods/step4FalseSupplement',
+            payload:{
+              userId:userId,
+              logId:match.params.id
+            }
+          })
+        }
+      }
     })
   }
   renderSuccess(){
-    const { dispatch, data } = this.props;
+    const { dispatch, step4supplementData } = this.props;
     const onPrev = () => {
       dispatch(routerRedux.push('/goods/putaway'));
     };
     const onValidateForm = e => {
       e.preventDefault();
-      validateFields((err, values) => {
-        if (!err) {
-          dispatch({
-            type: 'form/submitStepForm',
-            payload: {
-              ...data,
-              ...values,
-            },
-          });
-        }
-      });
+      dispatch(routerRedux.push('/goods/info/list'));
     };
     return (
-
       <div>
         <div style={{marginBottom:10}}>
-          恭喜您！<br/>
-          您共上传了{`${this.state.num1}`}个SKU，已审核成功。
+          {step4supplementData.log}
         </div>
-
         <div style={{marginTop:'30px'}}>
-
           <Button onClick={onPrev} style={{ marginLeft: 8 }}>
             返回
           </Button>
@@ -51,25 +58,21 @@ class Step4 extends React.PureComponent {
             查看商品列表
           </Button>
         </div>
-
       </div>
-
     );
   }
   renderFail(){
-    const { dispatch, data } = this.props;
+    const { dispatch, step4supplementData } = this.props;
     const onPrev = () => {
       dispatch(routerRedux.push('/goods/putaway'));
     };
     function download() {
-      console.log('下载')
+      window.location.href = step4supplementData.url
     }
     return (
-
       <div>
         <div style={{marginBottom:10}}>
-          您共上传了{`${this.state.num1}`}个SKU，其中30个SKU已成功入库，<br/>
-          5个SKU未成功入库的原因是：商品条码有误，请核对后重新上传。
+          {step4supplementData.log}
         </div>
 
         <div style={{marginTop:'30px'}}>
@@ -87,15 +90,13 @@ class Step4 extends React.PureComponent {
     );
   }
   render() {
-    console.log('1',this.props)
-
-    const { dispatch, data } = this.props;
+    const { dispatch, step4supplementData } = this.props;
     const onPrev = () => {
       dispatch(routerRedux.push('/goods/putaway'));
     };
     return (
         <div style={{textAlign:'center',padding:'30px',maxWidth:'400px',margin:'auto'}}>
-          { this.state.success ? this.renderSuccess() : this.renderFail()}
+          { this.props.match.params.isSuccess=='true' ? this.renderSuccess() : this.renderFail()}
         </div>
 
     );
@@ -103,5 +104,5 @@ class Step4 extends React.PureComponent {
 }
 
 export default connect(({ goods }) => ({
-  data: goods.step,
+  step4supplementData: goods.step4supplementData,
 }))(Step4);

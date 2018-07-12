@@ -406,13 +406,7 @@ export async function getWarehouseList(params) {
     body: params,
   });
 }
-//上传step1
-export async function getStep1Upload(params) {
-  return request(`/llback/Goods/UploadWarehouseGoods`, {
-    method: 'POST',
-    body: params,
-  });
-}
+
 //商品入库
 export async function getGoodsPutaway(params) {
   return request(`/llback/Goods/UploadList`, {
@@ -420,9 +414,56 @@ export async function getGoodsPutaway(params) {
     body: params,
   });
 }
+//查看详情时更新状态
+export async function getCheckStepStatus(params) {
+  return request(`/llback/Goods/GetUploadStatus`, {
+    method: 'POST',
+    body: params,
+  });
+}
+//上传step1
+export async function getStep1Upload(params) {
+  return request(`/llback/Goods/UploadWarehouseGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
-
-
+//第二步step2 补充信息
+export async function getStep2supplement(params) {
+  return request(`/llback/Goods/GetUploadStatusOne`, {
+    method: 'POST',
+    body: params,
+  });
+}
+//第三步step3 补充信息
+export async function getStep3supplement(params) {
+  return request(`/llback/Goods/GetUploadStatusTwo`, {
+    method: 'POST',
+    body: params,
+  });
+}
+//第四步step4 成功
+export async function getStep4TrueSupplement(params) {
+  return request(`/llback/Goods/GetUploadStatusThree`, {
+    method: 'POST',
+    body: params,
+  });
+}
+//第四步step4 失败
+export async function getStep4FalseSupplement(params) {
+  return request(`/llback/Goods/GetUploadStatusFour`, {
+    method: 'POST',
+    body: params,
+  });
+}
+//上传step2
+export async function getStep2Upload(params) {
+  return request(`/llback/Goods/UploadGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 //==以上为新 以下为旧商品
 export async function getGoodsListOfOperate(params) {

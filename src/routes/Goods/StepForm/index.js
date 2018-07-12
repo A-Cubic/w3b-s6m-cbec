@@ -12,8 +12,8 @@ export default class StepForm extends PureComponent {
   getCurrentStep() {
     const { location } = this.props;
     const { pathname } = location;
-    const pathList = pathname.split('/');
-    switch (pathList[pathList.length - 1]) {
+    const pathList = pathname.substring(pathname.indexOf('step-form')).split('/');
+    switch (pathList[1]) {
       case 'info':
         return 0;
       case 'confirm':
@@ -23,6 +23,7 @@ export default class StepForm extends PureComponent {
       case 'result':
         return 3;
       default:
+        console.warn('找不到要跳转的路由')
         return 0;
     }
   }

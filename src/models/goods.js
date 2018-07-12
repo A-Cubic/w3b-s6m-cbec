@@ -6,8 +6,11 @@ import {notification} from "antd/lib/index";
 import {
   getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl,
   getWarehouseList,getgoodsDetail,
-  getStep1Upload,getGoodsPutaway
+  getStep1Upload,getGoodsPutaway,getStep2supplement,
+  getCheckStepStatus,
+  getStep2Upload,getStep3supplement,getStep4TrueSupplement,getStep4FalseSupplement
 } from '../services/api';
+import {routerRedux} from "dva/router";
 export default {
   namespace: 'goods',
 
@@ -46,6 +49,9 @@ export default {
       receiverName: 'Alex',
       amount: '500',
     },
+    step2supplementData:{},
+    step3supplementData:{},
+    step4supplementData:{}
   },
 
   effects: {
@@ -139,7 +145,7 @@ export default {
 
     *step1Upload({ payload,callback },{ call,put}){
       const response = yield call(getStep1Upload, payload);
-      console.log('~',response)
+      // console.log('~',response)
       if (response !== undefined) {
         callback(response)
       }
@@ -154,7 +160,84 @@ export default {
         });
       }
     },
-
+    *checkStepStatus({ payload,callback },{ call,put}){
+      const response = yield call(getCheckStepStatus, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
+      }
+    },
+    *checkStepStatusIn({ payload,callback },{ call,put}){
+      const response = yield call(getCheckStepStatus, payload);
+      // console.log('~',response)
+      if(payload.status !== response.status){
+        switch (response.status){
+          case '0':
+            yield put(routerRedux.push('/goods/step-form/confirm/' + payload.logId));
+            break;
+          case '1':
+            yield put(routerRedux.push('/goods/step-form/wait/' + payload.logId));
+            break;
+          case '2':
+            yield put(routerRedux.push('/goods/step-form/result/true/' + payload.logId));
+            break;
+          case '3' :
+            yield put(routerRedux.push('/goods/step-form/result/false/'+ payload.logId));
+            break;
+          default:
+            break;
+        }
+      }else{
+        callback();
+      }
+    },
+    *step2supplement({ payload },{ call,put}){
+      const response = yield call(getStep2supplement, payload);
+      console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'step2supplementR',
+          payload: response,
+        });
+      }
+    },
+    *step3supplement({ payload },{ call,put}){
+      const response = yield call(getStep3supplement, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'step3supplementR',
+          payload: response,
+        });
+      }
+    },
+    *step4TrueSupplement({ payload },{ call,put}){
+      const response = yield call(getStep4TrueSupplement, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'step4TrueSupplementR',
+          payload: response,
+        });
+      }
+    },
+    *step4FalseSupplement({ payload },{ call,put}){
+      const response = yield call(getStep4FalseSupplement, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'step4TrueSupplementR',
+          payload: response,
+        });
+      }
+    },
+    *step2Upload({ payload,callback },{ call,put}){
+      const response = yield call(getStep2Upload, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
+      }
+    },
 
     // *list({ payload }, { call, put }) {
     //   const response = yield call(getGoodsListOfOperate, payload);
@@ -262,6 +345,24 @@ export default {
       return {
         ...state,
         goodsPutawayTable:action.payload,
+      };
+    },
+    step2supplementR(state, action) {
+      return {
+        ...state,
+        step2supplementData:action.payload,
+      };
+    },
+    step3supplementR(state, action) {
+      return {
+        ...state,
+        step3supplementData:action.payload,
+      };
+    },
+    step4TrueSupplementR(state, action) {
+      return {
+        ...state,
+        step4supplementData:action.payload,
       };
     },
   },

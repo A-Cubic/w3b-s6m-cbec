@@ -223,7 +223,19 @@ const proxy = {
     url:'https://github.com/llwell/API-SERVER/issues/11'
   },
   'POST /llback/Goods/UploadList': service_url2,
+  //查看详情时更新状态
+  'POST /llback/Goods/GetUploadStatus': service_url2,
+  //商品入库 查询补充信息 step2
+  'POST /llback/Goods/GetUploadStatusOne': service_url2,
+  //商品入库 等待审核 step3
+  'POST /llback/Goods/GetUploadStatusTwo': service_url2,
+  //商品入库 审核成功 step4
+  'POST /llback/Goods/GetUploadStatusThree': service_url2,
+  //商品入库 部分审核成功部分审核失败 step4
+  'POST /llback/Goods/GetUploadStatusFour': service_url2,
   'POST /llback/Goods/UploadWarehouseGoods': service_url2,
+  //step2 提交审核上传
+  'POST /llback/Goods/UploadGoods': service_url2,
   // 'POST /llback/goods/operate/list': service_url,
 
   // 'POST /llback/Goods/GetGoodsList': {

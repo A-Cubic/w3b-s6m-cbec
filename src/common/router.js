@@ -237,15 +237,15 @@ export const getRouterData = (app) => {
       // name: '分步表单（上传入库信息）',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step1')),
     },
-    '/goods/step-form/confirm': {
+    '/goods/step-form/confirm/:id': {
       // name: '分步表单（补全入库信息）',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step2')),
     },
-    '/goods/step-form/wait': {
+    '/goods/step-form/wait/:id': {
       // name: '分步表单（等待审核）',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step3')),
     },
-    '/goods/step-form/result/:isSuccess': {
+    '/goods/step-form/result/:isSuccess/:id': {
       // name: '分步表单（完成）',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step4')),
     },

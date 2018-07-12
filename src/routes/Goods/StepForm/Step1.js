@@ -15,21 +15,9 @@ class Step1 extends React.PureComponent {
     thumbUrl:'',
   }
   handleUploadChange=(info)=>{
-    console.log('info',info)
-    let fileList = info.fileList;
     this.setState({
       fileList:info.fileList,
       thumbUrl:info.file.thumbUrl
-    })
-    // this.props.dispatch({
-    //   type: 'o2o/upload',
-    //   payload: {
-    //     fileList1:info.fileList
-    //   },
-    //   callback: this.onUploadCallback,
-    // });
-    this.setState({
-      fileList:[]
     })
   }
   onUploadCallback = (params) => {
@@ -46,11 +34,11 @@ class Step1 extends React.PureComponent {
       //   message: "提示",
       //   description: msg,
       // });
-      this.props.dispatch(routerRedux.push('/goods/step-form/confirm'));
+      this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
     }
   }
   render() {
-    const { form, dispatch, data } = this.props;
+    const { form, dispatch,submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const url = 'http://api.llwell.net/llback/user/validate'
     const props = {
@@ -74,16 +62,6 @@ class Step1 extends React.PureComponent {
       }else{
         message.warning('请选择需要上传的.xlsx文件')
       }
-
-      // validateFields((err, values) => {
-      //   if (!err) {
-      //     dispatch({
-      //       type: 'goods/saveStepFormData',
-      //       payload: values,
-      //     });
-      //     dispatch(routerRedux.push('/goods/step-form/confirm'));
-      //   }
-      // });
     };
     return (
       <Fragment>
@@ -91,7 +69,7 @@ class Step1 extends React.PureComponent {
           <Upload {...props}>
             <Button type="primary" ghost>选择商品信息文件</Button>
           </Upload>
-          <Button style={{marginTop:'30px'}} type="primary" onClick={onValidateForm}>
+          <Button style={{marginTop:'30px'}} type="primary" loading={submitting} onClick={onValidateForm}>
             提交入库
           </Button>
         </div>
@@ -100,6 +78,7 @@ class Step1 extends React.PureComponent {
   }
 }
 
-export default connect(({ goods }) => ({
+export default connect(({ goods,loading }) => ({
+  submitting: loading.effects['goods/step1Upload'],
   data: goods.step,
 }))(Step1);
