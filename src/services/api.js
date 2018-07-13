@@ -406,6 +406,20 @@ export async function getWarehouseList(params) {
     body: params,
   });
 }
+//仓库 新增编辑保存
+export async function getUpdateWarehouse(params) {
+  return request(`/llback/Goods/UpdateWarehouse`, {
+    method: 'POST',
+    body: params,
+  });
+}
+//仓库 删除
+export async function getDeleteWarehouse(params) {
+  return request(`/llback/Goods/DeleteWarehouse`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 //商品入库
 export async function getGoodsPutaway(params) {
@@ -428,7 +442,6 @@ export async function getStep1Upload(params) {
     body: params,
   });
 }
-
 //第二步step2 补充信息
 export async function getStep2supplement(params) {
   return request(`/llback/Goods/GetUploadStatusOne`, {

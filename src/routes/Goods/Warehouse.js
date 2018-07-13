@@ -51,18 +51,38 @@ export default class Warehouse extends Component {
       visible:!!flag,
     });
   }
-  addWarehouse =(record)=>{
-    // this.props.dispatch({
-    //   type: 'o2o/orderCheck',
-    //   payload: {
-    //     orderId:record.merchantOrderId,
-    //   },
-    // });
+  addWarehouse =()=>{
+    this.props.dispatch({
+      type: 'goods/editWarehouse',
+      payload: {
+        taxation2type:'2',
+        supplier:'1',
+      },
+    });
     setTimeout(()=>{
       this.handleVisible(true);
     },0)
   }
-
+  handleEditWarehouse =(record)=>{
+    console.log('aa',record)
+    this.props.dispatch({
+      type: 'goods/editWarehouse',
+      payload: record,
+    });
+    setTimeout(()=>{
+      this.handleVisible(true);
+    },0)
+  }
+  handleDeleteWarehouse=(record)=>{
+    const _this = this;
+    this.props.dispatch({
+      type: 'goods/deleteWarehouse',
+      payload: record.wid,
+      callback:function () {
+        _this.init();
+      }
+    });
+  }
   render() {
     // console.log('1',this.props)
     const { goods:{warehouseTable:{ list, pagination }} } = this.props;
@@ -114,8 +134,8 @@ export default class Warehouse extends Component {
         render: (val,record) => {
           return (
             <Fragment>
-              <a href="javascript:;" onClick={(e) => this.handleEdit(e, record, index)}>编辑</a><br/>
-              <a href="javascript:;" onClick={(e) => this.handleDelete(e, record, index)}>删除</a><br/>
+              <a href="javascript:;" onClick={(e) => this.handleEditWarehouse(record)}>编辑</a><br/>
+              <a href="javascript:;" onClick={(e) => this.handleDeleteWarehouse(record)}>删除</a><br/>
             </Fragment>
           )
         }

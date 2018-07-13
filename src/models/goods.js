@@ -5,7 +5,8 @@ import { message} from 'antd';
 import {notification} from "antd/lib/index";
 import {
   getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl,
-  getWarehouseList,getgoodsDetail,
+  getWarehouseList,getUpdateWarehouse,getDeleteWarehouse,
+  getgoodsDetail,
   getStep1Upload,getGoodsPutaway,getStep2supplement,
   getCheckStepStatus,
   getStep2Upload,getStep3supplement,getStep4TrueSupplement,getStep4FalseSupplement
@@ -30,10 +31,11 @@ export default {
     },
     //编辑仓库信息
     ModalwarehouseEdit:{
-      supplier:'',
+      wid:'',
+      supplier:'1',
       wcode:'',
       taxation:'',
-      taxation2type:['1'],
+      taxation2type:'2',
       taxation2line:'',
       taxation2:'',
       freight:''
@@ -142,6 +144,37 @@ export default {
         });
       }
     },
+    *updateWarehouse({ payload,callback },{ call,put}){
+      const response = yield call(getUpdateWarehouse, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        if (response.type==1) {
+          callback();
+          message.success('保存成功');
+        }else{
+          message.error('保存失败');
+        }
+      }
+    },
+    *editWarehouse({ payload,callback },{ call,put}){
+      yield put({
+        type: 'editWarehouseR',
+        payload: payload,
+      });
+    },
+    *deleteWarehouse({ payload,callback },{ call,put}){
+      const response = yield call(getDeleteWarehouse, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        if (response.type==1) {
+          callback();
+          message.success('删除成功');
+        }else{
+          message.error('删除失败');
+        }
+      }
+    },
+
 
     *step1Upload({ payload,callback },{ call,put}){
       const response = yield call(getStep1Upload, payload);
@@ -239,6 +272,8 @@ export default {
       }
     },
 
+
+
     // *list({ payload }, { call, put }) {
     //   const response = yield call(getGoodsListOfOperate, payload);
     //   if (response !== undefined) {
@@ -329,6 +364,15 @@ export default {
         warehouseTable:action.payload,
       };
     },
+    editWarehouseR(state, action) {
+
+      console.log('payload',action.payload)
+      return {
+        ...state,
+        ModalwarehouseEdit:action.payload,
+      };
+    },
+
     save(state, action) {
       return {
         ...state,

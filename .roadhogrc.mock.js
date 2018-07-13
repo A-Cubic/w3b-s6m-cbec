@@ -203,16 +203,17 @@ const proxy = {
   'POST /llback/Goods/GetWareHouse': service_url2,
   'POST /llback/Goods/GetGoods': service_url2,
   'POST /llback/Goods/GetWarehouseList': service_url2,
-  // 'POST /llback/Goods/GetWarehouseList': {
-  //     list:[{
-  //       id: "412",
-  //     }],
-  //     pagination:{
-  //         current: 1,
-  //         total: 0,
-  //         pageSize: 10
-  //       }
-  //     },
+  //新增仓库
+  'POST /llback/Goods/UpdateWarehouse': {
+    msg:"保存成功",
+    type:1
+  },
+  //删除仓库
+  'POST /llback/Goods/DeleteWarehouse': {
+    msg:"删除成功",
+    type:1
+  },
+
   'POST /llback/Goods/downloadStoreTempUrl': {
     url:'https://github.com/llwell/API-SERVER/issues/11'
   },
