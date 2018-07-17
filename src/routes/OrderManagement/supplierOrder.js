@@ -6,10 +6,13 @@ import { Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badg
 import styles from './supplierOrder.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../services/api'
+import {getToken} from "../../utils/Global";
+const userId = getToken().userId;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
+
 @connect(({orderManagement,  loading }) => ({
   orderManagement,
   loading: loading.effects['orderManagement/list'],
@@ -21,13 +24,20 @@ export default class supplierOrder extends Component {
     fileList:[],
     fileList1:[],
     visible: false,
-    formValues:{}
+    formValues:{},
   }
   init(){
     this.props.dispatch({
+      type: 'orderManagement/getWareHouse',
+      payload: {
+        userId:userId,
+      },
+    });
+    this.props.dispatch({
       type: 'orderManagement/supplierOrderTable',
       payload: {
-        status:'新订单',
+        userId:userId,
+        status:"全部"
       },
     });
   }
@@ -36,6 +46,7 @@ export default class supplierOrder extends Component {
   }
   onSearch=(e)=>{
     e.preventDefault();
+    const {orderManagement:{supplierOrder:{tableData}}}=this.props
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
 
@@ -54,8 +65,9 @@ export default class supplierOrder extends Component {
       this.props.dispatch({
         type: 'orderManagement/supplierOrderTable',
         payload: {
-          status:'新订单',
+          userId:userId,
           ...values,
+          ...tableData.pagination
         },
       });
     });
@@ -65,6 +77,18 @@ export default class supplierOrder extends Component {
   handleFormReset =()=>{
     this.props.form.resetFields();
     this.init();
+  }
+  handleTableChange=(pagination, filtersArg, sorter)=>{
+    const params = {
+      ...this.state.formValues,
+      ...pagination,
+      userId:userId
+    };
+
+    this.props.dispatch({
+      type: 'orderManagement/supplierOrderTable',
+      payload: params,
+    });
   }
   handleVisible = (flag) => {
     this.setState({
@@ -116,10 +140,31 @@ export default class supplierOrder extends Component {
     }
   }
   renderAdvancedForm(){
+    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="订单状态">
+              {getFieldDecorator('status',{
+                initialValue:'全部'
+              })(
+                <Select
+                  placeholder="请选择"
+                  optionFilterProp="label"
+                  // onChange={this.onSelectChange}
+                >
+                  <Option value="全部">全部</Option>
+                  <Option value="待付款">待付款</Option>
+                  <Option value="待发货">待发货</Option>
+                  <Option value="已发货">已发货</Option>
+                  <Option value="已完成">已完成</Option>
+                  <Option value="已关闭">已关闭</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
           <Col md={8} sm={24}>
             <FormItem label="订单编号">
               {getFieldDecorator('orderId')(
@@ -134,6 +179,9 @@ export default class supplierOrder extends Component {
               )}
             </FormItem>
           </Col>
+
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="时段">
               {getFieldDecorator('date')(
@@ -141,17 +189,25 @@ export default class supplierOrder extends Component {
               )}
             </FormItem>
           </Col>
-        </Row>
-        <div style={{ overflow: 'hidden',marginBottom:20 }}>
-          <span style={{ float: 'right' }}>
+          <Col md={8} sm={24}>
+          </Col>
+          <Col md={8} sm={24}>
+            <span style={{ float: 'right' }}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </span>
-        </div>
+          </Col>
+        </Row>
+        {/*<div style={{ overflow: 'hidden',marginBottom:20 }}>*/}
+          {/*<span style={{ float: 'right' }}>*/}
+            {/*<Button type="primary" htmlType="submit">查询</Button>*/}
+            {/*<Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>*/}
+          {/*</span>*/}
+        {/*</div>*/}
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10 }}>
           <span style={{ float: 'right' }}>
-            共查询出符合条件的数据：3
+            共查询出符合条件的数据：{tableData?tableData.pagination.total:0}
             <Button  style={{marginLeft:18}}>
               <Icon type="cloud-download-o" />导出数据
             </Button>
@@ -161,8 +217,7 @@ export default class supplierOrder extends Component {
     );
   }
   render() {
-    console.log('1',this.props)
-    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
+    const { orderManagement:{supplierOrder:{tableData},wareHouseData} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -171,30 +226,35 @@ export default class supplierOrder extends Component {
 
     const columns = [
       {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-    }, {
-      title: '订单号',
-      dataIndex: 'merchantOrderId',
-      key: 'merchantOrderId',
-    }, {
-      title: '运单号',
-      dataIndex: 'waybillno',
-      key: 'waybillno',
-    }, {
-      title: '下单时间',
+      title: '订单日期',
       dataIndex: 'tradeTime',
       key: 'tradeTime',
     }, {
-      title: '收件人姓名',
-      dataIndex: 'consigneeName',
-      key: 'consigneeName',
+      title: '订单编号',
+      dataIndex: 'merchantOrderId',
+      key: 'merchantOrderId',
+    }, {
+      title: '订单总额',
+      dataIndex: 'tradeAmount',
+      key: 'tradeAmount',
+    }, {
+      title: '运单编号',
+      dataIndex: 'waybillno',
+      key: 'waybillno',
+    }, {
+      title: '订单状态',
+      dataIndex: 'status',
+      key: 'status',
     },{
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
-        render: (val,record) => <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>查看</a>
+        render: (val,record) =>
+          <div>
+            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>查看</a><br/>
+            {record.status=='待发货'?
+            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>发货</a>:''}
+          </div>
       }
     ];
     const {visible} = this.state;
@@ -211,13 +271,18 @@ export default class supplierOrder extends Component {
       multiple: false,
       customRequest:this.upload,
     };
-    function callback(key) {
-      console.log(key);
-    }
     return (
       <div>
         <div style={{display: 'inline-flex'}}>
-          <Button type="primary">
+          <Select style={{ width: 180 }}
+                  placeholder="请选择仓库"
+                  onChange={this.onSelectChange}>
+                  {wareHouseData.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
+          </Select>
+          <Button style={{ marginLeft: 8 }}>
+            <Icon type="cloud-download-o" />导出需发货的订单
+          </Button>
+          <Button style={{ marginLeft: 8 }} type="primary">
             <Icon type="download" />下载运单模板
           </Button>
           <Upload {...props1} fileList={this.state.fileList1}>
@@ -225,36 +290,19 @@ export default class supplierOrder extends Component {
               <Icon type="cloud-upload-o" /> 导入运单信息
             </Button>
           </Upload>
-          <Select style={{ width: 120,marginLeft:8 }}  placeholder="请选择仓库">
-            <Option value="lucy">Lucy</Option>
-          </Select>
-          <Button style={{ marginLeft: 8 }}>
-            <Icon type="cloud-download-o" />导出需发货的订单
-          </Button>
+
 
         </div>
         <Card className={styles.mT10}>
-          <Tabs defaultActiveKey="1" onChange={callback}>
-            <TabPane tab="所有订单" key="1">
-            </TabPane>
-            <TabPane tab="待发货" key="2">
-            </TabPane>
-            <TabPane tab="已发货" key="3">
-            </TabPane>
-            <TabPane tab="已完成" key="4">
-            </TabPane>
-            <TabPane tab="已关闭" key="5">
-            </TabPane>
-          </Tabs>
           <div className={styles.tableListForm}>
             {this.renderAdvancedForm()}
           </div>
           <Table
             dataSource={tableData.list}
-            //      rowKey={record => record.id}
+                 rowKey={record => record.id}
                  columns={columns}
                  pagination={paginationProps}
-                 // rowKey={record => record.id}
+                 onChange={this.handleTableChange}
                  // loading={submitting}
           />
         </Card>

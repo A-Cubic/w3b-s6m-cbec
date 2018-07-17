@@ -5,7 +5,7 @@ export default function orderManagementMock() {
     'POST /llback/Order/GetOrderList': {
       list: [{
         id: '3004',
-        status: '已完成',
+        status: '待发货',
         merchantOrderId: 'SH20180127144502664278',
         tradeTime: '2018-01-27 14:45:02',
         waybillno: '',
