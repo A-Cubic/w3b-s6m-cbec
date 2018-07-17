@@ -366,7 +366,7 @@ export default {
     },
     editWarehouseR(state, action) {
 
-      console.log('payload',action.payload)
+      // console.log('payload',action.payload)
       return {
         ...state,
         ModalwarehouseEdit:action.payload,

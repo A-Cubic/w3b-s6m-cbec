@@ -8,6 +8,7 @@ import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
 
+import orderManagementMock from './mock/orderManagementMock'
 // 是否禁用代理
 
 const noProxy = process.env.NO_PROXY === 'true';
@@ -15,6 +16,7 @@ const service_url =  'http://api.llwell.net/';// http://api.llwell.net/  http://
 const service_url2 =  'http://console.llwell.net/';// http://console.llwell.net/  http://localhost:51184/
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
+  ...orderManagementMock(service_url2),
   // ...
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
@@ -204,15 +206,9 @@ const proxy = {
   'POST /llback/Goods/GetGoods': service_url2,
   'POST /llback/Goods/GetWarehouseList': service_url2,
   //新增仓库
-  'POST /llback/Goods/UpdateWarehouse': {
-    msg:"保存成功",
-    type:1
-  },
+  'POST /llback/Goods/UpdateWarehouse': service_url2,
   //删除仓库
-  'POST /llback/Goods/DeleteWarehouse': {
-    msg:"删除成功",
-    type:1
-  },
+  'POST /llback/Goods/DeleteWarehouse': service_url2,
 
   'POST /llback/Goods/downloadStoreTempUrl': {
     url:'https://github.com/llwell/API-SERVER/issues/11'

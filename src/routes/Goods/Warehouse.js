@@ -64,7 +64,7 @@ export default class Warehouse extends Component {
     },0)
   }
   handleEditWarehouse =(record)=>{
-    console.log('aa',record)
+    // console.log('aa',record)
     this.props.dispatch({
       type: 'goods/editWarehouse',
       payload: record,
@@ -77,7 +77,9 @@ export default class Warehouse extends Component {
     const _this = this;
     this.props.dispatch({
       type: 'goods/deleteWarehouse',
-      payload: record.wid,
+      payload: {
+        wid:record.wid
+      },
       callback:function () {
         _this.init();
       }
