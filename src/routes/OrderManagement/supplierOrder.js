@@ -1,11 +1,10 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-// import ModalUnteratedOrder from './ModalUnteratedOrder';
+import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
+import ModalSupplierOrderCheck from './ModalSupplierOrderCheck';
 import styles from './supplierOrder.less';
 import moment from 'moment';
-import { getCurrentUrl } from '../../services/api'
 import {getToken} from "../../utils/Global";
 const userId = getToken().userId;
 const RangePicker = DatePicker.RangePicker;
@@ -15,16 +14,19 @@ const TabPane = Tabs.TabPane;
 
 @connect(({orderManagement,  loading }) => ({
   orderManagement,
-  loading: loading.effects['orderManagement/list'],
+  loading: loading.effects['orderManagement/supplierOrderTable'],
 }))
 
 @Form.create()
 export default class supplierOrder extends Component {
   state={
     fileList:[],
-    fileList1:[],
+    visibleChildCheck:false,
+    visibleChildDelivery:false,
+    orderId:'',
     visible: false,
     formValues:{},
+    warehouseId:'',
   }
   init(){
     this.props.dispatch({
@@ -44,6 +46,54 @@ export default class supplierOrder extends Component {
   componentDidMount() {
     this.init();
   }
+  //按钮层
+  onSelectChangeWarehouse=(val)=>{
+    this.setState({
+      warehouseId:val
+    },()=>{
+      // console.log(this.state.warehouseId)
+    })
+  }
+  downloadToSendOrder=()=>{
+    if(this.state.warehouseId!==''){
+      this.props.dispatch({
+        type:'orderManagement/downloadToSendOrder',
+        payload:{
+          wid:this.state.warehouseId
+        }
+      })
+    }
+  }
+  downloadTemplate=()=>{
+    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/order/Waybill.xlsx'
+  }
+  // 导入
+  handleUploadChange=(info)=>{
+    this.props.dispatch({
+      type: 'orderManagement/uploadWaybill',
+      payload: {
+        userId: userId,
+        byte64:info.file.thumbUrl
+      },
+      callback: this.onUploadCallback,
+
+    });
+  }
+  onUploadCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      notification.error({
+        message: "提示",
+        description: msg,
+      });
+    }else {
+      notification.success({
+        message: "提示",
+        description: msg,
+      });
+    }
+  }
+  //列表
   onSearch=(e)=>{
     e.preventDefault();
     const {orderManagement:{supplierOrder:{tableData}}}=this.props
@@ -90,54 +140,41 @@ export default class supplierOrder extends Component {
       payload: params,
     });
   }
-  handleVisible = (flag) => {
-    this.setState({
-      visible:!!flag,
-    });
+
+
+  handleVisible = (flag,who) => {
+    if(who=='childCheck'){
+      this.setState({
+        visibleChildCheck:!!flag,
+      });
+    }else if(who=='childDelivery'){
+      this.setState({
+        visibleChildDelivery:!!flag,
+      });
+    }
   }
   handleChildrenCheck =(record)=>{
     this.props.dispatch({
-      type: 'o2o/orderCheck',
+      type: 'orderManagement/supplierOrderChildCheck',
       payload: {
         orderId:record.merchantOrderId,
       },
     });
     setTimeout(()=>{
-      this.handleVisible(true);
+      this.handleVisible(true,'childCheck');
     },0)
   }
-  handleUploadChange=(info)=>{
-    console.log('info',info)
-    let fileList = info.fileList;
+  handleChildrenDelivery=(record)=>{
     this.setState({
-      fileList:info.fileList
+      orderId:record.merchantOrderId
     })
-
+    const { orderManagement:{supplierOrder:{tableData},wareHouseData,expressArr} } = this.props;
+    this.handleVisible(true,'childDelivery');
+    //快递选择
     this.props.dispatch({
-      type: 'o2o/upload',
-      payload: {
-        fileList:info.fileList
-      },
-      callback: this.onUploadCallback,
-    });
-      this.setState({
-        fileList:[]
-      })
-  }
-  upload=(file)=>{}
-  onUploadCallback = (params) => {
-    const msg = params.msg;
-    if(params.type==="0"){
-      notification.error({
-        message: "提示",
-        description: msg,
-      });
-    }else {
-      notification.success({
-        message: "提示",
-        description: msg,
-      });
-    }
+      type:'orderManagement/getExpress',
+      payload:{}
+    })
   }
   renderAdvancedForm(){
     const { orderManagement:{supplierOrder:{tableData}} } = this.props;
@@ -198,32 +235,25 @@ export default class supplierOrder extends Component {
           </span>
           </Col>
         </Row>
-        {/*<div style={{ overflow: 'hidden',marginBottom:20 }}>*/}
-          {/*<span style={{ float: 'right' }}>*/}
-            {/*<Button type="primary" htmlType="submit">查询</Button>*/}
-            {/*<Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>*/}
-          {/*</span>*/}
-        {/*</div>*/}
         <Divider dashed />
-        <div style={{ overflow: 'hidden',marginBottom:10 }}>
+        <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <span style={{ float: 'right' }}>
             共查询出符合条件的数据：{tableData?tableData.pagination.total:0}
-            <Button  style={{marginLeft:18}}>
-              <Icon type="cloud-download-o" />导出数据
-            </Button>
+            {/*<Button  style={{marginLeft:18}}>*/}
+              {/*<Icon type="cloud-download-o" />导出数据*/}
+            {/*</Button>*/}
           </span>
         </div>
       </Form>
     );
   }
   render() {
-    const { orderManagement:{supplierOrder:{tableData},wareHouseData} } = this.props;
+    const { orderManagement:{supplierOrder:{tableData},wareHouseData,expressArr} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
       ...tableData.pagination,
     }
-
     const columns = [
       {
       title: '订单日期',
@@ -252,48 +282,60 @@ export default class supplierOrder extends Component {
         render: (val,record) =>
           <div>
             <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>查看</a><br/>
-            {record.status=='待发货'?
-            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>发货</a>:''}
+            <a href="javascript:;" onClick={()=>this.handleChildrenDelivery(record)}>发货</a>
+            {record.ifSend==1?
+            <a href="javascript:;" onClick={()=>this.handleChildrenDelivery(record)}>发货</a>:''}
           </div>
       }
     ];
-    const {visible} = this.state;
+    const {visibleChildCheck,visibleChildDelivery} = this.state;
     const parent  = {
-      visible:visible,
+      visible:visibleChildCheck,
       handleVisible : this.handleVisible,
     };
-    const url1 = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
-    const props1 = {
-      action: url1,
+    const ChildrenDeliveryParent  = {
+      visible:visibleChildDelivery,
+      handleVisible : this.handleVisible,
+      expressArr:expressArr,
+      dispatch:this.props.dispatch,
+      orderId:this.state.orderId
+    };
+    const url = 'http://api.llwell.net/llback/user/validate'
+    const props = {
+      action: url,
       listType: 'picture',
+      data:{
+        userId:userId
+      },
       // accept:'image/*',
-      onChange: this.handleUploadChange1,
+      onChange: this.handleUploadChange,
       multiple: false,
       customRequest:this.upload,
     };
     return (
       <div>
-        <div style={{display: 'inline-flex'}}>
-          <Select style={{ width: 180 }}
-                  placeholder="请选择仓库"
-                  onChange={this.onSelectChange}>
-                  {wareHouseData.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
-          </Select>
-          <Button style={{ marginLeft: 8 }}>
-            <Icon type="cloud-download-o" />导出需发货的订单
-          </Button>
-          <Button style={{ marginLeft: 8 }} type="primary">
-            <Icon type="download" />下载运单模板
-          </Button>
-          <Upload {...props1} fileList={this.state.fileList1}>
-            <Button style={{ marginLeft: 8 }}>
-              <Icon type="cloud-upload-o" /> 导入运单信息
-            </Button>
-          </Upload>
-
-
-        </div>
         <Card className={styles.mT10}>
+          <div style={{display: 'inline-flex'}}>
+            <Select style={{ width: 180 }}
+                    placeholder="请选择仓库"
+                    onChange={this.onSelectChangeWarehouse}>
+              {wareHouseData.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
+            </Select>
+            <Button style={{ marginLeft: 8 }} onClick={this.downloadToSendOrder}>
+              <Icon type="cloud-download-o" />导出需发货的订单
+            </Button>
+            <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
+              <Icon type="download" />下载运单模板
+            </Button>
+            <Upload {...props} fileList={this.state.fileList}>
+              <Button style={{ marginLeft: 8 }}>
+                <Icon type="cloud-upload-o" /> 导入运单信息
+              </Button>
+            </Upload>
+
+
+          </div>
+          <Divider dashed />
           <div className={styles.tableListForm}>
             {this.renderAdvancedForm()}
           </div>
@@ -306,9 +348,113 @@ export default class supplierOrder extends Component {
                  // loading={submitting}
           />
         </Card>
-        {/*<ModalUnteratedOrder*/}
-          {/*parent = {parent}*/}
-        {/*/>*/}
+        <ModalSupplierOrderCheck
+          parent = {parent}
+        />
+        <ChildrenDelivery
+          parent = {ChildrenDeliveryParent}
+        />
+      </div>
+    );
+  }
+}
+
+
+@Form.create()
+class ChildrenDelivery extends React.Component {
+
+  handleOk = (e) => {
+    e.preventDefault();
+    const that = this;
+    this.props.form.validateFields((err, fieldsValue)=>{
+      if(!err){
+        this.props.parent.dispatch({
+          type:'orderManagement/confirmDelivery',
+          payload:{
+            ...fieldsValue,
+            userId:userId,
+            orderId:this.props.parent.orderId
+          },
+          callback:function () {
+            that.props.parent.handleVisible(false,'childDelivery')
+            that.props.form.resetFields();
+          }
+        })
+      }
+    })
+  }
+  handleOverseas =(e)=>{
+    e.preventDefault();
+    const that = this;
+    this.props.parent.dispatch({
+      type:'orderManagement/shipmentOverseas',
+      payload:{
+        ...fieldsValue,
+        userId:userId,
+        orderId:this.props.parent.orderId
+      },
+      callback:function () {
+        that.props.parent.handleVisible(false,'childDelivery')
+        that.props.form.resetFields();
+      }
+    })
+  }
+  handleCancel = (e) => {
+    this.props.parent.handleVisible(false,'childDelivery')
+    this.props.form.resetFields();
+  }
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    // const {parent:{expressArr}} = this.props
+    // console.log(this.props)
+    return (
+      <div>
+        <Modal
+          title="发货"
+          visible={this.props.parent.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="1" onClick={this.handleCancel}>关闭</Button>,
+            <Button key="2" type="primary" onClick={this.handleOverseas}>海外出货</Button>,
+            <Button key="3" type="primary" onClick={this.handleOk}>确定</Button>
+          ]}
+        >
+        <div className={styles.tableListForm}>
+          <Form onSubmit={this.handleOk} layout="inline">
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={24} sm={24}>
+                <FormItem label="运单号">
+                  {getFieldDecorator('goodsName',{
+                    rules:[{
+                      required:true,message:'请填写运单号',
+                    }]
+                  })(
+                    <Input placeholder="请输入" />
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={24} sm={24}>
+            <FormItem label="快递公司">
+              {getFieldDecorator('wid')(
+                <Select
+                  placeholder="请选择"
+                  optionFilterProp="label"
+                  // onChange={this.onSelectChange}
+                >
+                  {/*<Option value="重庆仓库">重庆仓库</Option>*/}
+                  {/*<Option value="香港仓库">香港仓库</Option>*/}
+                  {/*<Option value="青岛仓库">青岛仓库</Option>*/}
+                  {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressId} label={val.expressName}>{val.expressName}</Option>)}
+                </Select>
+              )}
+            </FormItem>
+              </Col>
+              </Row>
+          </Form>
+        </div>
+        </Modal>
       </div>
     );
   }

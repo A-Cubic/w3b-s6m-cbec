@@ -152,7 +152,7 @@ export default {
           callback();
           message.success('保存成功');
         }else{
-          message.error('保存失败');
+          message.error(response.msg);
         }
       }
     },
@@ -170,7 +170,7 @@ export default {
           callback();
           message.success('删除成功');
         }else{
-          message.error('删除失败');
+          message.error(response.msg);
         }
       }
     },
