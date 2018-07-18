@@ -53,6 +53,12 @@ export default class Warehouse extends Component {
   }
   addWarehouse =()=>{
     this.props.dispatch({
+      type:'goods/getSupplier',
+      payload:{
+        userId:userId
+      }
+    })
+    this.props.dispatch({
       type: 'goods/editWarehouse',
       payload: {
         taxation2type:'2',
@@ -87,7 +93,7 @@ export default class Warehouse extends Component {
   }
   render() {
     // console.log('1',this.props)
-    const { goods:{warehouseTable:{ list, pagination }} } = this.props;
+    const { goods:{warehouseTable:{ list, pagination },supplierArr} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

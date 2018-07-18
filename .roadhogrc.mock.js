@@ -207,6 +207,10 @@ const proxy = {
   'POST /llback/Goods/GetWarehouseList': service_url2,
   //新增仓库
   'POST /llback/Goods/UpdateWarehouse': service_url2,
+  // 仓库 供应商 下拉
+  'POST /llback/Goods/GetSupplier': [
+    {supplierId:1,supplier:"供应商上"}
+    ],
   //删除仓库
   'POST /llback/Goods/DeleteWarehouse': service_url2,
 

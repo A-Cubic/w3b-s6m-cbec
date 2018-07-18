@@ -7,7 +7,7 @@ import {
   getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl,
   getWarehouseList,getUpdateWarehouse,getDeleteWarehouse,
   getgoodsDetail,
-  getStep1Upload,getGoodsPutaway,getStep2supplement,
+  getStep1Upload,getGoodsPutaway,getStep2supplement,getSupplier,
   getCheckStepStatus,
   getStep2Upload,getStep3supplement,getStep4TrueSupplement,getStep4FalseSupplement
 } from '../services/api';
@@ -24,7 +24,8 @@ export default {
     brandData:[],
     wareHouseData:[],
     ModalGoodsAboutEdit:{},
-    //仓库
+    //仓库 -供应商
+    supplierArr:[],
     warehouseTable:{
       list: [],
       pagination:{},
@@ -33,7 +34,7 @@ export default {
     ModalwarehouseEdit:{
       wid:'',
       supplier:'1',
-      wcode:'',
+      wname:'',
       taxation:'',
       taxation2type:'2',
       taxation2line:'',
@@ -140,6 +141,17 @@ export default {
       if (response !== undefined) {
         yield put({
           type: 'warehouseListR',
+          payload: response,
+        });
+      }
+    },
+    // 供应商 下拉
+    *getSupplier({ payload },{ call,put}){
+      const response = yield call(getSupplier, payload);
+      console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getSupplierR',
           payload: response,
         });
       }
@@ -362,6 +374,13 @@ export default {
       return {
         ...state,
         warehouseTable:action.payload,
+      };
+    },
+    // 供应商下拉
+    getSupplierR(state, action) {
+      return {
+        ...state,
+        supplierArr:action.payload,
       };
     },
     editWarehouseR(state, action) {

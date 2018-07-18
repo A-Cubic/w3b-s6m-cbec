@@ -426,7 +426,7 @@ class ChildrenDelivery extends React.Component {
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={24} sm={24}>
                 <FormItem label="运单号">
-                  {getFieldDecorator('goodsName',{
+                  {getFieldDecorator('waybillno',{
                     rules:[{
                       required:true,message:'请填写运单号',
                     }]
@@ -437,7 +437,7 @@ class ChildrenDelivery extends React.Component {
               </Col>
               <Col md={24} sm={24}>
             <FormItem label="快递公司">
-              {getFieldDecorator('wid')(
+              {getFieldDecorator('expressId')(
                 <Select
                   placeholder="请选择"
                   optionFilterProp="label"

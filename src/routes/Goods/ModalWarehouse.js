@@ -54,7 +54,7 @@ export default class ModalUnteratedOrder extends React.PureComponent {
 
   }
   render() {
-    const {goods:{ModalwarehouseEdit}} = this.props;
+    const {goods:{ModalwarehouseEdit,supplierArr}} = this.props;
     const {getFieldDecorator, validateFields} = this.props.form;
     return (
       <div>
@@ -62,7 +62,7 @@ export default class ModalUnteratedOrder extends React.PureComponent {
           width={ '100%' }
           style={{maxWidth:1000}}
           cancelText="关闭"
-          okText="确认新增"
+          okText="确认保存"
           title="仓库基础信息"
 
           visible={this.props.parent.visible}
@@ -80,15 +80,16 @@ export default class ModalUnteratedOrder extends React.PureComponent {
                     {...formItemLayout}
                     label="供应商"
                   >
-                    {getFieldDecorator('supplier',{
-                      initialValue: ModalwarehouseEdit.taxation2type,
+                    {getFieldDecorator('supplierId',{
+                      // initialValue: ModalwarehouseEdit.taxation2type,
                       rules: [{ required: true, message: '请选择供应商' }],
                     })(
                       <Select
-                        placeholder="请选择税率提档类别"
+                        placeholder="请选择供应商"
                         // onChange={this.handleSelectChange}
                       >
-                        <Option value="1">供应商</Option>
+                        {supplierArr.map(val => <Option key={val.supplierId} value={val.supplierId} label={val.supplier}>{val.supplier}</Option>)}
+
                       </Select>
                     )}
                   </FormItem>
@@ -98,8 +99,8 @@ export default class ModalUnteratedOrder extends React.PureComponent {
                     {...formItemLayout}
                     label="所属仓库"
                   >
-                    {getFieldDecorator('wcode', {
-                      initialValue: ModalwarehouseEdit.wcode,
+                    {getFieldDecorator('wname', {
+                      initialValue: ModalwarehouseEdit.wname,
                       rules: [{ required: true, message: '请输入仓库名称' }],
                     })(
                       <Input placeholder="请输入仓库名称"/>
