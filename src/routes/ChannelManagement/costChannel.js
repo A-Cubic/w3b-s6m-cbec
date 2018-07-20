@@ -2,7 +2,6 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import CostChannelModalEdit from './costChannelModalEdit';
 import styles from './costChannel.less';
 import moment from 'moment';
 import {getToken} from "../../utils/Global";
@@ -29,7 +28,7 @@ const formItemLayout = {
 @Form.create()
 export default class costChannel extends Component {
   state={
-    visible:true,
+    visible:false,
     formValues:{},
   }
   init(){
@@ -137,9 +136,6 @@ export default class costChannel extends Component {
                  // loading={submitting}
           />
         </Card>
-        {/*<CostChannelModalEdit*/}
-          {/*parent = {parent}*/}
-        {/*/>*/}
         <ChildEdit
           parent = {Parent}
         />
