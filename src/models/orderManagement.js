@@ -8,15 +8,17 @@ import {notification} from "antd/lib/index";
 export default {
   namespace: 'orderManagement',
   state:{
+    //获取仓库
     wareHouseData:[],
+    //获取快递
     expressArr:[],
+    //供应商-运营商-渠道商接口共用table
     supplierOrder:{
       tableData:{
         list: [],
         pagination:{},
       },
       childCheck:{},
-      // childDelivery:{}
     }
   },
   effects:{
@@ -33,7 +35,7 @@ export default {
     //获取快递
     *getExpress({ payload },{ call,put}){
       const response = yield call(getExpressData, payload);
-      console.log('~',response)
+      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getExpressR',
