@@ -12,5 +12,15 @@ export default function(dynamicWrapper,app){
     '/orderManagement/channelOrder': {
       component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/channelOrder')),
     },
+
+
+    // 渠道管理 - 费用信息
+    '/channelManagement/costChannel': {
+      component: dynamicWrapper(app, ['channelManagement'], () => import('../routes/ChannelManagement/costChannel')),
+    },
+    // 渠道管理 - 商品信息
+    '/channelManagement/goodsChannel': {
+      component: dynamicWrapper(app, ['channelManagement'], () => import('../routes/ChannelManagement/goodsChannel')),
+    },
   };
 };
