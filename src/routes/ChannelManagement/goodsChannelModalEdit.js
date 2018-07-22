@@ -3,12 +3,12 @@ import { Modal, Button, Table, Input,Select, Form, Row, Col, Alert, Badge, Divid
 import { connect } from 'dva';
 const FormItem = Form.Item;
 const Option = Select.Option;
-@connect(({ orderManagement, loading }) => ({
-  orderManagement,
+@connect(({ channelManagement, loading }) => ({
+  channelManagement,
   // loading: loading.effects['goods/'],
 }))
 @Form.create()
-export default class ModalSupplierOrderCheck extends React.PureComponent {
+export default class GoodsChannelModalEdit extends React.PureComponent {
 
   handleCancel = (e) => {
     this.props.parent.handleVisible(false,'childCheck');
@@ -16,7 +16,7 @@ export default class ModalSupplierOrderCheck extends React.PureComponent {
   }
 
   render() {
-    const {orderManagement:{supplierOrder:{childCheck}}} = this.props;
+    const {channelManagement:{supplierOrder:{childCheck}}} = this.props;
     const columns = [
       {
       title: '商品条码',

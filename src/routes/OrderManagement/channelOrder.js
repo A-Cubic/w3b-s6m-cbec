@@ -2,8 +2,8 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import ModalSupplierOrderCheck from './ModalSupplierOrderCheck';
-import styles from './supplierOrder.less';
+import ModalChannelOrderCheck from './ModalChannelOrderCheck';
+import styles from './channelOrder.less';
 import moment from 'moment';
 import {getToken} from "../../utils/Global";
 const userId = getToken().userId;
@@ -18,7 +18,7 @@ const TabPane = Tabs.TabPane;
 }))
 
 @Form.create()
-export default class supplierOrder extends Component {
+export default class channelOrder extends Component {
   state={
     fileList:[],
     visibleChildCheck:false,
@@ -282,8 +282,6 @@ export default class supplierOrder extends Component {
         render: (val,record) =>
           <div>
             <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
-            {record.ifSend=='1'?
-            <a href="javascript:;" onClick={()=>this.handleChildrenDelivery(record)}>发货</a>:''}
           </div>
       }
     ];
@@ -314,21 +312,14 @@ export default class supplierOrder extends Component {
     return (
       <div>
         <Card className={styles.mT10}>
-          <div >
-            <Select style={{ width: 180 }}
-                    placeholder="请选择仓库"
-                    onChange={this.onSelectChangeWarehouse}>
-              {wareHouseData.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
-            </Select>
-            <Button style={{ marginLeft: 8 }} onClick={this.downloadToSendOrder}>
-              <Icon type="cloud-download-o" />导出需发货的订单
-            </Button>
+          <div style={{display: 'inline-flex'}}>
+
             <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
-              <Icon type="download" />下载运单模板
+              <Icon type="download" />下载订单模板
             </Button>
             <Upload {...props} fileList={this.state.fileList}>
               <Button style={{ marginLeft: 8 }}>
-                <Icon type="cloud-upload-o" /> 导入运单信息
+                <Icon type="cloud-upload-o" /> 导入订单信息
               </Button>
             </Upload>
 
@@ -347,114 +338,12 @@ export default class supplierOrder extends Component {
                  // loading={submitting}
           />
         </Card>
-        <ModalSupplierOrderCheck
+        <ModalChannelOrderCheck
           parent = {parent}
         />
-        <ChildrenDelivery
-          parent = {ChildrenDeliveryParent}
-        />
       </div>
     );
   }
 }
 
 
-@Form.create()
-class ChildrenDelivery extends React.Component {
-
-  handleOk = (e) => {
-    e.preventDefault();
-    const that = this;
-    this.props.form.validateFields((err, fieldsValue)=>{
-      if(!err){
-        this.props.parent.dispatch({
-          type:'orderManagement/confirmDelivery',
-          payload:{
-            ...fieldsValue,
-            userId:userId,
-            orderId:this.props.parent.orderId
-          },
-          callback:function () {
-            that.props.parent.handleVisible(false,'childDelivery')
-            that.props.form.resetFields();
-          }
-        })
-      }
-    })
-  }
-  handleOverseas =(e)=>{
-    e.preventDefault();
-    const that = this;
-    this.props.parent.dispatch({
-      type:'orderManagement/shipmentOverseas',
-      payload:{
-        ...fieldsValue,
-        userId:userId,
-        orderId:this.props.parent.orderId
-      },
-      callback:function () {
-        that.props.parent.handleVisible(false,'childDelivery')
-        that.props.form.resetFields();
-      }
-    })
-  }
-  handleCancel = (e) => {
-    this.props.parent.handleVisible(false,'childDelivery')
-    this.props.form.resetFields();
-  }
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    // const {parent:{expressArr}} = this.props
-    // console.log(this.props)
-    return (
-      <div>
-        <Modal
-          title="发货"
-          visible={this.props.parent.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          footer={[
-            <Button key="1" onClick={this.handleCancel}>关闭</Button>,
-            <Button key="2" type="primary" onClick={this.handleOverseas}>海外出货</Button>,
-            <Button key="3" type="primary" onClick={this.handleOk}>确定</Button>
-          ]}
-        >
-        <div className={styles.tableListForm}>
-          <Form onSubmit={this.handleOk} layout="inline">
-            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col md={24} sm={24}>
-                <FormItem label="运单号">
-                  {getFieldDecorator('waybillno',{
-                    rules:[{
-                      required:true,message:'请填写运单号',
-                    }]
-                  })(
-                    <Input placeholder="请输入" />
-                  )}
-                </FormItem>
-              </Col>
-              <Col md={24} sm={24}>
-            <FormItem label="快递公司">
-              {getFieldDecorator('expressId')(
-                <Select
-                  placeholder="请选择"
-                  optionFilterProp="label"
-                  // onChange={this.onSelectChange}
-                >
-                  {/*<Option value="重庆仓库">重庆仓库</Option>*/}
-                  {/*<Option value="香港仓库">香港仓库</Option>*/}
-                  {/*<Option value="青岛仓库">青岛仓库</Option>*/}
-                  {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressId} label={val.expressName}>{val.expressName}</Option>)}
-                </Select>
-              )}
-            </FormItem>
-              </Col>
-              </Row>
-          </Form>
-        </div>
-        </Modal>
-      </div>
-    );
-  }
-}

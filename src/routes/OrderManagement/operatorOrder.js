@@ -2,8 +2,8 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import ModalSupplierOrderCheck from './ModalSupplierOrderCheck';
-import styles from './supplierOrder.less';
+import ModalOperatorOrderCheck from './ModalOperatorOrderCheck';
+import styles from './operatorOrder.less';
 import moment from 'moment';
 import {getToken} from "../../utils/Global";
 const userId = getToken().userId;
@@ -18,8 +18,9 @@ const TabPane = Tabs.TabPane;
 }))
 
 @Form.create()
-export default class supplierOrder extends Component {
+export default class operatorOrder extends Component {
   state={
+    fileList1:[],
     fileList:[],
     visibleChildCheck:false,
     visibleChildDelivery:false,
@@ -68,6 +69,17 @@ export default class supplierOrder extends Component {
     window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/order/Waybill.xlsx'
   }
   // 导入
+  handleUploadChange1=(info)=>{
+    this.props.dispatch({
+      type: 'orderManagement/uploadWaybill',
+      payload: {
+        userId: userId,
+        byte64:info.file.thumbUrl
+      },
+      callback: this.onUploadCallback,
+
+    });
+  }
   handleUploadChange=(info)=>{
     this.props.dispatch({
       type: 'orderManagement/uploadWaybill',
@@ -267,7 +279,15 @@ export default class supplierOrder extends Component {
       title: '订单总额',
       dataIndex: 'tradeAmount',
       key: 'tradeAmount',
-    }, {
+      }, {
+        title: '供应商',
+        dataIndex: 'supplier',
+        key: 'supplier',
+      }, {
+        title: '分销渠道',
+        dataIndex: 'purchase',
+        key: 'purchase',
+      }, {
       title: '运单编号',
       dataIndex: 'waybillno',
       key: 'waybillno',
@@ -299,6 +319,18 @@ export default class supplierOrder extends Component {
       dispatch:this.props.dispatch,
       orderId:this.state.orderId
     };
+    const url1 = 'http://api.llwell.net/llback/user/validate'
+    const props1 = {
+      action: url1,
+      listType: 'picture',
+      data:{
+        userId:userId
+      },
+      // accept:'image/*',
+      onChange: this.handleUploadChange1,
+      multiple: false,
+      customRequest:this.upload,
+    };
     const url = 'http://api.llwell.net/llback/user/validate'
     const props = {
       action: url,
@@ -314,8 +346,17 @@ export default class supplierOrder extends Component {
     return (
       <div>
         <Card className={styles.mT10}>
-          <div >
-            <Select style={{ width: 180 }}
+          <div>
+
+            <Button  type="primary" onClick={this.downloadTemplate}>
+              <Icon type="download" />下载订单模板
+            </Button>
+            <Upload {...props1} fileList={this.state.fileList1}  className={styles.upload}>
+              <Button style={{ marginLeft: 8 }}>
+                <Icon type="cloud-upload-o" /> 导入订单信息
+              </Button>
+            </Upload>
+            <Select style={{ width: 180,marginLeft: 8 }}
                     placeholder="请选择仓库"
                     onChange={this.onSelectChangeWarehouse}>
               {wareHouseData.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
@@ -323,16 +364,11 @@ export default class supplierOrder extends Component {
             <Button style={{ marginLeft: 8 }} onClick={this.downloadToSendOrder}>
               <Icon type="cloud-download-o" />导出需发货的订单
             </Button>
-            <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
-              <Icon type="download" />下载运单模板
-            </Button>
-            <Upload {...props} fileList={this.state.fileList}>
+            <Upload {...props} fileList={this.state.fileList} className={styles.upload}>
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="cloud-upload-o" /> 导入运单信息
               </Button>
             </Upload>
-
-
           </div>
           <Divider dashed />
           <div className={styles.tableListForm}>
@@ -340,14 +376,14 @@ export default class supplierOrder extends Component {
           </div>
           <Table
             dataSource={tableData.list}
-                 rowKey={record => record.id}
-                 columns={columns}
-                 pagination={paginationProps}
-                 onChange={this.handleTableChange}
-                 // loading={submitting}
+               rowKey={record => record.id}
+               columns={columns}
+               pagination={paginationProps}
+               onChange={this.handleTableChange}
+               // loading={submitting}
           />
         </Card>
-        <ModalSupplierOrderCheck
+        <ModalOperatorOrderCheck
           parent = {parent}
         />
         <ChildrenDelivery
@@ -361,7 +397,6 @@ export default class supplierOrder extends Component {
 
 @Form.create()
 class ChildrenDelivery extends React.Component {
-
   handleOk = (e) => {
     e.preventDefault();
     const that = this;
@@ -388,7 +423,6 @@ class ChildrenDelivery extends React.Component {
     this.props.parent.dispatch({
       type:'orderManagement/shipmentOverseas',
       payload:{
-        ...fieldsValue,
         userId:userId,
         orderId:this.props.parent.orderId
       },

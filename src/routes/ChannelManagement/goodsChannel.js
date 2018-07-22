@@ -2,10 +2,10 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import ModalSupplierOrderCheck from './ModalSupplierOrderCheck';
-import styles from './supplierOrder.less';
+import styles from './goodsChannel.less';
 import moment from 'moment';
 import {getToken} from "../../utils/Global";
+import GoodsChannelModalEdit from "./goodsChannelModalEdit";
 const userId = getToken().userId;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -347,7 +347,7 @@ export default class supplierOrder extends Component {
                  // loading={submitting}
           />
         </Card>
-        <ModalSupplierOrderCheck
+        <GoodsChannelModalEdit
           parent = {parent}
         />
         <ChildrenDelivery
