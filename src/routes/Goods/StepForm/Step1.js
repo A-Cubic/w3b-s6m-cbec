@@ -6,6 +6,7 @@ import styles from './style.less';
 import {notification} from "antd/lib/index";
 import {getToken} from "../../../utils/Global";
 const userId = getToken().userId;
+const token = getToken().token;
 const { Option } = Select;
 
 @Form.create()
@@ -15,6 +16,7 @@ class Step1 extends React.PureComponent {
     thumbUrl:'',
   }
   handleUploadChange=(info)=>{
+    console.log(info)
     this.setState({
       fileList:info.fileList,
       thumbUrl:info.file.thumbUrl
@@ -40,14 +42,13 @@ class Step1 extends React.PureComponent {
   render() {
     const { form, dispatch,submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
-    const url = 'http://api.llwell.net/llback/user/validate'
+    const url = 'http://localhost:51186/llback/Order/UploadOrderTemp' //地址最终可以用/llback/Order/UploadOrderTemp的方式，调试可以在.roadhogrc.mock.js增加
     const props = {
       action: url,
-      listType: 'picture',
-      // accept:'image/*',
-      onChange: this.handleUploadChange,
-      multiple: false,
-      customRequest:this.upload,
+      data: {ss: 123}, //传递到后台的自定义参数
+      headers: { token, userId }, //未封装的头信息，以满足后台对头参数的验证
+      onChange: this.handleUploadChange, //回调函数通过res.filelist[i].respose获取回传的文件名
+      multiple: true
     };
     const onValidateForm = () => {
       if(this.state.thumbUrl!==''){
