@@ -2,7 +2,7 @@ import { message} from 'antd';
 import {getSupplier} from '../services/api'
 import {getChannelTypeData,
   getCostChannelTable,saveCostChannel,
-  getGoodsChannelTable
+  getGoodsChannelTable,saveGoodsChannel
 } from '../services/channelManagement_S'
 import {notification} from "antd/lib/index";
 import {confirmDelivery} from "../services/orderManagement_S";
@@ -48,7 +48,7 @@ export default {
     // 获取供应商下拉
     *getSupplier({ payload },{ call,put}){
       const response = yield call(getSupplier, payload);
-      console.log('~',response)
+      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getSupplierR',
@@ -103,13 +103,28 @@ export default {
         })
       }
     },
-    //渠道管理 - 费用信息 - 编辑
+    //渠道管理 - 商品信息 - 编辑
     *editGoodsChannel({payload, callback},{call,put}){
-      console.log('~',payload)
+      // console.log('~',payload)
       yield put({
         type:'editGoodsChannelR',
         payload: payload
       })
+    },
+    //渠道管理 - 商品信息 - 编辑保存
+    *saveGoodsChannel({payload, callback},{call,put}){
+      const response = yield call(saveGoodsChannel, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        if(response.type==1){
+          callback();
+          message.success('保存成功')
+        }else{
+          message.error(response.msg)
+        }
+      }else{
+        message.error(response.error)
+      }
     },
   },
   reducers:{
@@ -156,7 +171,7 @@ export default {
       }
     },
     editGoodsChannelR(state,action){
-      console.log(action.payload)
+      // console.log(action.payload)
       return{
         ...state,
         goodsChannel:{

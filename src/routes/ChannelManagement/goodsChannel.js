@@ -43,9 +43,6 @@ export default class costChannel extends Component {
     this.init();
   }
 
-
-
-
   handleTableChange=(pagination, filtersArg, sorter)=>{
     const params = {
       purchase:userId,
@@ -57,8 +54,6 @@ export default class costChannel extends Component {
       payload: params,
     });
   }
-
-
   handleVisible = (flag) => {
     this.setState({
       visible:!!flag,
@@ -247,7 +242,7 @@ class ChildEdit extends React.Component {
       console.log('fieldsValue',fieldsValue)
       if(!err){
         this.props.dispatch({
-          type:'channelManagement/saveCostChannel',
+          type:'channelManagement/saveGoodsChannel',
           payload:{
             ...fieldsValue,
             userId:userId,
@@ -269,8 +264,7 @@ class ChildEdit extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {channelManagement:{costChannel:{childEdit},supplierArr}} = this.props;
-    // console.log(this.props)
+    const {channelManagement:{goodsChannel:{childEdit},supplierArr}} = this.props;
     return (
       <div>
         <Modal
@@ -355,15 +349,15 @@ class ChildEdit extends React.Component {
                     {...formItemLayout}
                     label="默认供应商"
                   >
-                    {getFieldDecorator('suppliercode',{
-                      initialValue: childEdit.suppliercode,
+                    {getFieldDecorator('supplierId',{
+                      initialValue: childEdit.supplierId,
                       rules: [{ required: true, message: '请选择默认供应商' }],
                     })(
                       <Select
                         placeholder="请选择默认供应商"
                         // onChange={this.handleSelectChange}
                       >
-                        {supplierArr.map(val => <Option key={val.suppliercode} value={val.suppliercode} label={val.suppliername}>{val.suppliername}</Option>)}
+                        {supplierArr.map(val => <Option key={val.supplierId} value={val.supplierId} label={val.supplier}>{val.supplier}</Option>)}
 
                       </Select>
                     )}
