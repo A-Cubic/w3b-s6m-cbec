@@ -1,6 +1,7 @@
 import { message} from 'antd';
 import {getChannelTypeData,
-  getChannelTable,saveCostChannel
+  getCostChannelTable,saveCostChannel,
+  getGoodsChannelTable
 } from '../services/channelManagement_S'
 import {notification} from "antd/lib/index";
 import {confirmDelivery} from "../services/orderManagement_S";
@@ -18,7 +19,17 @@ export default {
       childEdit:{
         id:''
       },
-    }
+    },
+    // 渠道管理 - 商品信息
+    goodsChannel:{
+      tableData:{
+        list: [],
+        pagination:{},
+      },
+      childEdit:{
+        id:''
+      },
+    },
   },
   effects:{
     // 获取渠道商类型
@@ -32,13 +43,13 @@ export default {
       }
     },
 
-    //获取订单列表
+    //渠道管理 - 费用信息 - 获取订单列表
     *getCostChannelTable({payload, callback},{call,put}){
-      const response = yield call(getChannelTable,payload);
+      const response = yield call(getCostChannelTable,payload);
       // console.log('~',response)
       if (response !== undefined){
         yield put({
-          type:'getChannelTableR',
+          type:'getCostChannelTableR',
           payload: response
         })
       }
@@ -66,6 +77,18 @@ export default {
         message.error(response.error)
       }
     },
+
+    //渠道管理 - 商品信息 - 获取订单列表
+    *getGoodsChannelTable({payload, callback},{call,put}){
+      const response = yield call(getGoodsChannelTable,payload);
+      // console.log('~',response)
+      if (response !== undefined){
+        yield put({
+          type:'getGoodsChannelTableR',
+          payload: response
+        })
+      }
+    },
   },
   reducers:{
     getChannelTypeR(state, action) {
@@ -75,7 +98,7 @@ export default {
       };
     },
 
-    getChannelTableR(state,action){
+    getCostChannelTableR(state,action){
       return{
         ...state,
         costChannel:{
@@ -85,7 +108,7 @@ export default {
       }
     },
     editCostChannelR(state,action){
-      console.log(action.payload)
+      // console.log(action.payload)
       return{
         ...state,
         costChannel:{
@@ -94,6 +117,14 @@ export default {
         }
       }
     },
-
+    getGoodsChannelTableR(state,action){
+      return{
+        ...state,
+        goodsChannel:{
+          ...state.goodsChannel,
+          tableData:action.payload
+        }
+      }
+    },
   }
 }

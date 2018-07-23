@@ -8,13 +8,14 @@ export async function getChannelTypeData(params) {
     body: params,
   });
 }
-// 获取渠道管理 - 费用信息
-export async function getChannelTable(params) {
+// 获取渠道管理 - 费用信息 - 列表
+export async function getCostChannelTable(params) {
   return request(`/llback/Distributor/DistributorList`, {
     method: 'POST',
     body: params,
   });
 }
+
 // 渠道管理 - 费用信息 -编辑
 export async function editCostChannel(params) {
   return request(`/llback/Distributor/DistributorList`, {
@@ -30,3 +31,10 @@ export async function saveCostChannel(params) {
   });
 }
 
+// 获取渠道管理 - 商品信息 - 列表
+export async function getGoodsChannelTable(params) {
+  return request(`/llback/Distributor/DGoodsList`, {
+    method: 'POST',
+    body: params,
+  });
+}

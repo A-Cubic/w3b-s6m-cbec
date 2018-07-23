@@ -5,250 +5,81 @@ import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,P
 import styles from './goodsChannel.less';
 import moment from 'moment';
 import {getToken} from "../../utils/Global";
-import GoodsChannelModalEdit from "./goodsChannelModalEdit";
 const userId = getToken().userId;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
-
-@connect(({orderManagement,  loading }) => ({
-  orderManagement,
-  loading: loading.effects['orderManagement/supplierOrderTable'],
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 15 },
+  },
+};
+@connect(({channelManagement,  loading }) => ({
+  channelManagement,
+  loading: loading.effects['channelManagement/getGoodsChannelTable'],
 }))
 
 @Form.create()
-export default class supplierOrder extends Component {
+export default class costChannel extends Component {
   state={
-    fileList:[],
-    visibleChildCheck:false,
-    visibleChildDelivery:false,
-    orderId:'',
-    visible: false,
+    visible:true,
     formValues:{},
-    warehouseId:'',
   }
   init(){
     this.props.dispatch({
-      type: 'orderManagement/getWareHouse',
+      type: 'channelManagement/getGoodsChannelTable',
       payload: {
-        userId:userId,
-      },
-    });
-    this.props.dispatch({
-      type: 'orderManagement/supplierOrderTable',
-      payload: {
-        userId:userId,
-        status:"全部"
+        purchase:userId
       },
     });
   }
   componentDidMount() {
     this.init();
   }
-  //按钮层
-  onSelectChangeWarehouse=(val)=>{
-    this.setState({
-      warehouseId:val
-    },()=>{
-      // console.log(this.state.warehouseId)
-    })
-  }
-  downloadToSendOrder=()=>{
-    if(this.state.warehouseId!==''){
-      this.props.dispatch({
-        type:'orderManagement/downloadToSendOrder',
-        payload:{
-          wid:this.state.warehouseId
-        }
-      })
-    }
-  }
-  downloadTemplate=()=>{
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/order/Waybill.xlsx'
-  }
-  // 导入
-  handleUploadChange=(info)=>{
-    this.props.dispatch({
-      type: 'orderManagement/uploadWaybill',
-      payload: {
-        userId: userId,
-        byte64:info.file.thumbUrl
-      },
-      callback: this.onUploadCallback,
-
-    });
-  }
-  onUploadCallback = (params) => {
-    const msg = params.msg;
-    if(params.type==="0"){
-      notification.error({
-        message: "提示",
-        description: msg,
-      });
-    }else {
-      notification.success({
-        message: "提示",
-        description: msg,
-      });
-    }
-  }
-  //列表
-  onSearch=(e)=>{
-    e.preventDefault();
-    const {orderManagement:{supplierOrder:{tableData}}}=this.props
-    this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
-
-      if (err) return;
-      const rangeValue = fieldsValue['date'];
-      const values = rangeValue==undefined ? {
-        ...fieldsValue,
-      }:{
-        ...fieldsValue,
-        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
-      };
-
-      this.setState({
-        formValues: values,
-      });
-      this.props.dispatch({
-        type: 'orderManagement/supplierOrderTable',
-        payload: {
-          userId:userId,
-          ...values,
-          ...tableData.pagination
-        },
-      });
-    });
 
 
-  }
-  handleFormReset =()=>{
-    this.props.form.resetFields();
-    this.init();
-  }
+
+
   handleTableChange=(pagination, filtersArg, sorter)=>{
     const params = {
-      ...this.state.formValues,
+      purchase:userId,
       ...pagination,
-      userId:userId
     };
 
     this.props.dispatch({
-      type: 'orderManagement/supplierOrderTable',
+      type: 'channelManagement/getGoodsChannelTable',
       payload: params,
     });
   }
 
 
-  handleVisible = (flag,who) => {
-    if(who=='childCheck'){
-      this.setState({
-        visibleChildCheck:!!flag,
-      });
-    }else if(who=='childDelivery'){
-      this.setState({
-        visibleChildDelivery:!!flag,
-      });
-    }
+  handleVisible = (flag) => {
+    this.setState({
+      visible:!!flag,
+    });
   }
-  handleChildrenCheck =(record)=>{
+  handleChildEdit =(record)=>{
     this.props.dispatch({
-      type: 'orderManagement/supplierOrderChildCheck',
-      payload: {
-        orderId:record.merchantOrderId,
-      },
+      type: 'channelManagement/getChannelType',
+      payload: {},
+    });
+    this.props.dispatch({
+      type: 'channelManagement/editCostChannel',
+      payload: {...record},
     });
     setTimeout(()=>{
-      this.handleVisible(true,'childCheck');
+      this.handleVisible(true);
     },0)
   }
-  handleChildrenDelivery=(record)=>{
-    this.setState({
-      orderId:record.merchantOrderId
-    })
-    const { orderManagement:{supplierOrder:{tableData},wareHouseData,expressArr} } = this.props;
-    this.handleVisible(true,'childDelivery');
-    //快递选择
-    this.props.dispatch({
-      type:'orderManagement/getExpress',
-      payload:{}
-    })
-  }
-  renderAdvancedForm(){
-    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
-    const { getFieldDecorator } = this.props.form;
-    return (
-      <Form onSubmit={this.onSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="订单状态">
-              {getFieldDecorator('status',{
-                initialValue:'全部'
-              })(
-                <Select
-                  placeholder="请选择"
-                  optionFilterProp="label"
-                  // onChange={this.onSelectChange}
-                >
-                  <Option value="全部">全部</Option>
-                  <Option value="待付款">待付款</Option>
-                  <Option value="待发货">待发货</Option>
-                  <Option value="已发货">已发货</Option>
-                  <Option value="已完成">已完成</Option>
-                  <Option value="已关闭">已关闭</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="订单编号">
-              {getFieldDecorator('orderId')(
-                <Input placeholder="请输入订单编号" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="运单编号">
-              {getFieldDecorator('waybillno')(
-                <Input placeholder="请输入运单编号" />
-              )}
-            </FormItem>
-          </Col>
 
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="时段">
-              {getFieldDecorator('date')(
-                <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-          </Col>
-          <Col md={8} sm={24}>
-            <span style={{ float: 'right' }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-          </span>
-          </Col>
-        </Row>
-        <Divider dashed />
-        <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-          <span style={{ float: 'right' }}>
-            共查询出符合条件的数据：{tableData?tableData.pagination.total:0}
-            {/*<Button  style={{marginLeft:18}}>*/}
-              {/*<Icon type="cloud-download-o" />导出数据*/}
-            {/*</Button>*/}
-          </span>
-        </div>
-      </Form>
-    );
-  }
   render() {
-    const { orderManagement:{supplierOrder:{tableData},wareHouseData,expressArr} } = this.props;
+    const { channelManagement:{goodsChannel:{tableData},channelTypeArr} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -256,148 +87,179 @@ export default class supplierOrder extends Component {
     }
     const columns = [
       {
-      title: '订单日期',
-      dataIndex: 'tradeTime',
-      key: 'tradeTime',
-    }, {
-      title: '订单编号',
-      dataIndex: 'merchantOrderId',
-      key: 'merchantOrderId',
-    }, {
-      title: '订单总额',
-      dataIndex: 'tradeAmount',
-      key: 'tradeAmount',
-    }, {
-      title: '运单编号',
-      dataIndex: 'waybillno',
-      key: 'waybillno',
-    }, {
-      title: '订单状态',
-      dataIndex: 'status',
-      key: 'status',
-    },{
+        title: '商品条码',
+        dataIndex: 'barcode',
+        key: 'barcode',
+        fixed: 'left',
+        width: 100,
+      }, {
+        title: '商品名称',
+        dataIndex: 'goodsName',
+        key: 'goodsName',
+        fixed: 'left',
+        width: 90,
+      // }, {
+      //   title: '商品图片',
+      //   dataIndex: 'slt',
+      //   key: 'slt',
+      //   render: (val) => (
+      //     <img src={ val} alt="" width={80} style={{float:'left',marginRight:8}}/>
+      //   )
+      }, {
+        title: '采购类型',
+        dataIndex: 'platformType',
+        key: 'platformType',
+        fixed: 'left',
+        width: 90,
+      }, {
+        title: '采购商',
+        dataIndex: 'purchase',
+        key: 'purchase',
+        fixed: 'left',
+        width: 90,
+      }, {
+        title: '采购单价',
+        dataIndex: 'pprice',
+        key: 'pprice',
+        width: 90,
+        render:val=>val?'¥'+val:''
+      }, {
+        title: '采购数量',
+        dataIndex: 'pNum',
+        key: 'pNum',
+        width: 90,
+      }, {
+        title: '默认供应商',
+        dataIndex: 'suppliername',
+        key: 'suppliername',
+        width: 90,
+      }, {
+        title: '利润分成百分比（平台）',
+        dataIndex: 'profitPlatform',
+        key: 'profitPlatform',
+        width: 90,
+        render:val=>val+'%'
+      }, {
+        title: '利润分成百分比（代理）',
+        dataIndex: 'profitAgent',
+        key: 'profitAgent',
+        width: 90,
+        render:val=>val+'%'
+      }, {
+        title: '利润分成百分比(分销商)',
+        dataIndex: 'profitDealer',
+        key: 'profitDealer',
+        width: 90,
+        render:val=>val+'%'
+      }, {
+        title: '利润分成百分比(其他1)',
+        dataIndex: 'profitOther1',
+        key: 'profitOther1',
+        width: 90,
+        render:val=>val+'%'
+      }, {
+        title: '利润分成百分比(其他2)',
+        dataIndex: 'profitOther2',
+        key: 'profitOther2',
+        width: 90,
+        render:val=>val+'%'
+      }, {
+        title: '利润分成百分比(其他3)',
+        dataIndex: 'profitOther3',
+        key: 'profitOther3',
+        width: 90,
+        render:val=>val+'%'
+      }, {
+        title: '其他1',
+        dataIndex: 'profitOther1Name',
+        key: 'profitOther1Name',
+        width: 90,
+      }, {
+        title: '其他2',
+        dataIndex: 'profitOther2Name',
+        key: 'profitOther2Name',
+        render:val=>val?val:'',
+        width: 90,
+      }, {
+        title: '其他3',
+        dataIndex: 'profitOther3Name',
+        key: 'profitOther3Name',
+        render:val=>val?val:'',
+        width: 90,
+      }, {
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
+        fixed: 'right',
+        width: 90,
         render: (val,record) =>
           <div>
-            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
-            {record.ifSend=='1'?
-            <a href="javascript:;" onClick={()=>this.handleChildrenDelivery(record)}>发货</a>:''}
+            <a href="javascript:;" onClick={()=>this.handleChildEdit(record)}>编辑</a><br/>
           </div>
       }
     ];
-    const {visibleChildCheck,visibleChildDelivery} = this.state;
-    const parent  = {
-      visible:visibleChildCheck,
+    const {visible} = this.state;
+
+    const Parent  = {
+      visible:visible,
       handleVisible : this.handleVisible,
+      channelTypeArr:channelTypeArr,
     };
-    const ChildrenDeliveryParent  = {
-      visible:visibleChildDelivery,
-      handleVisible : this.handleVisible,
-      expressArr:expressArr,
-      dispatch:this.props.dispatch,
-      orderId:this.state.orderId
-    };
-    const url = 'http://api.llwell.net/llback/user/validate'
-    const props = {
-      action: url,
-      listType: 'picture',
-      data:{
-        userId:userId
-      },
-      // accept:'image/*',
-      onChange: this.handleUploadChange,
-      multiple: false,
-      customRequest:this.upload,
-    };
+
     return (
       <div>
         <Card className={styles.mT10}>
-          <div >
-            <Select style={{ width: 180 }}
-                    placeholder="请选择仓库"
-                    onChange={this.onSelectChangeWarehouse}>
-              {wareHouseData.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
-            </Select>
-            <Button style={{ marginLeft: 8 }} onClick={this.downloadToSendOrder}>
-              <Icon type="cloud-download-o" />导出需发货的订单
-            </Button>
-            <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
-              <Icon type="download" />下载运单模板
-            </Button>
-            <Upload {...props} fileList={this.state.fileList}>
-              <Button style={{ marginLeft: 8 }}>
-                <Icon type="cloud-upload-o" /> 导入运单信息
-              </Button>
-            </Upload>
-
-
-          </div>
-          <Divider dashed />
-          <div className={styles.tableListForm}>
-            {this.renderAdvancedForm()}
-          </div>
+          <Button type="primary" ghost onClick={this.downloadStoreTemp}>下载商品渠道模板</Button>
+          <Button style={{marginLeft:8}} type="primary" ghost onClick={this.onStartUpload}>上传商品渠道信息</Button>
           <Table
+            scroll={{ x: 1600 }}
             dataSource={tableData.list}
-                 rowKey={record => record.id}
-                 columns={columns}
-                 pagination={paginationProps}
-                 onChange={this.handleTableChange}
-                 // loading={submitting}
+            rowKey={record => record.id}
+            columns={columns}
+            pagination={paginationProps}
+            onChange={this.handleTableChange}
+            // loading={submitting}
           />
         </Card>
-        <GoodsChannelModalEdit
-          parent = {parent}
-        />
-        <ChildrenDelivery
-          parent = {ChildrenDeliveryParent}
+        <ChildEdit
+          parent = {Parent}
         />
       </div>
     );
   }
 }
 
-
+@connect(({ channelManagement, loading }) => ({
+  channelManagement,
+  // loading: loading.effects['goods/'],
+}))
 @Form.create()
-class ChildrenDelivery extends React.Component {
+
+class ChildEdit extends React.Component {
 
   handleOk = (e) => {
+    const {channelManagement:{costChannel:{childEdit},channelTypeArr}} = this.props
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue)=>{
+      console.log('fieldsValue',fieldsValue)
       if(!err){
-        this.props.parent.dispatch({
-          type:'orderManagement/confirmDelivery',
+        this.props.dispatch({
+          type:'channelManagement/saveCostChannel',
           payload:{
             ...fieldsValue,
             userId:userId,
-            orderId:this.props.parent.orderId
+            id:childEdit.id
           },
           callback:function () {
-            that.props.parent.handleVisible(false,'childDelivery')
+            that.props.parent.handleVisible(false)
             that.props.form.resetFields();
           }
         })
       }
     })
   }
-  handleOverseas =(e)=>{
-    e.preventDefault();
-    const that = this;
-    this.props.parent.dispatch({
-      type:'orderManagement/shipmentOverseas',
-      payload:{
-        ...fieldsValue,
-        userId:userId,
-        orderId:this.props.parent.orderId
-      },
-      callback:function () {
-        that.props.parent.handleVisible(false,'childDelivery')
-        that.props.form.resetFields();
-      }
-    })
-  }
+
   handleCancel = (e) => {
     this.props.parent.handleVisible(false,'childDelivery')
     this.props.form.resetFields();
@@ -405,54 +267,149 @@ class ChildrenDelivery extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    // const {parent:{expressArr}} = this.props
+    const {channelManagement:{costChannel:{childEdit},channelTypeArr}} = this.props
     // console.log(this.props)
     return (
       <div>
         <Modal
+          width={ '100%' }
+          style={{maxWidth:1000}}
           title="发货"
           visible={this.props.parent.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
             <Button key="1" onClick={this.handleCancel}>关闭</Button>,
-            <Button key="2" type="primary" onClick={this.handleOverseas}>海外出货</Button>,
             <Button key="3" type="primary" onClick={this.handleOk}>确定</Button>
           ]}
         >
-        <div className={styles.tableListForm}>
-          <Form onSubmit={this.handleOk} layout="inline">
-            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col md={24} sm={24}>
-                <FormItem label="运单号">
-                  {getFieldDecorator('waybillno',{
-                    rules:[{
-                      required:true,message:'请填写运单号',
-                    }]
-                  })(
-                    <Input placeholder="请输入" />
-                  )}
-                </FormItem>
-              </Col>
-              <Col md={24} sm={24}>
-            <FormItem label="快递公司">
-              {getFieldDecorator('expressId')(
-                <Select
-                  placeholder="请选择"
-                  optionFilterProp="label"
-                  // onChange={this.onSelectChange}
-                >
-                  {/*<Option value="重庆仓库">重庆仓库</Option>*/}
-                  {/*<Option value="香港仓库">香港仓库</Option>*/}
-                  {/*<Option value="青岛仓库">青岛仓库</Option>*/}
-                  {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressId} label={val.expressName}>{val.expressName}</Option>)}
-                </Select>
-              )}
-            </FormItem>
-              </Col>
+          <div className={styles.tableListForm}>
+            <Form onSubmit={this.handleOk} layout="inline">
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="商品条码"
+                  >
+                    {getFieldDecorator('aaa', {
+                      initialValue: childEdit.username,
+                      rules: [{ required: true, message: '请输入渠道商' }],
+                    })(
+                      <div>aaaa</div>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="商品名称"
+                  >
+                    {getFieldDecorator('VVV',{
+                      initialValue: childEdit.platformType,
+                      rules: [{ required: true, message: '请选择渠道商类型' }],
+                    })(
+                      <div>BBBB</div>
+                    )}
+                  </FormItem>
+                </Col>
+
               </Row>
-          </Form>
-        </div>
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="渠道商"
+                  >
+                    {getFieldDecorator('username', {
+                      initialValue: childEdit.username,
+                      rules: [{ required: true, message: '请输入渠道商' }],
+                    })(
+                      <Input placeholder="请输入渠道商"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="渠道商类型"
+                  >
+                    {getFieldDecorator('platformType',{
+                      initialValue: childEdit.platformType,
+                      rules: [{ required: true, message: '请选择渠道商类型' }],
+                    })(
+                      <Select
+                        placeholder="请选择渠道商"
+                        // onChange={this.handleSelectChange}
+                      >
+                        {channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}
+
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+
+              </Row>
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="渠道商价格类型"
+                  >
+                    {getFieldDecorator('priceType', {
+                      initialValue: ['','按订单售价计算','按供货价计算'][childEdit.priceType],
+                      rules: [{ required: true, message: '请选择渠道商价格类型' }],
+                    })(
+                      <Select
+                        placeholder="请选择渠道商价格类型"
+                        // onChange={this.handleSelectChange}
+                      >
+                        <Option value="1">按订单售价计算</Option>
+                        <Option value="2">按供货价计算</Option>
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="提点类型"
+                  >
+                    {getFieldDecorator('platformCostType',{
+                      initialValue: ['','进价基础计算','售价基础计算'][childEdit.platformCostType],
+                      rules: [{ required: true, message: '请选择提点类型' }],
+                    })(
+                      <Select
+                        placeholder="请选择提点类型"
+                        // onChange={this.handleSelectChange}
+                      >
+                        <Option value="1">进价基础计算</Option>
+                        <Option value="2">售价基础计算</Option>
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={11} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="平台提点（%）"
+                  >
+                    {getFieldDecorator('platformCost', {
+                      initialValue: childEdit.platformCost,
+                      rules: [{ required: true, message: '请输入平台提点（%）' }],
+                    })(
+                      <Input placeholder="请输入平台提点（%）"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={11} >
+
+                </Col>
+              </Row>
+            </Form>
+          </div>
         </Modal>
       </div>
     );

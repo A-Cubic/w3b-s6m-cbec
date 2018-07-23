@@ -1,12 +1,17 @@
 // const orderManagement = 'http://console.llwell.net/';
-export default function channelManagementMock() {
+export default function channelManagementMock(url) {
   return {
+    // 获取供应商
+    // 获取采购类型
     // 获取渠道商类型
     'POST /llback/Distributor/GetPlatform': getPlatform,
     // 渠道管理-获取渠道费用列表
-    'POST /llback/Distributor/DistributorList': getChannelList,
+    'POST /llback/Distributor/DistributorList': url,
     // 渠道管理-获取渠道费用列表
     'POST /llback/Distributor/UpdateDistributor': UpdateDistributor,
+
+    // 渠道管理-获取渠道商品列表
+    'POST /llback/Distributor/DGoodsList': getChannelList,
 
   };
 }
@@ -25,18 +30,32 @@ export function getPlatform(req, res) {
 export function getChannelList(req, res) {
   res.send({
     list: [{
-      id: 1,
+      id: '1',
       usercode: 'admin',
-      username: '管理员',
-      platformId: 1,
-      platformType: '渠道1',
-      platformCostType: 1,
-      priceType: 1,
-      platformCost: 2,
+      purchase: '管理员',
+      goodsid: '1',
+      barcode: '2',
+      goodsName: '3',
+      slt: '4',
+      platformId: '',
+      platformType: 'B2B',
+      pprice: '2',
+      pNum: 3,
+      suppliercode: 'caigou',
+      suppliername: '采购商',
+      profitPlatform: 0,
+      profitAgent: 0,
+      profitDealer: 0,
+      profitOther1: 0,
+      profitOther1Name: '0',
+      profitOther2: 0,
+      profitOther2Name: '0',
+      profitOther3: 0,
+      profitOther3Name: '0',
     }],
     pagination: {
       current: 1,
-      total: 8,
+      total: 1,
       pageSize: 10,
     },
   });
