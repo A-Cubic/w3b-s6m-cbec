@@ -209,21 +209,11 @@ const proxy = {
   //新增仓库
   'POST /llback/Goods/UpdateWarehouse': service_url2,
   // 仓库 供应商 下拉
-  'POST /llback/Goods/GetSupplier': [
-    {supplierId:1,supplier:"供应商上"}
-    ],
+  'POST /llback/Goods/GetSupplier': service_url2,
   //删除仓库
   'POST /llback/Goods/DeleteWarehouse': service_url2,
 
-  'POST /llback/Goods/downloadStoreTempUrl': {
-    url:'https://github.com/llwell/API-SERVER/issues/11'
-  },
-  'POST /llback/Goods/downloadGoodsTempUrl': {
-    url:'https://github.com/llwell/API-SERVER/issues/11'
-  },
-  'POST /llback/Goods/downloadPicZipUrl': {
-    url:'https://github.com/llwell/API-SERVER/issues/11'
-  },
+
   'POST /llback/Goods/UploadList': service_url2,
   //查看详情时更新状态
   'POST /llback/Goods/GetUploadStatus': service_url2,

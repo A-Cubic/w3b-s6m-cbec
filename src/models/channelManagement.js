@@ -1,4 +1,5 @@
 import { message} from 'antd';
+import {getSupplier} from '../services/api'
 import {getChannelTypeData,
   getCostChannelTable,saveCostChannel,
   getGoodsChannelTable
@@ -10,6 +11,8 @@ export default {
   state:{
     // 获取渠道商类型
     channelTypeArr:[],
+    // 获取供应商
+    supplierArr:[],
     // 渠道管理 - 费用信息
     costChannel:{
       tableData:{
@@ -38,6 +41,17 @@ export default {
       if (response !== undefined) {
         yield put({
           type: 'getChannelTypeR',
+          payload: response,
+        });
+      }
+    },
+    // 获取供应商下拉
+    *getSupplier({ payload },{ call,put}){
+      const response = yield call(getSupplier, payload);
+      console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getSupplierR',
           payload: response,
         });
       }
@@ -89,12 +103,27 @@ export default {
         })
       }
     },
+    //渠道管理 - 费用信息 - 编辑
+    *editGoodsChannel({payload, callback},{call,put}){
+      console.log('~',payload)
+      yield put({
+        type:'editGoodsChannelR',
+        payload: payload
+      })
+    },
   },
   reducers:{
     getChannelTypeR(state, action) {
       return {
         ...state,
         channelTypeArr:action.payload,
+      };
+    },
+    // 供应商下拉
+    getSupplierR(state, action) {
+      return {
+        ...state,
+        supplierArr:action.payload,
       };
     },
 
@@ -123,6 +152,16 @@ export default {
         goodsChannel:{
           ...state.goodsChannel,
           tableData:action.payload
+        }
+      }
+    },
+    editGoodsChannelR(state,action){
+      console.log(action.payload)
+      return{
+        ...state,
+        goodsChannel:{
+          ...state.goodsChannel,
+          childEdit:action.payload
         }
       }
     },

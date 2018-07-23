@@ -18,7 +18,9 @@ export default {
         list: [],
         pagination:{},
       },
-      childCheck:{},
+      childCheck:{
+        id:'',
+      },
     }
   },
   effects:{
