@@ -1,5 +1,11 @@
 export default function(dynamicWrapper,app){
   return {
+    //商品管理 - 上架审核
+    '/goods/onAudit': {
+      component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/goodsOnAudit')),
+    },
+
+
     //订单管理 - 供应商
     '/orderManagement/supplierOrder': {
       component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/supplierOrder')),
@@ -22,5 +28,6 @@ export default function(dynamicWrapper,app){
     '/channelManagement/goodsChannel': {
       component: dynamicWrapper(app, ['channelManagement'], () => import('../routes/ChannelManagement/goodsChannel')),
     },
+
   };
 };

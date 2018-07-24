@@ -35,7 +35,7 @@ export default class costChannel extends Component {
     this.props.dispatch({
       type: 'channelManagement/getGoodsChannelTable',
       payload: {
-        purchase:userId
+        // purchase:userId
       },
     });
   }
@@ -45,7 +45,7 @@ export default class costChannel extends Component {
 
   handleTableChange=(pagination, filtersArg, sorter)=>{
     const params = {
-      purchase:userId,
+      // purchase:userId,
       ...pagination,
     };
 
@@ -74,7 +74,9 @@ export default class costChannel extends Component {
       this.handleVisible(true);
     },0)
   }
-
+  downloadGoodsTemp=()=>{
+    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/DistributorGoods.xlsx'
+  }
   render() {
     const { channelManagement:{goodsChannel:{tableData},channelTypeArr,supplierArr} } = this.props;
     const paginationProps = {
@@ -206,7 +208,7 @@ export default class costChannel extends Component {
     return (
       <div>
         <Card className={styles.mT10}>
-          <Button type="primary" ghost onClick={this.downloadStoreTemp}>下载商品渠道模板</Button>
+          <Button type="primary" ghost onClick={this.downloadGoodsTemp}>下载商品渠道模板</Button>
           <Button style={{marginLeft:8}} type="primary" ghost onClick={this.onStartUpload}>上传商品渠道信息</Button>
           <Table
             scroll={{ x: 1600 }}

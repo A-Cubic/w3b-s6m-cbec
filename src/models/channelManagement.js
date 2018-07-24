@@ -57,7 +57,7 @@ export default {
       }
     },
 
-    //渠道管理 - 费用信息 - 获取订单列表
+    // 渠道管理 - 费用信息 - 获取订单列表
     *getCostChannelTable({payload, callback},{call,put}){
       const response = yield call(getCostChannelTable,payload);
       // console.log('~',response)
@@ -68,7 +68,7 @@ export default {
         })
       }
     },
-    //渠道管理 - 费用信息 - 编辑
+    // 渠道管理 - 费用信息 - 编辑
     *editCostChannel({payload, callback},{call,put}){
       // console.log('~',payload)
         yield put({
@@ -76,7 +76,7 @@ export default {
           payload: payload
         })
     },
-    //渠道管理 - 费用信息 - 编辑保存
+    // 渠道管理 - 费用信息 - 编辑保存
     *saveCostChannel({payload, callback},{call,put}){
       const response = yield call(saveCostChannel, payload);
       // console.log('~',response)
@@ -92,7 +92,7 @@ export default {
       }
     },
 
-    //渠道管理 - 商品信息 - 获取订单列表
+    // 渠道管理 - 商品信息 - 获取订单列表
     *getGoodsChannelTable({payload, callback},{call,put}){
       const response = yield call(getGoodsChannelTable,payload);
       // console.log('~',response)
@@ -103,7 +103,7 @@ export default {
         })
       }
     },
-    //渠道管理 - 商品信息 - 编辑
+    // 渠道管理 - 商品信息 - 编辑
     *editGoodsChannel({payload, callback},{call,put}){
       // console.log('~',payload)
       yield put({
@@ -111,7 +111,7 @@ export default {
         payload: payload
       })
     },
-    //渠道管理 - 商品信息 - 编辑保存
+    // 渠道管理 - 商品信息 - 编辑保存
     *saveGoodsChannel({payload, callback},{call,put}){
       const response = yield call(saveGoodsChannel, payload);
       // console.log('~',response)
