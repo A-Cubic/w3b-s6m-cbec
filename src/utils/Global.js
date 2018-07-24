@@ -23,3 +23,7 @@ export function getToken() {
 export function setToken(token) {
   return localStorage.setItem(TokenKey, JSON.stringify(token));
 }
+
+export function getHeader() {
+  return { token: getToken().token, userid: getToken().userId  }
+}
