@@ -2,7 +2,7 @@
 export default function goodsManagementMock() {
   return {
     // 获取渠道商类型
-    // 'POST /llback/Distributor/GetPlatform': url,
+    'POST /llback/Goods/WarehouseGoodsList': getChannelList,
 
   };
 }
@@ -20,35 +20,47 @@ export function getPlatform(req, res) {
 }
 export function getChannelList(req, res) {
   res.send({
-    list: [{
-      id: '1',
-      usercode: 'admin',
-      purchase: '管理员',
-      goodsid: '1',
-      barcode: '2',
-      goodsName: '3',
-      slt: '4',
-      platformId: '',
-      platformType: 'B2B',
-      pprice: '2',
-      pNum: 3,
-      supplierId: '53',
-      suppliername: 'qq供货',
-      profitPlatform: 0,
-      profitAgent: 0,
-      profitDealer: 0,
-      profitOther1: 0,
-      profitOther1Name: '0',
-      profitOther2: 0,
-      profitOther2Name: '0',
-      profitOther3: 0,
-      profitOther3Name: '0',
-    }],
-    pagination: {
-      current: 1,
-      total: 1,
-      pageSize: 10,
-    },
+    username: '管理员',
+    goodsUrl: '',
+    goodsImgUrl: '',
+    warehouseGoodsList: [
+      {
+        id: '1118',
+        barcode: '4580012350011',
+        goodsName: '翡翠皂 NN 100g',
+        wname: '大连仓',
+        inprice: 185.9,
+        goodsnum: 1000,
+        status: '等待审核',
+      },
+      {
+        id: '1119',
+        barcode: '4580012350022',
+        goodsName: '',
+        wname: '大连仓',
+        inprice: 200,
+        goodsnum: 2000,
+        status: '等待补全信息',
+      },
+      {
+        id: '1120',
+        barcode: '4580012350033',
+        goodsName: '',
+        wname: '大连仓',
+        inprice: 300,
+        goodsnum: 3000,
+        status: '等待补全信息',
+      },
+      {
+        id: '1121',
+        barcode: '4580012350044',
+        goodsName: '',
+        wname: '大连仓',
+        inprice: 400,
+        goodsnum: 4000,
+        status: '等待补全信息',
+      },
+    ],
   });
 }
 export function UpdateDistributor(req, res) {

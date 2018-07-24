@@ -2,21 +2,19 @@ import { message} from 'antd';
 
 import {notification} from "antd/lib/index";
 import {getCheckStepStatus, getGoodsPutaway} from '../services/api'
-import { } from '../services/goodsManagement_S'
+import { getGoodsDetails} from '../services/goodsManagement_S'
 export default {
   namespace: 'goodsManagement',
   state:{
-    // 获取渠道商类型
-    channelTypeArr:[],
-    // 获取供应商
-    supplierArr:[],
+
     // 商品管理 - 商品上架审核
     goodsOnAudit:{
       tableData:{
         list: [],
         pagination:{},
       },
-
+      // 审核、查看获取详细信息
+      goodsDetails:{},
     },
 
   },
@@ -40,6 +38,17 @@ export default {
         callback(response)
       }
     },
+    // 上架审核列表
+    *getGoodsDetails({ payload },{ call,put}){
+      const response = yield call(getGoodsDetails, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getGoodsDetailsR',
+          payload: response,
+        });
+      }
+    },
   },
   reducers:{
     getGoodsOnAuditListR(state, action) {
@@ -48,6 +57,15 @@ export default {
         goodsOnAudit:{
           ...state.goodsOnAudit,
           tableData:action.payload
+        },
+      };
+    },
+    getGoodsDetailsR(state, action) {
+      return {
+        ...state,
+        goodsOnAudit:{
+          ...state.goodsOnAudit,
+          goodsDetails:action.payload
         },
       };
     },

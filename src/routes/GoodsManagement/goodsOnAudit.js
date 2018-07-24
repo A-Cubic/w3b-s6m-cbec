@@ -2,7 +2,8 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import ChangeGoodsOnAuditModal from './changeGoodsOnAuditModal';
+import {ChangeGoodsOnAuditModal,CheckGoodsOnAuditModal} from './changeGoodsOnAuditModal';
+// import CheckGoodsOnAuditModal from './changeGoodsOnAuditModal';
 import styles from './goodsOnAudit.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../services/api'
@@ -20,7 +21,7 @@ const userId = getToken().userId;
 export default class goodsOnAudit extends Component {
   state={
     checkVisible:false,
-    changeVisible:true,
+    changeVisible:false,
   }
   init(){
     this.props.dispatch({
@@ -46,7 +47,14 @@ export default class goodsOnAudit extends Component {
 
 
   handleCheck=(e, record, index)=>{
-    const {dispatch}=this.props;
+    this.props.dispatch({
+      type:'goodsManagement/getGoodsDetails',
+      payload:{
+        logId:record.id
+      }
+    })
+
+    const that = this;
     this.props.dispatch({
       type:'goodsManagement/checkStepStatus',
       payload:{
@@ -54,23 +62,11 @@ export default class goodsOnAudit extends Component {
         logId:record.id
       },
       callback(params){
-        console.log(params)
-        // switch (params.status){
-        //   case '0':
-        //     dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
-        //     break;
-        //   case '1':
-        //     dispatch(routerRedux.push('/goods/step-form/wait/' + params.id));
-        //     break;
-        //   case '2':
-        //     dispatch(routerRedux.push('/goods/step-form/result/true/' + params.id));
-        //     break;
-        //   case '3' :
-        //     dispatch(routerRedux.push('/goods/step-form/result/false/'+ params.id));
-        //     break;
-        //   default:
-        //     break;
-        // }
+        if(params.status=='1'){
+          that.handleVisible(true,'changeVisible')
+        }else{
+          that.handleVisible(true,'checkVisible')
+        }
       }
     })
 
@@ -85,16 +81,19 @@ export default class goodsOnAudit extends Component {
         checkVisible:!!flag,
       });
     }
-
   }
   render() {
 
     // console.log('1',this.props)
-    const { goodsManagement:{goodsOnAudit:{tableData}} } = this.props;
-    const {changeVisible} = this.state;
+    const { goodsManagement:{goodsOnAudit:{tableData,goodsDetails}} } = this.props;
+    const {changeVisible,checkVisible} = this.state;
 
     const changeParent={
       visible:changeVisible,
+      handleVisible:this.handleVisible,
+    }
+    const checkParent={
+      visible:checkVisible,
       handleVisible:this.handleVisible,
     }
     const paginationProps = {
@@ -127,7 +126,7 @@ export default class goodsOnAudit extends Component {
           return (
             <Fragment>
               {record.status==1?
-                <a href="javascript:;" onClick={()=>this.handleCheck(e, record, index)}>审核</a>:
+                <a href="javascript:;" onClick={(e)=>this.handleCheck(e, record, index)}>审核</a>:
                 <a href="javascript:;" onClick={(e) => this.handleCheck(e, record, index)}>查看详情</a>}
             </Fragment>
           )
@@ -147,6 +146,9 @@ export default class goodsOnAudit extends Component {
         </Card>
         <ChangeGoodsOnAuditModal
           parent={changeParent}
+        />
+        <CheckGoodsOnAuditModal
+          parent={checkParent}
         />
       </div>
     );
