@@ -1,7 +1,8 @@
 import { message} from 'antd';
+import {getSupplier} from '../services/api'
 import {getChannelTypeData,
   getCostChannelTable,saveCostChannel,
-  getGoodsChannelTable
+  getGoodsChannelTable,saveGoodsChannel
 } from '../services/channelManagement_S'
 import {notification} from "antd/lib/index";
 import {confirmDelivery} from "../services/orderManagement_S";
@@ -10,6 +11,8 @@ export default {
   state:{
     // 获取渠道商类型
     channelTypeArr:[],
+    // 获取供应商
+    supplierArr:[],
     // 渠道管理 - 费用信息
     costChannel:{
       tableData:{
@@ -38,6 +41,17 @@ export default {
       if (response !== undefined) {
         yield put({
           type: 'getChannelTypeR',
+          payload: response,
+        });
+      }
+    },
+    // 获取供应商下拉
+    *getSupplier({ payload },{ call,put}){
+      const response = yield call(getSupplier, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getSupplierR',
           payload: response,
         });
       }
@@ -89,12 +103,42 @@ export default {
         })
       }
     },
+    //渠道管理 - 商品信息 - 编辑
+    *editGoodsChannel({payload, callback},{call,put}){
+      // console.log('~',payload)
+      yield put({
+        type:'editGoodsChannelR',
+        payload: payload
+      })
+    },
+    //渠道管理 - 商品信息 - 编辑保存
+    *saveGoodsChannel({payload, callback},{call,put}){
+      const response = yield call(saveGoodsChannel, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        if(response.type==1){
+          callback();
+          message.success('保存成功')
+        }else{
+          message.error(response.msg)
+        }
+      }else{
+        message.error(response.error)
+      }
+    },
   },
   reducers:{
     getChannelTypeR(state, action) {
       return {
         ...state,
         channelTypeArr:action.payload,
+      };
+    },
+    // 供应商下拉
+    getSupplierR(state, action) {
+      return {
+        ...state,
+        supplierArr:action.payload,
       };
     },
 
@@ -123,6 +167,16 @@ export default {
         goodsChannel:{
           ...state.goodsChannel,
           tableData:action.payload
+        }
+      }
+    },
+    editGoodsChannelR(state,action){
+      // console.log(action.payload)
+      return{
+        ...state,
+        goodsChannel:{
+          ...state.goodsChannel,
+          childEdit:action.payload
         }
       }
     },

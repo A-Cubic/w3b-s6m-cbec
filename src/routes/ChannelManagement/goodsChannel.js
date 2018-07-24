@@ -28,7 +28,7 @@ const formItemLayout = {
 @Form.create()
 export default class costChannel extends Component {
   state={
-    visible:true,
+    visible:false,
     formValues:{},
   }
   init(){
@@ -43,9 +43,6 @@ export default class costChannel extends Component {
     this.init();
   }
 
-
-
-
   handleTableChange=(pagination, filtersArg, sorter)=>{
     const params = {
       purchase:userId,
@@ -57,8 +54,6 @@ export default class costChannel extends Component {
       payload: params,
     });
   }
-
-
   handleVisible = (flag) => {
     this.setState({
       visible:!!flag,
@@ -66,11 +61,13 @@ export default class costChannel extends Component {
   }
   handleChildEdit =(record)=>{
     this.props.dispatch({
-      type: 'channelManagement/getChannelType',
-      payload: {},
+      type: 'channelManagement/getSupplier',
+      payload: {
+        userId:userId
+      },
     });
     this.props.dispatch({
-      type: 'channelManagement/editCostChannel',
+      type: 'channelManagement/editGoodsChannel',
       payload: {...record},
     });
     setTimeout(()=>{
@@ -79,7 +76,7 @@ export default class costChannel extends Component {
   }
 
   render() {
-    const { channelManagement:{goodsChannel:{tableData},channelTypeArr} } = this.props;
+    const { channelManagement:{goodsChannel:{tableData},channelTypeArr,supplierArr} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -203,7 +200,7 @@ export default class costChannel extends Component {
     const Parent  = {
       visible:visible,
       handleVisible : this.handleVisible,
-      channelTypeArr:channelTypeArr,
+      supplierArr: supplierArr,
     };
 
     return (
@@ -238,14 +235,14 @@ export default class costChannel extends Component {
 class ChildEdit extends React.Component {
 
   handleOk = (e) => {
-    const {channelManagement:{costChannel:{childEdit},channelTypeArr}} = this.props
+    const {channelManagement:{goodsChannel:{childEdit},channelTypeArr}} = this.props
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue)=>{
       console.log('fieldsValue',fieldsValue)
       if(!err){
         this.props.dispatch({
-          type:'channelManagement/saveCostChannel',
+          type:'channelManagement/saveGoodsChannel',
           payload:{
             ...fieldsValue,
             userId:userId,
@@ -267,14 +264,13 @@ class ChildEdit extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {channelManagement:{costChannel:{childEdit},channelTypeArr}} = this.props
-    // console.log(this.props)
+    const {channelManagement:{goodsChannel:{childEdit},supplierArr}} = this.props;
     return (
       <div>
         <Modal
           width={ '100%' }
           style={{maxWidth:1000}}
-          title="发货"
+          title="商品渠道信息"
           visible={this.props.parent.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -286,126 +282,201 @@ class ChildEdit extends React.Component {
           <div className={styles.tableListForm}>
             <Form onSubmit={this.handleOk} layout="inline">
               <Row type="flex" justify="space-around" gutter={8}>
-                <Col span={11} >
-                  <FormItem
-                    {...formItemLayout}
-                    label="商品条码"
-                  >
-                    {getFieldDecorator('aaa', {
-                      initialValue: childEdit.username,
-                      rules: [{ required: true, message: '请输入渠道商' }],
-                    })(
-                      <div>aaaa</div>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={11} >
+                <Col span={23} >
                   <FormItem
                     {...formItemLayout}
                     label="商品名称"
                   >
-                    {getFieldDecorator('VVV',{
-                      initialValue: childEdit.platformType,
-                      rules: [{ required: true, message: '请选择渠道商类型' }],
-                    })(
-                      <div>BBBB</div>
-                    )}
+                    <div>{childEdit.goodsName}</div>
                   </FormItem>
                 </Col>
-
               </Row>
               <Row type="flex" justify="space-around" gutter={8}>
-                <Col span={11} >
+                <Col span={7} >
                   <FormItem
                     {...formItemLayout}
-                    label="渠道商"
+                    label="商品条码"
                   >
-                    {getFieldDecorator('username', {
-                      initialValue: childEdit.username,
-                      rules: [{ required: true, message: '请输入渠道商' }],
+                      <div>{childEdit.barcode}</div>
+                  </FormItem>
+                </Col>
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="采购类型"
+                  >
+                    <div>{childEdit.platformType}</div>
+                  </FormItem>
+                </Col>
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="采购商"
+                  >
+                      <div>{childEdit.purchase}</div>
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="采购单价（¥）"
+                  >
+                    {getFieldDecorator('pprice', {
+                      initialValue: childEdit.pprice,
+                      rules: [{ required: true, message: '请输入采购单价' }],
                     })(
-                      <Input placeholder="请输入渠道商"/>
+                      <Input placeholder="请输入采购单价"/>
                     )}
                   </FormItem>
                 </Col>
-                <Col span={11} >
+                <Col span={7} >
                   <FormItem
                     {...formItemLayout}
-                    label="渠道商类型"
+                    label="采购数量（SKU）"
                   >
-                    {getFieldDecorator('platformType',{
-                      initialValue: childEdit.platformType,
-                      rules: [{ required: true, message: '请选择渠道商类型' }],
+                    {getFieldDecorator('pNum', {
+                      initialValue: childEdit.pNum,
+                      rules: [{ required: true, message: '请输入采购数量' }],
+                    })(
+                      <Input placeholder="请输入采购数量"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="默认供应商"
+                  >
+                    {getFieldDecorator('supplierId',{
+                      initialValue: childEdit.supplierId,
+                      rules: [{ required: true, message: '请选择默认供应商' }],
                     })(
                       <Select
-                        placeholder="请选择渠道商"
+                        placeholder="请选择默认供应商"
                         // onChange={this.handleSelectChange}
                       >
-                        {channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}
+                        {supplierArr.map(val => <Option key={val.supplierId} value={val.supplierId} label={val.supplier}>{val.supplier}</Option>)}
 
                       </Select>
                     )}
                   </FormItem>
                 </Col>
-
               </Row>
               <Row type="flex" justify="space-around" gutter={8}>
-                <Col span={11} >
+                <Col span={7} >
                   <FormItem
                     {...formItemLayout}
-                    label="渠道商价格类型"
+                    label="利润分成-平台（%）"
                   >
-                    {getFieldDecorator('priceType', {
-                      initialValue: ['','按订单售价计算','按供货价计算'][childEdit.priceType],
-                      rules: [{ required: true, message: '请选择渠道商价格类型' }],
+                    {getFieldDecorator('profitPlatform', {
+                      initialValue: childEdit.profitPlatform,
+                      rules: [{ required: true, message: '请输入' }],
                     })(
-                      <Select
-                        placeholder="请选择渠道商价格类型"
-                        // onChange={this.handleSelectChange}
-                      >
-                        <Option value="1">按订单售价计算</Option>
-                        <Option value="2">按供货价计算</Option>
-                      </Select>
+                      <Input placeholder="请输入"/>
                     )}
                   </FormItem>
                 </Col>
-                <Col span={11} >
+                <Col span={7} >
                   <FormItem
                     {...formItemLayout}
-                    label="提点类型"
+                    label="利润分成-代理（%）"
                   >
-                    {getFieldDecorator('platformCostType',{
-                      initialValue: ['','进价基础计算','售价基础计算'][childEdit.platformCostType],
-                      rules: [{ required: true, message: '请选择提点类型' }],
+                    {getFieldDecorator('profitAgent', {
+                      initialValue: childEdit.profitAgent,
                     })(
-                      <Select
-                        placeholder="请选择提点类型"
-                        // onChange={this.handleSelectChange}
-                      >
-                        <Option value="1">进价基础计算</Option>
-                        <Option value="2">售价基础计算</Option>
-                      </Select>
+                      <Input placeholder="请输入"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="利润分成-分销商（%）"
+                  >
+                    {getFieldDecorator('profitDealer',{
+                      initialValue: childEdit.profitDealer,
+                    })(
+                      <Input placeholder="请输入"/>
                     )}
                   </FormItem>
                 </Col>
               </Row>
-
               <Row type="flex" justify="space-around" gutter={8}>
-                <Col span={11} >
+                <Col span={7} >
                   <FormItem
                     {...formItemLayout}
-                    label="平台提点（%）"
+                    label="利润分成-其他1（%）"
                   >
-                    {getFieldDecorator('platformCost', {
-                      initialValue: childEdit.platformCost,
-                      rules: [{ required: true, message: '请输入平台提点（%）' }],
+                    {getFieldDecorator('profitOther1', {
+                      initialValue: childEdit.profitOther1,
                     })(
-                      <Input placeholder="请输入平台提点（%）"/>
+                      <Input placeholder="请输入"/>
                     )}
                   </FormItem>
                 </Col>
-                <Col span={11} >
-
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="利润分成-其他2（%）"
+                  >
+                    {getFieldDecorator('profitOther2', {
+                      initialValue: childEdit.profitOther2,
+                    })(
+                      <Input placeholder="请输入"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="利润分成-其他3（%）"
+                  >
+                    {getFieldDecorator('profitOther3',{
+                      initialValue: childEdit.profitOther3,
+                    })(
+                      <Input placeholder="请输入"/>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row type="flex" justify="space-around" gutter={8}>
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="利润分成-其他1"
+                  >
+                    {getFieldDecorator('profitOther1Name', {
+                      initialValue: childEdit.profitOther1Name,
+                    })(
+                      <Input placeholder="请输入"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="利润分成-其他2"
+                  >
+                    {getFieldDecorator('profitOther2Name', {
+                      initialValue: childEdit.profitOther2Name,
+                    })(
+                      <Input placeholder="请输入"/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={7} >
+                  <FormItem
+                    {...formItemLayout}
+                    label="利润分成-其他3"
+                  >
+                    {getFieldDecorator('profitOther3Name',{
+                      initialValue: childEdit.profitOther3Name,
+                    })(
+                      <Input placeholder="请输入"/>
+                    )}
+                  </FormItem>
                 </Col>
               </Row>
             </Form>

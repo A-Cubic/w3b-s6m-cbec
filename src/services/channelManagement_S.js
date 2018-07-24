@@ -38,3 +38,10 @@ export async function getGoodsChannelTable(params) {
     body: params,
   });
 }
+// 渠道管理 - 商品信息 -编辑保存
+export async function saveGoodsChannel(params) {
+  return request(`/llback/Distributor/UpdateDGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
