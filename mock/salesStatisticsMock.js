@@ -1,5 +1,5 @@
 // const orderManagement = 'http://console.llwell.net/';
-export default function goodsManagementMock() {
+export default function salesStatisticsMock() {
   return {
     // 获取渠道商类型
     'POST /llback/Sales/GetSalesListByAgent': getChannelList,
