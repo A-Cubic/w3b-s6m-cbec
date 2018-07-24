@@ -2,7 +2,7 @@ import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
-import { getToken } from '../utils/Global';
+import { getHeader } from '../utils/Global';
 
 // 网络错误列表
 const codeMessage = {
@@ -74,17 +74,15 @@ export default function request(url, options) {
     credentials: 'include',
   };
   const newOptions = { ...defaultOptions, ...options };
-  const tokens = getToken();
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     newOptions.headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json; charset=utf-8',
       ...newOptions.headers,
     };
-    if (tokens !== '') {
+    if (getHeader().token !== '') {
       newOptions.headers = {
-        token: tokens.token,
-        userId: tokens.userId,
+        ...getHeader(),
         ...newOptions.headers,
       };
     }
