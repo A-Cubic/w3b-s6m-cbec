@@ -29,5 +29,10 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['channelManagement'], () => import('../routes/ChannelManagement/goodsChannel')),
     },
 
+
+    // 销售统计 - 供应商
+    '/sales/salesStatisticsS': {
+      component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsS')),
+    },
   };
 };
