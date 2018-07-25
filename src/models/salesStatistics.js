@@ -19,7 +19,7 @@ export default {
 
   },
   effects:{
-    // 上架审核列表
+    // 销售统计列表
     *getSalesStatisticsList({ payload },{ call,put}){
       const response = yield call(getSalesStatisticsList, payload);
       // console.log('~',response)
@@ -30,7 +30,7 @@ export default {
         });
       }
     },
-    // 查看审核状态校验
+
 
 
 

@@ -23,17 +23,8 @@ export default class SalesStatisticsS extends Component {
   }
   init(){
     this.props.dispatch({
-      type: 'orderManagement/getWareHouse',
-      payload: {
-        userId:userId,
-      },
-    });
-    this.props.dispatch({
-      type: 'orderManagement/supplierOrderTable',
-      payload: {
-        userId:userId,
-        status:"全部"
-      },
+      type: 'salesStatistics/getSalesStatisticsList',
+      payload: {},
     });
   }
   componentDidMount() {
@@ -43,10 +34,9 @@ export default class SalesStatisticsS extends Component {
   //列表
   onSearch=(e)=>{
     e.preventDefault();
-    const {orderManagement:{supplierOrder:{tableData}}}=this.props
+    const {salesStatistics:{salesStatisticsAll:{tableData}}}=this.props
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
-
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
@@ -55,21 +45,17 @@ export default class SalesStatisticsS extends Component {
         ...fieldsValue,
         'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
-
       this.setState({
         formValues: values,
       });
       this.props.dispatch({
-        type: 'orderManagement/supplierOrderTable',
+        type: 'salesStatistics/getSalesStatisticsList',
         payload: {
-          userId:userId,
           ...values,
           ...tableData.pagination
         },
       });
     });
-
-
   }
   handleFormReset =()=>{
     this.props.form.resetFields();
@@ -79,11 +65,10 @@ export default class SalesStatisticsS extends Component {
     const params = {
       ...this.state.formValues,
       ...pagination,
-      userId:userId
     };
 
     this.props.dispatch({
-      type: 'orderManagement/supplierOrderTable',
+      type: 'salesStatistics/getSalesStatisticsList',
       payload: params,
     });
   }
@@ -96,36 +81,23 @@ export default class SalesStatisticsS extends Component {
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="订单状态">
-              {getFieldDecorator('status',{
-                initialValue:'全部'
-              })(
-                <Select
-                  placeholder="请选择"
-                  optionFilterProp="label"
-                  // onChange={this.onSelectChange}
-                >
-                  <Option value="全部">全部</Option>
-                  <Option value="待付款">待付款</Option>
-                  <Option value="待发货">待发货</Option>
-                  <Option value="已发货">已发货</Option>
-                  <Option value="已完成">已完成</Option>
-                  <Option value="已关闭">已关闭</Option>
-                </Select>
+            <FormItem label="商品条码：">
+              {getFieldDecorator('barcode')(
+                <Input placeholder="请输入商品条码" />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="订单编号">
-              {getFieldDecorator('orderId')(
-                <Input placeholder="请输入订单编号" />
+            <FormItem label="商品名称：">
+              {getFieldDecorator('goodsName')(
+                <Input placeholder="请输入商品名称" />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="运单编号">
-              {getFieldDecorator('waybillno')(
-                <Input placeholder="请输入运单编号" />
+            <FormItem label="商品品牌：">
+              {getFieldDecorator('brand')(
+                <Input placeholder="请输入商品品牌" />
               )}
             </FormItem>
           </Col>
@@ -133,9 +105,9 @@ export default class SalesStatisticsS extends Component {
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="时段">
+            <FormItem label="销售日期">
               {getFieldDecorator('date')(
-                <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
+                <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
           </Col>
@@ -150,12 +122,14 @@ export default class SalesStatisticsS extends Component {
         </Row>
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-          <span style={{ float: 'right' }}>
-            共查询出符合条件的数据：{tableData?tableData.pagination.total:0}
+          <div style={{ float: 'right' }}>
+            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
+            <span>总销量：{tableData?tableData.item.salesNumTotal:0}， </span>
+            <span>总销售额：{tableData?tableData.item.salesPriceTotal:0}</span>
             {/*<Button  style={{marginLeft:18}}>*/}
             {/*<Icon type="cloud-download-o" />导出数据*/}
             {/*</Button>*/}
-          </span>
+          </div>
         </div>
       </Form>
     );
@@ -169,46 +143,38 @@ export default class SalesStatisticsS extends Component {
     }
     const columns = [
       {
-        title: '订单日期',
-        dataIndex: 'tradeTime',
-        key: 'tradeTime',
+        title: '商品条码',
+        dataIndex: 'barcode',
+        key: 'barcode',
       }, {
-        title: '订单编号',
-        dataIndex: 'merchantOrderId',
-        key: 'merchantOrderId',
+        title: '商品图片',
+        dataIndex: 'slt',
+        key: 'slt',
+        render: (val) => (
+          <img src={val} alt="" width={80} style={{float:'left',marginRight:8}}/>
+        )
       }, {
-        title: '订单总额',
-        dataIndex: 'tradeAmount',
-        key: 'tradeAmount',
+        title: '商品名称',
+        dataIndex: 'goodsName',
+        key: 'goodsName',
       }, {
-        title: '供应商',
-        dataIndex: 'supplier',
-        key: 'supplier',
+        title: '商品品牌',
+        dataIndex: 'brand',
+        key: 'brand',
       }, {
-        title: '分销渠道',
-        dataIndex: 'purchase',
-        key: 'purchase',
+        title: '商品类别',
+        dataIndex: 'category',
+        key: 'category',
       }, {
-        title: '运单编号',
-        dataIndex: 'waybillno',
-        key: 'waybillno',
+        title: '销量',
+        dataIndex: 'salesNum',
+        key: 'salesNum',
       }, {
-        title: '订单状态',
-        dataIndex: 'status',
-        key: 'status',
-      },{
-        title: '操作',
-        dataIndex: 'operate',
-        key: 'operate',
-        render: (val,record) =>
-          <div>
-            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
-            {record.ifSend=='1'?
-              <a href="javascript:;" onClick={()=>this.handleChildrenDelivery(record)}>发货</a>:''}
-          </div>
+        title: '销售额',
+        dataIndex: 'salesPrice',
+        key: 'salesPrice',
       }
     ];
-
     return (
       <div>
         <Card className={styles.mT10}>
@@ -216,10 +182,10 @@ export default class SalesStatisticsS extends Component {
             {this.renderAdvancedForm()}
           </div>
           <Table
-            dataSource={[]}
-            // rowKey={record => record.id}
+            dataSource={tableData.list}
+            rowKey={record => record.id}
             columns={columns}
-            // pagination={paginationProps}
+            pagination={paginationProps}
             onChange={this.handleTableChange}
             // loading={submitting}
           />
