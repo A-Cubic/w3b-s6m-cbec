@@ -3,6 +3,8 @@ export default function goodsManagementMock() {
   return {
     // 获取渠道商类型
     'POST /llback/Goods/WarehouseGoodsList': getChannelList,
+    // 上架审核-审核操作
+    'POST /llback/Goods/ExamineWarehouseGoods': shipmentOverseas,
 
   };
 }
@@ -20,6 +22,7 @@ export function getPlatform(req, res) {
 }
 export function getChannelList(req, res) {
   res.send({
+    logId: '3',
     username: '管理员',
     goodsUrl: '',
     goodsImgUrl: '',

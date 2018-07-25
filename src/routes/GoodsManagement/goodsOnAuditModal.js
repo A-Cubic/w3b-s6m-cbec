@@ -30,9 +30,9 @@ export class ChangeGoodsOnAuditModal extends Component {
   state={
     changeSelect:false,
     auditFailureVisible:false,
-    selectedId:[],
     total:'',
     auditFailureNum:'',
+    selectedId: []
   }
   init(){
     // this.setState({
@@ -46,17 +46,24 @@ export class ChangeGoodsOnAuditModal extends Component {
     // });
   }
   componentDidMount() {
+    const { goodsManagement:{goodsOnAudit:{selectedId}}} = this.props;
+    console.log(selectedId)
+    this.setState({
+      selectedId: selectedId
+    })
   }
-  handleVisible = (flag) => {
+  handleAuditFailureVisible = (flag) => {
     this.setState({
       auditFailureVisible:!!flag,
+    },()=>{
+      console.log('2222',this.state.auditFailureVisible)
     });
   }
   handleCancel=()=>{
     this.props.parent.handleVisible(false,'changeVisible')
   }
   handleOk=()=>{
-    const { goodsManagement:{goodsOnAudit:{goodsDetails}}} = this.props;
+    const { goodsManagement:{goodsOnAudit:{goodsDetails,selectedId}}} = this.props;
     const getTotalLength = goodsDetails.warehouseGoodsList.length
     const getselectedIdLength = this.state.selectedId.length;
     this.setState({
@@ -66,15 +73,29 @@ export class ChangeGoodsOnAuditModal extends Component {
     })
 
     if(getTotalLength == getselectedIdLength||!this.state.changeSelect){
-      // this.props.dispatch({
-      //   type:'',
-      //   payload:''
-      // })
+      const that = this;
+      this.props.dispatch({
+        type:'goodsManagement/onAudit',
+        payload:{
+          logId:goodsDetails.logId,
+          logGoodsId:this.state.selectedId
+        },
+        callback:function () {
+          that.props.parent.handleVisible(false,'changeVisible');
+          that.setState({
+            changeSelect:false,
+            selectedId:[]
+          })
+          that.props.parent.init();
+        }
+      })
       console.log('已经全部选择')
+
+
     }else{
       console.log('弹出审核失败原因')
       this.props.parent.handleVisible(false,'changeVisible');
-      this.handleVisible(true);
+      this.handleAuditFailureVisible(true);
     }
   }
   downloadGoodsMes=(url)=>{
@@ -124,9 +145,10 @@ export class ChangeGoodsOnAuditModal extends Component {
       }
       }
     ];
+
     const rowSelection = {
 
-
+      selectedRowKeys:this.state.selectedId,
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         this.setState({
@@ -138,15 +160,16 @@ export class ChangeGoodsOnAuditModal extends Component {
         },
 
       getCheckboxProps: record => ({
-        defaultChecked:record.id,
-        disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        defaultChecked:true,
+        disabled: false, // Column configuration not to be checked
         name: record.name,
       }),
     };
     const auditFailureParent ={
-      visible:auditFailureVisible,
+      auditFailureVisible:auditFailureVisible,
       auditFailureNum:this.state.auditFailureNum,
-      handleVisible:this.handleVisible,
+      handleAuditFailureVisible:this.handleAuditFailureVisible,
+      logGoodsId:this.state.selectedId
 
     }
     return (
@@ -161,10 +184,10 @@ export class ChangeGoodsOnAuditModal extends Component {
           visible={this.props.parent.visible}
           onCancel={this.handleCancel}
           footer={[
-            <span style={{float:'left',marginLeft:18}}>提示：请选择审核通过的上架商品</span>,
+            <span key={1} style={{float:'left',marginLeft:18}}>提示：请选择审核通过的上架商品</span>,
 
-            <Button onClick={this.handleCancel}>关闭</Button>,
-            <Button onClick={this.handleOk} type="primary">审核通过</Button>
+            <Button key={2} onClick={this.handleCancel}>关闭</Button>,
+            <Button key={3} onClick={this.handleOk} type="primary">审核通过</Button>
           ]}
         >
           <div>
@@ -187,10 +210,12 @@ export class ChangeGoodsOnAuditModal extends Component {
               columns={columns}
             />
           </div>
-          <AuditFailure
-          parent={auditFailureParent}
-          />
+
         </Modal>
+        <AuditFailure
+
+          parent={auditFailureParent}
+        />
       </div>
     );
   }
@@ -205,36 +230,40 @@ export class ChangeGoodsOnAuditModal extends Component {
 class AuditFailure extends React.Component {
 
   handleOk = (e) => {
+    const { goodsManagement:{goodsOnAudit:{goodsDetails}}} = this.props;
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue)=>{
       console.log('fieldsValue',fieldsValue)
       if(!err){
         console.log('提交失败原因')
-        // this.props.dispatch({
-        //   type:'channelManagement/saveGoodsChannel',
-        //   payload:{
-        //     ...fieldsValue,
-        //     userId:userId,
-        //     id:childEdit.id
-        //   },
-        //   callback:function () {
-        //     that.props.parent.handleVisible(false)
-        //     that.props.form.resetFields();
-        //   }
-        // })
+        this.props.dispatch({
+          type:'goodsManagement/onAudit',
+          payload:{
+            ...fieldsValue,
+            logId:goodsDetails.logId,
+            logGoodsId:this.props.parent.logGoodsId
+          },
+          callback:function () {
+            that.props.parent.handleAuditFailureVisible(false)
+            that.props.form.resetFields();
+            that.setState({
+              changeSelect:false,
+              selectedId:[]
+            })
+          }
+        })
       }
     })
   }
 
   handleCancel = (e) => {
-    this.props.parent.handleVisible(false)
+    this.props.parent.handleAuditFailureVisible(false)
     this.props.form.resetFields();
   }
 
   render() {
     const { goodsManagement:{goodsOnAudit:{goodsDetails}}} = this.props;
-
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
@@ -242,7 +271,7 @@ class AuditFailure extends React.Component {
           width={ '100%' }
           style={{maxWidth:600}}
           title="审核失败原因"
-          visible={this.props.parent.visible}
+          visible={this.props.parent.auditFailureVisible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[

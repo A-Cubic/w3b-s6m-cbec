@@ -2,7 +2,7 @@ import { message} from 'antd';
 
 import {notification} from "antd/lib/index";
 import {getCheckStepStatus, getGoodsPutaway} from '../services/api'
-import { getGoodsDetails} from '../services/goodsManagement_S'
+import { getGoodsDetails,onAudit} from '../services/goodsManagement_S'
 export default {
   namespace: 'goodsManagement',
   state:{
@@ -14,7 +14,10 @@ export default {
         pagination:{},
       },
       // 审核、查看获取详细信息
-      goodsDetails:{},
+      goodsDetails:{
+        warehouseGoodsList: []
+      },
+      selectedId: []
     },
 
   },
@@ -41,12 +44,19 @@ export default {
     // 上架审核列表
     *getGoodsDetails({ payload },{ call,put}){
       const response = yield call(getGoodsDetails, payload);
-      // console.log('~',response)
+      console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getGoodsDetailsR',
           payload: response,
         });
+      }
+    },
+    *onAudit({ payload,callback },{ call,put}){
+      const response = yield call(onAudit, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
       }
     },
   },
@@ -65,7 +75,10 @@ export default {
         ...state,
         goodsOnAudit:{
           ...state.goodsOnAudit,
-          goodsDetails:action.payload
+          goodsDetails:action.payload,
+          selectedId: action.payload.warehouseGoodsList.map(item => {
+            return item.id
+          })
         },
       };
     },

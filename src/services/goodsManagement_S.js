@@ -9,3 +9,10 @@ export async function getGoodsDetails(params) {
     body: params,
   });
 }
+// 上架审核-审核操作
+export async function onAudit(params) {
+  return request(`/llback/Goods/ExamineWarehouseGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}

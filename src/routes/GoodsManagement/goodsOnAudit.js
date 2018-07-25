@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import {ChangeGoodsOnAuditModal,CheckGoodsOnAuditModal} from './changeGoodsOnAuditModal';
+import {ChangeGoodsOnAuditModal,CheckGoodsOnAuditModal} from './goodsOnAuditModal';
 // import CheckGoodsOnAuditModal from './changeGoodsOnAuditModal';
 import styles from './goodsOnAudit.less';
 import moment from 'moment';
@@ -47,28 +47,32 @@ export default class goodsOnAudit extends Component {
 
 
   handleCheck=(e, record, index)=>{
+    const that = this;
     this.props.dispatch({
       type:'goodsManagement/getGoodsDetails',
       payload:{
         logId:record.id
       }
+    }).then(()=>{
+      that.props.dispatch({
+        type:'goodsManagement/checkStepStatus',
+        payload:{
+          userId:userId,
+          logId:record.id
+        },
+        callback(params){
+          if(params.status=='1'){
+            console.log(that.props.goodsManagement.goodsOnAudit)
+            that.handleVisible(true,'changeVisible')
+          }else{
+            that.handleVisible(true,'checkVisible')
+          }
+        }
+      })
     })
 
-    const that = this;
-    this.props.dispatch({
-      type:'goodsManagement/checkStepStatus',
-      payload:{
-        userId:userId,
-        logId:record.id
-      },
-      callback(params){
-        if(params.status=='1'){
-          that.handleVisible(true,'changeVisible')
-        }else{
-          that.handleVisible(true,'checkVisible')
-        }
-      }
-    })
+
+
 
   }
   handleVisible = (flag,who) => {
@@ -91,6 +95,7 @@ export default class goodsOnAudit extends Component {
     const changeParent={
       visible:changeVisible,
       handleVisible:this.handleVisible,
+      init:this.init,
     }
     const checkParent={
       visible:checkVisible,
