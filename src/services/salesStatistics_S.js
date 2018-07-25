@@ -2,9 +2,23 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 
-// 获取渠道管理 - 费用信息 - 列表
-export async function getSalesStatisticsList(params) {
+// 销售统计 - 代理- 列表
+export async function getSalesStatisticsListA(params) {
   return request(`/llback/Sales/GetSalesListByAgent`, {
+    method: 'POST',
+    body: params,
+  });
+}
+// 销售统计 - 供应商- 列表
+export async function getSalesStatisticsListS(params) {
+  return request(`/llback/Sales/GetSalesListBySupplier`, {
+    method: 'POST',
+    body: params,
+  });
+}
+// 销售统计 - 运营- 列表
+export async function getSalesStatisticsListO(params) {
+  return request(`/llback/Sales/GetSalesListByOperator`, {
     method: 'POST',
     body: params,
   });

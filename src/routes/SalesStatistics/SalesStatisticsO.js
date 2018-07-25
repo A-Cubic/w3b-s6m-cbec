@@ -13,7 +13,7 @@ const TabPane = Tabs.TabPane;
 
 @connect(({salesStatistics,  loading }) => ({
   salesStatistics,
-  loading: loading.effects['salesStatistics/getSalesStatisticsList'],
+  loading: loading.effects['salesStatistics/getSalesStatisticsListO'],
 }))
 
 @Form.create()
@@ -32,7 +32,7 @@ export default class SalesStatisticsO extends Component {
       payload: {},
     });
     this.props.dispatch({
-      type: 'salesStatistics/getSalesStatisticsList',
+      type: 'salesStatistics/getSalesStatisticsListO',
       payload: {},
     });
   }
@@ -58,7 +58,7 @@ export default class SalesStatisticsO extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'salesStatistics/getSalesStatisticsList',
+        type: 'salesStatistics/getSalesStatisticsListO',
         payload: {
           ...values,
           ...tableData.pagination
@@ -77,7 +77,7 @@ export default class SalesStatisticsO extends Component {
     };
 
     this.props.dispatch({
-      type: 'salesStatistics/getSalesStatisticsList',
+      type: 'salesStatistics/getSalesStatisticsListO',
       payload: params,
     });
   }

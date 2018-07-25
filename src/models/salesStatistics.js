@@ -4,7 +4,7 @@ import {notification} from "antd/lib/index";
 import {getCheckStepStatus, getGoodsPutaway} from '../services/api'
 import {
   getPurchaseData,getDistributorsData,
-  getSalesStatisticsList,
+  getSalesStatisticsListA,getSalesStatisticsListS,getSalesStatisticsListO
 } from '../services/salesStatistics_S'
 import {getChannelTypeData} from "../services/channelManagement_S";
 export default {
@@ -58,9 +58,31 @@ export default {
         });
       }
     },
-    // 销售统计列表
-    *getSalesStatisticsList({ payload },{ call,put}){
-      const response = yield call(getSalesStatisticsList, payload);
+    // 销售统计列表 - 供应商
+    *getSalesStatisticsListS({ payload },{ call,put}){
+      const response = yield call(getSalesStatisticsListS, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getSalesStatisticsListR',
+          payload: response,
+        });
+      }
+    },
+    // 销售统计列表 - 运营
+    *getSalesStatisticsListO({ payload },{ call,put}){
+      const response = yield call(getSalesStatisticsListO, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getSalesStatisticsListR',
+          payload: response,
+        });
+      }
+    },
+    // 销售统计列表 - 代理
+    *getSalesStatisticsListA({ payload },{ call,put}){
+      const response = yield call(getSalesStatisticsListA, payload);
       // console.log('~',response)
       if (response !== undefined) {
         yield put({
