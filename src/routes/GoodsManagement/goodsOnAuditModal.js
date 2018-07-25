@@ -56,7 +56,7 @@ export class ChangeGoodsOnAuditModal extends Component {
     this.setState({
       auditFailureVisible:!!flag,
     },()=>{
-      console.log('2222',this.state.auditFailureVisible)
+      // console.log('2222',this.state.auditFailureVisible)
     });
   }
   handleCancel=()=>{
@@ -69,11 +69,14 @@ export class ChangeGoodsOnAuditModal extends Component {
     this.setState({
       auditFailureNum:getTotalLength-getselectedIdLength
     },()=>{
+      console.log(goodsDetails.warehouseGoodsList)
+      console.log(this.state.selectedId)
       console.log(this.state.auditFailureNum)
     })
 
     if(getTotalLength == getselectedIdLength||!this.state.changeSelect){
       const that = this;
+      console.log(this);
       this.props.dispatch({
         type:'goodsManagement/onAudit',
         payload:{
@@ -82,11 +85,14 @@ export class ChangeGoodsOnAuditModal extends Component {
         },
         callback:function () {
           that.props.parent.handleVisible(false,'changeVisible');
-          that.setState({
-            changeSelect:false,
-            selectedId:[]
-          })
-          that.props.parent.init();
+          that.handleClear();
+          // that.props.parent.init();
+          that.props.dispatch({
+            type: 'goodsManagement/getGoodsOnAuditList',
+            payload: {
+              userId:userId,
+            },
+          });
         }
       })
       console.log('已经全部选择')
@@ -97,6 +103,12 @@ export class ChangeGoodsOnAuditModal extends Component {
       this.props.parent.handleVisible(false,'changeVisible');
       this.handleAuditFailureVisible(true);
     }
+  }
+  handleClear=()=>{
+    this.setState({
+      changeSelect:false,
+      selectedId:[]
+    })
   }
   downloadGoodsMes=(url)=>{
     if(url){
@@ -169,8 +181,8 @@ export class ChangeGoodsOnAuditModal extends Component {
       auditFailureVisible:auditFailureVisible,
       auditFailureNum:this.state.auditFailureNum,
       handleAuditFailureVisible:this.handleAuditFailureVisible,
-      logGoodsId:this.state.selectedId
-
+      logGoodsId:this.state.selectedId,
+      handleClear:this.handleClear
     }
     return (
       <div>
@@ -245,12 +257,9 @@ class AuditFailure extends React.Component {
             logGoodsId:this.props.parent.logGoodsId
           },
           callback:function () {
-            that.props.parent.handleAuditFailureVisible(false)
+            that.props.parent.handleAuditFailureVisible(false);
             that.props.form.resetFields();
-            that.setState({
-              changeSelect:false,
-              selectedId:[]
-            })
+            that.props.parent.handleClear();
           }
         })
       }
