@@ -23,6 +23,10 @@ export default class SalesStatisticsS extends Component {
   }
   init(){
     this.props.dispatch({
+      type: 'salesStatistics/getDistributors',
+      payload: {},
+    });
+    this.props.dispatch({
       type: 'salesStatistics/getSalesStatisticsList',
       payload: {},
     });
@@ -75,7 +79,7 @@ export default class SalesStatisticsS extends Component {
 
 
   renderAdvancedForm(){
-    const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
+    const { salesStatistics:{salesStatisticsAll:{tableData},distributorsArr} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -104,6 +108,21 @@ export default class SalesStatisticsS extends Component {
 
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24} >
+            <FormItem
+              label="分销商"
+            >
+              {getFieldDecorator('distributionCode')(
+                <Select
+                  placeholder="请选择分销商"
+                  // onChange={this.handleSelectChange}
+                >
+                  {distributorsArr.map(val => <Option key={val.distributionCode} value={val.distributionCode} label={val.distributionName}>{val.distributionName}</Option>)}
+
+                </Select>
+              )}
+            </FormItem>
+          </Col>
           <Col md={8} sm={24}>
             <FormItem label="销售日期">
               {getFieldDecorator('date')(
@@ -125,7 +144,8 @@ export default class SalesStatisticsS extends Component {
           <div style={{ float: 'right' }}>
             <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
             <span>总销量：{tableData?tableData.item.salesNumTotal:0}， </span>
-            <span>总销售额：¥{tableData?tableData.item.salesPriceTotal:0}</span>
+            <span>总销售额：¥{tableData?tableData.item.salesPriceTotal:0}， </span>
+            <span>总佣金：¥{tableData?tableData.item.brokerageTotal:0}</span>
             {/*<Button  style={{marginLeft:18}}>*/}
             {/*<Icon type="cloud-download-o" />导出数据*/}
             {/*</Button>*/}
@@ -173,6 +193,14 @@ export default class SalesStatisticsS extends Component {
         title: '销售额',
         dataIndex: 'salesPrice',
         key: 'salesPrice',
+      }, {
+        title: '佣金',
+        dataIndex: 'brokerage',
+        key: 'brokerage',
+      }, {
+        title: '分销商',
+        dataIndex: 'distribution',
+        key: 'distribution',
       }
     ];
     return (

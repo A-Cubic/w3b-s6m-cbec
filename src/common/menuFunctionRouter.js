@@ -34,5 +34,13 @@ export default function(dynamicWrapper,app){
     '/sales/salesStatisticsS': {
       component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsS')),
     },
+    // 销售统计 - 运营
+    '/sales/salesStatisticsO': {
+      component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsO')),
+    },
+    // 销售统计 - 代理商
+    '/sales/salesStatisticsA': {
+      component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsA')),
+    },
   };
 };

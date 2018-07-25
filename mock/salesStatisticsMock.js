@@ -1,8 +1,12 @@
 // const orderManagement = 'http://console.llwell.net/';
-export default function salesStatisticsMock() {
+export default function salesStatisticsMock(url) {
   return {
-    // 获取渠道商类型
-    'POST /llback/Sales/GetSalesListByAgent': getChannelList,
+    // 获取渠道管理 - 费用信息 - 列表
+    'POST /llback/Sales/GetSalesListByAgent': url,
+    // 获取销售商（渠道商）
+    'POST /llback/Sales/GetPurchase': url,
+    // 获取分销商类型
+    'POST /llback/Sales/GetDistribution': url,
 
   };
 }
@@ -127,9 +131,27 @@ export function confirmDelivery(req, res) {
     mes: '成功',
   });
 }
-export function shipmentOverseas(req, res) {
-  res.send({
-    type: 1,
-    mes: '成功',
-  });
+export function GetPurchase(req, res) {
+  res.send([
+    {
+      purchaseCode: '15904117250',
+      purchaseName: 'ceshi',
+    },
+    {
+      purchaseCode: '15642532058',
+      purchaseName: '',
+    },
+  ]);
+}
+export function GetDistribution(req, res) {
+  res.send([
+    {
+      distributionCode: '456789',
+      distributionName: '分销1',
+    },
+    {
+      distributionCode: '567890',
+      distributionName: '分销2',
+    },
+  ]);
 }

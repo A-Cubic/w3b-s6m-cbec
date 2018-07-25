@@ -2,11 +2,20 @@ import { message} from 'antd';
 
 import {notification} from "antd/lib/index";
 import {getCheckStepStatus, getGoodsPutaway} from '../services/api'
-import { getSalesStatisticsList} from '../services/salesStatistics_S'
+import {
+  getPurchaseData,getDistributorsData,
+  getSalesStatisticsList,
+} from '../services/salesStatistics_S'
+import {getChannelTypeData} from "../services/channelManagement_S";
 export default {
   namespace: 'salesStatistics',
   state:{
-
+    // 获取平台渠道类型
+    channelTypeArr:[],
+    // 获取销售商（渠道商）
+    purchaseArr:[],
+    // 获取分销商
+    distributorsArr:[],
     // 商品管理 - 商品上架审核
     salesStatisticsAll:{
       tableData:{
@@ -19,6 +28,36 @@ export default {
 
   },
   effects:{
+    // 获取平台渠道类型
+    *getChannelType({ payload },{ call,put}){
+      const response = yield call(getChannelTypeData, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'getChannelTypeR',
+          payload: response,
+        });
+      }
+    },
+    // 获取销售商（渠道商）
+    *getPurchase({ payload },{ call,put}){
+      const response = yield call(getPurchaseData, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'getPurchaseR',
+          payload: response,
+        });
+      }
+    },
+    // 获取分销商类型
+    *getDistributors({ payload },{ call,put}){
+      const response = yield call(getDistributorsData, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'getDistributorsR',
+          payload: response,
+        });
+      }
+    },
     // 销售统计列表
     *getSalesStatisticsList({ payload },{ call,put}){
       const response = yield call(getSalesStatisticsList, payload);
@@ -36,6 +75,24 @@ export default {
 
   },
   reducers:{
+    getChannelTypeR(state, action) {
+      return {
+        ...state,
+        channelTypeArr:action.payload,
+      };
+    },
+    getPurchaseR(state, action) {
+      return {
+        ...state,
+        purchaseArr:action.payload,
+      };
+    },
+    getDistributorsR(state, action) {
+      return {
+        ...state,
+        distributorsArr:action.payload,
+      };
+    },
     getSalesStatisticsListR(state, action) {
       return {
         ...state,
