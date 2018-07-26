@@ -1,5 +1,14 @@
 export default function(dynamicWrapper,app){
   return {
+    //工作台 - 供应商
+    '/workbenchS': {
+      component: dynamicWrapper(app, ['workbench'], () => import('../routes/Workbench/workbenchS')),
+    },
+    //工作台 - 运营
+    '/workbenchO': {
+      component: dynamicWrapper(app, ['workbench'], () => import('../routes/Workbench/workbenchO')),
+    },
+
     //商品管理 - 上架审核
     '/goods/onAudit': {
       component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/goodsOnAudit')),
