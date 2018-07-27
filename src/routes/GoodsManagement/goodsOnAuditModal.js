@@ -60,7 +60,8 @@ export class ChangeGoodsOnAuditModal extends Component {
     });
   }
   handleCancel=()=>{
-    this.props.parent.handleVisible(false,'changeVisible')
+    this.props.parent.handleVisible(false,'changeVisible');
+    this.handleClear();
   }
   handleOk=()=>{
     const { goodsManagement:{goodsOnAudit:{goodsDetails,selectedId}}} = this.props;
@@ -260,6 +261,12 @@ class AuditFailure extends React.Component {
             that.props.parent.handleAuditFailureVisible(false);
             that.props.form.resetFields();
             that.props.parent.handleClear();
+            that.props.dispatch({
+              type: 'goodsManagement/getGoodsOnAuditList',
+              payload: {
+                userId:userId,
+              },
+            });
           }
         })
       }
@@ -269,6 +276,7 @@ class AuditFailure extends React.Component {
   handleCancel = (e) => {
     this.props.parent.handleAuditFailureVisible(false)
     this.props.form.resetFields();
+    this.props.parent.handleClear();
   }
 
   render() {
