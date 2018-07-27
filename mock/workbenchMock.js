@@ -2,7 +2,7 @@
 export default function workbenMock(url) {
   return {
     // 工作台-供应商
-    'POST /llback/Dashboard/GetWorkBenchS': url,
+    'POST /llback/Dashboard/GetWorkBenchS': getChannelList,
     // 工作台-供应商
     'POST /llback/Dashboard/GetWorkBenchO': url,
 
@@ -131,7 +131,7 @@ export function getChannelList(req, res) {
     goodsNum20: '0',
     yesterdaySales: {
       x: '昨日销售额',
-      y: 0,
+      y: 0.1,
     },
     todaySales: {
       x: '今日销售额',

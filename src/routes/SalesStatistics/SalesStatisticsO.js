@@ -172,8 +172,8 @@ export default class SalesStatisticsO extends Component {
           <div style={{ float: 'right' }}>
             <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
             <span>总销量：{tableData?tableData.item.salesNumTotal:0}， </span>
-            <span>总销售额：¥{tableData?tableData.item.salesPriceTotal:0}</span>
-            <span>总成本：¥{tableData?tableData.item.costTotal:0}</span>
+            <span>总销售额：¥{tableData?tableData.item.salesPriceTotal:0}， </span>
+            <span>总成本：¥{tableData?tableData.item.costTotal:0}， </span>
             <span>总毛利：¥{tableData?tableData.item.grossProfitTotal:0}</span>
             {/*<Button  style={{marginLeft:18}}>*/}
             {/*<Icon type="cloud-download-o" />导出数据*/}

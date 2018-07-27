@@ -46,37 +46,10 @@ export default class Analysis extends Component {
     const week = {x:'本周销售额',y:100}
     const month = {x:'本月销售额',y:100}
     const yesterday = [{...workbenchDataS.yesterdaySales}];
-    const todaySales = [
-      {
-        x: '1',
-        y: 0,
-      },
-      {...workbenchDataS.todaySales}
-    ];
-    const weekSales = [
-      {
-        x: '1',
-        y: 0,
-      },
-      {
-        x: '2',
-        y: 0,
-      },
-      {...workbenchDataS.weekSales}
-    ];
-    const monthSales = [
-      {
-        x: '1',
-        y: 0,
-      },{
-        x: '2',
-        y: 0,
-      },{
-        x: '3',
-        y: 0,
-      },
-      {...workbenchDataS.monthSales}
-    ];
+    const todaySales = [{...workbenchDataS.todaySales}];
+    const weekSales = [{...workbenchDataS.weekSales}];
+    const monthSales = [{...workbenchDataS.monthSales}]
+    ;
 
     const salesData = [{x:'商品条码：4520060581005,Skinature 胶原蛋白第二肌肤面膜 150ML',y:180},{x:'商品2',y:80},{x:'商品3',y:70},{x:'商品4',y:60},{x:'商品5',y:50},
       {x:'商品6',y:100},{x:'商品7',y:80},{x:'商品8',y:70},{x:'商品9',y:60},{x:'商品10',y:50},]
@@ -141,6 +114,8 @@ export default class Analysis extends Component {
                   data={yesterday}
                   height={248}
                   lineWidth={4}
+                  colors={['#1890FF']}
+                  // colors={['#1890FF']}
                 />
               </Col>
               <Col xl={6} lg={6} md={12} sm={24} xs={24}>
@@ -150,6 +125,8 @@ export default class Analysis extends Component {
                   data={todaySales}
                   height={248}
                   lineWidth={4}
+                  colors={['#36cbcb']}
+                  // colors={['#FF7A45']}
                 />
               </Col>
               <Col xl={6} lg={6} md={12} sm={24} xs={24}>
@@ -159,6 +136,8 @@ export default class Analysis extends Component {
                   data={weekSales}
                   height={248}
                   lineWidth={4}
+                  colors={['#2fc25b']}
+                  // colors={['#9254DE']}
                 />
               </Col>
               <Col xl={6} lg={6} md={12} sm={24} xs={24}>
@@ -168,6 +147,8 @@ export default class Analysis extends Component {
                   data={monthSales}
                   height={248}
                   lineWidth={4}
+                  colors={['#facc14']}
+                  // colors={['#FF4D4F']}
                 />
               </Col>
             </Row>

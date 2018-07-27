@@ -74,7 +74,7 @@ export default class GoodsAbout extends Component {
   }
   handleFormReset =()=>{
     this.props.form.resetFields();
-    // this.init();
+    this.init();
   }
   handleVisible = (flag) => {
     this.setState({

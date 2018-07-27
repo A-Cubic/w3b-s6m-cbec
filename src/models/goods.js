@@ -33,10 +33,10 @@ export default {
     //编辑仓库信息
     ModalwarehouseEdit:{
       wid:'',
-      supplier:'1',
+      supplierId:'1',
       wname:'',
       taxation:'',
-      taxation2type:'2',
+      taxation2type:'1',
       taxation2line:'',
       taxation2:'',
       freight:''
@@ -98,7 +98,7 @@ export default {
     },
     *downloadStoreTemp({ payload, callback }, { call, put }) {
       const response = yield call(downloadStoreTempUrl, payload);
-      console.log(response);
+      // console.log(response);
       if (response !== undefined) {
         message.success('导出成功');
         let downloadUrl = response.url;
@@ -111,7 +111,7 @@ export default {
     },
     *downloadGoodsTemp({ payload, callback }, { call, put }) {
       const response = yield call(downloadGoodsTempUrl, payload);
-      console.log(response);
+      // console.log(response);
       if (response !== undefined) {
         message.success('导出成功');
         let downloadUrl = response.url;
@@ -124,7 +124,7 @@ export default {
     },
     *downloadPicZip({ payload, callback }, { call, put }) {
       const response = yield call(downloadPicZipUrl, payload);
-      console.log(response);
+      // console.log(response);
       if (response !== undefined) {
         message.success('导出成功');
         let downloadUrl = response.url;
@@ -148,7 +148,7 @@ export default {
     // 供应商 下拉
     *getSupplier({ payload },{ call,put}){
       const response = yield call(getSupplier, payload);
-      console.log('~',response)
+      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getSupplierR',
@@ -171,7 +171,7 @@ export default {
     *editWarehouse({ payload,callback },{ call,put}){
       yield put({
         type: 'editWarehouseR',
-        payload: payload,
+        payload: {...payload},
       });
     },
     *deleteWarehouse({ payload,callback },{ call,put}){

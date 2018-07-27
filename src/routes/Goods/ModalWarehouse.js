@@ -1,6 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Modal, Button, Table,Select, Input, Form, Row, Col, Alert, Badge, Divider, Switch, Menu, Dropdown, Icon, message } from 'antd';
 import { connect } from 'dva';
+import {getToken} from "../../utils/Global";
+const userId = getToken().userId;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const formItemLayout = {
@@ -87,10 +89,11 @@ export default class ModalUnteratedOrder extends React.PureComponent {
                     label="供应商"
                   >
                     {getFieldDecorator('supplierId',{
-                      // initialValue: ModalwarehouseEdit.taxation2type,
+                      initialValue: ModalwarehouseEdit.supplierId,
                       rules: [{ required: true, message: '请选择供应商' }],
                     })(
                       <Select
+                        disabled={!!ModalwarehouseEdit.wid}
                         placeholder="请选择供应商"
                         // onChange={this.handleSelectChange}
                       >

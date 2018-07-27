@@ -61,8 +61,8 @@ export default class Warehouse extends Component {
     this.props.dispatch({
       type: 'goods/editWarehouse',
       payload: {
-        taxation2type:'2',
-        supplier:'1',
+        taxation2type:'1',
+        supplierId:'2',
       },
     });
     setTimeout(()=>{
@@ -125,7 +125,7 @@ export default class Warehouse extends Component {
         title: '税率提档类别',
         dataIndex: 'taxation2type',
         key: 'taxation2type',
-        render:val=>val?['','按总价提档','按元/克提档'][val]:''
+        render:val=>val?['','按元/克提档','按总价提档'][val]:''
       }, {
         title: '税率提档线',
         dataIndex: 'taxation2line',

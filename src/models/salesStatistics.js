@@ -19,7 +19,9 @@ export default {
     // 商品管理 - 商品上架审核
     salesStatisticsAll:{
       tableData:{
-        item:'',
+        item:{
+          salesNumTotal:0,
+        },
         list: [],
         pagination:{},
       },
@@ -116,13 +118,17 @@ export default {
       };
     },
     getSalesStatisticsListR(state, action) {
-      return {
-        ...state,
-        salesStatisticsAll:{
-          ...state.salesStatisticsAll,
-          tableData:action.payload
-        },
-      };
+      // if(action.payload.item==null){
+      //   return state
+      // }else{
+        return {
+          ...state,
+          salesStatisticsAll:{
+            ...state.salesStatisticsAll,
+            tableData:action.payload
+          },
+        };
+      // }
     },
 
 
