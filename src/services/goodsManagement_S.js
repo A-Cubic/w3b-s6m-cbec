@@ -2,7 +2,7 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 
-// 获取渠道管理 - 费用信息 - 列表
+// 上架审核-商品上架详情
 export async function getGoodsDetails(params) {
   return request(`/llback/Goods/WarehouseGoodsList`, {
     method: 'POST',

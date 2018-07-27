@@ -6,15 +6,15 @@ export default function orderManagementMock(url) {
     // 订单管理-查看详细订单
     'POST /llback/Order/GetOrder': url,
     // 订单管理-导出需发货的订单
-    'POST /llback/Order/SendOrder': SendOrder,
+    'POST /llback/Order/SendOrder': url,
     // 导入运单信息
-    'POST /llback/Order/getWaybill': getWaybill,
+    'POST /llback/Order/getWaybill': url,
     // 获取快递
-    'POST /llback/Order/GetExpress': getExpress,
+    'POST /llback/Order/GetExpress': url,
     // 确认发货
-    'POST /llback/Order/SingleWaybill': confirmDelivery,
+    'POST /llback/Order/SingleWaybill': url,
     // 海外已出货
-    'POST /llback/Order/Overseas': shipmentOverseas,
+    'POST /llback/Order/Overseas': url,
   };
 }
 export function GetOrderList(req, res) {

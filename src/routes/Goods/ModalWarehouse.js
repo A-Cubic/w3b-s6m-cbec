@@ -47,6 +47,12 @@ export default class ModalUnteratedOrder extends React.PureComponent {
         callback:function () {
           _this.props.parent.handleVisible();
           _this.props.form.resetFields();
+          _this.props.dispatch({
+            type: 'goods/warehouseList',
+            payload: {
+              userId:userId
+            },
+          });
         }
       });
     });

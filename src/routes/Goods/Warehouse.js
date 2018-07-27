@@ -72,6 +72,12 @@ export default class Warehouse extends Component {
   handleEditWarehouse =(record)=>{
     // console.log('aa',record)
     this.props.dispatch({
+      type:'goods/getSupplier',
+      payload:{
+        userId:userId
+      }
+    })
+    this.props.dispatch({
       type: 'goods/editWarehouse',
       payload: record,
     });

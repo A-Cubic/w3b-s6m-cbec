@@ -1,10 +1,10 @@
 // const orderManagement = 'http://console.llwell.net/';
-export default function goodsManagementMock() {
+export default function goodsManagementMock(url) {
   return {
-    // 获取渠道商类型
-    'POST /llback/Goods/WarehouseGoodsList': getChannelList,
+    // 上架审核-商品上架详情
+    'POST /llback/Goods/WarehouseGoodsList': url,
     // 上架审核-审核操作
-    'POST /llback/Goods/ExamineWarehouseGoods': shipmentOverseas,
+    'POST /llback/Goods/ExamineWarehouseGoods': url,
 
   };
 }

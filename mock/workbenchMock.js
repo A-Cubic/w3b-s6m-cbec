@@ -1,12 +1,10 @@
 // const orderManagement = 'http://console.llwell.net/';
-export default function workbenMock() {
+export default function workbenMock(url) {
   return {
     // 工作台-供应商
-    'POST /llback/Dashboard/GetWorkBenchS': getChannelList,
+    'POST /llback/Dashboard/GetWorkBenchS': url,
     // 工作台-供应商
-    'POST /llback/Dashboard/GetWorkBenchO': getA,
-    // // 上架审核-审核操作
-    // 'POST /llback/Goods/ExamineWarehouseGoods': shipmentOverseas,
+    'POST /llback/Dashboard/GetWorkBenchO': url,
 
   };
 }

@@ -154,6 +154,7 @@ class ChildEdit extends React.Component {
 
   handleOk = (e) => {
     const {channelManagement:{costChannel:{childEdit},channelTypeArr}} = this.props
+    console.log(this.props)
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue)=>{
@@ -163,12 +164,16 @@ class ChildEdit extends React.Component {
           type:'channelManagement/saveCostChannel',
           payload:{
             ...fieldsValue,
-            userId:userId,
+            // userId:userId,
             id:childEdit.id
           },
           callback:function () {
             that.props.parent.handleVisible(false)
             that.props.form.resetFields();
+            that.props.dispatch({
+              type: 'channelManagement/getCostChannelTable',
+              payload: {},
+            });
           }
         })
       }
@@ -219,8 +224,8 @@ class ChildEdit extends React.Component {
                   {...formItemLayout}
                   label="渠道商类型"
                 >
-                  {getFieldDecorator('platformType',{
-                    initialValue: childEdit.platformType,
+                  {getFieldDecorator('platformId',{
+                    initialValue: childEdit.platformId,
                     rules: [{ required: true, message: '请选择渠道商类型' }],
                   })(
                     <Select
