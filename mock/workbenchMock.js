@@ -1,8 +1,10 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function workbenMock() {
   return {
-    // 获取渠道商类型
-    // 'POST /llback/Goods/WarehouseGoodsList': getChannelList,
+    // 工作台-供应商
+    'POST /llback/Dashboard/GetWorkBenchS': getChannelList,
+    // 工作台-供应商
+    'POST /llback/Dashboard/GetWorkBenchO': getA,
     // // 上架审核-审核操作
     // 'POST /llback/Goods/ExamineWarehouseGoods': shipmentOverseas,
 
@@ -20,50 +22,176 @@ export function getPlatform(req, res) {
     },
   ]);
 }
-export function getChannelList(req, res) {
+export function getA(req, res) {
   res.send({
-    logId: '3',
-    username: '管理员',
-    goodsUrl: '',
-    goodsImgUrl: '',
-    warehouseGoodsList: [
+    overtime: '11',
+    wait: '11',
+    already: '1',
+    take: '2129',
+    done: '29',
+    confirm: null,
+    goodsNum100: '36',
+    goodsNum20: '3',
+    yesterdaySales: null,
+    todaySales: null,
+    weekSales: null,
+    monthSales: null,
+    bestSellingSupplier: null,
+    bestSellingPlatform: [
       {
-        id: '1118',
-        barcode: '4580012350011',
-        goodsName: '翡翠皂 NN 100g',
-        wname: '大连仓',
-        inprice: 185.9,
-        goodsnum: 1000,
-        status: '等待审核',
+        x: '8809539460888\n韩国 LANEIGE/兰芝 雪纱防晒隔离霜 紫色 30ml（新包装）[1件装]',
+        y: 402,
       },
       {
-        id: '1119',
-        barcode: '4580012350022',
-        goodsName: '',
-        wname: '大连仓',
-        inprice: 200,
-        goodsnum: 2000,
-        status: '等待补全信息',
+        x: '8809505JM1908\nJM solution 防晒喷雾[2件装]',
+        y: 325,
       },
       {
-        id: '1120',
-        barcode: '4580012350033',
-        goodsName: '',
-        wname: '大连仓',
-        inprice: 300,
-        goodsnum: 3000,
-        status: '等待补全信息',
+        x: '8809539461007\n韩国 LANEIGE/兰芝 雪纱防晒隔离霜 绿色 30ml（新包装）[1件装]',
+        y: 142,
       },
       {
-        id: '1121',
-        barcode: '4580012350044',
-        goodsName: '',
-        wname: '大连仓',
-        inprice: 400,
-        goodsnum: 4000,
-        status: '等待补全信息',
+        x: '8806390527767\n韩国Sulwhasoo雪花秀 玉容撕拉式面膜50ml[1件装]',
+        y: 68,
+      },
+      {
+        x: '8809378320695\npapa recipe/春雨 蜂蜜补水面膜[1件装]',
+        y: 62,
+      },
+      {
+        x: '8809495890132\nJAYJUN 樱花三部曲面膜 10片[1件装]',
+        y: 48,
+      },
+      {
+        x: '4901340206922\ncalpis 可尔必思浓缩470ml',
+        y: 45,
+      },
+      {
+        x: '8809505541924\nJM solution 防晒喷雾[1件装][1件装]',
+        y: 42,
+      },
+      {
+        x: '8809597410191\nPNY7‘S 星空面膜撕拉面膜[1件装]',
+        y: 40,
+      },
+      {
+        x: '8809323730470\nIt‘s skin/伊思 晶钻蜗牛洁面乳 150ml[1件装]',
+        y: 30,
       },
     ],
+    dashboardSales: [
+      {
+        id: 1,
+        platformType: 'B2B',
+        yesterdaySales: '0',
+        todaySales: '0',
+        weekSales: '0',
+        monthSales: '0',
+      },
+      {
+        id: 2,
+        platformType: 'BBC',
+        yesterdaySales: '0',
+        todaySales: '0',
+        weekSales: '0',
+        monthSales: '0',
+      },
+      {
+        id: 3,
+        platformType: 'O2O',
+        yesterdaySales: '0',
+        todaySales: '0',
+        weekSales: '0',
+        monthSales: '0',
+      },
+      {
+        id: 4,
+        platformType: '总计',
+        yesterdaySales: '0',
+        todaySales: '0',
+        weekSales: '0',
+        monthSales: '0',
+      },
+    ],
+    platformOrder: [
+      {
+        x: 'BBC',
+        y: 5,
+      },
+    ],
+  });
+}
+export function getChannelList(req, res) {
+  res.send({
+    overtime: '0',
+    wait: '0',
+    already: '0',
+    take: '0',
+    done: '0',
+    confirm: '0',
+    goodsNum100: '0',
+    goodsNum20: '0',
+    yesterdaySales: {
+      x: '昨日销售额',
+      y: 0,
+    },
+    todaySales: {
+      x: '今日销售额',
+      y: 0.1,
+    },
+    weekSales: {
+      x: '本周销售额',
+      y: 1,
+    },
+    monthSales: {
+      x: '本月销售额',
+      y: 1,
+    },
+    bestSellingSupplier: null,
+    bestSellingPlatform: [
+      {
+        x: '8809539460888\n韩国 LANEIGE/兰芝 雪纱防晒隔离霜 紫色 30ml（新包装）[1件装]',
+        y: 402,
+      },
+      {
+        x: '8809505JM1908\nJM solution 防晒喷雾[2件装]',
+        y: 325,
+      },
+      {
+        x: '8809539461007\n韩国 LANEIGE/兰芝 雪纱防晒隔离霜 绿色 30ml（新包装）[1件装]',
+        y: 142,
+      },
+      {
+        x: '8806390527767\n韩国Sulwhasoo雪花秀 玉容撕拉式面膜50ml[1件装]',
+        y: 68,
+      },
+      {
+        x: '8809378320695\npapa recipe/春雨 蜂蜜补水面膜[1件装]',
+        y: 62,
+      },
+      {
+        x: '8809495890132\nJAYJUN 樱花三部曲面膜 10片[1件装]',
+        y: 48,
+      },
+      {
+        x: '4901340206922\ncalpis 可尔必思浓缩470ml',
+        y: 45,
+      },
+      {
+        x: '8809505541924\nJM solution 防晒喷雾[1件装][1件装]',
+        y: 42,
+      },
+      {
+        x: '8809597410191\nPNY7‘S 星空面膜撕拉面膜[1件装]',
+        y: 40,
+      },
+      {
+        x: '8809323730470\nIt‘s skin/伊思 晶钻蜗牛洁面乳 150ml[1件装]',
+        y: 30,
+      },
+    ],
+    dashboardSales: null,
+    platformOrder: null,
   });
 }
 export function UpdateDistributor(req, res) {

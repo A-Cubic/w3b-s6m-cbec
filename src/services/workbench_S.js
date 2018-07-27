@@ -2,9 +2,16 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 
-// 获取渠道管理 - 费用信息 - 列表
-export async function getGoodsDetails(params) {
-  return request(`/llback/Goods/WarehouseGoodsList`, {
+// 工作台-供应商
+export async function getWorkbenchDataS(params) {
+  return request(`/llback/Dashboard/GetWorkBenchS`, {
+    method: 'POST',
+    body: params,
+  });
+}
+// 工作台-运营商
+export async function getWorkbenchDataO(params) {
+  return request(`/llback/Dashboard/GetWorkBenchO`, {
     method: 'POST',
     body: params,
   });

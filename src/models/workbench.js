@@ -1,50 +1,59 @@
-import { fakeChartData } from '../services/api';
+import {getWorkbenchDataS, getWorkbenchDataO} from '../services/workbench_S';
 
 export default {
   namespace: 'workbench',
 
   state: {
-
+    workbenchDataS:{},
+    workbenchDataO:{
+      DashboardSales:[],
+    }
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(fakeChartData);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    //工作台 - 供应商
+    *getWorkbenchDataS({ payload },{ call,put}){
+      const response = yield call(getWorkbenchDataS, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getWorkbenchDataSR',
+          payload: response,
+        });
+      }
     },
-    *fetchSalesData(_, { call, put }) {
-      const response = yield call(fakeChartData);
-      yield put({
-        type: 'save',
-        payload: {
-          salesData: response.salesData,
-        },
-      });
+
+    //工作台 - 运营商
+    *getWorkbenchDataO({ payload },{ call,put}){
+      const response = yield call(getWorkbenchDataO, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getWorkbenchDataOR',
+          payload: response,
+        });
+      }
     },
   },
 
   reducers: {
-    save(state, { payload }) {
+    getWorkbenchDataSR(state, action) {
       return {
         ...state,
-        ...payload,
+        workbenchDataS:action.payload,
       };
     },
+    getWorkbenchDataOR(state, action) {
+      return {
+        ...state,
+        workbenchDataO:action.payload,
+      };
+    },
+
     clear() {
       return {
-        visitData: [],
-        visitData2: [],
-        salesData: [],
-        searchData: [],
-        offlineData: [],
-        offlineChartData: [],
-        salesTypeData: [],
-        salesTypeDataOnline: [],
-        salesTypeDataOffline: [],
-        radarData: [],
+        workbenchDataS: [],
+        workbenchDataO: [],
       };
     },
   },
