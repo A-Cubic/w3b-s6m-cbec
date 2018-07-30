@@ -241,7 +241,7 @@ class ChildEdit extends React.Component {
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue)=>{
-      console.log('fieldsValue',fieldsValue)
+      // console.log('fieldsValue',fieldsValue)
       if(!err){
         this.props.dispatch({
           type:'channelManagement/saveGoodsChannel',
@@ -253,6 +253,7 @@ class ChildEdit extends React.Component {
           callback:function () {
             that.props.parent.handleVisible(false)
             that.props.form.resetFields();
+
           }
         })
       }

@@ -17,7 +17,7 @@ class Step1 extends React.PureComponent {
     thumbUrl:'',
   }
   handleUploadChange=(info)=>{
-    console.log(info)
+    // console.log(info)
     this.setState({
       fileList:info.fileList,
       file:info.file,

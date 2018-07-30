@@ -96,12 +96,13 @@ export default class costChannel extends Component {
       title: '渠道商价格类型',
       dataIndex: 'priceType',
       key: 'priceType',
-      render:val=>val?['','按订单售价计算','按供货价计算'][val]:''
+      render:val=>val?['','按订单售价计算','按供货价计算'][val*1]:''
     }, {
       title: '提点类型',
       dataIndex: 'platformCostType',
       key: 'platformCostType',
-      render:val=>val?['','进价基础计算','售价基础计算'][val]:''
+
+      render:val=>val?['','进价基础计算','售价基础计算'][val*1]:''
     }, {
       title: '平台提点',
       dataIndex: 'platformCost',
@@ -154,11 +155,11 @@ class ChildEdit extends React.Component {
 
   handleOk = (e) => {
     const {channelManagement:{costChannel:{childEdit},channelTypeArr}} = this.props
-    console.log(this.props)
+    // console.log(this.props)
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue)=>{
-      console.log('fieldsValue',fieldsValue)
+      // console.log('fieldsValue',fieldsValue)
       if(!err){
         this.props.dispatch({
           type:'channelManagement/saveCostChannel',
@@ -247,7 +248,7 @@ class ChildEdit extends React.Component {
                   label="渠道商价格类型"
                 >
                   {getFieldDecorator('priceType', {
-                    initialValue: ['','按订单售价计算','按供货价计算'][childEdit.priceType],
+                    initialValue: childEdit.priceType,
                     rules: [{ required: true, message: '请选择渠道商价格类型' }],
                   })(
                     <Select
@@ -266,7 +267,7 @@ class ChildEdit extends React.Component {
                   label="提点类型"
                 >
                   {getFieldDecorator('platformCostType',{
-                    initialValue: ['','进价基础计算','售价基础计算'][childEdit.platformCostType],
+                    initialValue: childEdit.platformCostType,
                     rules: [{ required: true, message: '请选择提点类型' }],
                   })(
                     <Select

@@ -65,7 +65,7 @@ export default class OrderListS extends Component {
       this.setState({
         formValues: values,
       });
-      console.log(values);
+      // console.log(values);
       dispatch({
         type: 'order/lists',
         payload: {

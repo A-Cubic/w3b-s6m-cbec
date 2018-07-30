@@ -84,7 +84,7 @@ export default class goodsMod extends Component {
       this.setState({
         formValues: values,
       });
-      console.log(values);
+      // console.log(values);
       dispatch({
         type: 'goods/update',
         payload: {
@@ -98,7 +98,7 @@ export default class goodsMod extends Component {
 
   componentWillMount () {
     let goodsid = this.props.match.params.id;
-    console.log(goodsid);
+    // console.log(goodsid);
     //假装获取到数据
     this.setState({
       data: data

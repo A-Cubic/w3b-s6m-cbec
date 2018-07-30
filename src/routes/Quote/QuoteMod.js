@@ -65,7 +65,7 @@ export default class QuoteMod extends Component {
 
   componentDidMount() {
     const { formValues, data } = this.state;
-    console.log(123);
+    // console.log(123);
     this.props.dispatch({
       type: 'quote/info',
       payload: {
@@ -101,7 +101,7 @@ export default class QuoteMod extends Component {
       this.setState({
         formValues: values,
       });
-      console.log(values);
+      // console.log(values);
       dispatch({
         type: 'quote/updateOffer',
         payload: {
@@ -115,7 +115,7 @@ export default class QuoteMod extends Component {
 
   componentWillMount () {
     let goodsTm = this.props.match.params.id;
-    console.log(goodsTm);
+    // console.log(goodsTm);
     //假装获取到数据
     this.setState({
       data: data

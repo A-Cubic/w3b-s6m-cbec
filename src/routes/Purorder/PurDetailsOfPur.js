@@ -485,7 +485,7 @@ export default class PurDetailsOfPur extends Component {
   }
   handleChange(value, key, column) {
     const newData = [...this.state.listGoods];
-    console.log(newData);
+    // console.log(newData);
     const target = newData.filter(item => key === item.id)[0];
     if (target) {
       target[column] = value;

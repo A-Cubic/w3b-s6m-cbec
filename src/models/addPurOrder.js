@@ -28,19 +28,20 @@ export default {
       });
     },
     *savePurOrder({ payload,callback }, { call, put }) {
-      console.log(payload);
+      // console.log(payload);
       const response = yield call(savePurOrder, payload);
       if ('purchasesn' in response) {
         if(callback) callback(response.purchasesn);
       }
     },
     *addPurGoods({ payload,callback }, { call, put }) {
-      const response = yield call(addPurGoods, payload);console.log(response);
+      const response = yield call(addPurGoods, payload);
+      // console.log(response);
       if(callback)callback(response);
     },
     *splitPurGoods({ payload,callback }, { call, put }) {
       const response = yield call(splitPurGoods, payload);
-      console.log(response);
+      // console.log(response);
       if(callback)callback(response);
     },
   },

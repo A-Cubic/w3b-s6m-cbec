@@ -92,7 +92,7 @@ const EditableCell = ({ editable, value, onChange }) => (
 //   }
 // }
 function onChangeDate(date, dateString) {
-  console.log(date, dateString);
+  // console.log(date, dateString);
 }
 @connect(({ addPurOrder, loading }) => ({
   addPurOrder,
@@ -247,7 +247,7 @@ export default class NewPurOrder extends Component {
   }
   handleChange2(value, key, column) {
     const newData = [...this.state.purList.purDataSource];
-    console.log(newData);
+    // console.log(newData);
     const target = newData.filter(item => key === item.id)[0];
     if (target) {
       target[column] = value;
@@ -369,7 +369,7 @@ export default class NewPurOrder extends Component {
 
 			      const target = dataSource.find(item => item.key === key);
 			      // console.log('target:',target);
-			      console.log(dataSource);
+			      // console.log(dataSource);
 			      if (target) {
 			        target[dataIndex] = value;
 			        this.setState({
@@ -384,8 +384,8 @@ export default class NewPurOrder extends Component {
 	  		const handleChangeSendtype = (index,value) => {
 	  			const { purList:{ purDataSource } }  = this.state;
 	  			var data = [...purDataSource];
-				console.log(index);
-				console.log(value);
+				// console.log(index);
+				// console.log(value);
 				data[index]['sendtype'] = value;
 				this.setState({
 					purList : {
@@ -451,7 +451,7 @@ export default class NewPurOrder extends Component {
 	  						type:'addPurOrder/savePurOrder',
 	  						payload:data,
 	  						callback:(purchasesn)=>{
-	  							console.log(purchasesn);
+	  							// console.log(purchasesn);
 	  							//未添加goodsList
 	  							if(purchasesn && purList.purDataSource.length == 0){
 									notification['success']({

@@ -44,7 +44,7 @@ export default {
     // 上架审核列表
     *getGoodsDetails({ payload },{ call,put}){
       const response = yield call(getGoodsDetails, payload);
-      console.log('~',response)
+      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getGoodsDetailsR',

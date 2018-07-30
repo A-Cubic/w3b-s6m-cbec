@@ -47,7 +47,7 @@ export class ChangeGoodsOnAuditModal extends Component {
   }
   componentDidMount() {
     const { goodsManagement:{goodsOnAudit:{selectedId}}} = this.props;
-    console.log(selectedId)
+    // console.log(selectedId)
     this.setState({
       selectedId: selectedId
     })
@@ -70,14 +70,14 @@ export class ChangeGoodsOnAuditModal extends Component {
     this.setState({
       auditFailureNum:getTotalLength-getselectedIdLength
     },()=>{
-      console.log(goodsDetails.warehouseGoodsList)
-      console.log(this.state.selectedId)
-      console.log(this.state.auditFailureNum)
+      // console.log(goodsDetails.warehouseGoodsList)
+      // console.log(this.state.selectedId)
+      // console.log(this.state.auditFailureNum)
     })
 
     if(getTotalLength == getselectedIdLength||!this.state.changeSelect){
       const that = this;
-      console.log(this);
+      // console.log(this);
       this.props.dispatch({
         type:'goodsManagement/onAudit',
         payload:{
@@ -96,11 +96,11 @@ export class ChangeGoodsOnAuditModal extends Component {
           });
         }
       })
-      console.log('已经全部选择')
+      // console.log('已经全部选择')
 
 
     }else{
-      console.log('弹出审核失败原因')
+      // console.log('弹出审核失败原因')
       this.props.parent.handleVisible(false,'changeVisible');
       this.handleAuditFailureVisible(true);
     }
@@ -163,12 +163,12 @@ export class ChangeGoodsOnAuditModal extends Component {
 
       selectedRowKeys:this.state.selectedId,
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         this.setState({
           selectedId:selectedRowKeys,
           changeSelect:true
         },()=>{
-          console.log(this.state.selectedId)
+          // console.log(this.state.selectedId)
         })
         },
 
@@ -247,9 +247,9 @@ class AuditFailure extends React.Component {
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue)=>{
-      console.log('fieldsValue',fieldsValue)
+      // console.log('fieldsValue',fieldsValue)
       if(!err){
-        console.log('提交失败原因')
+        // console.log('提交失败原因')
         this.props.dispatch({
           type:'goodsManagement/onAudit',
           payload:{

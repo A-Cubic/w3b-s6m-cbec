@@ -238,7 +238,7 @@ export default {
     },
     *step2supplement({ payload },{ call,put}){
       const response = yield call(getStep2supplement, payload);
-      console.log('~',response)
+      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'step2supplementR',

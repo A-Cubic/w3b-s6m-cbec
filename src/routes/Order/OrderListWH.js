@@ -66,7 +66,7 @@ export default class OrderListWH extends Component {
       this.setState({
         formValues: values,
       });
-      console.log(values);
+      // console.log(values);
       dispatch({
         type: 'order/listw',
         payload: {
@@ -108,7 +108,7 @@ export default class OrderListWH extends Component {
     const { dispatch } = this.props;
     const { pagination } = this.state;
 
-    console.log(e.target.value);
+    // console.log(e.target.value);
     dispatch({
       type: 'order/listw',
       payload: {

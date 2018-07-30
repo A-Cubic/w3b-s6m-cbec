@@ -62,7 +62,7 @@ export default class goodsOnAudit extends Component {
         },
         callback(params){
           if(params.status=='1'){
-            console.log(that.props.goodsManagement.goodsOnAudit)
+            // console.log(that.props.goodsManagement.goodsOnAudit)
             that.handleVisible(true,'changeVisible')
           }else{
             that.handleVisible(true,'checkVisible')

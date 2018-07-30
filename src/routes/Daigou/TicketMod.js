@@ -24,6 +24,7 @@ const formItemLayout2 = {
   wrapperCol: {
     xs: { span: 20 },
     sm: { span: 20 },
+
   }
 };
 
@@ -62,7 +63,7 @@ export default class TicketMod extends Component {
 
   componentDidMount() {
     var goodsTm = this.props.match.params.id;
-    console.log(goodsTm);
+    // console.log(goodsTm);
     const { formValues, data } = this.state;
     this.props.dispatch({
       type: 'daigou/info',
@@ -104,7 +105,7 @@ export default class TicketMod extends Component {
       this.setState({
         formValues: values,
       });
-      console.log(values);
+      // console.log(values);
       dispatch({
         type: 'daigou/update',
         payload: {

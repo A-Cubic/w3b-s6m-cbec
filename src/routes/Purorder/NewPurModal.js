@@ -25,7 +25,7 @@ export default class NewPurModal extends Component {
 	}
 	handleOk = (e) => {
 		const { getFieldsValue } = this.props.form;
-			console.log(getFieldsValue());
+			// console.log(getFieldsValue());
 		  this.setState({
 		  	loading : true
 		  });
@@ -67,7 +67,7 @@ export default class NewPurModal extends Component {
 		                       确认
 		                     </Button>,
 		                   ]}>
-		          
+
 
 		          <Form onSubmit={this.handleSubmit}>
 							<Row>
@@ -81,7 +81,7 @@ export default class NewPurModal extends Component {
 									  )}
 									</FormItem>
 								</Col>
-								
+
 								<Col xs={24} sm={12} md={8} lg={8} xl={8}>
 									<FormItem
 									{...formItemLayout}
@@ -122,7 +122,7 @@ export default class NewPurModal extends Component {
 									  )}
 									</FormItem>
 								</Col>
-							</Row>	
+							</Row>
 				  </Form>
 		        </Modal>
 		)

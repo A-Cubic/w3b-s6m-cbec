@@ -51,7 +51,7 @@ export default class GoodsAbout extends Component {
   onSearch=(e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
-      console.log('values',fieldsValue)
+      // console.log('values',fieldsValue)
 
       if (err) return;
       const values = {
@@ -104,7 +104,7 @@ export default class GoodsAbout extends Component {
     });
   }
   handleUploadChange1=(info)=>{
-    console.log('info',info)
+    // console.log('info',info)
     let fileList = info.fileList;
     this.setState({
       fileList1:info.fileList
@@ -122,7 +122,7 @@ export default class GoodsAbout extends Component {
     })
   }
   handleUploadChange2=(info)=>{
-    console.log('info',info)
+    // console.log('info',info)
     let fileList2 = info.fileList;
     this.setState({
       fileList2:info.fileList
@@ -140,7 +140,7 @@ export default class GoodsAbout extends Component {
     })
   }
   handleUploadChange3=(info)=>{
-    console.log('info',info)
+    // console.log('info',info)
     let fileList3 = info.fileList;
     this.setState({
       fileList3:info.fileList
@@ -402,7 +402,7 @@ export default class GoodsAbout extends Component {
         render: (text, record, index) => {
           return (
             <Fragment>
-              <a href="javascript:;" onClick={(e) => this.handleEdit(e, record, index)}>详情</a><br/>
+              <a href="javascript:;" onClick={(e) => this.handleEdit(e, record, index)}>{record.slt?'详情':''}</a><br/>
               {/*<a href="javascript:;" >{*/}
                 {/*record.status == 1?'':(*/}
                   {/*record.flag == 0?*/}

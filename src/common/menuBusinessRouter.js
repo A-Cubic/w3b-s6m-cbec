@@ -128,24 +128,25 @@ export default function(dynamicWrapper,app){
     '/account/order-s': {
       component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListS')),
     },
-    '/account/order-w': {
+    //订单结算
+    '/orderManagement/order-w': {
       component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListWH')),
     },
-    '/account/list-p': {
-      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/AccountP')),
-    },
-    '/account/list-s': {
-      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListP')),
-    },
-    '/account/ordergoods-p/:id': {
-      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsP')),
-    },
-    '/account/ordergoods-s/:id': {
-      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsS')),
-    },
-    '/account/ordergoods-w/:id': {
-      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsWH')),
-    },
+    // '/account/list-p': {
+    //   component: dynamicWrapper(app, ['order'], () => import('../routes/Order/AccountP')),
+    // },
+    // '/account/list-s': {
+    //   component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderListP')),
+    // },
+    // '/account/ordergoods-p/:id': {
+    //   component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsP')),
+    // },
+    // '/account/ordergoods-s/:id': {
+    //   component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsS')),
+    // },
+    // '/account/ordergoods-w/:id': {
+    //   component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderGoodsWH')),
+    // },
     '/goods/info/add': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/UploadGoods')),
     },

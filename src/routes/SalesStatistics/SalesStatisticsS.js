@@ -13,7 +13,7 @@ const TabPane = Tabs.TabPane;
 
 @connect(({salesStatistics,  loading }) => ({
   salesStatistics,
-  loading: loading.effects['salesStatistics/getSalesStatisticsListA'],
+  loading: loading.effects['salesStatistics/getSalesStatisticsListS'],
 }))
 
 @Form.create()
@@ -23,7 +23,7 @@ export default class SalesStatisticsS extends Component {
   }
   init(){
     this.props.dispatch({
-      type: 'salesStatistics/getSalesStatisticsListA',
+      type: 'salesStatistics/getSalesStatisticsListS',
       payload: {},
     });
   }
@@ -49,7 +49,7 @@ export default class SalesStatisticsS extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'salesStatistics/getSalesStatisticsListA',
+        type: 'salesStatistics/getSalesStatisticsListS',
         payload: {
           ...values,
           ...tableData.pagination
@@ -68,7 +68,7 @@ export default class SalesStatisticsS extends Component {
     };
 
     this.props.dispatch({
-      type: 'salesStatistics/getSalesStatisticsListA',
+      type: 'salesStatistics/getSalesStatisticsListS',
       payload: params,
     });
   }
@@ -183,7 +183,7 @@ export default class SalesStatisticsS extends Component {
           </div>
           <Table
             dataSource={tableData.list}
-            rowKey={record => record.barcode}
+            rowKey={record => record.id}
             columns={columns}
             pagination={paginationProps}
             onChange={this.handleTableChange}

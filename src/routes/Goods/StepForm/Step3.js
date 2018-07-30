@@ -30,7 +30,7 @@ class Step3 extends React.PureComponent {
         status:'1'
       },
       callback:function () {
-          console.log('a',that.props)
+          // console.log('a',that.props)
           dispatch({
             type:'goods/step3supplement',
             payload:{

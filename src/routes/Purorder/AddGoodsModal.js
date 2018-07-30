@@ -38,7 +38,7 @@ export default class AddGoodsModal extends Component {
 
 	handleOk = (e) => {
 	  if(this.props.handleOk){
-	  	console.log("goodsSelections",goodsSelections)
+	  	// console.log("goodsSelections",goodsSelections)
 		this.props.handleOk(goodsSelections);
   	  }
   	  this.setState({
@@ -70,7 +70,7 @@ export default class AddGoodsModal extends Component {
     this.getGoodsList('',1,pagination.pageSize)
   }
 	changGoodsPage = (page, filters, sorter) =>{
-		console.log(page)
+		// console.log(page)
 		const { getFieldsValue } = this.props.form;
 		const values = getFieldsValue();
 		this.getGoodsList('',page.current,page.pageSize)
@@ -89,13 +89,13 @@ export default class AddGoodsModal extends Component {
 	addGoods = () => {
   			const { purList } = this.state;
   			var data = purList.purDataSource.slice(0);
-  			console.log('add....................');
-  			console.log(goodsSelections);
+  			// console.log('add....................');
+  			// console.log(goodsSelections);
   			goodsSelections.forEach(function(val,i){
   				val.key = new Date().getTime()+i+'';
   				data.push(val);
   			});
-  			console.log(data);
+  			// console.log(data);
 			this.setState({
 				currentStep : 0,
 				purList : {

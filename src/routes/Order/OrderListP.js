@@ -66,7 +66,7 @@ export default class OrderListP extends Component {
       this.setState({
         formValues: values,
       });
-      console.log(values);
+      // console.log(values);
       dispatch({
         type: 'order/listp',
         payload: {
@@ -108,7 +108,7 @@ export default class OrderListP extends Component {
     const { dispatch } = this.props;
     const { pagination } = this.state;
 
-    console.log(e.target.value);
+    // console.log(e.target.value);
     dispatch({
       type: 'order/listp',
       payload: {

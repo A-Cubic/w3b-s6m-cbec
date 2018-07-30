@@ -34,25 +34,31 @@ export default {
           let tUrl = '/user/login';
           switch (auth) {
             case 'admin':
-              tUrl = '/dashboard-o';
-              break;
+            tUrl = '/dashboard-o';
+            break;
+            //供应商
             case 'supplier':
-              tUrl = '/dashboard-s';
+              tUrl = '/workbenchS';
               break;
+            //  渠道商
             case 'purchasers':
-              tUrl = '/account/order-p';
+              tUrl = '/orderManagement/channelOrder';
               break;
+            //  运营客服
             case 'operate':
-              tUrl = '/dashboard-o';
+              tUrl = '/workbenchO';
               break;
+            //  未审核通过的供应商
             case 'unaudited-s':
               tUrl = '/user/register-verify';
               break;
+            //  未审核通过的渠道商
             case 'unaudited-p':
               tUrl = '/user/register-verify';
               break;
+            //  仓库
             case 'warehouse':
-              tUrl = '/dashboard-o';
+              tUrl = '/orderManagement/order-w';
               break;
             case '':
               tUrl = '/user/login';

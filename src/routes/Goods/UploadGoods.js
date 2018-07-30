@@ -65,7 +65,7 @@ export default class UploadGoods extends Component {
       this.setState({
         formValues: values,
       });
-      console.log(values);
+      // console.log(values);
       dispatch({
         type: 'goods/list',
         payload: {

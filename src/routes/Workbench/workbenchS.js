@@ -41,7 +41,7 @@ export default class Analysis extends Component {
   }
   render() {
     const {workbench:{workbenchDataS}}= this.props;
-    console.log('~',this.props)
+    // console.log('~',this.props)
     const today = {x:'今日销售额',y:100}
     const week = {x:'本周销售额',y:100}
     const month = {x:'本月销售额',y:100}

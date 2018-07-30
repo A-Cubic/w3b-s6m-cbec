@@ -211,7 +211,7 @@ export default class SalesStatisticsS extends Component {
           </div>
           <Table
             dataSource={tableData.list}
-            rowKey={record => record.barcode}
+            rowKey={record => record.id}
             columns={columns}
             pagination={paginationProps}
             onChange={this.handleTableChange}

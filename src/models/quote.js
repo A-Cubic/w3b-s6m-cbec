@@ -55,7 +55,7 @@ export default {
       });
     },
     *insertOffer({ payload, callback }, { call }) {
-      console.log(payload.list);
+      // console.log(payload.list);
       const response = yield call(insertOfferOfSupplier, payload.list);
       if (response === undefined) {
 

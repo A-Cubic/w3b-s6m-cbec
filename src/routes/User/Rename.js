@@ -130,7 +130,7 @@ export default class Register extends Component {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
       if (!err) {
-        console.log(values);
+        // console.log(values);
         this.props.dispatch({
           type: 'register/rename',
           payload: {

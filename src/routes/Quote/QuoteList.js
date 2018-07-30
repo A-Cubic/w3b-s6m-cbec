@@ -66,7 +66,7 @@ export default class QuoteList extends Component {
        this.setState({
          formValues: values,
        });
-       console.log(values);
+       // console.log(values);
        dispatch({
          type: 'quote/list',
          payload: {

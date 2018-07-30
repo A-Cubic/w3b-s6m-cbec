@@ -39,7 +39,7 @@ export default class AddGoodsModal extends Component {
   }
 	handleOk = (e) => {
     const {  dispatch } = this.props;
-    console.log(goodsSelections);
+    // console.log(goodsSelections);
     var data = {
       list : goodsSelections.map((item,index)=>{
         return {
@@ -49,7 +49,7 @@ export default class AddGoodsModal extends Component {
           slt:item.slt
         }
       })};
-    console.log(data);
+    // console.log(data);
     dispatch({
       type: 'quote/insertOffer',
       payload: data,
@@ -87,7 +87,7 @@ export default class AddGoodsModal extends Component {
 	// 	this.getGoodsList('',1,10)
 	// }
 	changGoodsPage = (page, filters, sorter) =>{
-		console.log(page)
+		// console.log(page)
 		const { getFieldsValue } = this.props.form;
 		const values = getFieldsValue();
 		this.getGoodsList('',page.current,page.pageSize)
@@ -106,13 +106,13 @@ export default class AddGoodsModal extends Component {
 	addGoods = () => {
   			const { purList } = this.state;
   			var data = purList.purDataSource.slice(0);
-  			console.log('add....................');
-  			console.log(goodsSelections);
+  			// console.log('add....................');
+  			// console.log(goodsSelections);
   			goodsSelections.forEach(function(val,i){
   				val.key = new Date().getTime()+i+'';
   				data.push(val);
   			});
-  			console.log(data);
+  			// console.log(data);
 			this.setState({
 				currentStep : 0,
 				purList : {

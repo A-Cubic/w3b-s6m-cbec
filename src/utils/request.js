@@ -33,6 +33,10 @@ const serverCodeMessage = {
   '6': { code: 500, msg: '数据处理有误' },
   '7': { code: 500, msg: '请求参数不正确' },
   'default': { code: 500, msg: '未知错误' },
+
+  '500': { code: 5003, msg: '数据处理有误' },
+  '4000': { code: 401, msg: '登录信息过期，请重新登录' },
+  '4003': { code: 403, msg: '没有该功能相关权限' },
 };
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -117,6 +121,6 @@ export default function request(url, options) {
         dispatch(routerRedux.push('/exception/404'));
         return;
       }
-      console.log(e);
+      // console.log(e);
     });
 }

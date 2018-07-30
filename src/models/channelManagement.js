@@ -119,6 +119,10 @@ export default {
         if(response.type==1){
           callback();
           message.success('保存成功')
+          yield put({
+            type:'saveGoodsChannelR',
+            payload: payload
+          })
         }else{
           message.error(response.msg)
         }
@@ -171,13 +175,24 @@ export default {
       }
     },
     editGoodsChannelR(state,action){
-      // console.log(action.payload)
       return{
         ...state,
         goodsChannel:{
           ...state.goodsChannel,
-          childEdit:action.payload
+          childEdit:{
+            ...action.payload,
+            supplierId:action.payload.supplierid
+          }
         }
+      }
+    },
+    saveGoodsChannelR(state,action){
+      const b =state.goodsChannel.tableData.list.findIndex(item=>
+         item.id===action.payload.id
+       )
+      state.goodsChannel.tableData.list[b] = {...state.goodsChannel.tableData.list[b], ...action.payload};
+      return{
+        ...state
       }
     },
   }
