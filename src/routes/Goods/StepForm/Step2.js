@@ -108,13 +108,13 @@ class Step2 extends React.PureComponent {
     };
     const onValidateForm = e => {
       e.preventDefault();
-      if(this.state.file1!==''||this.state.file2!==''){
+      if(this.state.file1.response!==undefined||this.state.file2.response!==undefined){
         this.props.dispatch({
           type: 'goods/step2Upload',
           payload: {
             userId:userId,
-            fileTemp: this.state.file1.response.fileName[0],
-            fileTemp1: this.state.file2.response.fileName[0]
+            fileTemp: this.state.file1.response?this.state.file1.response.fileName[0]:'',
+            fileTemp1: this.state.file2.response?this.state.file2.response.fileName[0]:''
           },
           callback: this.onUploadCallback,
         });

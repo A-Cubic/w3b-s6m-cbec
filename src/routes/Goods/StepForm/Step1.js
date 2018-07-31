@@ -53,7 +53,7 @@ class Step1 extends React.PureComponent {
       multiple: false
     };
     const onValidateForm = () => {
-      if(this.state.file!==undefined){
+      if(this.state.file.response!==undefined){
         this.props.dispatch({
           type: 'goods/step1Upload',
           payload: {
