@@ -45,3 +45,10 @@ export async function saveGoodsChannel(params) {
     body: params,
   });
 }
+// 上传商品渠道信息
+export async function getUploadDGoods(params) {
+  return request(`/llback/Distributor/UploadDGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}

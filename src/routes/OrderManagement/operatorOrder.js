@@ -5,7 +5,8 @@ import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,P
 import ModalOperatorOrderCheck from './ModalOperatorOrderCheck';
 import styles from './operatorOrder.less';
 import moment from 'moment';
-import {getToken} from "../../utils/Global";
+import {getHeader, getToken} from "../../utils/Global";
+import { getUploadUrl } from "../../services/api"
 const userId = getToken().userId;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -71,41 +72,41 @@ export default class operatorOrder extends Component {
   downloadTemplate=()=>{
     window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/order.xlsx'
   }
-  // 导入
+  // 导入订单
   handleUploadChange1=(info)=>{
-    this.props.dispatch({
-      type: 'orderManagement/uploadWaybill',
-      payload: {
-        userId: userId,
-        byte64:info.file.thumbUrl
-      },
-      callback: this.onUploadCallback,
+    if(info.file.status === 'done') {
+      this.props.dispatch({
+        type: 'orderManagement/uploadOrderbill',
+        payload: {
+          userId:userId,
+          fileTemp: info.file.response.fileName[0]
+        },
+        callback: this.onUploadCallback,
 
-    });
+      });
+    }
+
   }
+  // 导入运单
   handleUploadChange=(info)=>{
-    this.props.dispatch({
-      type: 'orderManagement/uploadWaybill',
-      payload: {
-        userId: userId,
-        byte64:info.file.thumbUrl
-      },
-      callback: this.onUploadCallback,
+    if(info.file.status === 'done') {
+      this.props.dispatch({
+        type: 'orderManagement/uploadWaybill',
+        payload: {
+          userId:userId,
+          fileTemp: info.file.response.fileName[0]
+        },
+        callback: this.onUploadCallback,
 
-    });
+      });
+    }
   }
   onUploadCallback = (params) => {
     const msg = params.msg;
     if(params.type==="0"){
-      notification.error({
-        message: "提示",
-        description: msg,
-      });
+      message.error(msg);
     }else {
-      notification.success({
-        message: "提示",
-        description: msg,
-      });
+      message.success("上传成功");
     }
   }
   //列表
@@ -322,29 +323,31 @@ export default class operatorOrder extends Component {
       dispatch:this.props.dispatch,
       orderId:this.state.orderId
     };
-    const url1 = 'http://api.llwell.net/llback/user/validate'
     const props1 = {
-      action: url1,
-      listType: 'picture',
-      data:{
-        userId:userId
-      },
+      action: getUploadUrl(),
+      headers: getHeader(),
+      showUploadList: false,
+      // listType: 'picture',
+      // data:{
+      //   userId:userId
+      // },
       // accept:'image/*',
       onChange: this.handleUploadChange1,
       multiple: false,
-      customRequest:this.upload,
+      // customRequest:this.upload,
     };
-    const url = 'http://api.llwell.net/llback/user/validate'
     const props = {
-      action: url,
-      listType: 'picture',
-      data:{
-        userId:userId
-      },
+      action: getUploadUrl(),
+      headers: getHeader(),
+      showUploadList: false,
+      // listType: 'picture',
+      // data:{
+      //   userId:userId
+      // },
       // accept:'image/*',
       onChange: this.handleUploadChange,
       multiple: false,
-      customRequest:this.upload,
+      // customRequest:this.upload,
     };
     return (
       <div>
@@ -354,7 +357,7 @@ export default class operatorOrder extends Component {
             <Button  type="primary" onClick={this.downloadTemplate}>
               <Icon type="download" />下载订单模板
             </Button>
-            <Upload {...props1} fileList={this.state.fileList1}  className={styles.upload}>
+            <Upload {...props1} className={styles.upload}>
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="cloud-upload-o" /> 导入订单信息
               </Button>
@@ -367,7 +370,7 @@ export default class operatorOrder extends Component {
             <Button style={{ marginLeft: 8 }} onClick={this.downloadToSendOrder}>
               <Icon type="cloud-download-o" />导出需发货的订单
             </Button>
-            <Upload {...props} fileList={this.state.fileList} className={styles.upload}>
+            <Upload {...props} className={styles.upload}>
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="cloud-upload-o" /> 导入运单信息
               </Button>

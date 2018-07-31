@@ -4,7 +4,8 @@ import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
 import styles from './goodsChannel.less';
 import moment from 'moment';
-import {getToken} from "../../utils/Global";
+import {getHeader, getToken} from "../../utils/Global";
+import {getUploadUrl} from "../../services/api";
 const userId = getToken().userId;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -73,6 +74,27 @@ export default class costChannel extends Component {
     setTimeout(()=>{
       this.handleVisible(true);
     },0)
+  }
+  handleUploadChange=(info)=>{
+    if(info.file.status === 'done') {
+      this.props.dispatch({
+        type: 'channelManagement/uploadOrderbill',
+        payload: {
+          userId:userId,
+          fileTemp: info.file.response.fileName[0]
+        },
+        callback: this.onUploadCallback,
+
+      });
+    }
+  }
+  onUploadCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      message.error(msg);
+    }else {
+      message.success("上传成功");
+    }
   }
   downloadGoodsTemp=()=>{
     window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/DistributorGoods.xlsx'
@@ -204,12 +226,31 @@ export default class costChannel extends Component {
       handleVisible : this.handleVisible,
       supplierArr: supplierArr,
     };
-
+    const props = {
+      action: getUploadUrl(),
+      headers: getHeader(),
+      showUploadList: false,
+      // listType: 'picture',
+      // data:{
+      //   userId:userId
+      // },
+      // accept:'image/*',
+      onChange: this.handleUploadChange,
+      multiple: false,
+      // customRequest:this.upload,
+    };
     return (
       <div>
         <Card className={styles.mT10}>
           <Button type="primary" ghost onClick={this.downloadGoodsTemp}>下载商品渠道模板</Button>
-          <Button style={{marginLeft:8}} type="primary" ghost onClick={this.onStartUpload}>上传商品渠道信息</Button>
+          {/*<Button style={{marginLeft:8}} type="primary" ghost onClick={this.onStartUpload}>上传商品渠道信息</Button>*/}
+
+          <Upload {...props} >
+            <Button style={{ marginLeft: 8 }}>
+              <Icon type="cloud-upload-o" /> 上传商品渠道信息
+            </Button>
+          </Upload>
+
           <Table
             scroll={{ x: 1600 }}
             dataSource={tableData.list}

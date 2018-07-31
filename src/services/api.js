@@ -2,6 +2,12 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 const apiUrl = process.env.NODE_ENV === 'development' ? '' : 'http://api.llwell.net';
+const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://console.llwell.net' : '';
+
+
+export function getUploadUrl() {
+  return `${uploadUrl}/llback/Upload/Temp`;
+}
 
 export function getCurrentUrl(oriUrl) {
   return `${apiUrl}${oriUrl}`;

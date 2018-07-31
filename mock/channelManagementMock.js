@@ -7,7 +7,8 @@ export default function channelManagementMock(url) {
     'POST /llback/Distributor/DistributorList': url,
     // 渠道管理-渠道费用-保存
     'POST /llback/Distributor/UpdateDistributor': url,
-
+    // 渠道管理-渠道商品-上传商品渠道信息
+    'POST /llback/Distributor/UploadDGoods': url,
     // 渠道管理-获取渠道商品列表
     'POST /llback/Distributor/DGoodsList': url,
     // 渠道管理-渠道商品-保存

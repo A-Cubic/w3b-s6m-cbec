@@ -2,10 +2,11 @@ import { message} from 'antd';
 import {getSupplier} from '../services/api'
 import {getChannelTypeData,
   getCostChannelTable,saveCostChannel,
+  getUploadDGoods,
   getGoodsChannelTable,saveGoodsChannel
 } from '../services/channelManagement_S'
 import {notification} from "antd/lib/index";
-import {confirmDelivery} from "../services/orderManagement_S";
+import {confirmDelivery, getUploadOrderbill} from "../services/orderManagement_S";
 export default {
   namespace: 'channelManagement',
   state:{
@@ -128,6 +129,14 @@ export default {
         }
       }else{
         message.error(response.error)
+      }
+    },
+    // 上传商品渠道信息
+    *uploadOrderbill({ payload,callback },{ call,put}){
+      const response = yield call(getUploadDGoods, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
       }
     },
   },

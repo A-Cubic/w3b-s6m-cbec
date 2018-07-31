@@ -7,6 +7,8 @@ export default function orderManagementMock(url) {
     'POST /llback/Order/GetOrder': url,
     // 订单管理-导出需发货的订单
     'POST /llback/Order/ExportOrder': url,
+    // 导入订单信息
+    'POST /llback/Order/UploadOrder': url,
     // 导入运单信息
     'POST /llback/Order/UploadWaybill': url,
     // 获取快递

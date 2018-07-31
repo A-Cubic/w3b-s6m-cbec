@@ -5,7 +5,8 @@ import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,P
 import ModalChannelOrderCheck from './ModalChannelOrderCheck';
 import styles from './channelOrder.less';
 import moment from 'moment';
-import {getToken} from "../../utils/Global";
+import {getHeader, getToken} from "../../utils/Global";
+import { getUploadUrl } from "../../services/api"
 const userId = getToken().userId;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -69,28 +70,24 @@ export default class channelOrder extends Component {
   }
   // 导入
   handleUploadChange=(info)=>{
-    this.props.dispatch({
-      type: 'orderManagement/uploadWaybill',
-      payload: {
-        userId: userId,
-        byte64:info.file.thumbUrl
-      },
-      callback: this.onUploadCallback,
+    if(info.file.status === 'done') {
+      this.props.dispatch({
+        type: 'orderManagement/uploadOrderbill',
+        payload: {
+          userId:userId,
+          fileTemp: info.file.response.fileName[0]
+        },
+        callback: this.onUploadCallback,
 
-    });
+      });
+    }
   }
   onUploadCallback = (params) => {
     const msg = params.msg;
     if(params.type==="0"){
-      notification.error({
-        message: "提示",
-        description: msg,
-      });
+      message.error(msg);
     }else {
-      notification.success({
-        message: "提示",
-        description: msg,
-      });
+      message.success("上传成功");
     }
   }
   //列表
@@ -297,17 +294,18 @@ export default class channelOrder extends Component {
       dispatch:this.props.dispatch,
       orderId:this.state.orderId
     };
-    const url = 'http://api.llwell.net/llback/user/validate'
     const props = {
-      action: url,
-      listType: 'picture',
-      data:{
-        userId:userId
-      },
+      action: getUploadUrl(),
+      headers: getHeader(),
+      showUploadList: false,
+      // listType: 'picture',
+      // data:{
+      //   userId:userId
+      // },
       // accept:'image/*',
       onChange: this.handleUploadChange,
       multiple: false,
-      customRequest:this.upload,
+      // customRequest:this.upload,
     };
     return (
       <div>
@@ -317,7 +315,7 @@ export default class channelOrder extends Component {
             <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
               <Icon type="download" />下载订单模板
             </Button>
-            <Upload {...props} fileList={this.state.fileList}>
+            <Upload {...props} >
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="cloud-upload-o" /> 导入订单信息
               </Button>
