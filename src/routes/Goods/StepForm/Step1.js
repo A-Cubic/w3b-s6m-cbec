@@ -45,7 +45,7 @@ class Step1 extends React.PureComponent {
     const { form, dispatch,submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const props = {
-      action: 'http://localhost:51186/llback/Upload/Temp',
+      action: '/llback/Upload/Temp',
       // data: {test: 123}, //传递到后台的自定义参数
       headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
       onChange: this.handleUploadChange, //回调函数通过res.filelist[i].respose获取回传的文件名
