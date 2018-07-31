@@ -209,7 +209,7 @@ const proxy = {
   'POST /llback/goods/supplier/offer': service_url,
   'POST /llback/Goods/GetGoodsList': service_url2,
   'POST /llback/Goods/GetBrand': service_url2,
-  'POST /llback/Goods/GetWareHouse': service_url2,
+  'POST /llback/Goods/GetWarehouse': service_url2,
   'POST /llback/Goods/GetGoods': service_url2,
   'POST /llback/Goods/GetWarehouseList': service_url2,
   //新增仓库
@@ -257,7 +257,7 @@ const proxy = {
   //   }
   //   },
   // 'POST /llback/Goods/GetBrand': [{brand:'BBLab'},{brand:'ANELLO'}],
-  // 'POST /llback/Goods/GetWareHouse': [{wid:'3',wcode:"CQ",wname: "重庆仓库"},{wid:'6',wcode:"XG",wname: "香港仓库"}],
+  // 'POST /llback/Goods/GetWarehouse': [{wid:'3',wcode:"CQ",wname: "重庆仓库"},{wid:'6',wcode:"XG",wname: "香港仓库"}],
 
 
   'POST /llback/goods/operate/update': service_url,
