@@ -24,14 +24,14 @@ export async function getSupplierOrderChildCheck(params) {
 }
 // 供应商 导出需发货的订单
 export async function getDownloadToSendOrder(params) {
-  return request(`/llback/Order/SendOrder`, {
+  return request(`/llback/Order/ExportOrder`, {
     method: 'POST',
     body: params,
   });
 }
 // 供应商 导入运单
 export async function getUploadWaybill(params) {
-  return request(`/llback/Order/getWaybill`, {
+  return request(`/llback/Order/UploadWaybill`, {
     method: 'POST',
     body: params,
   });

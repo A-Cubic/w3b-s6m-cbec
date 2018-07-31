@@ -72,11 +72,16 @@ export default {
       const response = yield call(getDownloadToSendOrder, payload);
       console.log(response);
       if (response !== undefined) {
-        message.success('导出成功');
-        let downloadUrl = response.url;
-        window.location.href = downloadUrl;
+        if(response.type==1){
+          message.success('导出成功');
+          let downloadUrl = response.msg;
+          window.location.href = downloadUrl;
+        }else{
+          message.error(response.msg)
+        }
+
       }else{
-        message.error(response.error);
+        message.error(response.msg);
       }
     },
     //导入运单

@@ -65,7 +65,7 @@ export default class channelOrder extends Component {
     }
   }
   downloadTemplate=()=>{
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/order/Waybill.xlsx'
+    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/order.xlsx'
   }
   // 导入
   handleUploadChange=(info)=>{

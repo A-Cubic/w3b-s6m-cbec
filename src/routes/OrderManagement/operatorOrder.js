@@ -60,13 +60,16 @@ export default class operatorOrder extends Component {
       this.props.dispatch({
         type:'orderManagement/downloadToSendOrder',
         payload:{
+          userId:userId,
           wid:this.state.warehouseId
         }
       })
+    }else{
+      message.error('请选择仓库')
     }
   }
   downloadTemplate=()=>{
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/order/Waybill.xlsx'
+    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/order.xlsx'
   }
   // 导入
   handleUploadChange1=(info)=>{

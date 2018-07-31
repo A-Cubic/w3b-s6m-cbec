@@ -59,13 +59,15 @@ export default class supplierOrder extends Component {
       this.props.dispatch({
         type:'orderManagement/downloadToSendOrder',
         payload:{
+          userId:userId,
           wid:this.state.warehouseId
         }
       })
     }
   }
+  //下载运单模板
   downloadTemplate=()=>{
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/order/Waybill.xlsx'
+    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/Waybill.xlsx'
   }
   // 导入
   handleUploadChange=(info)=>{
