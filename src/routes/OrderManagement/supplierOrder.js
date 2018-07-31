@@ -63,6 +63,8 @@ export default class supplierOrder extends Component {
           wid:this.state.warehouseId
         }
       })
+    }else{
+      message.error('请选择仓库')
     }
   }
   //下载运单模板
