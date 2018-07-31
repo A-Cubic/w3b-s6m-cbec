@@ -5,6 +5,7 @@ import { routerRedux } from 'dva/router';
 import styles from './style.less';
 import {notification} from "antd/lib/index";
 import {getToken, getHeader} from "../../../utils/Global";
+import { getUploadUrl } from "../../../services/api"
 const userId = getToken().userId;
 const token = getToken().token;
 const { Option } = Select;
@@ -45,11 +46,11 @@ class Step1 extends React.PureComponent {
     const { form, dispatch,submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const props = {
-      action: '/llback/Upload/Temp',
+      action: getUploadUrl(),
       // data: {test: 123}, //传递到后台的自定义参数
       headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
       onChange: this.handleUploadChange, //回调函数通过res.filelist[i].respose获取回传的文件名
-      multiple: true
+      multiple: false
     };
     const onValidateForm = () => {
       if(this.state.file!==undefined){

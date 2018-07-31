@@ -29,7 +29,14 @@ export async function getDownloadToSendOrder(params) {
     body: params,
   });
 }
-// 供应商 导入运单
+// 导入订单
+export async function getUploadOrderbill(params) {
+  return request(`/llback/Order/UploadOrder`, {
+    method: 'POST',
+    body: params,
+  });
+}
+// 导入运单
 export async function getUploadWaybill(params) {
   return request(`/llback/Order/UploadWaybill`, {
     method: 'POST',

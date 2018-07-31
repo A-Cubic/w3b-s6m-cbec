@@ -6,7 +6,8 @@ import { digitUppercase } from '../../../utils/utils';
 import styles from './style.less';
 
 import {message, notification} from "antd/lib/index";
-import {getToken} from "../../../utils/Global";
+import {getToken, getHeader} from "../../../utils/Global";
+import { getUploadUrl } from "../../../services/api"
 const userId = getToken().userId;
 const formItemLayout = {
   labelCol: {
@@ -20,8 +21,10 @@ const formItemLayout = {
 @Form.create()
 class Step2 extends React.PureComponent {
   state={
-    fileList:[],
+    fileList1:[],
     fileList2:[],
+    file1:{},
+    file2:{},
     thumbUrl1:'',
     thumbUrl2:'',
   }
@@ -53,12 +56,14 @@ class Step2 extends React.PureComponent {
   handleUploadChange=(info)=>{
     this.setState({
       fileList1:info.fileList,
+      file1:info.file,
       thumbUrl1:info.file.thumbUrl
     })
   }
   handleUploadChange2=(info)=>{
     this.setState({
-      fileList1:info.fileList,
+      fileList2:info.fileList,
+      file2:info.file,
       thumbUrl2:info.file.thumbUrl
     })
   }
@@ -82,37 +87,34 @@ class Step2 extends React.PureComponent {
   render() {
     const { form, data, dispatch, submitting,step2supplementData } = this.props;
     const { getFieldDecorator, validateFields } = form;
-    const url = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
     const props = {
-      action: url,
-      listType: 'picture',
-      // accept:'image/*',
-      onChange: this.handleUploadChange,
-      multiple: false,
-      customRequest:this.upload,
+      action: getUploadUrl(),
+      // data: {test: 123}, //传递到后台的自定义参数
+      headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
+      onChange: this.handleUploadChange, //回调函数通过res.filelist[i].respose获取回传的文件名
+      multiple: false
     };
 
-    const url2 = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
     const props2 = {
-      action: url2,
-      listType: 'picture',
-      // accept:'image/*',
-      onChange: this.handleUploadChange2,
+      action: getUploadUrl(),
+      // data: {test: 123}, //传递到后台的自定义参数
+      headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
+      onChange: this.handleUploadChange2, //回调函数通过res.filelist[i].respose获取回传的文件名
       multiple: false,
-      customRequest:this.upload,
+      accept: "image/*"
     };
     const onPrev = () => {
       dispatch(routerRedux.push('/goods/putaway'));
     };
     const onValidateForm = e => {
       e.preventDefault();
-      if(this.state.thumbUrl1!==''||this.state.thumbUrl2!==''){
+      if(this.state.file1!==''||this.state.file2!==''){
         this.props.dispatch({
           type: 'goods/step2Upload',
           payload: {
             userId:userId,
-            byte64:this.state.thumbUrl1,
-            byte64Zip:this.state.thumbUrl2
+            fileTemp: this.state.file1.response.fileName[0],
+            fileTemp1: this.state.file2.response.fileName[0]
           },
           callback: this.onUploadCallback,
         });
@@ -142,10 +144,10 @@ class Step2 extends React.PureComponent {
           <Button style={{ marginBottom:10 }} type="primary" ghost onClick={this.downloadSKU}>下载需上传图片的SKU商品信息模板</Button>
           {/*<Button style={{ marginBottom: 10,marginLeft:8 }} type="primary" ghost onClick={this.downloadGoodsTemp}>下载商品信息模板</Button><br/>*/}
           <div style={{display:'inline-flex'}}>
-            <Upload {...props}>
+            <Upload {...props2}>
               <Button style={{marginBottom:10}} type="primary" ghost>上传商品信息</Button>
             </Upload>
-            <Upload {...props2} style={{marginLeft:8}}>
+            <Upload {...props} style={{marginLeft:8}}>
               <Button style={{marginBottom:10}} type="primary" ghost>上传商品图片Zip文件</Button>
             </Upload>
           </div>

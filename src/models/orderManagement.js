@@ -1,7 +1,7 @@
 import { message} from 'antd';
 import {downloadGoodsTempUrl, getStep1Upload, getWareHouseData} from '../services/api'
 import {getSupplierOrderTable,getSupplierOrderChildCheck,
-  getDownloadToSendOrder,getUploadWaybill,
+  getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,
   getExpressData,confirmDelivery,shipmentOverseas
 } from '../services/orderManagement_S'
 import {notification} from "antd/lib/index";
@@ -82,6 +82,14 @@ export default {
 
       }else{
         message.error(response.msg);
+      }
+    },
+    //导入订单
+    *uploadOrderbill({ payload,callback },{ call,put}){
+      const response = yield call(getUploadOrderbill, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
       }
     },
     //导入运单
