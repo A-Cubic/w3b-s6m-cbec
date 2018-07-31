@@ -119,7 +119,7 @@ export default {
           message.error(response.msg)
         }
       }else{
-        message.error(response.error)
+        message.error(response.msg)
       }
     },
   },

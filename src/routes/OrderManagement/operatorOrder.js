@@ -397,7 +397,10 @@ export default class operatorOrder extends Component {
   }
 }
 
-
+@connect(({orderManagement,  loading }) => ({
+  orderManagement,
+  loading: loading.effects['orderManagement/supplierOrderTable'],
+}))
 @Form.create()
 class ChildrenDelivery extends React.Component {
   handleOk = (e) => {
@@ -415,6 +418,13 @@ class ChildrenDelivery extends React.Component {
           callback:function () {
             that.props.parent.handleVisible(false,'childDelivery')
             that.props.form.resetFields();
+            that.props.dispatch({
+              type: 'orderManagement/supplierOrderTable',
+              payload: {
+                userId:userId,
+                status:"全部"
+              },
+            });
           }
         })
       }
@@ -432,6 +442,14 @@ class ChildrenDelivery extends React.Component {
       callback:function () {
         that.props.parent.handleVisible(false,'childDelivery')
         that.props.form.resetFields();
+        that.props.dispatch({
+          type: 'orderManagement/supplierOrderTable',
+          payload: {
+            userId:userId,
+            status:"全部"
+          },
+        });
+
       }
     })
   }
