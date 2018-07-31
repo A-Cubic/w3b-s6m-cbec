@@ -34,7 +34,7 @@ export default class Analysis extends Component {
   }
 
   orderList=()=>{
-    this.props.dispatch(routerRedux.push('/orderManagement/operatorOrder'));
+    this.props.dispatch(routerRedux.push('/orderManagement/supplierOrder'));
   }
   goodsList=()=>{
     this.props.dispatch(routerRedux.push('/goods/info/list'));
