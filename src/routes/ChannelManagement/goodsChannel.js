@@ -90,10 +90,11 @@ export default class costChannel extends Component {
   }
   onUploadCallback = (params) => {
     const msg = params.msg;
-    if(params.type==="0"){
-      message.error(msg);
-    }else {
+    if(params.type==="1"){
       message.success("上传成功");
+      this.init();
+    }else{
+      message.error(msg);
     }
   }
   downloadGoodsTemp=()=>{
