@@ -76,26 +76,26 @@ export default {
         });
       }
     },
-    *goodslist({ payload },{ call,put}){
-      const response = yield call(getGoodsList, payload);
-      // console.log('~',response)
-      if (response !== undefined) {
-        yield put({
-          type: 'goodslistR',
-          payload: response,
-        });
-      }
-    },
-    *goodsDetail({ payload },{ call,put}){
-      const response = yield call(getgoodsDetail, payload);
-      // console.log('~',response)
-      if (response !== undefined) {
-        yield put({
-          type: 'goodsDetailR',
-          payload: response,
-        });
-      }
-    },
+    // *goodslist({ payload },{ call,put}){
+    //   const response = yield call(getGoodsList, payload);
+    //   // console.log('~',response)
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'goodslistR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
+    // *goodsDetail({ payload },{ call,put}){
+    //   const response = yield call(getgoodsDetail, payload);
+    //   // console.log('~',response)
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'goodsDetailR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
     *downloadStoreTemp({ payload, callback }, { call, put }) {
       const response = yield call(downloadStoreTempUrl, payload);
       // console.log(response);

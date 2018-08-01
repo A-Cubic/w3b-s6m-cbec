@@ -207,10 +207,10 @@ const proxy = {
   'POST /llback/goods/supplier/offerbyid': service_url,
   'POST /llback/goods/supplier/list': service_url,
   'POST /llback/goods/supplier/offer': service_url,
-  'POST /llback/Goods/GetGoodsList': service_url2,
+  // 'POST /llback/Goods/GetGoodsList': service_url2,
   'POST /llback/Goods/GetBrand': service_url2,
   'POST /llback/Goods/GetWarehouse': service_url2,
-  'POST /llback/Goods/GetGoods': service_url2,
+  // 'POST /llback/Goods/GetGoods': service_url2,
   'POST /llback/Goods/GetWarehouseList': service_url2,
   //新增仓库
   'POST /llback/Goods/UpdateWarehouse': service_url2,

@@ -9,6 +9,19 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['workbench'], () => import('../routes/Workbench/workbenchO')),
     },
 
+    //商品管理 - 商品查看 - 供应商
+    '/goods/goodsAboutS': {
+      component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutS')),
+    },
+    //商品管理 - 商品查看 - 运营
+    '/goods/goodsAboutO': {
+      component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutO')),
+    },
+    //商品管理 - 商品查看 - 代理
+    '/goods/goodsAboutA': {
+      component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutA')),
+    },
+
     //商品管理 - 上架审核
     '/goods/onAudit': {
       component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/goodsOnAudit')),

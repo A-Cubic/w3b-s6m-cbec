@@ -212,11 +212,9 @@ class ChildEdit extends React.Component {
                   {...formItemLayout}
                   label="渠道商"
                 >
-                  {getFieldDecorator('username', {
-                    initialValue: childEdit.username,
-                    rules: [{ required: true, message: '请输入渠道商' }],
-                  })(
-                    <Input placeholder="请输入渠道商"/>
+                  {getFieldDecorator('username')(
+                    <div>{childEdit.username}</div>
+                    // <Input placeholder="请输入渠道商"/>
                   )}
                 </FormItem>
               </Col>
@@ -225,17 +223,16 @@ class ChildEdit extends React.Component {
                   {...formItemLayout}
                   label="渠道商类型"
                 >
-                  {getFieldDecorator('platformId',{
-                    initialValue: childEdit.platformId,
-                    rules: [{ required: true, message: '请选择渠道商类型' }],
-                  })(
-                    <Select
-                      placeholder="请选择渠道商"
-                      // onChange={this.handleSelectChange}
-                    >
-                      {channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}
-
-                    </Select>
+                  {getFieldDecorator('platformId')(
+                    <div>{childEdit.platformType}</div>
+                    // <Select
+                    //   placeholder="请选择渠道商"
+                    //   // onChange={this.handleSelectChange}
+                    // >
+                    //
+                    //   {channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}
+                    //
+                    // </Select>
                   )}
                 </FormItem>
               </Col>

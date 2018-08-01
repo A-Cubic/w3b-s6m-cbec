@@ -295,7 +295,10 @@ class ChildEdit extends React.Component {
           callback:function () {
             that.props.parent.handleVisible(false)
             that.props.form.resetFields();
-
+            that.props.dispatch({
+              type: 'channelManagement/getGoodsChannelTable',
+              payload: {},
+            });
           }
         })
       }

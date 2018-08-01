@@ -150,9 +150,7 @@ export default function(dynamicWrapper,app){
     '/goods/info/add': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/UploadGoods')),
     },
-    '/goods/info/list': {
-      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAbout')),
-    },
+
     //仓库
     '/goods/warehouse': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/Warehouse')),

@@ -1,6 +1,7 @@
 import '@babel/polyfill';
 import 'url-polyfill';
 import dva from 'dva';
+var _ = require('lodash');
 
 import createHistory from 'history/createHashHistory';
 // user BrowserHistory

@@ -1,6 +1,17 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function goodsManagementMock(url) {
   return {
+
+    // 商品管理 - 商品查看 - 运营/供应商/代理
+    'POST /llback/Goods/GetGoodsList': url,
+    // 商品管理 - 商品查看详情 - 供应
+    'POST /llback/Goods/GetGoods': url,
+    // 商品管理 - 商品查看详情 - 运营
+    'POST /llback/Goods/GetGoodsForOperator': url,
+    // 商品管理 - 商品查看详情 - 运营 - 默认选中供应商
+    'POST /llback/Goods/getDefaultRadios': confirmDelivery,
+    // 商品管理 - 商品查看详情 - 代理
+    'POST /llback/Goods/GetGoodsForAgent': url,
     // 上架审核-商品上架详情
     'POST /llback/Goods/WarehouseGoodsList': url,
     // 上架审核-审核操作
