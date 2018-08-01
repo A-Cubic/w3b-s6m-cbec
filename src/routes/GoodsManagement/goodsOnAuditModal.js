@@ -82,7 +82,12 @@ export class ChangeGoodsOnAuditModal extends Component {
         type:'goodsManagement/onAudit',
         payload:{
           logId:goodsDetails.logId,
-          logGoodsId:this.state.selectedId
+          logGoodsId:getselectedIdLength == 0 ?
+            goodsDetails.warehouseGoodsList.map(item => {
+              return item.id
+            })
+            :
+            this.state.selectedId
         },
         callback:function () {
           that.props.parent.handleVisible(false,'changeVisible');
