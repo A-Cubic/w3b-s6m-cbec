@@ -21,6 +21,10 @@ export default function(dynamicWrapper,app){
     '/goods/goodsAboutA': {
       component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutA')),
     },
+    //商品管理 - 商品查看 - 分销
+    '/agent/goodsAboutD': {
+      component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutA')),
+    },
 
     //商品管理 - 上架审核
     '/goods/onAudit': {
