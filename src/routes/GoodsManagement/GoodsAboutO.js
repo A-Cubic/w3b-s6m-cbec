@@ -220,16 +220,16 @@ export default class GoodsAboutO extends Component {
 
       },{
         title: '默认供货价',
-        dataIndex: 'wname',
-        key: 'wname',
+        dataIndex: 'selPrice',
+        key: 'selPrice',
       },{
         title: '默认供应商',
-        dataIndex: 'supplier',
-        key: 'supplier',
+        dataIndex: 'selSupplier',
+        key: 'selSupplier',
       },{
         title: '默认供应商库存',
-        dataIndex: 'month',
-        key: 'month',
+        dataIndex: 'selGoodsNum',
+        key: 'selGoodsNum',
       },{
         title: '操作',
         dataIndex: 'operate',

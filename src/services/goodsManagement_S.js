@@ -23,14 +23,14 @@ export async function getGoodsDetailsO(params) {
 }
 // 商品管理 - 商品查看详情 - 运营 - 默认选中供应商
 export async function getDefaultRadios(params) {
-  return request(`/llback/Goods/getDefaultRadios`, {
+  return request(`/llback/Goods/UpdateGoodsSelect`, {
     method: 'POST',
     body: params,
   });
 }
-// 商品管理 - 商品查看详情 - 代理
+// 商品管理 - 商品查看详情 - 代理（同供应商）
 export async function getGoodsDetailsA(params) {
-  return request(`/llback/Goods/GetGoodsForAgent`, {
+  return request(`/llback/Goods/GetGoods`, {
     method: 'POST',
     body: params,
   });

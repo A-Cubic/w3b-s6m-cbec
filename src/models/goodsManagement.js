@@ -206,15 +206,13 @@ export default {
       };
     },
     getDefaultRadiosR(state, action) {
-      // const a = state.goodsAboutData.childCheckO.goodsSelectSupplierList.find(item=>
-      //   item.id===action.payload.id);
-      // state.goodsAboutData.childCheckO.goodsSelectSupplierList.map(item=>{
-      //   if
-      // })
 
-      _.find(state.goodsAboutData.childCheckO.goodsSelectSupplierList,function(item){return item.id === action.payload.id}).ifSel = '1';
-      console.log(...state)
-      console.log(...state)
+      state.goodsAboutData.childCheckO.goodsSelectSupplierList.map(item=>{
+        item.ifSel=item.id ==action.payload.id?'1':'0'
+         return item
+      })
+
+      // _.find(state.goodsAboutData.childCheckO.goodsSelectSupplierList,function(item){ return item.id === action.payload.id}).ifSel = '1';
       // _.find(state.goodsAboutData.childCheckO.goodsSelectSupplierList,function(item){return item.id !== action.payload.id}).ifSel = '0';
 
       return {
@@ -230,8 +228,6 @@ export default {
         },
       };
     },
-
-
     getGoodsOnAuditListR(state, action) {
       return {
         ...state,

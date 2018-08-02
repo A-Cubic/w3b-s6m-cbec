@@ -24,7 +24,7 @@ export default class GoodsAboutOEditModal extends React.PureComponent {
   }
   render() {
     const {goodsManagement:{goodsAboutData:{childCheckO}}} = this.props;
-    // console.log(ModalGoodsAboutEdit)
+    // console.log(this.props)
     const {getFieldDecorator, validateFields} = this.props.form;
     const divRow = {marginBottom:'8px'}
     const divRowName = {marginBottom:'18px',fontSize:18,color:'#000'}
@@ -175,7 +175,7 @@ export default class GoodsAboutOEditModal extends React.PureComponent {
               </Row>
               <Row style={{marginBottom:10}}>
                 <Table
-                  dataSource={data}
+                  dataSource={childCheckO.goodsSelectSupplierList}
                    rowKey={record => record.id}
                    columns={columns}
                    pagination={false}

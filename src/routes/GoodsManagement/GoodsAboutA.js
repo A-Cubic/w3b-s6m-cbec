@@ -195,65 +195,34 @@ export default class GoodsAboutA extends Component {
       ...pagination,
     };
     const columns = [
-      {
-      title: '商品图片',
-      dataIndex: 'slt',
-      key: 'slt',
-      render: (val) => (
-          <img src={ val} alt="" width={80} style={{float:'left',marginRight:8}}/>
-      )
-    }, {
-      title: '名称',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
-    }, {
-      title: '条码',
+    {
+      title: '商品条码',
       dataIndex: 'barcode',
       key: 'barcode',
+      render: (val,record) => (
+        <div>
+          <span>{val}</span>
+          <img src={ record.slt} alt="" width={80} style={{marginLeft:8}}/>
+        </div>
+      )
+    }, {
+      title: '商品（SKU）',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
     }, {
       title: '品牌',
       dataIndex: 'brand',
       key: 'brand',
-    }, {
-      title: '产地',
-      dataIndex: 'source',
-      key: 'source',
     },{
-        title: '所在仓',
-        dataIndex: 'wname',
-        key: 'wname',
-      },{
         title: '库存',
         dataIndex: 'goodsnum',
         key: 'goodsnum',
-
       },{
-        title: '商品状态',
-        dataIndex: 'status',
-        key: 'status',
-        render: (val) => {
-          return(<div>
-            {['正常','申请中','已驳回'][`${val}`]}
-          </div>)
-        }
-      },{
-        title: '周销',
-        dataIndex: 'week',
-        key: 'week',
-      },{
-        title: '月销',
-        dataIndex: 'month',
-        key: 'month',
-      },{
-        title: '供应商',
-        fixed: 'right',
-        width:200,
-        dataIndex: 'supplier',
-        key: 'supplier',
+        title: '供货价',
+        dataIndex: 'selPrice',
+        key: 'selPrice',
       },{
         title: '操作',
-        fixed: 'right',
-        width:100,
         dataIndex: 'operate',
         key: 'operate',
         render: (text, record, index) => {
@@ -281,7 +250,7 @@ export default class GoodsAboutA extends Component {
         </Card>
         <Card className={styles.mT10}>
           <Table dataSource={list}
-                 scroll={{ x: 1500}}
+                 // scroll={{ x: 1500}}
                  rowKey={record => record.id}
                  columns={columns}
                  pagination={paginationProps}
