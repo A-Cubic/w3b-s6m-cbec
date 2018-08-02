@@ -190,11 +190,19 @@ export default class channelOrder extends Component {
                   // onChange={this.onSelectChange}
                 >
                   <Option value="全部">全部</Option>
-                  <Option value="待付款">待付款</Option>
-                  <Option value="待发货">待发货</Option>
-                  <Option value="已发货">已发货</Option>
-                  <Option value="已完成">已完成</Option>
-                  <Option value="已关闭">已关闭</Option>
+                  <Option value="0">未支付</Option>
+                  <Option value="1">新订单</Option>
+                  <Option value="2">等待发货</Option>
+                  <Option value="3">已发货</Option>
+                  <Option value="4">等待签收</Option>
+                  <Option value="5">已完成</Option>
+                  <Option value="6">待处理</Option>
+                  <Option value="-1">已关闭</Option>
+                  {/*<Option value="待付款">待付款</Option>*/}
+                  {/*<Option value="待发货">待发货</Option>*/}
+                  {/*<Option value="已发货">已发货</Option>*/}
+                  {/*<Option value="已完成">已完成</Option>*/}
+                  {/*<Option value="已关闭">已关闭</Option>*/}
                 </Select>
               )}
             </FormItem>

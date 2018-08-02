@@ -101,7 +101,6 @@ class Step2 extends React.PureComponent {
       headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
       onChange: this.handleUploadChange2, //回调函数通过res.filelist[i].respose获取回传的文件名
       multiple: false,
-      accept: "image/*"
     };
     const onPrev = () => {
       dispatch(routerRedux.push('/goods/putaway'));
