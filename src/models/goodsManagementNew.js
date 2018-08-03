@@ -202,35 +202,6 @@ export default {
         callback(response);
       }
     },
-
-    // *onAuditFailure({ payload,callback },{ call,put, select}){
-    //
-    //   const selected = yield select(state => state.goodsManagementNew.goodsOnAudit.selectedId);
-    //   const response = yield call(onAudit, {...payload, logGoodsId: selected});
-    //   console.log(response);
-    //   // console.log('~',response)
-    //   if (response !== undefined) {
-    //     yield put({
-    //       type: 'changeVisible',
-    //       payload: {
-    //         visibleType: 'auditFailureVisible',
-    //         visibleValue: false
-    //       }
-    //     });
-    //     yield put({
-    //       type: 'changeSelectedId',
-    //       payload: {
-    //         selectedRow:[],
-    //       },
-    //     });
-    //     yield put({
-    //       type: 'getGoodsOnAuditList',
-    //       payload: {
-    //         userId:getToken().userId,
-    //       },
-    //     });
-    //   }
-    // },
   },
   reducers:{
     changeVisible(state, action){

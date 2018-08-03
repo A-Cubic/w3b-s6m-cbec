@@ -383,6 +383,7 @@ class ChildrenDelivery extends React.Component {
         this.props.parent.dispatch({
           type:'orderManagement/confirmDelivery',
           payload:{
+            ...fieldsValue,
             userId:userId,
             orderId:this.props.parent.orderId
           },

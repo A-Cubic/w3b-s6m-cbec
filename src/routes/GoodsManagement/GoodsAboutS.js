@@ -233,7 +233,7 @@ export default class GoodsAboutS extends Component {
         render: (text, record, index) => {
           return (
             <Fragment>
-              <a href="javascript:;" onClick={(e) => this.handleEdit(e, record, index)}>{record.slt?'详情':''}</a><br/>
+              <a href="javascript:;" onClick={(e) => this.handleEdit(e, record, index)}>详情</a><br/>
             </Fragment>
           )
         }

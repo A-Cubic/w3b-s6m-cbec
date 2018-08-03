@@ -1,7 +1,7 @@
 import { message} from 'antd';
 import {downloadGoodsTempUrl, getStep1Upload, getWareHouseData} from '../services/api'
 import {getSupplierOrderTable,getSupplierOrderChildCheck,
-  getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,
+  getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,getExportWaybill,
   getExpressData,confirmDelivery,shipmentOverseas
 } from '../services/orderManagement_S'
 import {notification} from "antd/lib/index";
@@ -95,6 +95,14 @@ export default {
     //导入运单
     *uploadWaybill({ payload,callback },{ call,put}){
       const response = yield call(getUploadWaybill, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
+      }
+    },
+    //导出运单
+    *exportWaybill({ payload,callback },{ call,put}){
+      const response = yield call(getExportWaybill, payload);
       // console.log('~',response)
       if (response !== undefined) {
         callback(response)

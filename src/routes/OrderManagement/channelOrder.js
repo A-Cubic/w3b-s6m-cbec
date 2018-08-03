@@ -137,7 +137,34 @@ export default class channelOrder extends Component {
       payload: params,
     });
   }
+  exportWaybill=(e)=>{
+    e.preventDefault();
+    const {orderManagement:{supplierOrder:{tableData}}}=this.props
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('values',fieldsValue)
 
+      if (err) return;
+      const rangeValue = fieldsValue['date'];
+      const values = rangeValue==undefined ? {
+        ...fieldsValue,
+      }:{
+        ...fieldsValue,
+        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+      };
+
+      this.setState({
+        formValues: values,
+      });
+      this.props.dispatch({
+        type: 'orderManagement/exportWaybill',
+        payload: {
+          userId:userId,
+          ...values,
+          ...tableData.pagination
+        },
+      });
+    });
+  }
 
   handleVisible = (flag,who) => {
     if(who=='childCheck'){
@@ -231,22 +258,18 @@ export default class channelOrder extends Component {
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-          </Col>
-          <Col md={8} sm={24}>
-            <span style={{ float: 'right' }}>
+          <Col md={16} sm={24}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-          </span>
+            <Button  style={{marginLeft:8}} onClick={this.exportWaybill}>
+              <Icon type="cloud-download-o" />导出运单信息
+            </Button>
           </Col>
         </Row>
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <span style={{ float: 'right' }}>
             共查询出符合条件的数据：{tableData?tableData.pagination.total:0}
-            {/*<Button  style={{marginLeft:18}}>*/}
-              {/*<Icon type="cloud-download-o" />导出数据*/}
-            {/*</Button>*/}
           </span>
         </div>
       </Form>

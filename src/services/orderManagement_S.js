@@ -29,6 +29,7 @@ export async function getDownloadToSendOrder(params) {
     body: params,
   });
 }
+
 // 导入订单
 export async function getUploadOrderbill(params) {
   return request(`/llback/Order/UploadOrder`, {
@@ -39,6 +40,13 @@ export async function getUploadOrderbill(params) {
 // 导入运单
 export async function getUploadWaybill(params) {
   return request(`/llback/Order/UploadWaybill`, {
+    method: 'POST',
+    body: params,
+  });
+}
+// 导出运单
+export async function getExportWaybill(params) {
+  return request(`/llback/Order/ExportWaybill`, {
     method: 'POST',
     body: params,
   });

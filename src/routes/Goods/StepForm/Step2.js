@@ -85,7 +85,7 @@ class Step2 extends React.PureComponent {
     }
   }
   render() {
-    const { form, data, dispatch, submitting,step2supplementData } = this.props;
+    const { form, data, dispatch, submitting,step2supplementData,match } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const props = {
       action: getUploadUrl(),
@@ -111,6 +111,7 @@ class Step2 extends React.PureComponent {
         this.props.dispatch({
           type: 'goods/step2Upload',
           payload: {
+            logId:match.params.id,
             userId:userId,
             fileTemp: this.state.file1.response?this.state.file1.response.fileName[0]:'',
             fileTemp1: this.state.file2.response?this.state.file2.response.fileName[0]:''
