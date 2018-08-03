@@ -89,6 +89,7 @@ export default class channelOrder extends Component {
     }else {
       message.success("上传成功");
     }
+    this.init();
   }
   //列表
   onSearch=(e)=>{
