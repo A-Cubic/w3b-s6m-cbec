@@ -43,7 +43,7 @@ class Step4 extends React.PureComponent {
     };
     const onValidateForm = e => {
       e.preventDefault();
-      dispatch(routerRedux.push('/goods/info/list'));
+      dispatch(routerRedux.push('/goods/goodsAboutS'));
     };
     return (
       <div>

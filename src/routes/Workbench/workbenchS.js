@@ -37,7 +37,7 @@ export default class Analysis extends Component {
     this.props.dispatch(routerRedux.push('/orderManagement/supplierOrder'));
   }
   goodsList=()=>{
-    this.props.dispatch(routerRedux.push('/goods/info/list'));
+    this.props.dispatch(routerRedux.push('/goods/goodsAboutS'));
   }
   render() {
     const {workbench:{workbenchDataS}}= this.props;
