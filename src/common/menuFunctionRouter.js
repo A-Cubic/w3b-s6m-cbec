@@ -26,7 +26,7 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutA')),
     },
 
-    //商品管理 - 上架审核
+    //商品管理 - 上架审核（复制新）
     '/goods/onAudit': {
       component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/goodsOnAudit')),
     },

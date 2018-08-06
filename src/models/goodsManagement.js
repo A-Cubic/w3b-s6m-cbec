@@ -1,5 +1,4 @@
 import { message} from 'antd';
-
 import {notification} from "antd/lib/index";
 import {getBrandData, getCheckStepStatus, getGoodsPutaway, getWareHouseData} from '../services/api'
 import {
@@ -31,6 +30,11 @@ export default {
     },
     // 商品管理 - 商品上架审核
     goodsOnAudit:{
+      visible:{
+        checkVisible:false,
+        changeVisible:false,
+        auditFailureVisible:false,
+      },
       tableData:{
         list: [],
         pagination:{},
@@ -44,6 +48,19 @@ export default {
 
   },
   effects:{
+    *getDataAndClose({ payload },{ call, put }){
+      const response = yield call(getBrandData, payload);
+      if(response !== ''){
+        yield put({
+          type: 'changeVisible',
+          payload: {
+            visibleType: payload.visibleType,
+            visibleValue: false
+          }
+        });
+      }
+    },
+
     // 获取品评
     *getBrand({ payload },{ call,put}){
       const response = yield call(getBrandData, payload);
@@ -138,34 +155,64 @@ export default {
         });
       }
     },
-    // 查看审核状态校验
-    *checkStepStatus({ payload,callback },{ call,put}){
-      const response = yield call(getCheckStepStatus, payload);
-      // console.log('~',response)
-      if (response !== undefined) {
-        callback(response)
-      }
-    },
-    // 上架审核列表
-    *getGoodsDetails({ payload },{ call,put}){
-      const response = yield call(getGoodsDetails, payload);
-      // console.log('~',response)
-      if (response !== undefined) {
+    // 上架审核列表全套
+    *getGoodsDetailsAndOther({ payload },{ call,put}){
+      const responseF = yield call(getGoodsDetails, {logId: payload.logId});
+      if (responseF !== undefined) {
         yield put({
           type: 'getGoodsDetailsR',
-          payload: response,
+          payload: responseF,
         });
+
+        const responseS = yield call(getCheckStepStatus, payload);
+        if (responseS !== undefined) {
+          yield put({
+            type: 'changeVisible',
+            payload: {
+              visibleType: responseS.status == '1' ? 'changeVisible' : 'checkVisible',
+              visibleValue: true
+            },
+          });
+        }
       }
     },
-    *onAudit({ payload,callback },{ call,put}){
-      const response = yield call(onAudit, payload);
-      // console.log('~',response)
+    *onAudit({ payload,callback },{ call,put, select}){
+      const selected = yield select(state => state.goodsManagement.goodsOnAudit.selectedId);
+      const response = yield call(onAudit, {...payload, logGoodsId: selected});
       if (response !== undefined) {
-        callback(response)
+        yield put({
+          type: 'changeVisible',
+          payload: {
+            visibleType: payload.visibleType,
+            visibleValue: false
+          }
+        });
+        yield put({
+          type: 'changeSelectedId',
+          payload: {
+            selectedRow:[],
+          },
+        });
+        yield put({
+          type: 'getGoodsOnAuditList',
+          payload: {
+            userId:payload.userId,
+          },
+        });
+        callback(response);
       }
     },
   },
   reducers:{
+    changeVisible(state, action){
+      state.goodsOnAudit.visible[action.payload.visibleType] = action.payload.visibleValue;
+      return {...state};
+    },
+    changeSelectedId(state, action){
+      state.goodsOnAudit.selectedId = action.payload.selectedRow;
+      return {...state};
+    },
+
     getBrandR(state, action) {
       return {
         ...state,
@@ -209,7 +256,7 @@ export default {
 
       state.goodsAboutData.childCheckO.goodsSelectSupplierList.map(item=>{
         item.ifSel=item.id ==action.payload.id?'1':'0'
-         return item
+        return item
       })
 
       // _.find(state.goodsAboutData.childCheckO.goodsSelectSupplierList,function(item){ return item.id === action.payload.id}).ifSel = '1';

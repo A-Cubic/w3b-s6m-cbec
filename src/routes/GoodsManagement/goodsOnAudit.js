@@ -14,15 +14,12 @@ const FormItem = Form.Item;
 const userId = getToken().userId;
 @connect(({goodsManagement,  loading }) => ({
   goodsManagement,
-  loading: loading.effects['goodsManagement/getGoodsOnAuditList'],
+  // loading: loading.effects['goodsManagement/getGoodsOnAuditList'],
 }))
 
 @Form.create()
 export default class goodsOnAudit extends Component {
-  state={
-    checkVisible:false,
-    changeVisible:false,
-  }
+
   init(){
     this.props.dispatch({
       type: 'goodsManagement/getGoodsOnAuditList',
@@ -47,60 +44,25 @@ export default class goodsOnAudit extends Component {
 
 
   handleCheck=(e, record, index)=>{
-    const that = this;
     this.props.dispatch({
-      type:'goodsManagement/getGoodsDetails',
+      type:'goodsManagement/getGoodsDetailsAndOther',
       payload:{
+        userId:userId,
         logId:record.id
       }
-    }).then(()=>{
-      that.props.dispatch({
-        type:'goodsManagement/checkStepStatus',
-        payload:{
-          userId:userId,
-          logId:record.id
-        },
-        callback(params){
-          if(params.status=='1'){
-            // console.log(that.props.goodsManagement.goodsOnAudit)
-            that.handleVisible(true,'changeVisible')
-          }else{
-            that.handleVisible(true,'checkVisible')
-          }
-        }
-      })
     })
-
-
-
-
   }
   handleVisible = (flag,who) => {
-    if (who=='changeVisible'){
-      this.setState({
-        changeVisible:!!flag,
-      });
-    } else{
-      this.setState({
-        checkVisible:!!flag,
-      });
-    }
+    this.props.dispatch({
+      type: 'goodsManagement/changeVisible',
+      payload: {
+        visibleType: who,
+        visibleValue: !!flag
+      }
+    });
   }
   render() {
-
-    // console.log('1',this.props)
-    const { goodsManagement:{goodsOnAudit:{tableData,goodsDetails}} } = this.props;
-    const {changeVisible,checkVisible} = this.state;
-
-    const changeParent={
-      visible:changeVisible,
-      handleVisible:this.handleVisible,
-      init:this.init,
-    }
-    const checkParent={
-      visible:checkVisible,
-      handleVisible:this.handleVisible,
-    }
+    const { goodsManagement:{goodsOnAudit:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -108,21 +70,21 @@ export default class goodsOnAudit extends Component {
     };
     const columns = [
       {
-      title: '上传时间',
-      dataIndex: 'uploadTime',
-      key: 'uploadTime',
-    }, {
-      title: '供应商',
-      dataIndex: 'username',
-      key: 'username',
-    }, {
-      title: '商品上架数量',
-      dataIndex: 'uploadNum',
-      key: 'uploadNum',
-    }, {
-      title: '上架状态',
-      dataIndex: 'statusText',
-      key: 'statusText',
+        title: '上传时间',
+        dataIndex: 'uploadTime',
+        key: 'uploadTime',
+      }, {
+        title: '供应商',
+        dataIndex: 'username',
+        key: 'username',
+      }, {
+        title: '商品上架数量',
+        dataIndex: 'uploadNum',
+        key: 'uploadNum',
+      }, {
+        title: '上架状态',
+        dataIndex: 'statusText',
+        key: 'statusText',
       },{
         title: '操作',
         dataIndex: 'operate',
@@ -146,14 +108,11 @@ export default class goodsOnAudit extends Component {
                  columns={columns}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
-                 // loading={submitting}
           />
         </Card>
         <ChangeGoodsOnAuditModal
-          parent={changeParent}
         />
         <CheckGoodsOnAuditModal
-          parent={checkParent}
         />
       </div>
     );
