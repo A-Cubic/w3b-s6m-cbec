@@ -162,10 +162,10 @@ export class ChangeGoodsOnAuditModal extends Component {
           <div>
             <div>
               <span>供应商：{goodsDetails.username}</span>
-              <Button style={{ marginLeft: 50 }} type="primary" onClick={this.downloadGoodsMes(goodsDetails.goodsUrl)}>
+              <Button style={{ marginLeft: 50 }} type="primary" onClick={this.downloadGoodsMes}>
                 下载新上架的商品基础信息
               </Button>
-              <Button style={{ marginLeft: 20 }} type="primary" onClick={this.downloadGoodsZip(goodsDetails.goodsImgUrl)}>
+              <Button style={{ marginLeft: 20 }} type="primary" onClick={this.downloadGoodsZip}>
                 下载新上架的商品图片压缩包
               </Button>
 
@@ -302,17 +302,12 @@ export class CheckGoodsOnAuditModal extends Component {
   }
   downloadGoodsMes=()=>{
     const { goodsManagement:{goodsOnAudit:{goodsDetails, visible} }} = this.props;
-
-    console.log('11111111')
     if(goodsDetails) {
       window.location.href = goodsDetails.goodsUrl;
     }
   }
   downloadGoodsZip=()=>{
     const { goodsManagement:{goodsOnAudit:{goodsDetails, visible} }} = this.props;
-
-    console.log('22')
-
     if(goodsDetails) {
       window.location.href = goodsDetails.goodsImgUrl+'.zip';
     }
