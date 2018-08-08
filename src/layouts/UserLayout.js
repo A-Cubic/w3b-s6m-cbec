@@ -1,29 +1,20 @@
 import React from 'react';
 import { Link, Redirect, Switch, Route } from 'dva/router';
+import { Modal, Icon,Radio} from 'antd';
+
 import DocumentTitle from 'react-document-title';
-import { Icon } from 'antd';
 import GlobalFooter from '../components/GlobalFooter';
 import styles from './UserLayout.less';
 import logo from '../assets/logo.png';
 import { getRoutes } from '../utils/utils';
 
-const links = [{
-  key: 'help',
-  title: '帮助',
-  href: '',
-}, {
-  key: 'privacy',
-  title: '隐私',
-  href: '',
-}, {
-  key: 'terms',
-  title: '条款',
-  href: '',
-}];
 
 const copyright = <div>Copyright <Icon type="copyright" /> 2018 岂止科技（大连）有限公司 </div>;
 
 class UserLayout extends React.PureComponent {
+  state={
+    CooperationVisible:false,
+  }
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
@@ -33,7 +24,35 @@ class UserLayout extends React.PureComponent {
     }
     return title;
   }
+  showModalCooperation =(flag)=>{
+    this.setState({
+      CooperationVisible:!!flag,
+    })
+  }
   render() {
+    const parent ={
+      CooperationVisible:this.state.CooperationVisible,
+      showModalCooperation:this.showModalCooperation,
+    }
+    const links = [
+//   {
+//   key: 'help',
+//   title: '帮助',
+//   href: '',
+// },
+      {
+        key: 'privacy',
+        title: '关于我们',
+        href: 'http://b2b.llwell.net',
+        blankTarget:true,
+      }, {
+        key: 'terms',
+        href: 'javascript:;',
+        title: '商务合作',
+        onClick:this.showModalCooperation,
+      }];
+
+
     const { routerData, match } = this.props;
     return (
       <DocumentTitle title={this.getPageTitle()}>
@@ -62,6 +81,9 @@ class UserLayout extends React.PureComponent {
             </Switch>
           </div>
           <GlobalFooter links={links} copyright={copyright} />
+          <Cooperation
+            parent={parent}
+          />
         </div>
       </DocumentTitle>
     );
@@ -69,3 +91,35 @@ class UserLayout extends React.PureComponent {
 }
 
 export default UserLayout;
+
+
+class Cooperation extends React.Component {
+
+  handleOk = (e) => {
+    this.props.parent.showModalCooperation(false)
+  }
+
+  handleCancel = (e) => {
+    this.props.parent.showModalCooperation(false)
+  }
+
+  render() {
+    return (
+      <div>
+        <Modal
+          title="商务合作"
+          width={950}
+          bodyStyle={{padding:0}}
+
+          visible={this.props.parent.CooperationVisible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[]}
+        >
+          <div className={styles.bg}></div>
+
+        </Modal>
+      </div>
+    );
+  }
+}

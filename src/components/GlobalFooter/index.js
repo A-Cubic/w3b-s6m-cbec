@@ -14,6 +14,7 @@ export default ({ className, links, copyright }) => {
                 key={link.key}
                 target={link.blankTarget ? '_blank' : '_self'}
                 href={link.href}
+                onClick={link.onClick}
               >
                 {link.title}
               </a>

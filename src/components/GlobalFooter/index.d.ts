@@ -4,6 +4,7 @@ export interface GlobalFooterProps {
     title: React.ReactNode;
     href: string;
     blankTarget?: boolean;
+    onClick: any;
   }>;
   copyright?: React.ReactNode;
   style?: React.CSSProperties;
