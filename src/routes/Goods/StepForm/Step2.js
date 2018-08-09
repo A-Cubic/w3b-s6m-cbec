@@ -67,7 +67,7 @@ class Step2 extends React.PureComponent {
       thumbUrl2:info.file.thumbUrl
     })
   }
-  onUploadCallback = (params) => {
+  onUploadCallback = (params, id) => {
     const msg = params.msg;
     if(params.type==="0"){
       message.error(msg);
@@ -81,7 +81,7 @@ class Step2 extends React.PureComponent {
       //   message: "提示",
       //   description: msg,
       // });
-      this.props.dispatch(routerRedux.push('/goods/step-form/wait/'+params.id));
+      this.props.dispatch(routerRedux.push('/goods/step-form/wait/'+id));
     }
   }
   render() {
@@ -116,7 +116,7 @@ class Step2 extends React.PureComponent {
             fileTemp: this.state.file1.response?this.state.file1.response.fileName[0]:'',
             fileTemp1: this.state.file2.response?this.state.file2.response.fileName[0]:''
           },
-          callback: this.onUploadCallback,
+          callback:(res)=> this.onUploadCallback(res, match.params.id),
         });
       }else{
         message.warning('请选择需要上传的文件')
