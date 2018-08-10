@@ -119,7 +119,7 @@ export default class costChannel extends Component {
         dataIndex: 'goodsName',
         key: 'goodsName',
         fixed: 'left',
-        width: 90,
+        width: 200,
       // }, {
       //   title: '商品图片',
       //   dataIndex: 'slt',
@@ -253,7 +253,7 @@ export default class costChannel extends Component {
           </Upload>
 
           <Table
-            scroll={{ x: 1600 }}
+            scroll={{ x: 1300 }}
             dataSource={tableData.list}
             rowKey={record => record.id}
             columns={columns}
