@@ -285,6 +285,10 @@ export default class channelOrder extends Component {
     }
     const columns = [
       {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      }, {
       title: '订单日期',
       dataIndex: 'tradeTime',
       key: 'tradeTime',

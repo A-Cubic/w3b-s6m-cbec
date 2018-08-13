@@ -48,6 +48,14 @@ export default {
             case 'operate':
               tUrl = '/workbenchO';
               break;
+            //  渠道代理
+            case 'agent':
+              tUrl = '/goods/goodsAboutA';
+              break;
+            //  分销商
+            case 'distribution':
+              tUrl = '/agent/goodsAboutD';
+              break;
             //  未审核通过的供应商
             case 'unaudited-s':
               tUrl = '/user/register-verify';

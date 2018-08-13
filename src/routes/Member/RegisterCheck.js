@@ -11,7 +11,7 @@ const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const statusMap = ['default', 'processing', 'success', 'error'];
-const status = [' ', '供应商', '采购商'];
+const status = [' ', '供应商', '采购商', '渠道代理', '分销商'];
 
 const formItemLayout = {
 	labelCol: {

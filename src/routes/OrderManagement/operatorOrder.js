@@ -277,6 +277,10 @@ export default class operatorOrder extends Component {
     }
     const columns = [
       {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      }, {
       title: '订单日期',
       dataIndex: 'tradeTime',
       key: 'tradeTime',
@@ -285,7 +289,7 @@ export default class operatorOrder extends Component {
       dataIndex: 'merchantOrderId',
       key: 'merchantOrderId',
     }, {
-      title: '订单总额',
+      title: '订单额',
       dataIndex: 'tradeAmount',
       key: 'tradeAmount',
       }, {
@@ -296,6 +300,10 @@ export default class operatorOrder extends Component {
         title: '分销渠道',
         dataIndex: 'purchase',
         key: 'purchase',
+      }, {
+        title: '所在仓库',
+        dataIndex: 'warehouseName',
+        key: 'warehouseName',
       }, {
       title: '运单编号',
       dataIndex: 'waybillno',
