@@ -31,9 +31,9 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/goodsOnAudit')),
     },
     //商品管理 - 上架审核（新）
-    '/goods/onAuditNew': {
-      component: dynamicWrapper(app, ['goodsManagementNew'], () => import('../routes/GoodsManagement/goodsOnAuditNew')),
-    },
+    // '/goods/onAuditNew': {
+    //   component: dynamicWrapper(app, ['goodsManagementNew'], () => import('../routes/GoodsManagement/goodsOnAuditNew')),
+    // },
 
 
     //订单管理 - 供应商

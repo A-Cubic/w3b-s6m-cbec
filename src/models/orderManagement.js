@@ -1,13 +1,16 @@
 import { message} from 'antd';
 import {downloadGoodsTempUrl, getStep1Upload, getWareHouseData} from '../services/api'
 import {getSupplierOrderTable,getSupplierOrderChildCheck,
-  getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,getExportWaybill,
+  getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,getExportWaybill,getExportOrders,
   getExpressData,confirmDelivery,shipmentOverseas
 } from '../services/orderManagement_S'
 import {notification} from "antd/lib/index";
+import {getChannelTypeData} from "../services/channelManagement_S";
 export default {
   namespace: 'orderManagement',
   state:{
+    // 获取平台渠道类型
+    channelTypeArr:[],
     //获取仓库
     wareHouseData:[],
     //获取快递
@@ -24,6 +27,16 @@ export default {
     }
   },
   effects:{
+    // 获取平台渠道类型
+    *getChannelType({ payload },{ call,put}){
+      const response = yield call(getChannelTypeData, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'getChannelTypeR',
+          payload: response,
+        });
+      }
+    },
     //获取仓库
     *getWareHouse({ payload },{ call,put}){
       const response = yield call(getWareHouseData, payload);
@@ -70,7 +83,7 @@ export default {
     //导出需发货的订单
     *downloadToSendOrder({ payload, callback }, { call, put }) {
       const response = yield call(getDownloadToSendOrder, payload);
-      console.log(response);
+
       if (response !== undefined) {
         if(response.type==1){
           message.success('导出成功');
@@ -108,6 +121,23 @@ export default {
         callback(response)
       }
     },
+    //导出订单
+    *exportOrders({ payload,callback },{ call,put}){
+      const response = yield call(getExportOrders, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        if(response.type==1){
+          let downloadUrl = response.msg;
+          // console.log(downloadUrl)
+          window.location.href = downloadUrl;
+          message.success('导出成功');
+        }else{
+          message.error(response.msg)
+        }
+      }else{
+        message.error(response.msg);
+      }
+    },
     //确认发货
     *confirmDelivery({ payload,callback },{ call,put}){
       const response = yield call(confirmDelivery, payload);
@@ -140,6 +170,12 @@ export default {
     },
   },
   reducers:{
+    getChannelTypeR(state, action) {
+      return {
+        ...state,
+        channelTypeArr:action.payload,
+      };
+    },
     getWareHouseR(state, action) {
       return {
         ...state,

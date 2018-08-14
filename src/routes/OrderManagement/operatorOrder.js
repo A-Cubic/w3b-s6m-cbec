@@ -32,6 +32,10 @@ export default class operatorOrder extends Component {
   }
   init(){
     this.props.dispatch({
+      type: 'orderManagement/getChannelType',
+      payload: {},
+    });
+    this.props.dispatch({
       type: 'orderManagement/getWareHouse',
       payload: {
         userId:userId,
@@ -146,6 +150,17 @@ export default class operatorOrder extends Component {
     this.props.form.resetFields();
     this.init();
   }
+  //导出订单
+  exportOrders =()=>{
+// console.log('~~',this.state.formValues)
+    this.props.dispatch({
+      type:'orderManagement/exportOrders',
+      payload:{
+        ...this.state.formValues,
+        userId:userId,
+      }
+    })
+  }
   handleTableChange=(pagination, filtersArg, sorter)=>{
     const params = {
       ...this.state.formValues,
@@ -195,7 +210,7 @@ export default class operatorOrder extends Component {
     })
   }
   renderAdvancedForm(){
-    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
+    const { orderManagement:{supplierOrder:{tableData},channelTypeArr} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -241,11 +256,37 @@ export default class operatorOrder extends Component {
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="时段">
+            <FormItem
+              label="平台渠道"
+            >
+              {getFieldDecorator('platformId')(
+                <Select
+                  placeholder="请选择渠道商"
+                >
+                  {channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}
+
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="供应商">
+              {getFieldDecorator('supplier')(
+                <Input placeholder="请输入供应商账号/公司名称/邮箱/手机号" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="订单日期">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
             </FormItem>
+          </Col>
+
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
           </Col>
           <Col md={8} sm={24}>
           </Col>
@@ -253,6 +294,7 @@ export default class operatorOrder extends Component {
             <span style={{ float: 'right' }}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+            <Button style={{ marginLeft: 8 }} onClick={this.exportOrders} disabled={tableData.pagination.total<=0} >导出订单</Button>
           </span>
           </Col>
         </Row>
@@ -367,9 +409,9 @@ export default class operatorOrder extends Component {
         <Card className={styles.mT10}>
           <div>
 
-            <Button  type="primary" onClick={this.downloadTemplate}>
-              <Icon type="download" />下载订单模板
-            </Button>
+            {/*<Button  type="primary" onClick={this.downloadTemplate}>*/}
+              {/*<Icon type="download" />下载订单模板*/}
+            {/*</Button>*/}
             <Upload {...props1} className={styles.upload}>
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="cloud-upload-o" /> 导入订单信息

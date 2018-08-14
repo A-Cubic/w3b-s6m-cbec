@@ -51,6 +51,13 @@ export async function getExportWaybill(params) {
     body: params,
   });
 }
+// 导出订单
+export async function getExportOrders(params) {
+  return request(`/llback/Order/ExportSelectOrder`, {
+    method: 'POST',
+    body: params,
+  });
+}
 // 确认发货
 export async function confirmDelivery(params) {
   return request(`/llback/Order/SingleWaybill`, {

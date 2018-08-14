@@ -13,6 +13,8 @@ export default function orderManagementMock(url) {
     'POST /llback/Order/UploadWaybill': url,
     // 导出运单信息
     'POST /llback/Order/ExportWaybill': url,
+    // 导出订单
+    'POST /llback/Order/ExportSelectOrder': url,
     // 获取快递
     'POST /llback/Order/GetExpress': url,
     // 确认发货
@@ -101,12 +103,12 @@ export function getExpress(req, res) {
 export function confirmDelivery(req, res) {
   res.send({
     type: 1,
-    mes: '成功',
+    msg: '成功',
   });
 }
 export function shipmentOverseas(req, res) {
   res.send({
     type: 1,
-    mes: '成功',
+    msg: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/Waybill.xlsx',
   });
 }
