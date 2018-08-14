@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import ModalOperatorOrderCheck from './ModalOperatorOrderCheck';
+import OperatorOrderCheckModal from './operatorOrderCheckModal';
 import styles from './operatorOrder.less';
 import moment from 'moment';
 import {getHeader, getToken} from "../../utils/Global";
@@ -444,7 +444,7 @@ export default class operatorOrder extends Component {
                // loading={submitting}
           />
         </Card>
-        <ModalOperatorOrderCheck
+        <OperatorOrderCheckModal
           parent = {parent}
         />
         <ChildrenDelivery

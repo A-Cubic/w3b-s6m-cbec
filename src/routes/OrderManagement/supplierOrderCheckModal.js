@@ -8,7 +8,7 @@ const Option = Select.Option;
   // loading: loading.effects['goods/'],
 }))
 @Form.create()
-export default class ModalOperatorOrderCheck extends React.PureComponent {
+export default class SupplierOrderCheckModal extends React.PureComponent {
 
   handleCancel = (e) => {
     this.props.parent.handleVisible(false,'childCheck');

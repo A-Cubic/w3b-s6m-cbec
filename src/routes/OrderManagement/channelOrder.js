@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import ModalChannelOrderCheck from './ModalChannelOrderCheck';
+import ChannelOrderCheckModal from './channelOrderCheckModal';
 import styles from './channelOrder.less';
 import moment from 'moment';
 import {getHeader, getToken} from "../../utils/Global";
@@ -372,7 +372,7 @@ export default class channelOrder extends Component {
                  // loading={submitting}
           />
         </Card>
-        <ModalChannelOrderCheck
+        <ChannelOrderCheckModal
           parent = {parent}
         />
       </div>

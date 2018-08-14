@@ -48,6 +48,14 @@ export default function(dynamicWrapper,app){
     '/orderManagement/channelOrder': {
       component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/channelOrder')),
     },
+    //订单管理 - 代理
+    '/orderManagement/agentOrder': {
+      component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/agentOrder')),
+    },
+    //订单管理 - 分销商
+    '/orderManagement/distributionOrder': {
+      component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/distributionOrder')),
+    },
 
 
     // 渠道管理 - 费用信息
