@@ -269,9 +269,12 @@ export default class channelOrder extends Component {
         </Row>
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-          <span style={{ float: 'right' }}>
-            共查询出符合条件的数据：{tableData?tableData.pagination.total:0}
-          </span>
+          <div style={{ float: 'right' }}>
+            <span> 共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
+            <span>总销量：{tableData.item?tableData.item.totalSales :0}， </span>
+            <span>总订单额：¥{tableData.item?tableData.item.totalTradeAmount :0}， </span>
+            <span>渠道总利润额：¥{tableData.item?tableData.item.purchaseTotal :0} </span>
+          </div>
         </div>
       </Form>
     );

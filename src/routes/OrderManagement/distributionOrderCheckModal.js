@@ -81,7 +81,6 @@ export default class DistributionOrderCheckModal extends React.PureComponent {
               pagination={false}
               columns={columns}
             />
-
           </div>
         </Modal>
       </div>

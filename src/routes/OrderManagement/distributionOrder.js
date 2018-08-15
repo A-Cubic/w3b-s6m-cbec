@@ -247,12 +247,16 @@ export default class distributionOrder extends Component {
         </Row>
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-          <span style={{ float: 'right' }}>
-            共查询出符合条件的数据：{tableData?tableData.pagination.total:0}
+
+          <div style={{ float: 'right' }}>
+            <span> 共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
+            <span>总销量：{tableData.item?tableData.item.totalSales :0}， </span>
+            <span>总订单额：¥{tableData.item?tableData.item.totalTradeAmount :0}， </span>
+            <span>总佣金：¥{tableData.item?tableData.item.totalDealer :0}</span>
             {/*<Button  style={{marginLeft:18}}>*/}
               {/*<Icon type="cloud-download-o" />导出数据*/}
             {/*</Button>*/}
-          </span>
+          </div>
         </div>
       </Form>
     );
@@ -282,10 +286,10 @@ export default class distributionOrder extends Component {
       dataIndex: 'tradeAmount',
       key: 'tradeAmount',
     }, {
-      title: '所在仓库',
-      dataIndex: 'warehouseName',
-      key: 'warehouseName',
-    }, {
+        title: '销量',
+        dataIndex: 'sales',
+        key: 'sales',
+      },{
       title: '运单编号',
       dataIndex: 'waybillno',
       key: 'waybillno',
@@ -294,14 +298,16 @@ export default class distributionOrder extends Component {
       dataIndex: 'status',
       key: 'status',
     },{
+        title: '佣金',
+        dataIndex: 'dealerTotal',
+        key: 'dealerTotal',
+      },{
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
         render: (val,record) =>
           <div>
             <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
-            {record.ifSend=='1'?
-            <a href="javascript:;" onClick={()=>this.handleChildrenDelivery(record)}>发货</a>:''}
           </div>
       }
     ];

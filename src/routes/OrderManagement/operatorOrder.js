@@ -300,12 +300,11 @@ export default class operatorOrder extends Component {
         </Row>
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-          <span style={{ float: 'right' }}>
-            共查询出符合条件的数据：{tableData?tableData.pagination.total:0}
-            {/*<Button  style={{marginLeft:18}}>*/}
-              {/*<Icon type="cloud-download-o" />导出数据*/}
-            {/*</Button>*/}
-          </span>
+          <div style={{ float: 'right' }}>
+            <span> 共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
+            <span>总销量：{tableData.item?tableData.item.totalSales :0}， </span>
+            <span>总订单额：¥{tableData.item?tableData.item.totalTradeAmount :0} </span>
+          </div>
         </div>
       </Form>
     );
