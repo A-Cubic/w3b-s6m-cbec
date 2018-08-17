@@ -17,3 +17,10 @@ export async function getUpdateDistributor(params) {
     body: params,
   });
 }
+// 分销管理 - 推广二维码
+export async function getAgentQRCode(params) {
+  return request(`/llback/Agent/GetAgentQRCode`, {
+    method: 'POST',
+    body: params,
+  });
+}

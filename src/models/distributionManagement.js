@@ -1,6 +1,6 @@
 import { message} from 'antd';
 import {notification} from "antd/lib/index";
-import {getDistributorTable,getUpdateDistributor} from '../services/distributionManagement_S'
+import {getDistributorTable,getUpdateDistributor,getAgentQRCode} from '../services/distributionManagement_S'
 import {getBrandData, getGoodsPutaway, getO2OCheck, getUpdateWarehouse} from "../services/api";
 export default {
   namespace: 'distributionManagement',
@@ -20,6 +20,7 @@ export default {
         wxName:'',
       },
     },
+    agentQRCode:''
   },
   effects:{
     *changeVisible({ payload },{ call, put }){
@@ -72,6 +73,18 @@ export default {
         }
       }
     },
+    *agentQRCode({ payload,callback },{ call,put}){
+      const response = yield call(getAgentQRCode, payload);
+      if (response !== undefined) {
+          yield put({
+            type: 'agentQRCodeR',
+            payload: response,
+          });
+
+      }else{
+        message.error('出错了');
+      }
+    },
   },
   reducers:{
     changeVisibleR(state, action){
@@ -96,6 +109,13 @@ export default {
           ...state.distributorsMgtData,
           childCheckS:action.payload,
         },
+      };
+    },
+    agentQRCodeR(state, action) {
+      // console.log('madel',action.payload)
+      return {
+        ...state,
+        agentQRCode:action.payload.agentQRCodeUrl,
       };
     },
   }

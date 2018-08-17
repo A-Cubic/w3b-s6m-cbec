@@ -5,6 +5,8 @@ export default function distributionManagementMock(url) {
     'POST /llback/Agent/GetDistributionList': url,
     // 分销管理 - 分销商管理 - 保存、编辑分销商
     'POST /llback/Agent/UpdateDistribution': url,
+    // 推广二维码
+    'POST /llback/Agent/GetAgentQRCode': agentQRCodeUrl,
   };
 }
 export function getPlatform(req, res) {
@@ -126,6 +128,11 @@ export function confirmDelivery(req, res) {
   res.send({
     type: 1,
     mes: '成功',
+  });
+}
+export function agentQRCodeUrl(req, res) {
+  res.send({
+    agentQRCodeUrl: 'http://llwell-wxapp.oss-cn-beijing.aliyuncs.com/A-test/goodtest.png',
   });
 }
 export function GetPurchase(req, res) {

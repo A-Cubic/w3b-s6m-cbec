@@ -31,6 +31,12 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['distributionManagement'], () => import('../routes/DistributionManagement/distributorsMgt')),
     },
 
+    //分销管理 - 推广二维码
+    '/agentQR': {
+      component: dynamicWrapper(app, ['distributionManagement'], () => import('../routes/DistributionManagement/agentQRCode')),
+    },
+
+
     //商品管理 - 上架审核（复制新）
     '/goods/onAudit': {
       component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/goodsOnAudit')),
