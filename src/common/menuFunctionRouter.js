@@ -26,6 +26,11 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutA')),
     },
 
+    //分销管理 - 分销商管理 - 代理
+    '/agent/agent1': {
+      component: dynamicWrapper(app, ['distributionManagement'], () => import('../routes/DistributionManagement/distributorsMgt')),
+    },
+
     //商品管理 - 上架审核（复制新）
     '/goods/onAudit': {
       component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/goodsOnAudit')),
@@ -80,5 +85,9 @@ export default function(dynamicWrapper,app){
     '/sales/salesStatisticsA': {
       component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsA')),
     },
+
+
+
+
   };
 };

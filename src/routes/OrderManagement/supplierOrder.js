@@ -248,9 +248,9 @@ export default class supplierOrder extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span> 共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
-            <span>总订单额：¥{tableData.item?tableData.item.totalTradeAmount :0} </span>
-          </div>
+          <span> 共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
+          <span>总订单额：¥{tableData.item?tableData.item.totalTradeAmount :0} </span>
+        </div>
         </div>
       </Form>
     );

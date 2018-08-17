@@ -34,10 +34,6 @@ export default class DistributionOrderCheckModal extends React.PureComponent {
       dataIndex: 'skuBillName',
       key: 'skuBillName',
     }, {
-      title: '供货单价',
-      dataIndex: 'purchasePrice',
-      key: 'purchasePrice',
-    }, {
       title: '销量',
       dataIndex: 'quantity',
       key: 'quantity',
@@ -45,11 +41,18 @@ export default class DistributionOrderCheckModal extends React.PureComponent {
       title: '销售单价',
       dataIndex: 'skuUnitPrice',
       key: 'skuUnitPrice',
+        render:val=>val?'¥'+val:'--'
     }, {
       title: '销售额',
       dataIndex: 'totalPrice',
       key: 'totalPrice',
-    }
+        render:val=>val?'¥'+val:'--'
+    },{
+        title: '佣金',
+        dataIndex: 'profitDealer',
+        key: 'profitDealer',
+        render:val=>val?'¥'+val:'--'
+      }
     ];
     return (
       <div>

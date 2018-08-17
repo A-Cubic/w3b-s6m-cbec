@@ -13,6 +13,7 @@ import salesStatisticsMock from './mock/salesStatisticsMock';
 import orderManagementMock from './mock/orderManagementMock';
 import channelManagementMock from './mock/channelManagementMock';
 import goodsManagementMock from './mock/goodsManagementMock';
+import distributionManagementMock from './mock/distributionManagementMock';
 // 是否禁用代理
 
 const noProxy = process.env.NO_PROXY === 'true';
@@ -25,6 +26,7 @@ const proxy = {
   ...orderManagementMock(service_url2),
   ...channelManagementMock(service_url2),
   ...goodsManagementMock(service_url2),
+  ...distributionManagementMock(service_url2),
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
     $desc: '获取当前用户接口',
