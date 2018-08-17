@@ -34,30 +34,29 @@ export default class DistributorsMgt extends Component {
   //列表
   onSearch=(e)=>{
     e.preventDefault();
-    // const {salesStatistics:{salesStatisticsAll:{tableData}}}=this.props
-    // this.props.form.validateFields((err, fieldsValue) => {
-    //   // console.log('values',fieldsValue)
-    //   if (err) return;
-    //   const rangeValue = fieldsValue['date'];
-    //   const values = rangeValue==undefined ? {
-    //     ...fieldsValue,
-    //   }:{
-    //     ...fieldsValue,
-    //     'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
-    //   };
-    //   this.setState({
-    //     formValues: values,
-    //   });
-    //   this.props.dispatch({
-    //     type: 'salesStatistics/getSalesStatisticsListS',
-    //     payload: {
-    //       ...values,
-    //       ...tableData.pagination
-    //     },
-    //   });
-    // });
+    const {distributionManagement:{distributorsMgtData:{tableData}}}=this.props
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('values',fieldsValue)
+      if (err) return;
+      const values = {
+        ...fieldsValue,
+      }
+      this.setState({
+        formValues: values,
+      });
+      this.props.dispatch({
+        type: 'distributionManagement/getDistributorTable',
+        payload: {
+          ...values,
+          ...tableData.pagination
+        },
+      });
+    });
   }
   handleFormReset =()=>{
+    this.setState({
+      formValues: '',
+    });
     this.props.form.resetFields();
     this.init();
   }
@@ -68,13 +67,18 @@ export default class DistributorsMgt extends Component {
     };
 
     this.props.dispatch({
-      type: 'salesStatistics/getSalesStatisticsListS',
+      type: 'distributionManagement/getDistributorTable',
       payload: params,
     });
   }
 
   mgtDistributors=(flag)=>{
-    this.handleChangeVisible(true)
+    this.props.dispatch({
+      type: 'distributionManagement/editChildR',
+      payload: {},
+    })
+    this.handleChangeVisible(true);
+
   }
   handleChangeVisible(visibleValue){
     this.props.dispatch({
@@ -84,8 +88,13 @@ export default class DistributorsMgt extends Component {
       }
     });
   }
-  handleChildrenCheck=()=>{
-
+  handleChildrenCheck=(record)=>{
+    const {distributionManagement:{distributorsMgtData:{visible,childCheckS}}} = this.props
+    this.props.dispatch({
+      type: 'distributionManagement/editChildR',
+      payload: record,
+    });
+    this.handleChangeVisible(true)
   }
   renderAdvancedForm(){
     // const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
@@ -97,7 +106,7 @@ export default class DistributorsMgt extends Component {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }} type="flex" justify="center">
           <Col md={10} sm={24}>
             <FormItem label="分销商：">
-              {getFieldDecorator('brand')(
+              {getFieldDecorator('search')(
                 <Input placeholder="请输入分销商名称/公司名称/联系电话/微信昵称" />
               )}
             </FormItem>
@@ -114,7 +123,7 @@ export default class DistributorsMgt extends Component {
     );
   }
   render() {
-    console.log(this.props)
+    // console.log(this.props)
 
     const { distributionManagement:{distributorsMgtData:{tableData}} } = this.props;
     const paginationProps = {
@@ -129,20 +138,20 @@ export default class DistributorsMgt extends Component {
         key: 'keyId',
       }, {
         title: '分销商',
-        dataIndex: 'distribution',
-        key: 'distribution',
+        dataIndex: 'userName',
+        key: 'userName',
       }, {
         title: '公司名称',
-        dataIndex: '',
-        key: '',
+        dataIndex: 'company',
+        key: 'company',
       }, {
         title: '联系电话',
-        dataIndex: '',
-        key: '',
+        dataIndex: 'mobile',
+        key: 'mobile',
       }, {
         title: '微信昵称',
-        dataIndex: '',
-        key: '',
+        dataIndex: 'wxName',
+        key: 'wxName',
       }, {
         title: '操作',
         dataIndex: 'operate',
@@ -193,12 +202,14 @@ class Distributors extends React.Component {
       this.setState({
         formValues: values,
       });
-      // console.log('ssss',this.props)
       this.props.dispatch({
-        type: 'distributionManagement/update',
+        type: 'distributionManagement/updateDistributor',
         payload: {
           ...values,
           id:childCheckS.id
+        },
+        callback:()=>{
+          this.props.form.resetFields();
         }
       });
     });
@@ -217,8 +228,8 @@ class Distributors extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {distributionManagement:{distributorsMgtData:{visible}}} = this.props
-    // console.log(this.props)
+    const {distributionManagement:{distributorsMgtData:{visible,childCheckS}}} = this.props
+    // console.log(childCheckS)
     return (
       <div>
         <Modal
@@ -236,7 +247,8 @@ class Distributors extends React.Component {
               <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                 <Col md={24} sm={24}>
                   <FormItem label="分销商">
-                    {getFieldDecorator('a',{
+                    {getFieldDecorator('userName',{
+                      initialValue: childCheckS.userName,
                       rules:[{
                         required:true,message:'请输入名称',
                       }]
@@ -247,7 +259,8 @@ class Distributors extends React.Component {
                 </Col>
                 <Col md={24} sm={24}>
                   <FormItem label="公司名称">
-                    {getFieldDecorator('b',{
+                    {getFieldDecorator('company',{
+                      initialValue: childCheckS.company,
                       rules:[{
                         required:true,message:'请输入公司名称',
                       }]
@@ -258,7 +271,8 @@ class Distributors extends React.Component {
                 </Col>
                 <Col md={24} sm={24}>
                   <FormItem label="联系电话">
-                    {getFieldDecorator('c',{
+                    {getFieldDecorator('mobile',{
+                      initialValue: childCheckS.mobile,
                       rules:[{
                         required:true,message:'请输入联系电话',
                       }]
@@ -269,7 +283,8 @@ class Distributors extends React.Component {
                 </Col>
                 <Col md={24} sm={24}>
                   <FormItem label="微信昵称">
-                    {getFieldDecorator('d',{
+                    {getFieldDecorator('wxName',{
+                      initialValue: childCheckS.wxName,
                       rules:[{
                         required:true,message:'请输入微信昵称',
                       }]

@@ -1,7 +1,7 @@
 import { message} from 'antd';
 import {notification} from "antd/lib/index";
-import {getDistributorTable} from '../services/distributionManagement_S'
-import {getBrandData, getGoodsPutaway, getUpdateWarehouse} from "../services/api";
+import {getDistributorTable,getUpdateDistributor} from '../services/distributionManagement_S'
+import {getBrandData, getGoodsPutaway, getO2OCheck, getUpdateWarehouse} from "../services/api";
 export default {
   namespace: 'distributionManagement',
   state:{
@@ -12,7 +12,13 @@ export default {
       },
       visible:false,
       // 商品管理 - 商品查看详情 - 供应
-      childCheckS:{},
+      childCheckS:{
+        id:'',
+        userName:'',
+        company:'',
+        mobile:'',
+        wxName:'',
+      },
     },
   },
   effects:{
@@ -35,7 +41,7 @@ export default {
     },
     *getDistributorTable({ payload },{ call,put}){
       const response = yield call(getDistributorTable, payload);
-      console.log('~',response)
+      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getDistributorTableR',
@@ -43,13 +49,24 @@ export default {
         });
       }
     },
-    *updateWarehouse({ payload,callback },{ call,put}){
-      const response = yield call(getUpdateWarehouse, payload);
+    *updateDistributor({ payload,callback },{ call,put}){
+      const response = yield call(getUpdateDistributor, payload);
+      const responseList = yield call(getDistributorTable, payload);
       // console.log('~',response)
       if (response !== undefined) {
         if (response.type==1) {
-          callback();
           message.success('保存成功');
+          yield put({
+            type: 'getDistributorTableR',
+            payload: responseList,
+          });
+          yield put({
+            type: 'changeVisibleR',
+            payload: {
+              visibleValue: false
+            },
+          });
+          callback();
         }else{
           message.error(response.msg);
         }
@@ -68,6 +85,16 @@ export default {
         distributorsMgtData:{
           ...state.distributorsMgtData,
           tableData:action.payload,
+        },
+      };
+    },
+    editChildR(state, action) {
+      // console.log('madel',action.payload)
+      return {
+        ...state,
+        distributorsMgtData:{
+          ...state.distributorsMgtData,
+          childCheckS:action.payload,
         },
       };
     },

@@ -1,8 +1,10 @@
 // const orderManagement = 'http://console.llwell.net/';
-export default function distributionManagementMock() {
+export default function distributionManagementMock(url) {
   return {
     // 销售统计 - 代理- 列表
-    'POST /llback/Agent/getDistributorList': getChannelList,
+    'POST /llback/Agent/GetDistributionList': url,
+    // 分销管理 - 分销商管理 - 保存、编辑分销商
+    'POST /llback/Agent/UpdateDistribution': url,
   };
 }
 export function getPlatform(req, res) {
