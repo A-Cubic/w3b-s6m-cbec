@@ -1,7 +1,7 @@
 import { message} from 'antd';
 
 import {notification} from "antd/lib/index";
-import {getCheckStepStatus, getGoodsPutaway} from '../services/api'
+import {getSupplier} from '../services/api'
 import {
   getPurchaseData,getDistributorsData,
   getSalesStatisticsListA,getSalesStatisticsListS,getSalesStatisticsListO
@@ -21,8 +21,8 @@ export default {
     channelTypeArr:[],
     // 获取销售商（渠道商）
     purchaseArr:[],
-    // 获取分销商
-    distributorsArr:[],
+    // 获取供应商
+    supplierArr:[],
     // 结算管理 - 运营/供应商/采购商/代理/分销商
     settlementAll:{
       tableData:{
@@ -54,12 +54,13 @@ export default {
         });
       }
     },
-    // 获取分销商类型
-    *getDistributors({ payload },{ call,put}){
-      const response = yield call(getDistributorsData, payload);
+    // 供应商 下拉
+    *getSupplier({ payload },{ call,put}){
+      const response = yield call(getSupplier, payload);
+      // console.log('~',response)
       if (response !== undefined) {
         yield put({
-          type: 'getDistributorsR',
+          type: 'getSupplierR',
           payload: response,
         });
       }
@@ -133,10 +134,10 @@ export default {
         purchaseArr:action.payload,
       };
     },
-    getDistributorsR(state, action) {
+    getSupplierR(state, action) {
       return {
         ...state,
-        distributorsArr:action.payload,
+        supplierArr:action.payload,
       };
     },
     getSettlementListR(state, action) {

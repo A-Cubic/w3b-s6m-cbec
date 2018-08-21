@@ -82,6 +82,9 @@ export default class settlementMgtA extends Component {
     });
   }
   handleFormReset =()=>{
+    this.setState({
+      formValues: {},
+    });
     this.props.form.resetFields();
     this.init();
   }

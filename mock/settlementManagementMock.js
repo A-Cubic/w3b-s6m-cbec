@@ -39,6 +39,7 @@ export function getChannelList(req, res) {
       grossProfitTotal: -23777.84,
       brokerageTotal: 0,
       totalPurchase: 90,
+      totalPlatform: 90,
     },
     list: [
       {
