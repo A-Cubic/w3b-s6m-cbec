@@ -15,7 +15,7 @@ const TabPane = Tabs.TabPane;
   settlementManagement,
   // loading: loading.effects['salesStatistics/getSalesStatisticsListO'],
 }))
-
+//结算管理 - 运营
 @Form.create()
 export default class settlementMgtS extends Component {
   state={
@@ -38,32 +38,34 @@ export default class settlementMgtS extends Component {
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
       if (err) return;
-      const rangeValue1 = fieldsValue['date1'];
-      const rangeValue2 = fieldsValue['date2'];
-
+      let rangeValue1 = fieldsValue['OrderDate'];
+      let rangeValue2 = fieldsValue['BalanceDate'];
       let values;
-        if(rangeValue1!== undefined && rangeValue2!==undefined){
+
+      rangeValue1 = rangeValue1==''?undefined:rangeValue1;
+      rangeValue2 = rangeValue2==''?undefined:rangeValue2;
+
+        if(rangeValue1!== undefined&&rangeValue1!== '' && rangeValue2!==undefined&&rangeValue1!== ''){
            values ={
             ...fieldsValue,
-            'date1': [rangeValue1[0].format('YYYY-MM-DD'), rangeValue1[1].format('YYYY-MM-DD')],
-            'date2': [rangeValue2[0].format('YYYY-MM-DD'), rangeValue2[1].format('YYYY-MM-DD')],
+            'OrderDate': [rangeValue1[0].format('YYYY-MM-DD'), rangeValue1[1].format('YYYY-MM-DD')],
+            'BalanceDate': [rangeValue2[0].format('YYYY-MM-DD'), rangeValue2[1].format('YYYY-MM-DD')],
            }
         } else if(rangeValue1!==undefined && rangeValue2==undefined){
           values ={
             ...fieldsValue,
-            'date1': [rangeValue1[0].format('YYYY-MM-DD'), rangeValue1[1].format('YYYY-MM-DD')],
+            'OrderDate': [rangeValue1[0].format('YYYY-MM-DD'), rangeValue1[1].format('YYYY-MM-DD')],
           }
         } else if(rangeValue1==undefined && rangeValue2 !==undefined){
           values ={
             ...fieldsValue,
-            'date2': [rangeValue2[0].format('YYYY-MM-DD'), rangeValue2[1].format('YYYY-MM-DD')],
+            'BalanceDate': [rangeValue2[0].format('YYYY-MM-DD'), rangeValue2[1].format('YYYY-MM-DD')],
           }
         } else{
           values ={
             ...fieldsValue,
           }
         }
-
 
       this.setState({
         formValues: values,
@@ -93,7 +95,6 @@ export default class settlementMgtS extends Component {
     });
   }
 
-
   renderAdvancedForm(){
     const { settlementManagement:{settlementAll:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
@@ -102,21 +103,21 @@ export default class settlementMgtS extends Component {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="订单号：">
-              {getFieldDecorator('barcode')(
+              {getFieldDecorator('merchantOrderId')(
                 <Input placeholder="请输入订单号" />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="订单日期">
-              {getFieldDecorator('date1')(
+              {getFieldDecorator('OrderDate')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="结算日期">
-              {getFieldDecorator('date2')(
+              {getFieldDecorator('BalanceDate')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
@@ -139,11 +140,8 @@ export default class settlementMgtS extends Component {
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
             <span>总单数：{tableData.item?tableData.pagination.total:0}， </span>
-            <span>订单总供货额：{tableData.item?tableData.item.salesNumTotal:0}， </span>
-            <span>总结算额：¥{tableData.item?tableData.item.salesPriceTotal:0}， </span>
-            {/*<Button  style={{marginLeft:18}}>*/}
-            {/*<Icon type="cloud-download-o" />导出数据*/}
-            {/*</Button>*/}
+            <span>订单总供货额：{tableData.item?tableData.item.totalSales:0}， </span>
+            <span>总结算额：¥{tableData.item?tableData.item.totalSupplier:0} </span>
           </div>
         </div>
       </Form>
@@ -164,25 +162,25 @@ export default class settlementMgtS extends Component {
         key: 'keyId',
       }, {
         title: '订单号',
-        dataIndex: 'barcode',
-        key: 'barcode',
+        dataIndex: 'merchantOrderId',
+        key: 'merchantOrderId',
       }, {
         title: '订单时间',
-        dataIndex: 'goodsName',
-        key: 'goodsName',
+        dataIndex: 'tradeTime',
+        key: 'tradeTime',
       }, {
         title: '订单供货额',
-        dataIndex: 'brand',
-        key: 'brand',
+        dataIndex: 'tradeAmount',
+        key: 'tradeAmount',
       }, {
         title: '结算时间',
-        dataIndex: 'category',
-        key: 'category',
+        dataIndex: 'waybilltime',
+        key: 'waybilltime',
         width:100,
       }, {
         title: '结算金额',
-        dataIndex: 'salesNum',
-        key: 'salesNum',
+        dataIndex: 'supplie',
+        key: 'supplie',
       }
     ];
     return (

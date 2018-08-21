@@ -1,12 +1,16 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function salesStatisticsMock(url) {
   return {
-    // 结算管理 - 代理- 列表
-    'POST /llback/Settlement/SettlementA': getChannelList,
     // 结算管理 - 供应商- 列表
-    'POST /llback/Settlement/SettlementS': getChannelList,
+    'POST /llback/Balance/GetBalanceListBySupplier': getChannelList,
     // 结算管理 - 运营- 列表
-    'POST /llback/Settlement/SettlementO': getChannelList,
+    'POST /llback/Balance/GetBalanceListByOperator': getChannelList,
+    // 结算管理 - 采购- 列表
+    'POST /llback/Balance/GetBalanceListByPurchase': getChannelList,
+    // 结算管理 - 代理- 列表
+    'POST /llback/Balance/GetBalanceListByAgent': getChannelList,
+    // 结算管理 - 分销- 列表
+    'POST /llback/Balance/GetBalanceListByDistribution': getChannelList,
     // 获取销售商（渠道商）
     'POST /llback/Sales/GetPurchase': url,
     // 获取分销商类型
@@ -30,13 +34,14 @@ export function getChannelList(req, res) {
   res.send({
     item: {
       salesNumTotal: 2584,
-      salesPriceTotal: 184124.6,
-      costTotal: 207902.44,
+      totalSupplier: 184124.6,
+      totalSales: 207902.44,
       grossProfitTotal: -23777.84,
       brokerageTotal: 0,
     },
     list: [
       {
+        id: 1,
         barcode: '4571395822073',
         goodsName: 'Fernanda 香气护肤乳(Lilly Crown)',
         slt: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4571395822073_cp_1.jpg',
@@ -56,6 +61,7 @@ export function getChannelList(req, res) {
         distribution: null,
       },
       {
+        id: 2,
         barcode: '4582238542133',
         goodsName: 'DOSHISHA vivekke 防晒喷雾',
         slt: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4582238542133_cp_2.jpg',

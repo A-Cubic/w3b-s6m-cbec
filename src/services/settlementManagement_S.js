@@ -3,22 +3,36 @@ import request from '../utils/request';
 
 // 结算管理 - 运营- 列表
 export async function getSettlementListO(params) {
-  return request(`/llback/Settlement/SettlementO`, {
+  return request(`/llback/Balance/GetBalanceListByOperator`, {
     method: 'POST',
     body: params,
   });
 }
 // 结算管理 - 供应商- 列表
 export async function getSettlementListS(params) {
-  return request(`/llback/Settlement/SettlementS`, {
+  return request(`/llback/Balance/GetBalanceListBySupplier`, {
     method: 'POST',
     body: params,
   });
 }
 
+// 结算管理 - 采购- 列表
+export async function getSettlementListP(params) {
+  return request(`/llback/Balance/GetBalanceListByPurchase`, {
+    method: 'POST',
+    body: params,
+  });
+}
 // 结算管理 - 代理- 列表
 export async function getSettlementListA(params) {
-  return request(`/llback/Settlement/SettlementA`, {
+  return request(`/llback/Balance/GetBalanceListByAgent`, {
+    method: 'POST',
+    body: params,
+  });
+}
+// 结算管理 - 分销- 列表
+export async function getSettlementListD(params) {
+  return request(`/llback/Balance/GetBalanceListByDistribution`, {
     method: 'POST',
     body: params,
   });
