@@ -1,3 +1,5 @@
+import {getSettlementListS} from "../services/settlementManagement_S";
+
 export default function(dynamicWrapper,app){
   return {
     //工作台 - 供应商
@@ -90,6 +92,12 @@ export default function(dynamicWrapper,app){
     // 销售统计 - 代理商
     '/sales/salesStatisticsA': {
       component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsA')),
+    },
+
+
+    // 结算管理 - 供应商
+    '/settlement/settlementS': {
+      component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/settlementMgtS')),
     },
 
 

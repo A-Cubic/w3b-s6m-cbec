@@ -6,7 +6,7 @@ export default function distributionManagementMock(url) {
     // 分销管理 - 分销商管理 - 保存、编辑分销商
     'POST /llback/Agent/UpdateDistribution': url,
     // 推广二维码
-    'POST /llback/Agent/GetAgentQRCode': agentQRCodeUrl,
+    'POST /llback/Agent/GetAgentQRCode': url,
   };
 }
 export function getPlatform(req, res) {

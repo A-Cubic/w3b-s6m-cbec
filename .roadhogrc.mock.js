@@ -14,6 +14,7 @@ import orderManagementMock from './mock/orderManagementMock';
 import channelManagementMock from './mock/channelManagementMock';
 import goodsManagementMock from './mock/goodsManagementMock';
 import distributionManagementMock from './mock/distributionManagementMock';
+import settlementManagementMock from './mock/settlementManagementMock';
 // 是否禁用代理
 
 const noProxy = process.env.NO_PROXY === 'true';
@@ -21,12 +22,14 @@ const service_url =  'http://api.llwell.net/';// http://api.llwell.net/  http://
 const service_url2 =  'http://console.llwell.net/';// http://console.llwell.net/  http://localhost:51184/
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
+  ...settlementManagementMock(service_url2),
+  ...distributionManagementMock(service_url2),
   ...workbenchMock(service_url2),
   ...salesStatisticsMock(service_url2),
   ...orderManagementMock(service_url2),
   ...channelManagementMock(service_url2),
   ...goodsManagementMock(service_url2),
-  ...distributionManagementMock(service_url2),
+
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
     $desc: '获取当前用户接口',

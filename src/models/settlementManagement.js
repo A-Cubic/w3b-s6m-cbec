@@ -7,6 +7,7 @@ import {
   getSalesStatisticsListA,getSalesStatisticsListS,getSalesStatisticsListO
 } from '../services/salesStatistics_S'
 import {getChannelTypeData} from "../services/channelManagement_S";
+import {getSettlementListS,getSettlementListO,getSettlementListA} from "../services/settlementManagement_S";
 export default {
   namespace: 'settlementManagement',
   state:{
@@ -16,16 +17,13 @@ export default {
     purchaseArr:[],
     // 获取分销商
     distributorsArr:[],
-    // 商品管理 - 商品上架审核
-    salesStatisticsAll:{
+    // 结算管理 - 运营/供应商/采购商/代理/分销商
+    settlementAll:{
       tableData:{
-        item:{
-          salesNumTotal:0,
-        },
+        item:{},
         list: [],
         pagination:{},
       },
-
     },
 
   },
@@ -61,42 +59,27 @@ export default {
       }
     },
     // 销售统计列表 - 供应商
-    *getSalesStatisticsListS({ payload },{ call,put}){
-      const response = yield call(getSalesStatisticsListS, payload);
+    *getSettlementListS({ payload },{ call,put}){
+      const response = yield call(getSettlementListS, payload);
       // console.log('~',response)
       if (response !== undefined) {
         yield put({
-          type: 'getSalesStatisticsListR',
+          type: 'getSettlementListR',
           payload: response,
         });
       }
     },
     // 销售统计列表 - 运营
-    *getSalesStatisticsListO({ payload },{ call,put}){
-      const response = yield call(getSalesStatisticsListO, payload);
+    *getSettlementListO({ payload },{ call,put}){
+      const response = yield call(getSettlementListO, payload);
       // console.log('~',response)
       if (response !== undefined) {
         yield put({
-          type: 'getSalesStatisticsListR',
+          type: 'getSettlementListR',
           payload: response,
         });
       }
     },
-    // 销售统计列表 - 代理
-    *getSalesStatisticsListA({ payload },{ call,put}){
-      const response = yield call(getSalesStatisticsListA, payload);
-      // console.log('~',response)
-      if (response !== undefined) {
-        yield put({
-          type: 'getSalesStatisticsListR',
-          payload: response,
-        });
-      }
-    },
-
-
-
-
   },
   reducers:{
     getChannelTypeR(state, action) {
@@ -117,20 +100,14 @@ export default {
         distributorsArr:action.payload,
       };
     },
-    getSalesStatisticsListR(state, action) {
-      // if(action.payload.item==null){
-      //   return state
-      // }else{
-        return {
-          ...state,
-          salesStatisticsAll:{
-            ...state.salesStatisticsAll,
-            tableData:action.payload
-          },
-        };
-      // }
+    getSettlementListR(state, action) {
+      return {
+        ...state,
+        settlementAll:{
+          ...state.settlementAll,
+          tableData:action.payload
+        },
+      };
     },
-
-
   }
 }

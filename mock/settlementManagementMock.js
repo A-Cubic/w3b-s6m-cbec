@@ -1,12 +1,12 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function salesStatisticsMock(url) {
   return {
-    // 销售统计 - 代理- 列表
-    'POST /llback/Sales/GetSalesListByAgent': url,
-    // 销售统计 - 供应商- 列表
-    'POST /llback/Sales/GetSalesListBySupplier': url,
-    // 销售统计 - 运营- 列表
-    'POST /llback/Sales/GetSalesListByOperator': url,
+    // 结算管理 - 代理- 列表
+    'POST /llback/Settlement/SettlementA': getChannelList,
+    // 结算管理 - 供应商- 列表
+    'POST /llback/Settlement/SettlementS': getChannelList,
+    // 结算管理 - 运营- 列表
+    'POST /llback/Settlement/SettlementO': getChannelList,
     // 获取销售商（渠道商）
     'POST /llback/Sales/GetPurchase': url,
     // 获取分销商类型

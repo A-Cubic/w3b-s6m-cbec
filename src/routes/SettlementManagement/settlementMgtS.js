@@ -21,18 +21,9 @@ export default class settlementMgtS extends Component {
   state={
     formValues:{},
   }
-  init()
-  {
+  init(){
     this.props.dispatch({
-      type: 'salesStatistics/getChannelType',
-      payload: {},
-    });
-    this.props.dispatch({
-      type: 'salesStatistics/getPurchase',
-      payload: {},
-    });
-    this.props.dispatch({
-      type: 'salesStatistics/getSalesStatisticsListO',
+      type: 'settlementManagement/getSettlementListS',
       payload: {},
     });
   }
@@ -43,22 +34,42 @@ export default class settlementMgtS extends Component {
   //列表
   onSearch=(e)=>{
     e.preventDefault();
-    const {salesStatistics:{salesStatisticsAll:{tableData}}}=this.props
+    const {settlementManagement:{settlementAll:{tableData}}}=this.props
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
       if (err) return;
-      const rangeValue = fieldsValue['date'];
-      const values = rangeValue==undefined ? {
-        ...fieldsValue,
-      }:{
-        ...fieldsValue,
-        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
-      };
+      const rangeValue1 = fieldsValue['date1'];
+      const rangeValue2 = fieldsValue['date2'];
+
+      let values;
+        if(rangeValue1!== undefined && rangeValue2!==undefined){
+           values ={
+            ...fieldsValue,
+            'date1': [rangeValue1[0].format('YYYY-MM-DD'), rangeValue1[1].format('YYYY-MM-DD')],
+            'date2': [rangeValue2[0].format('YYYY-MM-DD'), rangeValue2[1].format('YYYY-MM-DD')],
+           }
+        } else if(rangeValue1!==undefined && rangeValue2==undefined){
+          values ={
+            ...fieldsValue,
+            'date1': [rangeValue1[0].format('YYYY-MM-DD'), rangeValue1[1].format('YYYY-MM-DD')],
+          }
+        } else if(rangeValue1==undefined && rangeValue2 !==undefined){
+          values ={
+            ...fieldsValue,
+            'date2': [rangeValue2[0].format('YYYY-MM-DD'), rangeValue2[1].format('YYYY-MM-DD')],
+          }
+        } else{
+          values ={
+            ...fieldsValue,
+          }
+        }
+
+
       this.setState({
         formValues: values,
       });
       this.props.dispatch({
-        type: 'salesStatistics/getSalesStatisticsListO',
+        type: 'settlementManagement/getSettlementListS',
         payload: {
           ...values,
           ...tableData.pagination
@@ -77,20 +88,18 @@ export default class settlementMgtS extends Component {
     };
 
     this.props.dispatch({
-      type: 'salesStatistics/getSalesStatisticsListO',
+      type: 'settlementManagement/getSettlementListS',
       payload: params,
     });
   }
 
 
   renderAdvancedForm(){
-    const { salesStatistics:{salesStatisticsAll:{tableData},channelTypeArr,purchaseArr,distributorsArr} } = this.props;
+    const { settlementManagement:{settlementAll:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
-
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-
           <Col md={8} sm={24}>
             <FormItem label="订单号：">
               {getFieldDecorator('barcode')(
@@ -100,28 +109,22 @@ export default class settlementMgtS extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="订单日期">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('date1')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="结算日期">
-              {getFieldDecorator('date1')(
+              {getFieldDecorator('date2')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
           </Col>
-
         </Row>
 
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            {/*<FormItem label="销售日期">*/}
-              {/*{getFieldDecorator('date')(*/}
-                {/*<RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />*/}
-              {/*)}*/}
-            {/*</FormItem>*/}
           </Col>
           <Col md={8} sm={24}>
           </Col>
@@ -135,9 +138,9 @@ export default class settlementMgtS extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span>总单数：{tableData?tableData.pagination.total:0}， </span>
-            <span>订单总供货额：{tableData?tableData.item.salesNumTotal:0}， </span>
-            <span>总结算额：¥{tableData?tableData.item.salesPriceTotal:0}， </span>
+            <span>总单数：{tableData.item?tableData.pagination.total:0}， </span>
+            <span>订单总供货额：{tableData.item?tableData.item.salesNumTotal:0}， </span>
+            <span>总结算额：¥{tableData.item?tableData.item.salesPriceTotal:0}， </span>
             {/*<Button  style={{marginLeft:18}}>*/}
             {/*<Icon type="cloud-download-o" />导出数据*/}
             {/*</Button>*/}
@@ -148,7 +151,7 @@ export default class settlementMgtS extends Component {
   }
   render() {
     // console.log(this.props)
-    const { salesStatistics:{salesStatisticsAll:{tableData},purchaseArr,channelTypeArr} } = this.props;
+    const { settlementManagement:{settlementAll:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
