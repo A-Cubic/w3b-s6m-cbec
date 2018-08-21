@@ -7,7 +7,7 @@ import {
   getSalesStatisticsListA,getSalesStatisticsListS,getSalesStatisticsListO
 } from '../services/salesStatistics_S'
 import {getChannelTypeData} from "../services/channelManagement_S";
-import {getSettlementListS,getSettlementListO,getSettlementListA} from "../services/settlementManagement_S";
+import {getSettlementListS,getSettlementListO,getSettlementListP,getSettlementListA} from "../services/settlementManagement_S";
 export default {
   namespace: 'settlementManagement',
   state:{
@@ -72,6 +72,17 @@ export default {
     // 销售统计列表 - 运营
     *getSettlementListO({ payload },{ call,put}){
       const response = yield call(getSettlementListO, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getSettlementListR',
+          payload: response,
+        });
+      }
+    },
+    // 销售统计列表 - 采购
+    *getSettlementListP({ payload },{ call,put}){
+      const response = yield call(getSettlementListP, payload);
       // console.log('~',response)
       if (response !== undefined) {
         yield put({

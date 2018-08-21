@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import styles from './settlementMgtS.less';
+import styles from './settlementMgtP.less';
 import moment from 'moment';
 import {getToken} from "../../utils/Global";
 const userId = getToken().userId;
@@ -17,15 +17,15 @@ const TabPane = Tabs.TabPane;
 }))
 @Form.create()
 
-//结算管理 - 供应商
+//结算管理 - 采购
 
-export default class settlementMgtS extends Component {
+export default class settlementMgtP extends Component {
   state={
     formValues:{},
   }
   init(){
     this.props.dispatch({
-      type: 'settlementManagement/getSettlementListS',
+      type: 'settlementManagement/getSettlementListP',
       payload: {},
     });
   }
@@ -73,7 +73,7 @@ export default class settlementMgtS extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'settlementManagement/getSettlementListS',
+        type: 'settlementManagement/getSettlementListP',
         payload: {
           ...values,
           ...tableData.pagination
@@ -92,7 +92,7 @@ export default class settlementMgtS extends Component {
     };
 
     this.props.dispatch({
-      type: 'settlementManagement/getSettlementListS',
+      type: 'settlementManagement/getSettlementListP',
       payload: params,
     });
   }
@@ -142,8 +142,8 @@ export default class settlementMgtS extends Component {
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
             <span>总单数：{tableData.item?tableData.pagination.total:0}， </span>
-            <span>订单总供货额：¥{tableData.item?tableData.item.totalSales:0}， </span>
-            <span>总结算额：¥{tableData.item?tableData.item.totalSupplier:0} </span>
+            <span>订单总销售额：¥{tableData.item?tableData.item.totalSales:0}， </span>
+            <span>总结算额：¥{tableData.item?tableData.item.totalPurchase:0} </span>
           </div>
         </div>
       </Form>
@@ -171,7 +171,7 @@ export default class settlementMgtS extends Component {
         dataIndex: 'tradeTime',
         key: 'tradeTime',
       }, {
-        title: '订单供货额',
+        title: '订单销售额',
         dataIndex: 'tradeAmount',
         key: 'tradeAmount',
       }, {
@@ -181,8 +181,8 @@ export default class settlementMgtS extends Component {
         width:100,
       }, {
         title: '结算金额',
-        dataIndex: 'supplie',
-        key: 'supplie',
+        dataIndex: 'purchase',
+        key: 'purchase',
       }
     ];
     return (

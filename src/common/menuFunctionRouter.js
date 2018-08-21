@@ -99,6 +99,10 @@ export default function(dynamicWrapper,app){
     '/settlement/settlementS': {
       component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/settlementMgtS')),
     },
+    // 结算管理 - 采购
+    '/settlement/settlementP': {
+      component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/settlementMgtP')),
+    },
 
 
 

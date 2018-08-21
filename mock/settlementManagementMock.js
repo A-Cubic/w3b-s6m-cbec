@@ -38,6 +38,7 @@ export function getChannelList(req, res) {
       totalSales: 207902.44,
       grossProfitTotal: -23777.84,
       brokerageTotal: 0,
+      totalPurchase: 90,
     },
     list: [
       {
