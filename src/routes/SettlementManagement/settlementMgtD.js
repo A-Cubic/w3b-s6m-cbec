@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import styles from './settlementMgtA.less';
+import styles from './settlementMgtD.less';
 import moment from 'moment';
 import {getToken} from "../../utils/Global";
 const userId = getToken().userId;
@@ -17,15 +17,15 @@ const TabPane = Tabs.TabPane;
 }))
 @Form.create()
 
-//结算管理 - 代理
+//结算管理 - 分销
 
-export default class settlementMgtA extends Component {
+export default class settlementMgtD extends Component {
   state={
     formValues:{},
   }
   init(){
     this.props.dispatch({
-      type: 'settlementManagement/getSettlementListA',
+      type: 'settlementManagement/getSettlementListD',
       payload: {},
     });
   }
@@ -73,7 +73,7 @@ export default class settlementMgtA extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'settlementManagement/getSettlementListA',
+        type: 'settlementManagement/getSettlementListD',
         payload: {
           ...values,
           ...tableData.pagination
@@ -92,7 +92,7 @@ export default class settlementMgtA extends Component {
     };
 
     this.props.dispatch({
-      type: 'settlementManagement/getSettlementListA',
+      type: 'settlementManagement/getSettlementListD',
       payload: params,
     });
   }
@@ -141,7 +141,7 @@ export default class settlementMgtA extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span>总单数：{tableData.item?tableData.pagination.total:0}， </span>
+            <span>总计算单数：{tableData.item?tableData.pagination.total:0}， </span>
             <span>订单总销售额：¥{tableData.item?tableData.item.totalSales:0}， </span>
             <span>总结算额：¥{tableData.item?tableData.item.totalPurchase:0} </span>
           </div>
@@ -184,10 +184,6 @@ export default class settlementMgtA extends Component {
         dataIndex: 'purchase',
         key: 'purchase',
         render:val=>`¥${val}`
-      }, {
-        title: '分销商',
-        dataIndex: 'distribution',
-        key: 'distribution',
       }
     ];
     return (
