@@ -29,7 +29,7 @@ export default function(dynamicWrapper,app){
     },
 
     //分销管理 - 分销商管理 - 代理
-    '/agent/agent1': {
+    '/agent/agentMgt': {
       component: dynamicWrapper(app, ['distributionManagement'], () => import('../routes/DistributionManagement/distributorsMgt')),
     },
 

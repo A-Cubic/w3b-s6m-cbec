@@ -50,11 +50,11 @@ export default {
               break;
             //  渠道代理
             case 'agent':
-              tUrl = '/goods/goodsAboutA';
+              tUrl = '/orderManagement/agentOrder';
               break;
             //  分销商
             case 'distribution':
-              tUrl = '/agent/goodsAboutD';
+              tUrl = '/orderManagement/distributionOrder';
               break;
             //  未审核通过的供应商
             case 'unaudited-s':
