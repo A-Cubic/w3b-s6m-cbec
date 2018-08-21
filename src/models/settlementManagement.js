@@ -91,6 +91,17 @@ export default {
         });
       }
     },
+    // 销售统计列表 - 代理
+    *getSettlementListA({ payload },{ call,put}){
+      const response = yield call(getSettlementListA, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getSettlementListR',
+          payload: response,
+        });
+      }
+    },
   },
   reducers:{
     getChannelTypeR(state, action) {

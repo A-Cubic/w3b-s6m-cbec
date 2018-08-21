@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import styles from './settlementMgtP.less';
+import styles from './settlementMgtA.less';
 import moment from 'moment';
 import {getToken} from "../../utils/Global";
 const userId = getToken().userId;
@@ -19,13 +19,13 @@ const TabPane = Tabs.TabPane;
 
 //结算管理 - 采购
 
-export default class settlementMgtP extends Component {
+export default class settlementMgtA extends Component {
   state={
     formValues:{},
   }
   init(){
     this.props.dispatch({
-      type: 'settlementManagement/getSettlementListP',
+      type: 'settlementManagement/getSettlementListA',
       payload: {},
     });
   }
@@ -73,7 +73,7 @@ export default class settlementMgtP extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'settlementManagement/getSettlementListP',
+        type: 'settlementManagement/getSettlementListA',
         payload: {
           ...values,
           ...tableData.pagination
@@ -92,7 +92,7 @@ export default class settlementMgtP extends Component {
     };
 
     this.props.dispatch({
-      type: 'settlementManagement/getSettlementListP',
+      type: 'settlementManagement/getSettlementListA',
       payload: params,
     });
   }
@@ -179,12 +179,15 @@ export default class settlementMgtP extends Component {
         title: '结算时间',
         dataIndex: 'waybillTime',
         key: 'waybillTime',
-        width:100,
       }, {
         title: '结算金额',
         dataIndex: 'purchase',
         key: 'purchase',
         render:val=>`¥${val}`
+      }, {
+        title: '分销商',
+        dataIndex: 'distribution',
+        key: 'distribution',
       }
     ];
     return (

@@ -174,15 +174,17 @@ export default class settlementMgtS extends Component {
         title: '订单供货额',
         dataIndex: 'tradeAmount',
         key: 'tradeAmount',
+        render:val=>`¥${val}`
       }, {
         title: '结算时间',
-        dataIndex: 'waybilltime',
-        key: 'waybilltime',
+        dataIndex: 'waybillTime',
+        key: 'waybillTime',
         width:100,
       }, {
         title: '结算金额',
-        dataIndex: 'supplie',
-        key: 'supplie',
+        dataIndex: 'supplier',
+        key: 'supplier',
+        render:val=>`¥${val}`
       }
     ];
     return (

@@ -220,6 +220,7 @@ export default class settlementMgtO extends Component {
         title: '订单销售额',
         dataIndex: 'brand',
         key: 'brand',
+        render:val=>`¥${val}`
       }, {
         title: '结算时间',
         dataIndex: 'category',
@@ -229,6 +230,7 @@ export default class settlementMgtO extends Component {
         title: '供货结算额',
         dataIndex: 'salesNum',
         key: 'salesNum',
+        render:val=>`¥${val}`
       }, {
         title: '佣金结算额',
         dataIndex: 'salesPrice',
