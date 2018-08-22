@@ -87,11 +87,11 @@ export default function(dynamicWrapper,app){
     },
     // 销售统计 - 运营
     '/sales/salesStatisticsO': {
-      component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsO')),
+      component: dynamicWrapper(app, ['salesStatistics','publicDictionary'], () => import('../routes/SalesStatistics/SalesStatisticsO')),
     },
     // 销售统计 - 代理商
     '/sales/salesStatisticsA': {
-      component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsA')),
+      component: dynamicWrapper(app, ['salesStatistics','publicDictionary'], () => import('../routes/SalesStatistics/SalesStatisticsA')),
     },
 
 

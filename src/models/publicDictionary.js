@@ -18,6 +18,8 @@ export default {
     purchaseArr:[],
     // 获取供应商
     supplierArr:[],
+    // 获取分销商
+    distributorsArr:[],
     // 获取仓库
     wareHouseArr:[],
     // 获取快递
@@ -53,6 +55,16 @@ export default {
       if (response !== undefined) {
         yield put({
           type: 'getSupplierR',
+          payload: response,
+        });
+      }
+    },
+    // 获取分销商类型
+    *getDistributors({ payload },{ call,put}){
+      const response = yield call(getDistributorsData, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'getDistributorsR',
           payload: response,
         });
       }
@@ -97,6 +109,12 @@ export default {
       return {
         ...state,
         supplierArr:action.payload,
+      };
+    },
+    getDistributorsR(state, action) {
+      return {
+        ...state,
+        distributorsArr:action.payload,
       };
     },
     getWareHouseR(state, action) {

@@ -11,8 +11,8 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
-@connect(({salesStatistics,  loading }) => ({
-  salesStatistics,
+@connect(({salesStatistics,publicDictionary,  loading }) => ({
+  salesStatistics,publicDictionary,
   loading: loading.effects['salesStatistics/getSalesStatisticsListA'],
 }))
 
@@ -23,7 +23,7 @@ export default class SalesStatisticsS extends Component {
   }
   init(){
     this.props.dispatch({
-      type: 'salesStatistics/getDistributors',
+      type: 'publicDictionary/getDistributors',
       payload: {},
     });
     this.props.dispatch({
@@ -79,7 +79,8 @@ export default class SalesStatisticsS extends Component {
 
 
   renderAdvancedForm(){
-    const { salesStatistics:{salesStatisticsAll:{tableData},distributorsArr} } = this.props;
+    const { publicDictionary:{channelTypeArr,purchaseArr,distributorsArr} } = this.props;
+    const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -155,7 +156,7 @@ export default class SalesStatisticsS extends Component {
     );
   }
   render() {
-    const { salesStatistics:{salesStatisticsAll:{tableData},wareHouseData,expressArr} } = this.props;
+    const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

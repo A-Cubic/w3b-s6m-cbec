@@ -11,8 +11,8 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
-@connect(({salesStatistics,  loading }) => ({
-  salesStatistics,
+@connect(({salesStatistics, publicDictionary, loading }) => ({
+  salesStatistics,publicDictionary,
   loading: loading.effects['salesStatistics/getSalesStatisticsListO'],
 }))
 
@@ -24,11 +24,11 @@ export default class SalesStatisticsO extends Component {
   init()
   {
     this.props.dispatch({
-      type: 'salesStatistics/getChannelType',
+      type: 'publicDictionary/getChannelType',
       payload: {},
     });
     this.props.dispatch({
-      type: 'salesStatistics/getPurchase',
+      type: 'publicDictionary/getPurchase',
       payload: {},
     });
     this.props.dispatch({
@@ -84,7 +84,8 @@ export default class SalesStatisticsO extends Component {
 
 
   renderAdvancedForm(){
-    const { salesStatistics:{salesStatisticsAll:{tableData},channelTypeArr,purchaseArr,distributorsArr} } = this.props;
+    const { publicDictionary:{channelTypeArr,purchaseArr,distributorsArr} } = this.props;
+    const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -185,7 +186,7 @@ export default class SalesStatisticsO extends Component {
   }
   render() {
     // console.log(this.props)
-    const { salesStatistics:{salesStatisticsAll:{tableData},purchaseArr,channelTypeArr} } = this.props;
+    const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
