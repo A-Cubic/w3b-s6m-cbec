@@ -11,8 +11,8 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
-@connect(({settlementManagement,  loading }) => ({
-  settlementManagement,
+@connect(({settlementManagement,publicDictionary,  loading }) => ({
+  settlementManagement,publicDictionary,
   // loading: loading.effects['salesStatistics/getSalesStatisticsListO'],
 }))
 
@@ -24,15 +24,15 @@ export default class settlementMgtO extends Component {
   }
   init(){
     this.props.dispatch({
-      type: 'settlementManagement/getChannelType',
+      type: 'publicDictionary/getChannelType',
       payload: {},
     });
     this.props.dispatch({
-      type: 'settlementManagement/getPurchase',
+      type: 'publicDictionary/getPurchase',
       payload: {},
     });
     this.props.dispatch({
-      type: 'settlementManagement/getSupplier',
+      type: 'publicDictionary/getSupplier',
       payload:{
         userId:userId
       }
@@ -105,7 +105,6 @@ export default class settlementMgtO extends Component {
       ...this.state.formValues,
       ...pagination,
     };
-
     this.props.dispatch({
       type: 'settlementManagement/getSettlementListO',
       payload: params,
@@ -114,7 +113,8 @@ export default class settlementMgtO extends Component {
 
 
   renderAdvancedForm(){
-    const { settlementManagement:{settlementAll:{tableData},channelTypeArr,purchaseArr,supplierArr} } = this.props;
+    const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr} }= this.props;
+    const { settlementManagement:{settlementAll:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -128,7 +128,6 @@ export default class settlementMgtO extends Component {
                   placeholder="请选择渠道商"
                 >
                   {channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}
-
                 </Select>
               )}
             </FormItem>
@@ -223,8 +222,9 @@ export default class settlementMgtO extends Component {
     );
   }
   render() {
-    // console.log(this.props)
-    const { settlementManagement:{settlementAll:{tableData},purchaseArr,channelTypeArr} } = this.props;
+    // console.log('~~~',this.props)
+
+    const { settlementManagement:{settlementAll:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

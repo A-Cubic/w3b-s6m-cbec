@@ -97,7 +97,7 @@ export default function(dynamicWrapper,app){
 
     // 结算管理 - 运营
     '/settlement/settlementO': {
-      component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/settlementMgtO')),
+      component: dynamicWrapper(app, ['settlementManagement','publicDictionary'], () => import('../routes/SettlementManagement/settlementMgtO')),
     },
     // 结算管理 - 供应商
     '/settlement/settlementS': {
