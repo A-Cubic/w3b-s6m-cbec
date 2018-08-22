@@ -73,11 +73,11 @@ export default function(dynamicWrapper,app){
 
     // 渠道管理 - 费用信息
     '/channelManagement/costChannel': {
-      component: dynamicWrapper(app, ['channelManagement'], () => import('../routes/ChannelManagement/costChannel')),
+      component: dynamicWrapper(app, ['channelManagement','publicDictionary'], () => import('../routes/ChannelManagement/costChannel')),
     },
     // 渠道管理 - 商品信息
     '/channelManagement/goodsChannel': {
-      component: dynamicWrapper(app, ['channelManagement'], () => import('../routes/ChannelManagement/goodsChannel')),
+      component: dynamicWrapper(app, ['channelManagement','publicDictionary'], () => import('../routes/ChannelManagement/goodsChannel')),
     },
 
 

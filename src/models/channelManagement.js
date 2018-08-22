@@ -1,5 +1,4 @@
 import { message} from 'antd';
-import {getSupplier} from '../services/api'
 import {getChannelTypeData,
   getCostChannelTable,saveCostChannel,
   getUploadDGoods,
@@ -10,10 +9,6 @@ import {confirmDelivery, getUploadOrderbill} from "../services/orderManagement_S
 export default {
   namespace: 'channelManagement',
   state:{
-    // 获取渠道商类型
-    channelTypeArr:[],
-    // 获取供应商
-    supplierArr:[],
     // 渠道管理 - 费用信息
     costChannel:{
       tableData:{
@@ -36,28 +31,6 @@ export default {
     },
   },
   effects:{
-    // 获取渠道商类型
-    *getChannelType({ payload },{ call,put}){
-      const response = yield call(getChannelTypeData, payload);
-      if (response !== undefined) {
-        yield put({
-          type: 'getChannelTypeR',
-          payload: response,
-        });
-      }
-    },
-    // 获取供应商下拉
-    *getSupplier({ payload },{ call,put}){
-      const response = yield call(getSupplier, payload);
-      // console.log('~',response)
-      if (response !== undefined) {
-        yield put({
-          type: 'getSupplierR',
-          payload: response,
-        });
-      }
-    },
-
     // 渠道管理 - 费用信息 - 获取订单列表
     *getCostChannelTable({payload, callback},{call,put}){
       const response = yield call(getCostChannelTable,payload);
@@ -141,20 +114,6 @@ export default {
     },
   },
   reducers:{
-    getChannelTypeR(state, action) {
-      return {
-        ...state,
-        channelTypeArr:action.payload,
-      };
-    },
-    // 供应商下拉
-    getSupplierR(state, action) {
-      return {
-        ...state,
-        supplierArr:action.payload,
-      };
-    },
-
     getCostChannelTableR(state,action){
       return{
         ...state,

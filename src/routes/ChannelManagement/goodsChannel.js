@@ -21,8 +21,8 @@ const formItemLayout = {
     sm: { span: 15 },
   },
 };
-@connect(({channelManagement,  loading }) => ({
-  channelManagement,
+@connect(({channelManagement,publicDictionary,  loading }) => ({
+  channelManagement,publicDictionary,
   loading: loading.effects['channelManagement/getGoodsChannelTable'],
 }))
 
@@ -62,7 +62,7 @@ export default class costChannel extends Component {
   }
   handleChildEdit =(record)=>{
     this.props.dispatch({
-      type: 'channelManagement/getSupplier',
+      type: 'publicDictionary/getSupplier',
       payload: {
         userId:userId
       },
@@ -101,7 +101,10 @@ export default class costChannel extends Component {
     window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/DistributorGoods.xlsx'
   }
   render() {
-    const { channelManagement:{goodsChannel:{tableData},channelTypeArr,supplierArr} } = this.props;
+    console.log('~~~',this.props)
+    const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr} }= this.props;
+
+    const { channelManagement:{goodsChannel:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -270,8 +273,8 @@ export default class costChannel extends Component {
   }
 }
 
-@connect(({ channelManagement, loading }) => ({
-  channelManagement,
+@connect(({ channelManagement,publicDictionary, loading }) => ({
+  channelManagement,publicDictionary,
   // loading: loading.effects['goods/'],
 }))
 @Form.create()
@@ -312,7 +315,8 @@ class ChildEdit extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {channelManagement:{goodsChannel:{childEdit},supplierArr}} = this.props;
+    const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr} }= this.props;
+    const {channelManagement:{goodsChannel:{childEdit}}} = this.props;
     return (
       <div>
         <Modal

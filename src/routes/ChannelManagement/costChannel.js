@@ -20,8 +20,8 @@ const formItemLayout = {
     sm: { span: 15 },
   },
 };
-@connect(({channelManagement,  loading }) => ({
-  channelManagement,
+@connect(({channelManagement,publicDictionary,  loading }) => ({
+  channelManagement,publicDictionary,
   loading: loading.effects['channelManagement/supplierOrderTable'],
 }))
 
@@ -40,10 +40,6 @@ export default class costChannel extends Component {
   componentDidMount() {
     this.init();
   }
-
-
-
-
   handleTableChange=(pagination, filtersArg, sorter)=>{
     const params = {
       ...pagination,
@@ -55,7 +51,6 @@ export default class costChannel extends Component {
     });
   }
 
-
   handleVisible = (flag) => {
       this.setState({
         visible:!!flag,
@@ -63,7 +58,7 @@ export default class costChannel extends Component {
   }
   handleChildEdit =(record)=>{
     this.props.dispatch({
-      type: 'channelManagement/getChannelType',
+      type: 'publicDictionary/getChannelType',
       payload: {},
     });
     this.props.dispatch({
@@ -76,7 +71,8 @@ export default class costChannel extends Component {
   }
 
   render() {
-    const { channelManagement:{costChannel:{tableData},channelTypeArr} } = this.props;
+    const { publicDictionary:{channelTypeArr,supplierArr} }= this.props;
+    const { channelManagement:{costChannel:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -145,8 +141,8 @@ export default class costChannel extends Component {
   }
 }
 
-@connect(({ channelManagement, loading }) => ({
-  channelManagement,
+@connect(({ channelManagement,publicDictionary, loading }) => ({
+  channelManagement,publicDictionary,
   // loading: loading.effects['goods/'],
 }))
 @Form.create()
@@ -154,7 +150,8 @@ export default class costChannel extends Component {
 class ChildEdit extends React.Component {
 
   handleOk = (e) => {
-    const {channelManagement:{costChannel:{childEdit},channelTypeArr}} = this.props
+    const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr} }= this.props;
+    const {channelManagement:{costChannel:{childEdit}}} = this.props
     // console.log(this.props)
     e.preventDefault();
     const that = this;
@@ -188,7 +185,7 @@ class ChildEdit extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {channelManagement:{costChannel:{childEdit},channelTypeArr}} = this.props
+    const {channelManagement:{costChannel:{childEdit}}} = this.props
     // console.log(this.props)
     return (
       <div>
