@@ -101,7 +101,6 @@ export default class costChannel extends Component {
     window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/DistributorGoods.xlsx'
   }
   render() {
-    console.log('~~~',this.props)
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr} }= this.props;
 
     const { channelManagement:{goodsChannel:{tableData}} } = this.props;

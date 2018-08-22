@@ -253,7 +253,7 @@ class Distributors extends React.Component {
                         required:true,message:'请输入名称',
                       }]
                     })(
-                      <Input placeholder="请输入名称" />
+                      <Input disabled={!!childCheckS.id} placeholder="请输入名称" />
                     )}
                   </FormItem>
                 </Col>

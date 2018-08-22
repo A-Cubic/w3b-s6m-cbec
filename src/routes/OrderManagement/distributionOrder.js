@@ -31,7 +31,7 @@ export default class distributionOrder extends Component {
   }
   init(){
     this.props.dispatch({
-      type: 'orderManagement/getWareHouse',
+      type: 'publicDictionary/getWareHouse',
       payload: {
         userId:userId,
       },
@@ -170,11 +170,11 @@ export default class distributionOrder extends Component {
     this.setState({
       orderId:record.merchantOrderId
     })
-    const { orderManagement:{supplierOrder:{tableData},wareHouseData,expressArr} } = this.props;
+    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     this.handleVisible(true,'childDelivery');
     //快递选择
     this.props.dispatch({
-      type:'orderManagement/getExpress',
+      type:'publicDictionary/getExpress',
       payload:{}
     })
   }
@@ -262,7 +262,7 @@ export default class distributionOrder extends Component {
     );
   }
   render() {
-    const { orderManagement:{supplierOrder:{tableData},wareHouseData,expressArr} } = this.props;
+    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

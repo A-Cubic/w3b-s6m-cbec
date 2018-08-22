@@ -13,8 +13,8 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
-@connect(({orderManagement,  loading }) => ({
-  orderManagement,
+@connect(({orderManagement, publicDictionary, loading }) => ({
+  orderManagement,publicDictionary,
   loading: loading.effects['orderManagement/supplierOrderTable'],
 }))
 
@@ -31,7 +31,7 @@ export default class supplierOrder extends Component {
   }
   init(){
     this.props.dispatch({
-      type: 'orderManagement/getWareHouse',
+      type: 'publicDictionary/getWareHouse',
       payload: {
         userId:userId,
       },
@@ -170,15 +170,16 @@ export default class supplierOrder extends Component {
     this.setState({
       orderId:record.merchantOrderId
     })
-    const { orderManagement:{supplierOrder:{tableData},wareHouseData,expressArr} } = this.props;
+    const { orderManagement:{supplierOrder:{tableData},expressArr} } = this.props;
     this.handleVisible(true,'childDelivery');
     //快递选择
     this.props.dispatch({
-      type:'orderManagement/getExpress',
+      type:'publicDictionary/getExpress',
       payload:{}
     })
   }
   renderAdvancedForm(){
+    const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr,wareHouseArr,expressArr} }= this.props;
     const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
@@ -256,7 +257,8 @@ export default class supplierOrder extends Component {
     );
   }
   render() {
-    const { orderManagement:{supplierOrder:{tableData},wareHouseData,expressArr} } = this.props;
+    const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr,wareHouseArr,expressArr} }= this.props;
+    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -335,7 +337,7 @@ export default class supplierOrder extends Component {
             <Select style={{ width: 180 }}
                     placeholder="请选择仓库"
                     onChange={this.onSelectChangeWarehouse}>
-              {wareHouseData.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
+              {wareHouseArr.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
             </Select>
             <Button style={{ marginLeft: 8 }} onClick={this.downloadToSendOrder}>
               <Icon type="cloud-download-o" />导出需发货的订单
@@ -375,8 +377,8 @@ export default class supplierOrder extends Component {
   }
 }
 
-@connect(({orderManagement,  loading }) => ({
-  orderManagement,
+@connect(({orderManagement,publicDictionary,  loading }) => ({
+  orderManagement,publicDictionary,
   loading: loading.effects['orderManagement/supplierOrderTable'],
 }))
 @Form.create()

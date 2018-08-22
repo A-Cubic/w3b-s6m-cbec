@@ -51,23 +51,23 @@ export default function(dynamicWrapper,app){
 
     //订单管理 - 供应商
     '/orderManagement/supplierOrder': {
-      component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/supplierOrder')),
+      component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/supplierOrder')),
     },
     //订单管理 - 运营商
     '/orderManagement/operatorOrder': {
-      component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/operatorOrder')),
+      component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/operatorOrder')),
     },
     //订单管理 - 渠道商
     '/orderManagement/channelOrder': {
-      component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/channelOrder')),
+      component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/channelOrder')),
     },
     //订单管理 - 代理
     '/orderManagement/agentOrder': {
-      component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/agentOrder')),
+      component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/agentOrder')),
     },
     //订单管理 - 分销商
     '/orderManagement/distributionOrder': {
-      component: dynamicWrapper(app, ['orderManagement'], () => import('../routes/OrderManagement/distributionOrder')),
+      component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/distributionOrder')),
     },
 
 

@@ -1,12 +1,13 @@
 import { message} from 'antd';
 
 import {notification} from "antd/lib/index";
-import {getSupplier} from '../services/api'
+import {getSupplier, getWareHouseData} from '../services/api'
 import {
   getPurchaseData,getDistributorsData,
   getSalesStatisticsListA,getSalesStatisticsListS,getSalesStatisticsListO
 } from '../services/salesStatistics_S'
 import {getChannelTypeData} from "../services/channelManagement_S";
+import {getExpressData} from "../services/orderManagement_S";
 
 export default {
   namespace: 'publicDictionary',
@@ -17,12 +18,16 @@ export default {
     purchaseArr:[],
     // 获取供应商
     supplierArr:[],
-
+    // 获取仓库
+    wareHouseArr:[],
+    // 获取快递
+    expressArr:[],
 
   },
   effects:{
     // 获取平台渠道类型
     *getChannelType({ payload },{ call,put}){
+
       const response = yield call(getChannelTypeData, payload);
       if (response !== undefined) {
         yield put({
@@ -52,6 +57,27 @@ export default {
         });
       }
     },
+    // 获取仓库
+    *getWareHouse({ payload },{ call,put}){
+      const response = yield call(getWareHouseData, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'getWareHouseR',
+          payload: response,
+        });
+      }
+    },
+    // 获取快递
+    *getExpress({ payload },{ call,put}){
+      const response = yield call(getExpressData, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getExpressR',
+          payload: response,
+        });
+      }
+    },
 
   },
   reducers:{
@@ -71,6 +97,18 @@ export default {
       return {
         ...state,
         supplierArr:action.payload,
+      };
+    },
+    getWareHouseR(state, action) {
+      return {
+        ...state,
+        wareHouseArr:action.payload,
+      };
+    },
+    getExpressR(state, action) {
+      return {
+        ...state,
+        expressArr:action.payload,
       };
     },
   }

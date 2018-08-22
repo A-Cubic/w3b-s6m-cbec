@@ -9,12 +9,12 @@ import {getChannelTypeData} from "../services/channelManagement_S";
 export default {
   namespace: 'orderManagement',
   state:{
-    // 获取平台渠道类型
-    channelTypeArr:[],
-    //获取仓库
-    wareHouseData:[],
-    //获取快递
-    expressArr:[],
+    // // 获取平台渠道类型
+    // channelTypeArr:[],
+    // //获取仓库
+    // wareHouseData:[],
+    // //获取快递
+    // expressArr:[],
     //供应商-运营商-渠道商接口共用table
     supplierOrder:{
       tableData:{
@@ -28,36 +28,36 @@ export default {
   },
   effects:{
     // 获取平台渠道类型
-    *getChannelType({ payload },{ call,put}){
-      const response = yield call(getChannelTypeData, payload);
-      if (response !== undefined) {
-        yield put({
-          type: 'getChannelTypeR',
-          payload: response,
-        });
-      }
-    },
-    //获取仓库
-    *getWareHouse({ payload },{ call,put}){
-      const response = yield call(getWareHouseData, payload);
-      if (response !== undefined) {
-        yield put({
-          type: 'getWareHouseR',
-          payload: response,
-        });
-      }
-    },
-    //获取快递
-    *getExpress({ payload },{ call,put}){
-      const response = yield call(getExpressData, payload);
-      // console.log('~',response)
-      if (response !== undefined) {
-        yield put({
-          type: 'getExpressR',
-          payload: response,
-        });
-      }
-    },
+    // *getChannelType({ payload },{ call,put}){
+    //   const response = yield call(getChannelTypeData, payload);
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'getChannelTypeR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
+    // //获取仓库
+    // *getWareHouse({ payload },{ call,put}){
+    //   const response = yield call(getWareHouseData, payload);
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'getWareHouseR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
+    // //获取快递
+    // *getExpress({ payload },{ call,put}){
+    //   const response = yield call(getExpressData, payload);
+    //   // console.log('~',response)
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'getExpressR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
     //获取订单列表
     *supplierOrderTable({payload, callback},{call,put}){
       const response = yield call(getSupplierOrderTable,payload);
@@ -170,24 +170,24 @@ export default {
     },
   },
   reducers:{
-    getChannelTypeR(state, action) {
-      return {
-        ...state,
-        channelTypeArr:action.payload,
-      };
-    },
-    getWareHouseR(state, action) {
-      return {
-        ...state,
-        wareHouseData:action.payload,
-      };
-    },
-    getExpressR(state, action) {
-      return {
-        ...state,
-        expressArr:action.payload,
-      };
-    },
+    // getChannelTypeR(state, action) {
+    //   return {
+    //     ...state,
+    //     channelTypeArr:action.payload,
+    //   };
+    // },
+    // getWareHouseR(state, action) {
+    //   return {
+    //     ...state,
+    //     wareHouseData:action.payload,
+    //   };
+    // },
+    // getExpressR(state, action) {
+    //   return {
+    //     ...state,
+    //     expressArr:action.payload,
+    //   };
+    // },
     supplierOrderTableR(state,action){
       return{
         ...state,
