@@ -1,8 +1,6 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function channelManagementMock(url) {
   return {
-    // 获取渠道商类型
-    'POST /llback/Distributor/GetPlatform': url,
     // 渠道管理-获取渠道费用列表
     'POST /llback/Distributor/DistributorList': url,
     // 渠道管理-渠道费用-保存

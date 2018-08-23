@@ -362,19 +362,19 @@ export async function insertOfferOfSupplier(params) {
 }
 ///////////////////////////////////////////////////////////////////////////////// 商品报价 部分  end/////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////// 商品 部分  begin/////////////////////////////////////////////////////////////////////////
-export async function getBrandData(params) {
-  return request(`/llback/Goods/GetBrand`, {
-    method: 'POST',
-    body: params,
-  });
-}
-export async function getWareHouseData(params) {
-
-  return request(`/llback/Goods/GetWarehouse`, {
-    method: 'POST',
-    body: params,
-  });
-}
+// export async function getBrandData(params) {
+//   return request(`/llback/Goods/GetBrand`, {
+//     method: 'POST',
+//     body: params,
+//   });
+// }
+// export async function getWareHouseData(params) {
+//
+//   return request(`/llback/Goods/GetWarehouse`, {
+//     method: 'POST',
+//     body: params,
+//   });
+// }
 // export async function getGoodsList(params) {
 //   return request(`/llback/Goods/GetGoodsList`, {
 //     method: 'POST',
@@ -413,13 +413,13 @@ export async function getWarehouseList(params) {
     body: params,
   });
 }
-// 仓库 供应商下拉
-export async function getSupplier(params) {
-  return request(`/llback/Goods/GetSupplier`, {
-    method: 'POST',
-    body: params,
-  });
-}
+// // 仓库 供应商下拉
+// export async function getSupplier(params) {
+//   return request(`/llback/Goods/GetSupplier`, {
+//     method: 'POST',
+//     body: params,
+//   });
+// }
 //仓库 新增编辑保存
 export async function getUpdateWarehouse(params) {
   return request(`/llback/Goods/UpdateWarehouse`, {

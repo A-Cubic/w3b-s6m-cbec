@@ -11,8 +11,8 @@ const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const userId = getToken().userId;
-@connect(({goods,  loading }) => ({
-  goods,
+@connect(({goods,publicDictionary,  loading }) => ({
+  goods,publicDictionary,
   loading: loading.effects['goods/goodslist'],
 }))
 
@@ -27,13 +27,13 @@ export default class GoodsAbout extends Component {
   }
   init(){
     this.props.dispatch({
-      type: 'goods/getBrand',
+      type: 'publicDictionary/getBrand',
       payload: {
         userId:userId,
       },
     });
     this.props.dispatch({
-      type: 'goods/getWareHouse',
+      type: 'publicDictionary/getWareHouse',
       payload: {
         userId:userId,
       },
@@ -69,8 +69,6 @@ export default class GoodsAbout extends Component {
         },
       });
     });
-
-
   }
   handleFormReset =()=>{
     this.props.form.resetFields();
@@ -173,7 +171,8 @@ export default class GoodsAbout extends Component {
     }
   }
   renderAdvancedForm(){
-    const { goods:{goodsTable:{list, pagination},brandData,wareHouseData} } = this.props;
+    const { publicDictionary:{brandArr,wareHouseArr} } = this.props;
+    const { goods:{goodsTable:{list, pagination}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     // const url = getCurrentUrl('/llback/user/validate');
     const url1 = 'http://192.168.0.109:51186/llback/O2O/UploadOrder'
@@ -234,7 +233,7 @@ export default class GoodsAbout extends Component {
                   {/*<Option value="重庆仓库">重庆仓库</Option>*/}
                   {/*<Option value="香港仓库">香港仓库</Option>*/}
                   {/*<Option value="青岛仓库">青岛仓库</Option>*/}
-                   {wareHouseData.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
+                   {wareHouseArr.map(val => <Option key={val.wid} value={val.wid} label={val.wname}>{val.wname}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -258,7 +257,7 @@ export default class GoodsAbout extends Component {
                   // onChange={this.onSelectChange}
                 >
                   {/*<Option value="品牌1">品牌1</Option>*/}
-                   {brandData.map(val => <Option key={val.brand} value={val.brand} label={val.brand}>{val.brand}</Option>)}
+                   {brandArr.map(val => <Option key={val.brand} value={val.brand} label={val.brand}>{val.brand}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -334,7 +333,7 @@ export default class GoodsAbout extends Component {
 
   render() {
     // console.log('1',this.props)
-    const { goods:{goodsTable:{list, pagination},brandData} } = this.props;
+    const { goods:{goodsTable:{list, pagination}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

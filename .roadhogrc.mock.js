@@ -15,6 +15,7 @@ import channelManagementMock from './mock/channelManagementMock';
 import goodsManagementMock from './mock/goodsManagementMock';
 import distributionManagementMock from './mock/distributionManagementMock';
 import settlementManagementMock from './mock/settlementManagementMock';
+import publicDictionaryMock from './mock/publicDictionaryMock';
 // 是否禁用代理
 
 const noProxy = process.env.NO_PROXY === 'true';
@@ -22,6 +23,7 @@ const service_url =  'http://api.llwell.net/';// http://api.llwell.net/  http://
 const service_url2 =  'http://console.llwell.net/';// http://console.llwell.net/  http://localhost:51184/
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
+  ...publicDictionaryMock(service_url2),
   ...settlementManagementMock(service_url2),
   ...distributionManagementMock(service_url2),
   ...workbenchMock(service_url2),
@@ -213,14 +215,11 @@ const proxy = {
   'POST /llback/goods/supplier/list': service_url,
   'POST /llback/goods/supplier/offer': service_url,
   // 'POST /llback/Goods/GetGoodsList': service_url2,
-  'POST /llback/Goods/GetBrand': service_url2,
-  'POST /llback/Goods/GetWarehouse': service_url2,
   // 'POST /llback/Goods/GetGoods': service_url2,
   'POST /llback/Goods/GetWarehouseList': service_url2,
   //新增仓库
   'POST /llback/Goods/UpdateWarehouse': service_url2,
-  // 仓库 供应商 下拉
-  'POST /llback/Goods/GetSupplier': service_url2,
+
   //删除仓库
   'POST /llback/Goods/DeleteWarehouse': service_url2,
 

@@ -153,7 +153,7 @@ export default function(dynamicWrapper,app){
 
     //仓库
     '/goods/warehouse': {
-      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/Warehouse')),
+      component: dynamicWrapper(app, ['goods','publicDictionary'], () => import('../routes/Goods/Warehouse')),
     },
     //商品入库
     '/goods/putaway': {

@@ -15,8 +15,6 @@ export default function orderManagementMock(url) {
     'POST /llback/Order/ExportWaybill': url,
     // 导出订单
     'POST /llback/Order/ExportSelectOrder': url,
-    // 获取快递
-    'POST /llback/Order/GetExpress': url,
     // 确认发货
     'POST /llback/Order/SingleWaybill': url,
     // 海外已出货

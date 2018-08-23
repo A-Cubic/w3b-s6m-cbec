@@ -1,13 +1,13 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-// 快递获取
-export async function getExpressData(params) {
-  return request(`/llback/Order/GetExpress`, {
-    method: 'POST',
-    body: params,
-  });
-}
+// // 快递获取
+// export async function getExpressData(params) {
+//   return request(`/llback/Order/GetExpress`, {
+//     method: 'POST',
+//     body: params,
+//   });
+// }
 // 供应商 订单管理
 export async function getSupplierOrderTable(params) {
   return request(`/llback/Order/GetOrderList`, {

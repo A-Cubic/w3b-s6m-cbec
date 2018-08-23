@@ -7,10 +7,6 @@ export default function salesStatisticsMock(url) {
     'POST /llback/Sales/GetSalesListBySupplier': url,
     // 销售统计 - 运营- 列表
     'POST /llback/Sales/GetSalesListByOperator': url,
-    // 获取销售商（渠道商）
-    'POST /llback/Sales/GetPurchase': url,
-    // 获取分销商类型
-    'POST /llback/Sales/GetDistribution': url,
 
   };
 }

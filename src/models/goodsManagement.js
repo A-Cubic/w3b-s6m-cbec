@@ -1,6 +1,7 @@
 import { message} from 'antd';
 import {notification} from "antd/lib/index";
-import {getBrandData, getCheckStepStatus, getGoodsPutaway, getWareHouseData} from '../services/api'
+import {getBrandData} from '../services/publicDictionary_S'
+import {getCheckStepStatus, getGoodsPutaway, getWareHouseData} from '../services/api'
 import {
   getGoodsList,getGoodsDetailsO,getGoodsDetailsA,getGoodsDetailsS,getDefaultRadios,
   getGoodsDetails,onAudit,
@@ -8,10 +9,10 @@ import {
 export default {
   namespace: 'goodsManagement',
   state:{
-    // 品牌集合
-    brandArr:[],
-    // 仓库集合
-    wareHouseArr:[],
+    // // 品牌集合
+    // brandArr:[],
+    // // 仓库集合
+    // wareHouseArr:[],
     // 商品管理 - 商品查看 - 运营/供应商/代理
     goodsAboutData:{
       tableData:{
@@ -61,26 +62,26 @@ export default {
       }
     },
 
-    // 获取品评
-    *getBrand({ payload },{ call,put}){
-      const response = yield call(getBrandData, payload);
-      if (response !== undefined) {
-        yield put({
-          type: 'getBrandR',
-          payload: response,
-        });
-      }
-    },
-    // 获取仓库
-    *getWareHouse({ payload },{ call,put}){
-      const response = yield call(getWareHouseData, payload);
-      if (response !== undefined) {
-        yield put({
-          type: 'getWareHouseR',
-          payload: response,
-        });
-      }
-    },
+    // // 获取品评
+    // *getBrand({ payload },{ call,put}){
+    //   const response = yield call(getBrandData, payload);
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'getBrandR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
+    // // 获取仓库
+    // *getWareHouse({ payload },{ call,put}){
+    //   const response = yield call(getWareHouseData, payload);
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'getWareHouseR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
     // 商品管理 - 商品查看 - 运营/供应商/代理
     *getGoodsAboutData({ payload },{ call,put}){
       const response = yield call(getGoodsList, payload);
@@ -213,18 +214,18 @@ export default {
       return {...state};
     },
 
-    getBrandR(state, action) {
-      return {
-        ...state,
-        brandArr:action.payload,
-      };
-    },
-    getWareHouseR(state, action) {
-      return {
-        ...state,
-        wareHouseArr:action.payload,
-      };
-    },
+    // getBrandR(state, action) {
+    //   return {
+    //     ...state,
+    //     brandArr:action.payload,
+    //   };
+    // },
+    // getWareHouseR(state, action) {
+    //   return {
+    //     ...state,
+    //     wareHouseArr:action.payload,
+    //   };
+    // },
     getGoodsAboutDataR(state, action) {
       return {
         ...state,

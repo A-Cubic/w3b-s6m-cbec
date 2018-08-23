@@ -11,8 +11,8 @@ const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const userId = getToken().userId;
-@connect(({goodsManagement,  loading }) => ({
-  goodsManagement,
+@connect(({goodsManagement,publicDictionary,  loading }) => ({
+  goodsManagement,publicDictionary,
   loading: loading.effects['goodsManagement/getGoodsAboutData'],
 }))
 
@@ -24,13 +24,13 @@ export default class GoodsAboutS extends Component {
   }
   init(){
     this.props.dispatch({
-      type: 'goodsManagement/getBrand',
+      type: 'publicDictionary/getBrand',
       payload: {
         userId:userId,
       },
     });
     this.props.dispatch({
-      type: 'goodsManagement/getWareHouse',
+      type: 'publicDictionary/getWareHouse',
       payload: {
         userId:userId,
       },
@@ -102,7 +102,8 @@ export default class GoodsAboutS extends Component {
   }
 
   renderAdvancedForm(){
-    const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckS},brandArr,wareHouseArr} } = this.props;
+    const { publicDictionary:{brandArr,wareHouseArr} } = this.props;
+    const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckS}} } = this.props;
 
     const { getFieldDecorator } = this.props.form;
     // const url = getCurrentUrl('/llback/user/validate');
@@ -187,7 +188,7 @@ export default class GoodsAboutS extends Component {
 
   render() {
     // console.log('1',this.props)
-    const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckS},brandArr,wareHouseArr} } = this.props;
+    const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckS}} } = this.props;
 
     const paginationProps = {
       showSizeChanger: true,

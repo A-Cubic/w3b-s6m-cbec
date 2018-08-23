@@ -13,19 +13,19 @@ export default function(dynamicWrapper,app){
 
     //商品管理 - 商品查看 - 供应商
     '/goods/goodsAboutS': {
-      component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutS')),
+      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutS')),
     },
     //商品管理 - 商品查看 - 运营
     '/goods/goodsAboutO': {
-      component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutO')),
+      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutO')),
     },
     //商品管理 - 商品查看 - 代理
     '/goods/goodsAboutA': {
-      component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutA')),
+      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutA')),
     },
     //商品管理 - 商品查看 - 分销
     '/agent/goodsAboutD': {
-      component: dynamicWrapper(app, ['goodsManagement'], () => import('../routes/GoodsManagement/GoodsAboutA')),
+      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutA')),
     },
 
     //分销管理 - 分销商管理 - 代理

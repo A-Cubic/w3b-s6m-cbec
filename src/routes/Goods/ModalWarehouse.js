@@ -15,8 +15,8 @@ const formItemLayout = {
     sm: { span: 15 },
   },
 };
-@connect(({ goods, loading }) => ({
-  goods,
+@connect(({ goods,publicDictionary, loading }) => ({
+  goods,publicDictionary,
   loading: loading.effects['goods/warehouseList'],
 }))
 @Form.create()
@@ -62,7 +62,8 @@ export default class ModalUnteratedOrder extends React.PureComponent {
 
   }
   render() {
-    const {goods:{ModalwarehouseEdit,supplierArr}} = this.props;
+    const {publicDictionary:{supplierArr}} = this.props;
+    const {goods:{ModalwarehouseEdit}} = this.props;
     const {getFieldDecorator, validateFields} = this.props.form;
     return (
       <div>

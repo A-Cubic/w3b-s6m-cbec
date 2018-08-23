@@ -11,8 +11,8 @@ const userId = getToken().userId;
 
 const Option = Select.Option;
 const FormItem = Form.Item;
-@connect(({goods,  loading }) => ({
-  goods,
+@connect(({goods,publicDictionary,  loading }) => ({
+  goods,publicDictionary,
   // loading: loading.effects['o2o/list'],
 }))
 
@@ -53,7 +53,7 @@ export default class Warehouse extends Component {
   }
   addWarehouse =()=>{
     this.props.dispatch({
-      type:'goods/getSupplier',
+      type:'publicDictionary/getSupplier',
       payload:{
         userId:userId
       }
@@ -72,7 +72,7 @@ export default class Warehouse extends Component {
   handleEditWarehouse =(record)=>{
     // console.log('aa',record)
     this.props.dispatch({
-      type:'goods/getSupplier',
+      type:'publicDictionary/getSupplier',
       payload:{
         userId:userId
       }

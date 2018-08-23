@@ -1,13 +1,13 @@
-import { message} from 'antd';
-
-import {notification} from "antd/lib/index";
-import {getSupplier, getWareHouseData} from '../services/api'
+// 公共字典
 import {
-  getPurchaseData,getDistributorsData,
-  getSalesStatisticsListA,getSalesStatisticsListS,getSalesStatisticsListO
-} from '../services/salesStatistics_S'
-import {getChannelTypeData} from "../services/channelManagement_S";
-import {getExpressData} from "../services/orderManagement_S";
+  getChannelTypeData,
+  getPurchaseData,
+  getSupplier,
+  getDistributorsData,
+  getBrandData,
+  getWareHouseData,
+  getExpressData
+} from "../services/publicDictionary_S";
 
 export default {
   namespace: 'publicDictionary',
@@ -20,6 +20,8 @@ export default {
     supplierArr:[],
     // 获取分销商
     distributorsArr:[],
+    // 获取品牌
+    brandArr:[],
     // 获取仓库
     wareHouseArr:[],
     // 获取快递
@@ -65,6 +67,16 @@ export default {
       if (response !== undefined) {
         yield put({
           type: 'getDistributorsR',
+          payload: response,
+        });
+      }
+    },
+    // 获取品牌
+    *getBrand({ payload },{ call,put}){
+      const response = yield call(getBrandData, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'getBrandR',
           payload: response,
         });
       }
@@ -115,6 +127,12 @@ export default {
       return {
         ...state,
         distributorsArr:action.payload,
+      };
+    },
+    getBrandR(state, action) {
+      return {
+        ...state,
+        brandArr:action.payload,
       };
     },
     getWareHouseR(state, action) {
