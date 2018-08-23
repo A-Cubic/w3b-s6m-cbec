@@ -4,10 +4,10 @@
 import { message} from 'antd';
 import {notification} from "antd/lib/index";
 import {
-  getGoodsList,getBrandData,getWareHouseData,downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl,
+  downloadStoreTempUrl,downloadGoodsTempUrl,downloadPicZipUrl,
   getWarehouseList,getUpdateWarehouse,getDeleteWarehouse,
-  getgoodsDetail,
-  getStep1Upload,getGoodsPutaway,getStep2supplement,getSupplier,
+
+  getStep1Upload,getGoodsPutaway,getStep2supplement,
   getCheckStepStatus,
   getStep2Upload,getStep3supplement,getStep4TrueSupplement,getStep4FalseSupplement
 } from '../services/api';
@@ -21,8 +21,8 @@ export default {
       list: [],
       pagination:{},
     },
-    brandData:[],
-    wareHouseData:[],
+    // brandData:[],
+    // wareHouseData:[],
     ModalGoodsAboutEdit:{},
     //仓库 -供应商
     supplierArr:[],
@@ -58,24 +58,24 @@ export default {
   },
 
   effects: {
-    *getBrand({ payload },{ call,put}){
-      const response = yield call(getBrandData, payload);
-      if (response !== undefined) {
-        yield put({
-          type: 'getBrandR',
-          payload: response,
-        });
-      }
-    },
-    *getWareHouse({ payload },{ call,put}){
-      const response = yield call(getWareHouseData, payload);
-      if (response !== undefined) {
-        yield put({
-          type: 'getWareHouseR',
-          payload: response,
-        });
-      }
-    },
+    // *getBrand({ payload },{ call,put}){
+    //   const response = yield call(getBrandData, payload);
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'getBrandR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
+    // *getWareHouse({ payload },{ call,put}){
+    //   const response = yield call(getWareHouseData, payload);
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'getWareHouseR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
     // *goodslist({ payload },{ call,put}){
     //   const response = yield call(getGoodsList, payload);
     //   // console.log('~',response)
@@ -145,17 +145,17 @@ export default {
         });
       }
     },
-    // 供应商 下拉
-    *getSupplier({ payload },{ call,put}){
-      const response = yield call(getSupplier, payload);
-      // console.log('~',response)
-      if (response !== undefined) {
-        yield put({
-          type: 'getSupplierR',
-          payload: response,
-        });
-      }
-    },
+    // // 供应商 下拉
+    // *getSupplier({ payload },{ call,put}){
+    //   const response = yield call(getSupplier, payload);
+    //   // console.log('~',response)
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'getSupplierR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
     *updateWarehouse({ payload,callback },{ call,put}){
       const response = yield call(getUpdateWarehouse, payload);
       // console.log('~',response)
@@ -346,18 +346,18 @@ export default {
   },
 
   reducers: {
-    getBrandR(state, action) {
-      return {
-        ...state,
-        brandData:action.payload,
-      };
-    },
-    getWareHouseR(state, action) {
-      return {
-        ...state,
-        wareHouseData:action.payload,
-      };
-    },
+    // getBrandR(state, action) {
+    //   return {
+    //     ...state,
+    //     brandData:action.payload,
+    //   };
+    // },
+    // getWareHouseR(state, action) {
+    //   return {
+    //     ...state,
+    //     wareHouseData:action.payload,
+    //   };
+    // },
     goodslistR(state, action) {
       return {
         ...state,
@@ -376,13 +376,13 @@ export default {
         warehouseTable:action.payload,
       };
     },
-    // 供应商下拉
-    getSupplierR(state, action) {
-      return {
-        ...state,
-        supplierArr:action.payload,
-      };
-    },
+    // // 供应商下拉
+    // getSupplierR(state, action) {
+    //   return {
+    //     ...state,
+    //     supplierArr:action.payload,
+    //   };
+    // },
     editWarehouseR(state, action) {
 
       // console.log('payload',action.payload)

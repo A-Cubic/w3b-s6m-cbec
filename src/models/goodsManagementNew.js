@@ -1,6 +1,6 @@
 import { message} from 'antd';
 import {notification} from "antd/lib/index";
-import {getBrandData, getCheckStepStatus, getGoodsPutaway, getWareHouseData} from '../services/api'
+import { getCheckStepStatus, getGoodsPutaway} from '../services/api'
 import {
   getGoodsList,getGoodsDetailsO,getGoodsDetailsA,getGoodsDetailsS,getDefaultRadios,
   getGoodsDetails,onAudit,
