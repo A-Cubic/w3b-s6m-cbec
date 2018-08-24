@@ -19,6 +19,8 @@ export default function orderManagementMock(url) {
     'POST /llback/Order/SingleWaybill': url,
     // 海外已出货
     'POST /llback/Order/Overseas': url,
+    // 海外已出货
+    'POST /llback/Order/getCode': SendOrder,
   };
 }
 export function GetOrderList(req, res) {
@@ -77,7 +79,7 @@ export function getorder(req, res) {
 }
 export function SendOrder(req, res) {
   res.send({
-    url: 'https://ant.design/components/select-cn/',
+    imgUrl: 'http://llwell-wxapp.oss-cn-beijing.aliyuncs.com/A-test/goodtest.png',
   });
 }
 export function getWaybill(req, res) {

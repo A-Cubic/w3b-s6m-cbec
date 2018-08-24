@@ -72,3 +72,10 @@ export async function shipmentOverseas(params) {
     body: params,
   });
 }
+// 扫码支付
+export async function getCode(params) {
+  return request(`/llback/Order/getCode`, {
+    method: 'POST',
+    body: params,
+  });
+}

@@ -19,6 +19,8 @@ const TabPane = Tabs.TabPane;
 }))
 
 @Form.create()
+
+// 订单管理 分销商
 export default class distributionOrder extends Component {
   state={
     fileList:[],
@@ -95,6 +97,20 @@ export default class distributionOrder extends Component {
     }
     this.init();
   }
+  //扫码支付
+  handleCode=()=>{
+    this.props.dispatch({
+      type: 'orderManagement/getCode',
+      payload: {
+        userId:userId,
+      },
+    })
+  }
+  // 在线支付
+  handleOnline=()=>{
+    window.open('http://www.llwell.net');
+  }
+
   //列表
   onSearch=(e)=>{
     e.preventDefault();
@@ -142,6 +158,34 @@ export default class distributionOrder extends Component {
       payload: params,
     });
   }
+  exportWaybill=(e)=>{
+    e.preventDefault();
+    const {orderManagement:{supplierOrder:{tableData}}}=this.props
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('values',fieldsValue)
+
+      if (err) return;
+      const rangeValue = fieldsValue['date'];
+      const values = rangeValue==undefined ? {
+        ...fieldsValue,
+      }:{
+        ...fieldsValue,
+        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+      };
+
+      this.setState({
+        formValues: values,
+      });
+      this.props.dispatch({
+        type: 'orderManagement/exportWaybill',
+        payload: {
+          userId:userId,
+          ...values,
+          ...tableData.pagination
+        },
+      });
+    });
+  }
 
 
   handleVisible = (flag,who) => {
@@ -178,6 +222,8 @@ export default class distributionOrder extends Component {
       payload:{}
     })
   }
+
+
   renderAdvancedForm(){
     const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
@@ -236,13 +282,12 @@ export default class distributionOrder extends Component {
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-          </Col>
-          <Col md={8} sm={24}>
-            <span style={{ float: 'right' }}>
+          <Col md={16} sm={24}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-          </span>
+            <Button  style={{marginLeft:8}} onClick={this.exportWaybill}>
+                <Icon type="cloud-download-o" />导出运单信息
+              </Button>
           </Col>
         </Row>
         <Divider dashed />
@@ -262,6 +307,7 @@ export default class distributionOrder extends Component {
     );
   }
   render() {
+    // console.log(this.props)
     const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
@@ -316,6 +362,7 @@ export default class distributionOrder extends Component {
       visible:visibleChildCheck,
       handleVisible : this.handleVisible,
     };
+
     const props = {
       action: getUploadUrl(),
       headers: getHeader(),
@@ -332,7 +379,25 @@ export default class distributionOrder extends Component {
     return (
       <div>
         <Card className={styles.mT10}>
+          <div style={{display: 'inline-flex'}}>
 
+            <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
+              <Icon type="download" />下载订单模板
+            </Button>
+            <Upload {...props} >
+              <Button style={{ marginLeft: 8 }}>
+                <Icon type="cloud-upload-o" /> 导入订单信息
+              </Button>
+            </Upload>
+            <Button style={{ marginLeft: 8 }} onClick={this.handleCode}>
+              扫码支付
+            </Button>
+            <Button style={{ marginLeft: 8 }} onClick={this.handleOnline}>
+              在线支付
+            </Button>
+
+          </div>
+          <Divider dashed />
           <div className={styles.tableListForm}>
             {this.renderAdvancedForm()}
           </div>
@@ -348,8 +413,42 @@ export default class distributionOrder extends Component {
         <DistributionOrderCheckModal
           parent = {parent}
         />
+        <Code />
       </div>
     );
   }
 }
 
+@connect(({orderManagement,  loading }) => ({
+  orderManagement,
+}))
+export class Code extends Component {
+  handleCancel = (e) => {
+    this.props.dispatch({
+      type:'orderManagement/getCodeVisibleR',
+      payload:{
+        codeVisible:false
+      }
+    })
+  }
+  render() {
+    const {orderManagement:{codeUrl,codeVisible}}=this.props
+    return (
+      <div>
+        <Button type="primary" onClick={this.showModal}>Open</Button>
+        <Modal
+          title="扫码支付"
+          visible={codeVisible}
+          footer={null}
+          width={400}
+          // onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <div style={{textAlign:'center'}}>
+            <img src={codeUrl} alt=""/>
+          </div>
+        </Modal>
+      </div>
+    );
+  }
+}

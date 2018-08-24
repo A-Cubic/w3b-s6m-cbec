@@ -2,13 +2,14 @@ import { message} from 'antd';
 import {downloadGoodsTempUrl, getStep1Upload, getWareHouseData} from '../services/api'
 import {getSupplierOrderTable,getSupplierOrderChildCheck,
   getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,getExportWaybill,getExportOrders,
-  getExpressData,confirmDelivery,shipmentOverseas
+  getExpressData,confirmDelivery,shipmentOverseas,getCode
 } from '../services/orderManagement_S'
 import {notification} from "antd/lib/index";
 import {getChannelTypeData} from "../services/channelManagement_S";
 export default {
   namespace: 'orderManagement',
   state:{
+
     // // 获取平台渠道类型
     // channelTypeArr:[],
     // //获取仓库
@@ -24,7 +25,9 @@ export default {
       childCheck:{
         id:'',
       },
-    }
+    },
+    codeVisible:false,
+    codeUrl:''
   },
   effects:{
     // 获取平台渠道类型
@@ -168,6 +171,26 @@ export default {
         message.error(response.msg)
       }
     },
+
+  //  分销商 - 扫码支付
+    *getCode({ payload,callback },{ call,put}){
+      const response = yield call(getCode, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type:'getCodeR',
+          payload: response.imgUrl
+        })
+        yield put({
+          type:'getCodeVisibleR',
+          payload: {
+            codeVisible:true
+          }
+        })
+      }else{
+        message.error(response.msg)
+      }
+    },
   },
   reducers:{
     // getChannelTypeR(state, action) {
@@ -204,6 +227,18 @@ export default {
           ...state.supplierOrder,
           childCheck:action.payload
         }
+      }
+    },
+    getCodeR(state,action){
+      return{
+        ...state,
+        codeUrl:action.payload
+      }
+    },
+    getCodeVisibleR(state,action){
+      return{
+        ...state,
+        codeVisible:action.payload.codeVisible
       }
     }
   }
