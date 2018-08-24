@@ -104,7 +104,18 @@ export default class RegisterVerify extends Component {
 	                      ]
 	                    })(<Input size="large" placeholder="联系人常用邮箱且能正常收发邮件" />)}
 	                  </FormItem>
-
+                   <FormItem
+                     {...formItemLayout}
+                     label='网店/网站的链接'>
+                     {getFieldDecorator('website', {
+                       rules: [
+                         {
+                           required: false,
+                           message: '请输入网店或网站的链接！',
+                         }
+                       ]
+                     })(<Input size="large" placeholder="分销商需要输入网店或网站的链接" />)}
+                   </FormItem>
 	                   <FormItem
 	                    {...formItemLayout}
 	                    label='资质上传'>
@@ -124,7 +135,7 @@ export default class RegisterVerify extends Component {
 	                             {getFieldDecorator('img1')(
 	                             	<Upload {...props} beforeUpload={this.beforeUpload} >
 	                             	    <Button>
-	                             	      <Icon type="upload"/> 营业执照
+	                             	      <Icon type="upload"/> 营业执照/销售端截图
 	                             	    </Button>
 	                             	  </Upload>
 	                             	)}
@@ -172,6 +183,7 @@ export default class RegisterVerify extends Component {
 	                      <Row className={styles.uploadNote}>
 	                        中国境内供应商请提交营业执照（三证合一）或者营业执照+组织结构代码+税务登记证。<br/>
 	                        中国境内外供应商请提交营业执照。<br/>
+	                        分销商用户请提交销售端截图（比如淘宝店，京东店）。<br/>
                           **只支持jpeg,jpg,gif,png格式的图片文件
 	                      </Row>
 	                      </div>

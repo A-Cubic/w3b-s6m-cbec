@@ -207,6 +207,11 @@ export default class UserInfoDetails extends Component {
             <Description term="邮箱">{currentUser.email}</Description>
             <Description term="联系人">{currentUser.contact}</Description>
             <Description term="电话">{currentUser.tel}</Description>
+            <Description term="网店/网站链接地址">
+              <a href="">
+                {currentUser.website}
+              </a>
+              </Description>
           </DescriptionList>
 
           <Card type="inner" title="上传材料">

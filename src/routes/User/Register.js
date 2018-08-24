@@ -227,7 +227,8 @@ export default class Register extends Component {
       if(re1.test(value)){
         callback();
       }else{
-        callback("填写错误，请填入正确的邮箱或者手机号码！");
+        // callback("填写错误，请填入正确的邮箱或者手机号码！");
+        callback("填写错误，请填入正确的手机号码！");
       }
 
     }
@@ -292,14 +293,16 @@ export default class Register extends Component {
 
                   <FormItem
                   {...formItemLayout}
-                    label ='邮箱/手机号码'
+                    // label ='邮箱/手机号码'
+                    label ='手机号码'
                   >
                     {getFieldDecorator('mail', {
 
                       rules: [
                         {
                           required: true,
-                          message: '请输入邮箱地址或手机号！',
+                          // message: '请输入邮箱地址或手机号！',
+                          message: '请输入手机号！',
                         }, {
                           validator: this.handleMail,
                         }
@@ -309,7 +312,9 @@ export default class Register extends Component {
                         //   message: '邮箱地址格式错误！',
                         // }
                       ],
-                    })(<Input size="large" placeholder="邮箱/手机号" />)}
+                    })(
+                      <Input size="large" placeholder="手机号" />
+                    )}
                   </FormItem>
                   <FormItem
                     {...formItemLayout}
