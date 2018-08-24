@@ -37,6 +37,10 @@ export default function(dynamicWrapper,app){
     '/agentQR': {
       component: dynamicWrapper(app, ['distributionManagement'], () => import('../routes/DistributionManagement/agentQRCode')),
     },
+    //关注公众号 - 二维码
+    '/mediaPlatform': {
+      component: dynamicWrapper(app, [], () => import('../routes/MediaPlatform/mediaPlatform')),
+    },
 
 
     //商品管理 - 上架审核（复制新）
