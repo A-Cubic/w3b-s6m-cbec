@@ -21,6 +21,7 @@ export default class GoodsAboutAEditModal extends React.PureComponent {
     const divRow = {marginBottom:'8px'}
     const labelWidth = {width:'100px',display:'inline-block'}
     const spanWidth = {width:'70%',display:'inline-flex'}
+    const imgList = ["http://ecc-product.oss-cn-beijing.aliyuncs.com/static/mediaPlatform.jpeg","http://ecc-product.oss-cn-beijing.aliyuncs.com/static/mediaPlatform.jpeg"]
     const formItemLayout = {
       // labelCol: {
       //   xs: { span: 24 },
@@ -109,6 +110,13 @@ export default class GoodsAboutAEditModal extends React.PureComponent {
                   </div>
                   </div>
                 </Col>
+              </Row>
+              <Row style={{marginBottom:10}}>
+                  {
+                    imgList.map((value, index, array)=>{
+                      return <img style={{width:'100%'}} src={value} alt=""/>
+                    })
+                  }
               </Row>
             </div>
           </div>
