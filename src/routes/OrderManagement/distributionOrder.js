@@ -78,7 +78,7 @@ export default class distributionOrder extends Component {
   handleUploadChange=(info)=>{
     if(info.file.status === 'done') {
       this.props.dispatch({
-        type: 'orderManagement/uploadWaybill',
+        type: 'orderManagement/uploadDistributorsOrderbill',
         payload: {
           userId:userId,
           fileTemp: info.file.response.fileName[0]

@@ -37,6 +37,13 @@ export async function getUploadOrderbill(params) {
     body: params,
   });
 }
+//分销商 - 上传订单
+export async function getUploadDistributorsOrderbill(params) {
+  return request(`/llback/Order/UploadOrderOfDistribution`, {
+    method: 'POST',
+    body: params,
+  });
+}
 // 导入运单
 export async function getUploadWaybill(params) {
   return request(`/llback/Order/UploadWaybill`, {
@@ -72,9 +79,9 @@ export async function shipmentOverseas(params) {
     body: params,
   });
 }
-// 扫码支付
+// 分销商 - 扫码支付
 export async function getCode(params) {
-  return request(`/llback/Order/getCode`, {
+  return request(`/llback/Order/GetOrderPageQRCode`, {
     method: 'POST',
     body: params,
   });

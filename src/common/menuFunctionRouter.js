@@ -24,7 +24,7 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutA')),
     },
     //商品管理 - 商品查看 - 分销
-    '/agent/goodsAboutD': {
+    '/goods/goodsAboutD': {
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutA')),
     },
 

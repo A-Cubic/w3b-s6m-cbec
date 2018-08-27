@@ -9,6 +9,8 @@ export default function orderManagementMock(url) {
     'POST /llback/Order/ExportOrder': url,
     // 导入订单信息
     'POST /llback/Order/UploadOrder': url,
+    // 分销商 - 上传订单
+    '/llback/Order/UploadOrderOfDistribution': url,
     // 导入运单信息
     'POST /llback/Order/UploadWaybill': url,
     // 导出运单信息
@@ -19,8 +21,8 @@ export default function orderManagementMock(url) {
     'POST /llback/Order/SingleWaybill': url,
     // 海外已出货
     'POST /llback/Order/Overseas': url,
-    // 海外已出货
-    'POST /llback/Order/getCode': SendOrder,
+    // 分销商 - 扫码支付
+    'POST /llback/Order/GetOrderPageQRCode': url,
   };
 }
 export function GetOrderList(req, res) {

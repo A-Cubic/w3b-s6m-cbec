@@ -17,11 +17,13 @@ export default class GoodsAboutAEditModal extends React.PureComponent {
 
   render() {
     const {goodsManagement:{goodsAboutData:{childCheckA}}} = this.props;
+    // console.log('~~',childCheckA)
     const {getFieldDecorator, validateFields} = this.props.form;
     const divRow = {marginBottom:'8px'}
     const labelWidth = {width:'100px',display:'inline-block'}
     const spanWidth = {width:'70%',display:'inline-flex'}
-    const imgList = ["http://ecc-product.oss-cn-beijing.aliyuncs.com/static/mediaPlatform.jpeg","http://ecc-product.oss-cn-beijing.aliyuncs.com/static/mediaPlatform.jpeg"]
+    // const imgList = ["http://ecc-product.oss-cn-beijing.aliyuncs.com/static/mediaPlatform.jpeg","http://ecc-product.oss-cn-beijing.aliyuncs.com/static/mediaPlatform.jpeg"]
+    const imgList = childCheckA.content?childCheckA.content:[""]
     const formItemLayout = {
       // labelCol: {
       //   xs: { span: 24 },
@@ -114,7 +116,7 @@ export default class GoodsAboutAEditModal extends React.PureComponent {
               <Row style={{marginBottom:10}}>
                   {
                     imgList.map((value, index, array)=>{
-                      return <img style={{width:'100%'}} src={value} alt=""/>
+                      return <img style={{width:'100%'}} key={index} src={value} alt=""/>
                     })
                   }
               </Row>

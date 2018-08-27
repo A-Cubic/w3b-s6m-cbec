@@ -1,21 +1,12 @@
 import { message} from 'antd';
-import {downloadGoodsTempUrl, getStep1Upload, getWareHouseData} from '../services/api'
 import {getSupplierOrderTable,getSupplierOrderChildCheck,
-  getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,getExportWaybill,getExportOrders,
-  getExpressData,confirmDelivery,shipmentOverseas,getCode
+  getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,getUploadDistributorsOrderbill,getExportWaybill,getExportOrders,
+  confirmDelivery,shipmentOverseas,getCode
 } from '../services/orderManagement_S'
-import {notification} from "antd/lib/index";
-import {getChannelTypeData} from "../services/channelManagement_S";
 export default {
   namespace: 'orderManagement',
   state:{
 
-    // // 获取平台渠道类型
-    // channelTypeArr:[],
-    // //获取仓库
-    // wareHouseData:[],
-    // //获取快递
-    // expressArr:[],
     //供应商-运营商-渠道商接口共用table
     supplierOrder:{
       tableData:{
@@ -108,6 +99,14 @@ export default {
         callback(response)
       }
     },
+    //分销商 - 导入订单
+    *uploadDistributorsOrderbill({ payload,callback },{ call,put}){
+      const response = yield call(getUploadDistributorsOrderbill, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
+      }
+    },
     //导入运单
     *uploadWaybill({ payload,callback },{ call,put}){
       const response = yield call(getUploadWaybill, payload);
@@ -179,7 +178,7 @@ export default {
       if (response !== undefined) {
         yield put({
           type:'getCodeR',
-          payload: response.imgUrl
+          payload: response.url
         })
         yield put({
           type:'getCodeVisibleR',
