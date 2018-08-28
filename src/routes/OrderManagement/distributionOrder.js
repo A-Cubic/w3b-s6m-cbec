@@ -102,7 +102,7 @@ export default class distributionOrder extends Component {
     this.props.dispatch({
       type: 'orderManagement/getCode',
       payload: {
-        userId:userId,
+        // userId:userId,
       },
     })
   }
