@@ -196,7 +196,11 @@ export default class GoodsAboutS extends Component {
       ...pagination,
     };
     const columns = [
-    {
+      {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      }, {
       title: '商品条码',
       dataIndex: 'barcode',
       key: 'barcode',

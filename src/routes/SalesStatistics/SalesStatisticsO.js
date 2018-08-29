@@ -194,15 +194,18 @@ export default class SalesStatisticsO extends Component {
     }
     const columns = [
       {
+        title: '序号',
+        dataIndex: 'id',
+        key: 'id',
+      }, {
         title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
-      }, {
-        title: '商品图片',
-        dataIndex: 'slt',
-        key: 'slt',
-        render: (val) => (
-          <img src={val} alt="" width={80} style={{float:'left',marginRight:8}}/>
+        render: (val,record) => (
+          <div>
+            <span>{val}</span>
+            <img src={ record.slt} alt="" width={80} style={{marginLeft:8}}/>
+          </div>
         )
       }, {
         title: '商品名称',
@@ -221,21 +224,25 @@ export default class SalesStatisticsO extends Component {
         title: '销量',
         dataIndex: 'salesNum',
         key: 'salesNum',
+        width:100,
       }, {
         title: '销售额',
         dataIndex: 'salesPrice',
         key: 'salesPrice',
-        render:val=>`¥${val}`
+        render:val=>`¥${val}`,
+        width:100,
       }, {
         title: '成本',
         dataIndex: 'cost',
         key: 'cost',
-        render:val=>`¥${val}`
+        render:val=>`¥${val}`,
+        width:100,
       }, {
         title: '毛利',
         dataIndex: 'grossProfit',
         key: 'grossProfit',
-        render:val=>`¥${val}`
+        render:val=>`¥${val}`,
+        width:100,
       }, {
         title: '平台渠道',
         dataIndex: 'platformType',

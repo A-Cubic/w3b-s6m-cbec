@@ -164,15 +164,18 @@ export default class SalesStatisticsS extends Component {
     }
     const columns = [
       {
+        title: '序号',
+        dataIndex: 'id',
+        key: 'id',
+      }, {
         title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
-      }, {
-        title: '商品图片',
-        dataIndex: 'slt',
-        key: 'slt',
-        render: (val) => (
-          <img src={val} alt="" width={80} style={{float:'left',marginRight:8}}/>
+        render: (val,record) => (
+          <div>
+            <span>{val}</span>
+            <img src={ record.slt} alt="" width={80} style={{marginLeft:8}}/>
+          </div>
         )
       }, {
         title: '商品名称',
@@ -190,14 +193,17 @@ export default class SalesStatisticsS extends Component {
         title: '销量',
         dataIndex: 'salesNum',
         key: 'salesNum',
+        width:100,
       }, {
         title: '销售额',
         dataIndex: 'salesPrice',
         key: 'salesPrice',
+        width:100,
       }, {
         title: '佣金',
         dataIndex: 'brokerage',
         key: 'brokerage',
+        width:100,
       }, {
         title: '分销商',
         dataIndex: 'distribution',
