@@ -1,16 +1,16 @@
 // const orderManagement = 'http://console.llwell.net/';
-export default function salesStatisticsMock() {
+export default function salesStatisticsMock(url) {
   return {
     // 结算管理 - 供应商- 列表
-    'POST /llback/Balance/GetBalanceListBySupplier': getChannelList,
+    'POST /llback/Balance/GetBalanceListBySupplier': url,
     // 结算管理 - 运营- 列表
-    'POST /llback/Balance/GetBalanceListByOperator': getChannelList,
+    'POST /llback/Balance/GetBalanceListByOperator': url,
     // 结算管理 - 采购- 列表
-    'POST /llback/Balance/GetBalanceListByPurchase': getChannelList,
+    'POST /llback/Balance/GetBalanceListByPurchase': url,
     // 结算管理 - 代理- 列表
-    'POST /llback/Balance/GetBalanceListByAgent': getChannelList,
+    'POST /llback/Balance/GetBalanceListByAgent': url,
     // 结算管理 - 分销- 列表
-    'POST /llback/Balance/GetBalanceListByDistribution': getChannelList,
+    'POST /llback/Balance/GetBalanceListByDistribution': url,
 
   };
 }
