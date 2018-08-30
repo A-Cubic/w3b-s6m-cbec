@@ -23,7 +23,14 @@ export default {
             message: "提示",
             description: msg,
           });
-          yield put(routerRedux.push('/user/login'));
+          // yield put(routerRedux.push('/user/login'));
+          yield put({
+            type:'login/login',
+            payload:{
+              userName:payload.mail,
+              password:payload.password
+            }
+          });
         }
       }
     },
