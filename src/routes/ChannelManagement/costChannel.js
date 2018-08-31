@@ -192,7 +192,7 @@ class ChildEdit extends React.Component {
         <Modal
           width={ '100%' }
           style={{maxWidth:1000}}
-          title="发货"
+          title="渠道商费用及基础信息"
           visible={this.props.parent.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
