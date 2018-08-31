@@ -324,8 +324,8 @@ export default class NewPurOrder extends Component {
           //  )
         },{
           title: '操作1',
-          dataIndex: 'operate',
-          key: 'operate',
+          dataIndex: 'operate1',
+          key: 'operate1',
           width: '8%',
           render: (text, record) => {
             const { editable } = record;
