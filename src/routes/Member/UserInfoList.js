@@ -9,7 +9,7 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const flagMap = ['error','processing'];
 const flag = ['冻结','使用中'];
-const status = [' ', '供应商', '采购商', '分销商', '采购分销商', '客服'];
+const status = [' ', '供应商', '采购商', '分销代理', '分销商', '运营'];
 
 const formItemLayout = {
   labelCol: {
