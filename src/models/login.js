@@ -13,7 +13,7 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      console.log('111',payload)
+      // console.log('111',payload)
       const response = yield call(realAccountLogin, payload);
       if (response == null) {
         yield put({

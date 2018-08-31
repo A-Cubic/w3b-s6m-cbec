@@ -100,6 +100,7 @@ export default class SiderMenu extends PureComponent {
   * @memberof SiderMenu
   */
   getMenuItemPath = (item) => {
+    // console.log('item',item)
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
     const { target, name } = item;
@@ -155,6 +156,11 @@ export default class SiderMenu extends PureComponent {
   * @memberof SiderMenu
   */
   getNavMenuItems = (menusData) => {
+    menusData.map((item)=>{
+      // 商城首页部分（包含http）都另打开窗口
+      item.path.indexOf('http')!= -1?item.target="_blank":"target"
+    })
+
     if (!menusData) {
       return [];
     }
