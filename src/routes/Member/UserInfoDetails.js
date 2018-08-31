@@ -125,7 +125,7 @@ export default class UserInfoDetails extends Component {
     const { stepDirection, currentUser,previewVisible,previewImage } = this.state;
     const { profile, loading } = this.props;
 
-    const userType = [' ', '供应商', '采购商','采购商 ','采购商 ', '客服'];
+    const userType = [' ', '供应商', '采购商','分销代理 ','分销商 ', '运营'];
     const userStatus = [' ', '系统账号', '未提交资料','待审核 ','已通过审核'];
     const flagMap = ['error','processing'];
     const flag = ['冻结','使用中'];
