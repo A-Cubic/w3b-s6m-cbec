@@ -435,7 +435,7 @@ export class Code extends Component {
     const {orderManagement:{codeUrl,codeVisible}}=this.props
     return (
       <div>
-        <Button type="primary" onClick={this.showModal}>Open</Button>
+        {/*<Button type="primary" onClick={this.showModal}>Open</Button>*/}
         <Modal
           title="扫码支付"
           visible={codeVisible}
