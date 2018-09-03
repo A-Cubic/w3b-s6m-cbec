@@ -27,7 +27,10 @@ export default function(dynamicWrapper,app){
     '/goods/goodsAboutD': {
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutA')),
     },
-
+    //商品管理 - 商品查看 - 采购purchase
+    '/goods/goodsAboutP': {
+      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutP')),
+    },
     //分销管理 - 分销商管理 - 代理
     '/agent/agentMgt': {
       component: dynamicWrapper(app, ['distributionManagement'], () => import('../routes/DistributionManagement/distributorsMgt')),

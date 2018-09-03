@@ -2,22 +2,22 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import GoodsAboutSEditModal from './GoodsAboutSEditModal';
-import styles from './GoodsAboutS.less';
+import styles from './GoodsAboutP.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../services/api'
 import {getToken} from "../../utils/Global";
+import GoodsAboutAEditModal from "./GoodsAboutAEditModal";
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const userId = getToken().userId;
-@connect(({goodsManagement,publicDictionary,  loading }) => ({
+@connect(({goodsManagement,publicDictionary, loading }) => ({
   goodsManagement,publicDictionary,
   loading: loading.effects['goodsManagement/getGoodsAboutData'],
 }))
 
 @Form.create()
-export default class GoodsAboutS extends Component {
+export default class GoodsAboutP extends Component {
   state={
     visible: false,
     formValues:{}
@@ -81,7 +81,7 @@ export default class GoodsAboutS extends Component {
   handleEdit=(e, record, index)=>{
     // console.log(record)
     this.props.dispatch({
-      type: 'goodsManagement/getGoodsDetailsS',
+      type: 'goodsManagement/getGoodsDetailsA',
       payload: {
         userId:userId,
         goodsId:record.id,
@@ -100,13 +100,11 @@ export default class GoodsAboutS extends Component {
       payload: params,
     });
   }
-
   renderAdvancedForm(){
     const { publicDictionary:{brandArr,wareHouseArr} } = this.props;
-    const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckS}} } = this.props;
-
+    const { goodsManagement:{goodsAboutData:{tableData:{list, pagination}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    // const url = getCurrentUrl('/llback/user/validate');
+
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -175,6 +173,8 @@ export default class GoodsAboutS extends Component {
               )}
             </FormItem>
           </Col>
+
+
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 0 }}>
@@ -188,7 +188,7 @@ export default class GoodsAboutS extends Component {
 
   render() {
     // console.log('1',this.props)
-    const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckS}} } = this.props;
+    const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckA}} } = this.props;
 
     const paginationProps = {
       showSizeChanger: true,
@@ -209,7 +209,7 @@ export default class GoodsAboutS extends Component {
           <span>{val}</span>
           <img src={ record.slt} alt="" width={80} style={{marginLeft:8}}/>
         </div>
-          )
+      )
     }, {
       title: '商品（SKU）',
       dataIndex: 'goodsName',
@@ -222,18 +222,13 @@ export default class GoodsAboutS extends Component {
         title: '库存',
         dataIndex: 'goodsnum',
         key: 'goodsnum',
-      }, {
-      title: '供货价',
-      dataIndex: 'price',
-      key: 'price',
+      },{
+        title: '供货价',
+        dataIndex: 'price',
+        key: 'price',
         render:val=>`¥${val}`
-    },{
-        title: '仓库',
-        dataIndex: 'wname',
-        key: 'wname',
       },{
         title: '操作',
-        // fixed: 'right',
         dataIndex: 'operate',
         key: 'operate',
         render: (text, record, index) => {
@@ -269,7 +264,7 @@ export default class GoodsAboutS extends Component {
                  // loading={submitting}
           />
         </Card>
-        <GoodsAboutSEditModal
+        <GoodsAboutAEditModal
           parent = {parent}
         />
       </div>

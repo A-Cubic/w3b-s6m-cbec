@@ -9,10 +9,6 @@ import {
 export default {
   namespace: 'goodsManagement',
   state:{
-    // // 品牌集合
-    // brandArr:[],
-    // // 仓库集合
-    // wareHouseArr:[],
     // 商品管理 - 商品查看 - 运营/供应商/代理
     goodsAboutData:{
       tableData:{
@@ -27,7 +23,6 @@ export default {
       },
       // 商品管理 - 商品查看详情 - 代理
       childCheckA:{},
-
     },
     // 商品管理 - 商品上架审核
     goodsOnAudit:{
@@ -61,28 +56,7 @@ export default {
         });
       }
     },
-
-    // // 获取品评
-    // *getBrand({ payload },{ call,put}){
-    //   const response = yield call(getBrandData, payload);
-    //   if (response !== undefined) {
-    //     yield put({
-    //       type: 'getBrandR',
-    //       payload: response,
-    //     });
-    //   }
-    // },
-    // // 获取仓库
-    // *getWareHouse({ payload },{ call,put}){
-    //   const response = yield call(getWareHouseData, payload);
-    //   if (response !== undefined) {
-    //     yield put({
-    //       type: 'getWareHouseR',
-    //       payload: response,
-    //     });
-    //   }
-    // },
-    // 商品管理 - 商品查看 - 运营/供应商/代理
+    // 商品管理 - 商品查看 - 运营/供应商/代理/采购
     *getGoodsAboutData({ payload },{ call,put}){
       const response = yield call(getGoodsList, payload);
       // console.log('~',response)
@@ -213,19 +187,6 @@ export default {
       state.goodsOnAudit.selectedId = action.payload.selectedRow;
       return {...state};
     },
-
-    // getBrandR(state, action) {
-    //   return {
-    //     ...state,
-    //     brandArr:action.payload,
-    //   };
-    // },
-    // getWareHouseR(state, action) {
-    //   return {
-    //     ...state,
-    //     wareHouseArr:action.payload,
-    //   };
-    // },
     getGoodsAboutDataR(state, action) {
       return {
         ...state,

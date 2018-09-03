@@ -224,8 +224,9 @@ export default class GoodsAboutA extends Component {
         key: 'goodsnum',
       },{
         title: '供货价',
-        dataIndex: 'selPrice',
-        key: 'selPrice',
+        dataIndex: 'price',
+        key: 'price',
+        render:val=>`¥${val}`
       },{
         title: '操作',
         dataIndex: 'operate',

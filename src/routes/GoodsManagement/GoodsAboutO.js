@@ -227,6 +227,7 @@ export default class GoodsAboutO extends Component {
         title: '默认供货价',
         dataIndex: 'selPrice',
         key: 'selPrice',
+        render:val=>`¥${val}`
       },{
         title: '默认供应商',
         dataIndex: 'selSupplier',
