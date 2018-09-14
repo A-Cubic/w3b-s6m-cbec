@@ -19,7 +19,7 @@ export default {
       },
     },
     customsVisible:false,
-    customsInformationList:{},
+    customsInformationList:[],
     codeVisible:false,
     codeUrl:''
   },
