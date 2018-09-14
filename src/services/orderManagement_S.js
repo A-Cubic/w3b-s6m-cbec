@@ -86,3 +86,10 @@ export async function getCode(params) {
     body: params,
   });
 }
+// 运营 - 增加获取海关清关状态数据
+export async function getCustoms(params) {
+  return request(`/llback/Order/GetCustomsState`, {
+    method: 'POST',
+    body: params,
+  });
+}

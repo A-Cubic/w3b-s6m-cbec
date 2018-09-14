@@ -1,8 +1,9 @@
 import { message} from 'antd';
 import {getSupplierOrderTable,getSupplierOrderChildCheck,
   getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,getUploadDistributorsOrderbill,getExportWaybill,getExportOrders,
-  confirmDelivery,shipmentOverseas,getCode
+  confirmDelivery,shipmentOverseas,getCode,getCustoms
 } from '../services/orderManagement_S'
+import {getBrandData} from "../services/publicDictionary_S";
 export default {
   namespace: 'orderManagement',
   state:{
@@ -17,10 +18,37 @@ export default {
         id:'',
       },
     },
+    customsVisible:false,
+    customsInformationList:{},
     codeVisible:false,
     codeUrl:''
   },
   effects:{
+    // 运营 - 增加获取海关清关状态数据
+    *operatorCustoms({ payload },{ call, put }){
+      const response = yield call(getCustoms, payload);
+      if(response !== ''){
+        yield put({
+          type: 'changeCustomsVisibleR',
+          payload: true,
+        });
+        yield put({
+          type:'operatorCustomsR',
+          payload: response
+        })
+      }
+    },
+    // *supplierOrderChildCheck({payload, callback},{call,put}){
+    //   const response = yield call(getSupplierOrderChildCheck,payload);
+    //   // console.log('~',response)
+    //   if (response !== undefined){
+    //     yield put({
+    //       type:'supplierOrderChildCheckR',
+    //       payload: response
+    //     })
+    //   }
+    // },
+
     // 获取平台渠道类型
     // *getChannelType({ payload },{ call,put}){
     //   const response = yield call(getChannelTypeData, payload);
@@ -204,12 +232,18 @@ export default {
     //     wareHouseData:action.payload,
     //   };
     // },
-    // getExpressR(state, action) {
-    //   return {
-    //     ...state,
-    //     expressArr:action.payload,
-    //   };
-    // },
+    changeCustomsVisibleR(state, action) {
+      return {
+        ...state,
+        customsVisible:action.payload,
+      };
+    },
+    operatorCustomsR(state, action) {
+      return {
+        ...state,
+        customsInformationList:action.payload,
+      };
+    },
     supplierOrderTableR(state,action){
       return{
         ...state,

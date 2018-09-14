@@ -197,6 +197,16 @@ export default class operatorOrder extends Component {
       this.handleVisible(true,'childCheck');
     },0)
   }
+  handleChildrenCustoms =(record)=>{
+    this.props.dispatch({
+      type: 'orderManagement/operatorCustoms',
+      payload: {
+        orderId:record.merchantOrderId,
+        // orderId:"SH20180913112913284028",
+      },
+    });
+    console.log("record",record)
+  }
   handleChildrenDelivery=(record)=>{
     this.setState({
       orderId:record.merchantOrderId
@@ -363,6 +373,7 @@ export default class operatorOrder extends Component {
         render: (val,record) =>
           <div>
             <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+            <a href="javascript:;" onClick={()=>this.handleChildrenCustoms (record)}>清关信息</a><br/>
             {record.ifSend=='1'?
             <a href="javascript:;" onClick={()=>this.handleChildrenDelivery(record)}>发货</a>:''}
           </div>
@@ -452,6 +463,7 @@ export default class operatorOrder extends Component {
         <ChildrenDelivery
           parent = {ChildrenDeliveryParent}
         />
+        <ChildrenCustoms />
       </div>
     );
   }
@@ -568,6 +580,83 @@ class ChildrenDelivery extends React.Component {
               </Row>
           </Form>
         </div>
+        </Modal>
+      </div>
+    );
+  }
+}
+
+
+//  清关信息弹窗
+@connect(({orderManagement,publicDictionary,  loading }) => ({
+  orderManagement,publicDictionary,
+  loading: loading.effects['orderManagement/supplierOrderTable'],
+}))
+@Form.create()
+class ChildrenCustoms extends React.PureComponent {
+
+  handleCancel = (e) => {
+    // this.props.parent.handleVisible(false,'childCheck');
+    // this.props.form.resetFields();
+    this.props.dispatch({
+      type:'orderManagement/changeCustomsVisibleR',
+      payload:false
+    })
+  }
+
+  render() {
+    const {orderManagement:{customsVisible,customsInformationList}} = this.props;
+    const columns = [
+      {
+        title: '申报时间',
+        dataIndex: 'applyTime',
+        key: 'applyTime',
+      }, {
+        title: '订单号',
+        dataIndex: 'orderNo',
+        key: 'orderNo',
+      }, {
+        title: '运单号',
+        dataIndex: 'wayBillNo',
+        key: 'wayBillNo',
+      }, {
+        title: '快递公司',
+        dataIndex: 'logisticsName',
+        key: 'logisticsName',
+      }, {
+        title: '清关状态',
+        dataIndex: 'notes',
+        key: 'notes',
+      }, {
+        title: '清关时间',
+        dataIndex: 'ratifyDate',
+        key: 'ratifyDate',
+      }
+    ];
+    return (
+      <div>
+        <Modal
+          width={ '100%' }
+          style={{maxWidth:1200}}
+          cancelText="关闭"
+          // okText="提交"
+          title="清关信息"
+
+          visible={customsVisible}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="back" onClick={this.handleCancel}>关闭</Button>
+          ]}
+        >
+          <div>
+            <Table
+              dataSource={customsInformationList}
+              rowKey={record => record.key}
+              pagination={false}
+              columns={columns}
+            />
+
+          </div>
         </Modal>
       </div>
     );

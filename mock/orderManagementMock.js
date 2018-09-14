@@ -23,6 +23,8 @@ export default function orderManagementMock(url) {
     'POST /llback/Order/Overseas': url,
     // 分销商 - 扫码支付
     'POST /llback/Order/GetOrderPageQRCode': url,
+    // 运营 - 增加获取海关清关状态数据
+    'POST /llback/Order/GetCustomsState': url,
   };
 }
 export function GetOrderList(req, res) {
