@@ -1,7 +1,13 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-
+// 我的客户
+export async function getClient(params) {
+  return request(`/llback/Sales/client`,{
+    method: 'POST',
+    body: params,
+  })
+}
 // 销售统计 - 代理- 列表
 export async function getSalesStatisticsListA(params) {
   return request(`/llback/Sales/GetSalesListByAgent`, {

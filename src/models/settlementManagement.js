@@ -16,6 +16,7 @@ export default {
         pagination:{},
       },
     },
+
   },
   effects:{
     // 销售统计列表 - 供应商

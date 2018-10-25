@@ -1,6 +1,8 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function salesStatisticsMock(url) {
   return {
+    // 我的客户
+    'POST /llback/Sales/client': GetOrderList,
     // 销售统计 - 代理- 列表
     'POST /llback/Sales/GetSalesListByAgent': url,
     // 销售统计 - 供应商- 列表
@@ -9,6 +11,31 @@ export default function salesStatisticsMock(url) {
     'POST /llback/Sales/GetSalesListByOperator': url,
 
   };
+}
+export function GetOrderList(req, res) {
+  res.send({
+    list: [{
+      id: '3004',
+      status: '待发货',
+      merchantOrderId: 'SH20180127144502664278',
+      tradeTime: '2018-01-27 14:45:02',
+      waybillno: '',
+      consigneeName: null,
+      tradeAmount: '1',
+      idNumber: null,
+      consigneeMobile: null,
+      addrProvince: null,
+      addrCity: null,
+      addrDistrict: null,
+      addrDetail: null,
+      orderGoods: null,
+    }],
+    pagination: {
+      current: 1,
+      total: 8,
+      pageSize: 10,
+    },
+  });
 }
 export function getPlatform(req, res) {
   res.send([
