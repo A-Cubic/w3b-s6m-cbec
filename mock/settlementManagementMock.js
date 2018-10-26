@@ -1,6 +1,12 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function salesStatisticsMock(url) {
   return {
+    // 我的收益（代理）- 已结算收益
+    'POST /llback/Balance/getIncomeASettlementData': getChannelList,
+    // 我的收益（代理）- 预估收益
+    'POST /llback/Balance/getIncomeAForecastData': getChannelList,
+    // 我的收益（代理）- 信息展示
+    'POST /llback/Balance/mes': mmmm,
     // 结算管理 - 供应商- 列表
     'POST /llback/Balance/GetBalanceListBySupplier': url,
     // 结算管理 - 运营- 列表
@@ -90,6 +96,13 @@ export function UpdateDistributor(req, res) {
   res.send({
     type: 1,
     mes: '修改成功',
+  });
+}
+export function mmmm(req, res) {
+  res.send({
+    mesa: 90,
+    mesb: 100,
+    mes: 100,
   });
 }
 export function getorder(req, res) {

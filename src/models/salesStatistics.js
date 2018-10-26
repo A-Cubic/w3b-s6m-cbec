@@ -29,6 +29,12 @@ export default {
     *getClient({ payload },{ call,put }){
       const response = yield call(getClient, payload);
       console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getClientR',
+          payload: response,
+        })
+      }
     },
     // 销售统计列表 - 供应商
     *getSalesStatisticsListS({ payload },{ call,put}){
@@ -67,6 +73,15 @@ export default {
 
   },
   reducers:{
+    getClientR(state, action){
+      return {
+        ...state,
+        clientData:{
+          ...state.clientData,
+          tableData:action.payload
+        }
+      }
+    },
     getSalesStatisticsListR(state, action) {
         return {
           ...state,
@@ -76,5 +91,6 @@ export default {
           },
         };
     },
+
   }
 }

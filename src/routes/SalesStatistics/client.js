@@ -38,18 +38,14 @@ export default class client extends Component {
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
       if (err) return;
-      const rangeValue = fieldsValue['date'];
-      const values = rangeValue==undefined ? {
+      const values = {
         ...fieldsValue,
-      }:{
-        ...fieldsValue,
-        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
       this.setState({
         formValues: values,
       });
       this.props.dispatch({
-        type: 'salesStatistics/getSalesStatisticsListA',
+        type: 'salesStatistics/getClient',
         payload: {
           ...values,
           ...tableData.pagination
@@ -68,22 +64,22 @@ export default class client extends Component {
     };
 
     this.props.dispatch({
-      type: 'salesStatistics/getSalesStatisticsListA',
+      type: 'salesStatistics/getClient',
       payload: params,
     });
   }
 
 
   renderAdvancedForm(){
-    const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
+    const { salesStatistics:{clientData:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="商品条码：">
+            <FormItem label="客户名称：">
               {getFieldDecorator('barcode')(
-                <Input placeholder="请输入商品条码" />
+                <Input placeholder="请输入客户名称" />
               )}
             </FormItem>
           </Col>
@@ -102,7 +98,7 @@ export default class client extends Component {
     );
   }
   render() {
-    const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
+    const { salesStatistics:{clientData:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

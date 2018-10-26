@@ -1,6 +1,26 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
-
+// 我的收益（代理）- 已结算收益
+export async function getIncomeASettlementData(params) {
+  return request(`/llback/Balance/getIncomeASettlementData`, {
+    method: 'POST',
+    body: params,
+  });
+}
+// 我的收益（代理）- 预估收益
+export async function getIncomeAForecastData(params) {
+  return request(`/llback/Balance/getIncomeAForecastData`, {
+    method: 'POST',
+    body: params,
+  });
+}
+// 我的收益（代理）- 信息展示
+export async function getIncomeAInformationData(params) {
+  return request(`/llback/Balance/mes`, {
+    method: 'POST',
+    body: params,
+  });
+}
 // 结算管理 - 运营- 列表
 export async function getSettlementListO(params) {
   return request(`/llback/Balance/GetBalanceListByOperator`, {
