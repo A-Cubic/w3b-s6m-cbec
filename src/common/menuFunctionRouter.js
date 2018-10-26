@@ -100,10 +100,10 @@ export default function(dynamicWrapper,app){
     '/sales/salesStatisticsA': {
       component: dynamicWrapper(app, ['salesStatistics','publicDictionary'], () => import('../routes/SalesStatistics/SalesStatisticsA')),
     },
-    // 我的客户 - 代理20181025
-    '/sales/client': {
-      component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/client')),
-    },
+    // // 我的客户 - 代理20181025
+    // '/sales/client': {
+    //   component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/client')),
+    // },
     //----结算管理----
     // 结算管理 - 运营
     '/settlement/settlementO': {
@@ -125,14 +125,14 @@ export default function(dynamicWrapper,app){
     '/settlement/settlementD': {
       component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/settlementMgtD')),
     },
-    // 我的收益 - 代理20181025
-    '/settlement/incomeA': {
-      component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/incomeA')),
-    },
-    // 我的收益 - 门店20181025
-    '/settlement/incomeStore': {
-      component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/incomeStore')),
-    },
+    // // 我的收益 - 代理20181025
+    // '/settlement/incomeA': {
+    //   component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/incomeA')),
+    // },
+    // // 我的收益 - 门店20181025
+    // '/settlement/incomeStore': {
+    //   component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/incomeStore')),
+    // },
 
 
 
