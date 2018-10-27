@@ -15,21 +15,21 @@ env:
 #    - TEST_TYPE=test-all
 #    - TEST_TYPE=test-dist
 
-addons:
-  apt:
-    packages:
-      - xvfb
+#addons:
+#  apt:
+#    packages:
+#      - xvfb
 
 cache:
   directories:
     - "node_modules"
 
-notifications:
-  webhooks: https://hook.bearychat.com/=bwCGO/travis/42614e695afefe41ff5437de242de91c
+#notifications:
+  #webhooks: https://hook.bearychat.com/=bwCGO/travis/42614e695afefe41ff5437de242de91c
 
 install:
-  - export DISPLAY=':99.0'
-  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+  #- export DISPLAY=':99.0'
+  #- Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - npm install
 
 after_success:
