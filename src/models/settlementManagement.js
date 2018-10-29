@@ -1,10 +1,34 @@
 import {
+  getIncomeStoreInformationData,getIncomeStoreUnSettlementData,getIncomeStoreSettlementData,getIncomeStoreSettlementOrderData,
   getIncomeAInformationData,getIncomeAForecastData,getIncomeASettlementData,getIncomeASettlementOrderData,
   getSettlementListS,getSettlementListO,getSettlementListP,getSettlementListA,getSettlementListD
 } from "../services/settlementManagement_S";
 export default {
   namespace: 'settlementManagement',
   state:{
+    // 我的收益（门店）
+    incomeStoreData:{
+      // 信息展示
+      informationData:{},
+      // 待结算收益
+      unSettlementData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+      // 已结算收益
+      settlementData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+      // 已结算收益 - 查看订单
+      settlementOrderData:{
+        item:{},
+        list: [],
+        pagination:{},
+      }
+    },
     // 我的收益（代理）
     incomeAgencyData:{
       // 信息展示
@@ -22,7 +46,6 @@ export default {
         pagination:{},
       },
       // 已结算收益 - 查看订单
-      settlementOrderVisible:false,
       settlementOrderData:{
         item:{},
         list: [],
@@ -40,6 +63,51 @@ export default {
 
   },
   effects:{
+    // 我的收益（门店）- 已结算收益 - 查看订单
+    *getIncomeStoreSettlementOrderData({ payload },{ call,put}){
+      const response = yield call(getIncomeStoreSettlementOrderData, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getIncomeStoreSettlementOrderDataR',
+          payload: response,
+        });
+      }
+    },
+    // 我的收益（门店）- 已结算收益
+    *getIncomeStoreSettlementData({ payload },{ call,put}){
+      const response = yield call(getIncomeStoreSettlementData, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getIncomeStoreSettlementDataR',
+          payload: response,
+        });
+      }
+    },
+    // 我的收益（门店）- 待结算收益
+    *getIncomeStoreUnSettlementData({ payload },{ call,put}){
+      const response = yield call(getIncomeStoreUnSettlementData, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getIncomeStoreUnSettlementDataR',
+          payload: response,
+        });
+      }
+    },
+    // 我的收益（门店）- 信息展示
+    *getIncomeStoreInformationData({ payload },{ call,put}){
+      const response = yield call(getIncomeStoreInformationData, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getIncomeStoreInformationDataR',
+          payload: response,
+        });
+      }
+    },
+
     // 我的收益（代理）- 已结算收益 - 查看订单
     *getIncomeASettlementOrderData({ payload },{ call,put}){
       const response = yield call(getIncomeASettlementOrderData, payload);
@@ -142,6 +210,43 @@ export default {
     },
   },
   reducers:{
+    getIncomeStoreSettlementOrderDataR(state, action) {
+      return {
+        ...state,
+        incomeStoreData:{
+          ...state.incomeStoreData,
+          settlementOrderData:action.payload
+        },
+      };
+    },
+    getIncomeStoreSettlementDataR(state, action) {
+      return {
+        ...state,
+        incomeStoreData:{
+          ...state.incomeStoreData,
+          settlementData:action.payload
+        },
+      };
+    },
+    getIncomeStoreUnSettlementDataR(state, action) {
+      return {
+        ...state,
+        incomeStoreData:{
+          ...state.incomeStoreData,
+          unSettlementData:action.payload
+        },
+      };
+    },
+    getIncomeStoreInformationDataR(state, action) {
+      return {
+        ...state,
+        incomeStoreData:{
+          ...state.incomeStoreData,
+          informationData:action.payload
+        },
+      };
+    },
+
     getIncomeASettlementOrderDataR(state, action) {
       return {
         ...state,

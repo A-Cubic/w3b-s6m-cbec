@@ -17,7 +17,7 @@ const TabPane = Tabs.TabPane;
 }))
 @Form.create()
 
-//结算管理 - 采购
+//我的收益 - 代理20181029
 
 export default class incomeA extends Component {
   state={
