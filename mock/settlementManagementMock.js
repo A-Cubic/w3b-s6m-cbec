@@ -1,6 +1,8 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function salesStatisticsMock(url) {
   return {
+    // 我的收益（代理）- 已结算收益 - 查看订单
+    'POST /llback/Balance/getIncomeASettlementOrderData': getChannelList,
     // 我的收益（代理）- 已结算收益
     'POST /llback/Balance/getIncomeASettlementData': getChannelList,
     // 我的收益（代理）- 预估收益

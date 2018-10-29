@@ -1,5 +1,5 @@
 import {
-  getIncomeAInformationData,getIncomeAForecastData,getIncomeASettlementData,
+  getIncomeAInformationData,getIncomeAForecastData,getIncomeASettlementData,getIncomeASettlementOrderData,
   getSettlementListS,getSettlementListO,getSettlementListP,getSettlementListA,getSettlementListD
 } from "../services/settlementManagement_S";
 export default {
@@ -22,7 +22,7 @@ export default {
         pagination:{},
       },
       // 已结算收益 - 查看订单
-      settlementOrder:false,
+      settlementOrderVisible:false,
       settlementOrderData:{
         item:{},
         list: [],
@@ -40,6 +40,17 @@ export default {
 
   },
   effects:{
+    // 我的收益（代理）- 已结算收益 - 查看订单
+    *getIncomeASettlementOrderData({ payload },{ call,put}){
+      const response = yield call(getIncomeASettlementOrderData, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getIncomeASettlementOrderDataR',
+          payload: response,
+        });
+      }
+    },
     // 我的收益（代理）- 已结算收益
     *getIncomeASettlementData({ payload },{ call,put}){
       const response = yield call(getIncomeASettlementData, payload);
@@ -131,6 +142,15 @@ export default {
     },
   },
   reducers:{
+    getIncomeASettlementOrderDataR(state, action) {
+      return {
+        ...state,
+        incomeAgencyData:{
+          ...state.incomeAgencyData,
+          settlementOrderData:action.payload
+        },
+      };
+    },
     getIncomeASettlementDataR(state, action) {
       return {
         ...state,

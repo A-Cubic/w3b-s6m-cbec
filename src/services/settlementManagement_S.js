@@ -1,5 +1,12 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
+// 我的收益（代理）- 已结算收益 - 查看订单
+export async function getIncomeASettlementOrderData(params) {
+  return request(`/llback/Balance/getIncomeASettlementOrderData`, {
+    method: 'POST',
+    body: params,
+  });
+}
 // 我的收益（代理）- 已结算收益
 export async function getIncomeASettlementData(params) {
   return request(`/llback/Balance/getIncomeASettlementData`, {

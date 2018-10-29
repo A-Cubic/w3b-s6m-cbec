@@ -23,6 +23,8 @@ export default class incomeA extends Component {
   state={
     keyOneFormValues:{},
     keyTwoFormValues:{},
+    modalFormValues:{},
+    settlementOrderVisible:false
   }
   init(){
     this.props.dispatch({
@@ -126,7 +128,7 @@ export default class incomeA extends Component {
     });
   }
   onChangeTabs=(key)=>{
-    console.log(key)
+    // console.log(key)
     if(key==1){
       this.props.dispatch({
         type: 'settlementManagement/getIncomeAForecastData',
@@ -282,7 +284,7 @@ export default class incomeA extends Component {
         key: 'operate',
         render: (val,record) =>
           <div>
-            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+            <a href="javascript:;" onClick={()=>this.handleChildrenCheckOrder(record)}>订单详情</a><br/>
           </div>
       }
     ];
@@ -337,9 +339,53 @@ export default class incomeA extends Component {
 
     );
   }
+  handleChildrenCheckOrder=(record)=>{
+    // console.log(record)
+    this.props.dispatch({
+      type: 'settlementManagement/getIncomeASettlementOrderData',
+      payload: {record},
+    });
+    this.showModal(true)
+  }
   render() {
-    // console.log(this.props)
-
+    // console.log(this.props.form)
+    const { getFieldDecorator } = this.props.form;
+    const { settlementManagement:{incomeAgencyData:{settlementOrderData} }} = this.props;
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...settlementOrderData.pagination,
+    }
+    const columns = [
+      {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      }, {
+        title: '订单编号',
+        dataIndex: 'merchantOrderId',
+        key: 'merchantOrderId',
+      }, {
+        title: '发货时间',
+        dataIndex: 'tradeTime',
+        key: 'tradeTime',
+      }, {
+        title: '合作方',
+        dataIndex: 'tradeAmount',
+        key: 'tradeAmount',
+        render:val=>`¥${val}`
+      },{
+        title: '订单金额',
+        dataIndex: 'purchase',
+        key: 'purchase',
+        render:val=>`¥${val}`
+      },{
+        title: '收益',
+        dataIndex: 's',
+        key: 's',
+        render:val=>`¥${val}`
+      }
+    ];
     return (
       <div>
         <Card
@@ -369,9 +415,112 @@ export default class incomeA extends Component {
             </Tabs>
           </div>
         </Card>
+        <Modal
+          width={ '100%' }
+          style={{maxWidth:1200}}
+          title="详情"
+          visible={this.state.settlementOrderVisible}
+          onCancel={()=>{
+            this.showModal(false)
+          }}
+          footer={null}
+        >
+          <div className={styles.tableListForm}>
+            <Form onSubmit={this.onSearchModal} layout="inline">
+              <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                <Col md={8} sm={24}>
+                  <FormItem label="订单编号：">
+                    {getFieldDecorator('dingdan')(
+                      <Input placeholder="请输入订单编号" />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col md={8} sm={24}>
+                  <FormItem
+                    label="合作方"
+                  >
+                    {getFieldDecorator('hezuo')(
+                      <Select
+                        placeholder="请选择合作方"
+                      >
+                        <option key={1} value={1}>aa</option>
+                        {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
+
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col md={8} sm={24}>
+                  <Button type="primary" htmlType="submit">查询</Button>
+                  <Button style={{ marginLeft: 8 }} onClick={this.handleFormResetModal}>重置</Button>
+                </Col>
+              </Row>
+            </Form>
+            <Table
+              dataSource={settlementOrderData.list}
+              rowKey={record => record.id}
+              columns={columns}
+              pagination={paginationProps}
+              onChange={this.handleTableChangeModal}
+              // loading={submitting}
+            />
+          </div>
+        </Modal>
       </div>
     );
   }
+  //列表 Modal
+  onSearchModal=(e)=>{
+    e.preventDefault();
+    const {settlementManagement:{incomeAgencyData:{settlementOrderData}}}=this.props
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('values',fieldsValue)
+      if (err) return;
+      let values;
+      values ={
+        ...fieldsValue,
+      }
+      this.setState({
+        modalFormValues: values,
+      });
+      this.props.dispatch({
+        type: 'settlementManagement/getIncomeASettlementOrderData',
+        payload: {
+          ...values,
+          ...settlementOrderData.pagination
+        },
+      });
+    });
+  }
+  handleFormResetModal =()=>{
+    this.setState({
+      modalFormValues: {},
+    });
+    this.props.form.resetFields();
+  }
+  handleTableChangeModal=(pagination, filtersArg, sorter)=>{
+    const params = {
+      ...this.state.modalFormValues,
+      ...pagination,
+    };
+
+    this.props.dispatch({
+      type: 'settlementManagement/getIncomeASettlementOrderData',
+      payload: params,
+    });
+  }
+  showModal = (flag) => {
+    this.setState({
+      settlementOrderVisible: !!flag,
+    });
+    this.handleFormResetModal();
+  }
+  // handleCancel = (e) => {
+  //   // console.log(e);
+  //   this.setState({
+  //     settlementOrderVisible: false,
+  //   });
+  // }
 }
 
 

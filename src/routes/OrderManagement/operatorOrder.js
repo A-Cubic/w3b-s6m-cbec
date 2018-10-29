@@ -205,7 +205,7 @@ export default class operatorOrder extends Component {
         // orderId:"SH20180913112913284028",
       },
     });
-    console.log("record",record)
+    // console.log("record",record)
   }
   handleChildrenDelivery=(record)=>{
     this.setState({
