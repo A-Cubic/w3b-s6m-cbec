@@ -150,10 +150,10 @@ export default class incomeStore extends Component {
       <div style={{margin:'0 100px 0px',fontSize:16}}>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            待结算收益（元）：<span style={{color: '#ff8282'}}>¥{informationData.mes}</span>
+            待结算收益（元）：<span className={styles.colorRed} >¥{informationData.mes}</span>
           </Col>
           <Col md={8} sm={24}>
-            累积结算收益（元）：<span style={{color: '#ff8282'}}>¥{informationData.mes}</span>
+            累积结算收益（元）：<span className={styles.colorRed}>¥{informationData.mes}</span>
           </Col>
         </Row>
       </div>
@@ -216,7 +216,7 @@ export default class incomeStore extends Component {
                   <Select
                     placeholder="请选择合作方"
                   >
-                    <option key={1} value={1}>aa</option>
+                    <option key={1} value={1}>ss</option>
                     {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
 
                   </Select>
@@ -231,7 +231,8 @@ export default class incomeStore extends Component {
                   <Select
                     placeholder="请选择支付类型"
                   >
-                    <option key={1} value={1}>aa</option>
+                    <option key={0} value={0}>线上支付</option>
+                    <option key={1} value={1}>线下支付</option>
                     {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
 
                   </Select>
@@ -254,9 +255,9 @@ export default class incomeStore extends Component {
           <Divider dashed />
           <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
             <div style={{ float: 'right' }}>
-              <span>订单总数：{unSettlementData.item?unSettlementData.pagination.total:0}， </span>
-              <span>订单总额（元）：¥{unSettlementData.item?unSettlementData.item.totalSales:0}， </span>
-              <span>收益总额（元）：¥{unSettlementData.item?unSettlementData.item.totalPurchase:0} </span>
+              订单总数：<span className={styles.colorRed}>{unSettlementData.item?unSettlementData.pagination.total:0}</span>，
+              订单总额（元）：<span className={styles.colorRed}>¥{unSettlementData.item?unSettlementData.item.totalSales:0}</span>，
+              收益总额（元）：<span className={styles.colorRed}>¥{unSettlementData.item?unSettlementData.item.totalPurchase:0} </span>
             </div>
           </div>
         </Form>
@@ -323,8 +324,8 @@ export default class incomeStore extends Component {
           <Divider dashed />
           <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
             <div style={{ float: 'right' }}>
-              <span>总条数：{settlementData.item?settlementData.pagination.total:0}</span>
-              <span>结算总额：{settlementData.item?settlementData.pagination.total:0}</span>
+              总条数：<span className={styles.colorRed}>{settlementData.item?settlementData.pagination.total:0}</span> ,
+              结算总额：<span className={styles.colorRed}>¥{settlementData.item?settlementData.pagination.total:0}</span>
             </div>
           </div>
         </Form>
@@ -452,8 +453,34 @@ export default class incomeStore extends Component {
                   </FormItem>
                 </Col>
                 <Col md={8} sm={24}>
-                  <Button type="primary" htmlType="submit">查询</Button>
-                  <Button style={{ marginLeft: 8 }} onClick={this.handleFormResetModal}>重置</Button>
+                  <FormItem
+                    label="支付类型"
+                  >
+                    {getFieldDecorator('hezuo')(
+                      <Select
+                        placeholder="请选择支付类型"
+                      >
+                        <option key={0} value={0}>线上支付</option>
+                        <option key={1} value={1}>线下支付</option>
+                        {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
+
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+                {/*<Col md={8} sm={24}>*/}
+                  {/*<Button type="primary" htmlType="submit">查询</Button>*/}
+                  {/*<Button style={{ marginLeft: 8 }} onClick={this.handleFormResetModal}>重置</Button>*/}
+                {/*</Col>*/}
+              </Row>
+              <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                <Col md={8} sm={24}></Col>
+                <Col md={8} sm={24}></Col>
+                <Col md={8} sm={24}>
+              <span style={{ float: 'right', marginBottom: 24 }}>
+                <Button type="primary" htmlType="submit">查询</Button>
+                <Button style={{ marginLeft: 8 }} onClick={this.handleFormResetModal}>重置</Button>
+              </span>
                 </Col>
               </Row>
             </Form>
