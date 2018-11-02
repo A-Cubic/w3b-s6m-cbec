@@ -28,7 +28,7 @@ export default {
     // 我的客户
     *getClient({ payload },{ call,put }){
       const response = yield call(getClient, payload);
-      console.log('~res',response)
+      // console.log('~res',response)
       if(response!==undefined){
         yield put({
           type: 'getClientR',

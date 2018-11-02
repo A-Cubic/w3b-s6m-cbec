@@ -2,14 +2,13 @@
 export default function salesStatisticsMock(url) {
   return {
     // 我的客户
-    'POST /llback/Sales/client': GetOrderList,
+    'POST /llback/Sales/GetClient': url,
     // 销售统计 - 代理- 列表
     'POST /llback/Sales/GetSalesListByAgent': url,
     // 销售统计 - 供应商- 列表
     'POST /llback/Sales/GetSalesListBySupplier': url,
     // 销售统计 - 运营- 列表
     'POST /llback/Sales/GetSalesListByOperator': url,
-
   };
 }
 export function GetOrderList(req, res) {

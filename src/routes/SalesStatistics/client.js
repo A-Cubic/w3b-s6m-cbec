@@ -78,7 +78,7 @@ export default class client extends Component {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="客户名称：">
-              {getFieldDecorator('barcode')(
+              {getFieldDecorator('userName')(
                 <Input placeholder="请输入客户名称" />
               )}
             </FormItem>
@@ -107,20 +107,20 @@ export default class client extends Component {
     const columns = [
       {
         title: '序号',
-        dataIndex: 'id',
-        key: 'id',
+        dataIndex: 'keyId',
+        key: 'keyId',
       },{
         title: '入驻日期',
-        dataIndex: 'goodsName',
-        key: 'goodsName',
+        dataIndex: 'createDate',
+        key: 'createDate',
       }, {
         title: '客户名称',
-        dataIndex: 'brand',
-        key: 'brand',
+        dataIndex: 'userName',
+        key: 'userName',
       }, {
         title: '提点方式',
-        dataIndex: 'category',
-        key: 'category',
+        dataIndex: 'agentCost',
+        key: 'agentCost',
       }
     ];
     return (

@@ -3,7 +3,7 @@ import request from '../utils/request';
 
 // 我的客户
 export async function getClient(params) {
-  return request(`/llback/Sales/client`,{
+  return request(`/llback/Sales/GetClient`,{
     method: 'POST',
     body: params,
   })
