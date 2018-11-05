@@ -127,7 +127,7 @@ export default function(dynamicWrapper,app){
     },
     // 我的收益 - 代理20181025
     '/settlement/incomeA': {
-      component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/incomeA')),
+      component: dynamicWrapper(app, ['settlementManagement','publicDictionary'], () => import('../routes/SettlementManagement/incomeA')),
     },
     // 我的收益 - 门店20181025
     '/settlement/incomeStore': {

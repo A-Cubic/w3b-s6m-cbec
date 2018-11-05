@@ -89,12 +89,12 @@ export default class incomeStore extends Component {
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
       if (err) return;
-      const rangeValue = fieldsValue['date'];
+      const rangeValue = fieldsValue['BalanceDate'];
       const values = rangeValue==undefined ? {
         ...fieldsValue,
       }:{
         ...fieldsValue,
-        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+        'BalanceDate': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
 
       this.setState({
@@ -150,10 +150,10 @@ export default class incomeStore extends Component {
       <div style={{margin:'0 100px 0px',fontSize:16}}>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            待结算收益（元）：<span className={styles.colorRed} >¥{informationData.mes}</span>
+            待结算收益（元）：<span className={styles.colorRed} >¥{informationData.totalEstimate}</span>
           </Col>
           <Col md={8} sm={24}>
-            累积结算收益（元）：<span className={styles.colorRed}>¥{informationData.mes}</span>
+            累积结算收益（元）：<span className={styles.colorRed}>¥{informationData.totalProfit}</span>
           </Col>
         </Row>
       </div>
@@ -178,8 +178,8 @@ export default class incomeStore extends Component {
         key: 'merchantOrderId',
       }, {
         title: '发货时间',
-        dataIndex: 'tradeTime',
-        key: 'tradeTime',
+        dataIndex: 'waybillTime',
+        key: 'waybillTime',
       }, {
         title: '订单金额',
         dataIndex: 'tradeAmount',
@@ -187,14 +187,16 @@ export default class incomeStore extends Component {
         render:val=>`¥${val}`
       },{
         title: '收益',
-        dataIndex: 'purchase',
-        key: 'purchase',
+        dataIndex: 'profit',
+        key: 'profit',
         render:val=>`¥${val}`
       },{
         title: '支付类型',
-        dataIndex: 's',
-        key: 's',
-        render:val=>`¥${val}`
+        dataIndex: 'payType',
+        key: 'payType',
+        render:val=>{
+          val==1?'线上支付':'线下支付'
+        }
       }
     ];
     return (
@@ -203,26 +205,12 @@ export default class incomeStore extends Component {
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={8} sm={24}>
               <FormItem label="订单编号：">
-                {getFieldDecorator('dingdan')(
+                {getFieldDecorator('merchantOrderId')(
                   <Input placeholder="请输入订单编号" />
                 )}
               </FormItem>
             </Col>
-            <Col md={8} sm={24}>
-              <FormItem
-                label="合作方"
-              >
-                {getFieldDecorator('hezuo')(
-                  <Select
-                    placeholder="请选择合作方"
-                  >
-                    <option key={1} value={1}>ss</option>
-                    {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
 
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
             <Col md={8} sm={24}>
               <FormItem
                 label="支付类型"
@@ -239,15 +227,9 @@ export default class incomeStore extends Component {
                 )}
               </FormItem>
             </Col>
-          </Row>
-          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-            <Col md={8} sm={24}></Col>
-            <Col md={8} sm={24}></Col>
             <Col md={8} sm={24}>
-              <span style={{ float: 'right', marginBottom: 24 }}>
                 <Button type="primary" htmlType="submit">查询</Button>
                 <Button style={{ marginLeft: 8 }} onClick={this.handleFormResetKeyOne}>重置</Button>
-              </span>
             </Col>
           </Row>
 
@@ -257,7 +239,7 @@ export default class incomeStore extends Component {
             <div style={{ float: 'right' }}>
               订单总数：<span className={styles.colorRed}>{unSettlementData.item?unSettlementData.pagination.total:0}</span>，
               订单总额（元）：<span className={styles.colorRed}>¥{unSettlementData.item?unSettlementData.item.totalSales:0}</span>，
-              收益总额（元）：<span className={styles.colorRed}>¥{unSettlementData.item?unSettlementData.item.totalPurchase:0} </span>
+              收益总额（元）：<span className={styles.colorRed}>¥{unSettlementData.item?unSettlementData.item.totalProfit:0} </span>
             </div>
           </div>
         </Form>
@@ -287,12 +269,12 @@ export default class incomeStore extends Component {
         key: 'keyId',
       },{
         title: '结算日期',
-        dataIndex: 'tradeTime',
-        key: 'tradeTime',
+        dataIndex: 'createTime',
+        key: 'createTime',
       }, {
         title: '结算金额（元）',
-        dataIndex: 'tradeAmount',
-        key: 'tradeAmount',
+        dataIndex: 'price',
+        key: 'price',
         render:val=>`¥${val}`
       }, {
         title: '操作',
@@ -310,7 +292,7 @@ export default class incomeStore extends Component {
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={8} sm={24}>
               <FormItem label="结算日期">
-                {getFieldDecorator('date')(
+                {getFieldDecorator('BalanceDate')(
                   <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
                 )}
               </FormItem>
@@ -342,7 +324,7 @@ export default class incomeStore extends Component {
     );
   }
   handleChildrenCheckOrder=(record)=>{
-    // console.log(record)
+    console.log(record)
     this.props.dispatch({
       type: 'settlementManagement/getIncomeStoreSettlementOrderData',
       payload: {record},
@@ -369,8 +351,8 @@ export default class incomeStore extends Component {
         key: 'merchantOrderId',
       }, {
         title: '发货时间',
-        dataIndex: 'tradeTime',
-        key: 'tradeTime',
+        dataIndex: 'waybillTime',
+        key: 'waybillTime',
       }, {
         title: '订单金额',
         dataIndex: 'tradeAmount',
@@ -378,14 +360,16 @@ export default class incomeStore extends Component {
         render:val=>`¥${val}`
       },{
         title: '收益',
-        dataIndex: 'purchase',
-        key: 'purchase',
+        dataIndex: 'profit',
+        key: 'profit',
         render:val=>`¥${val}`
       },{
         title: '支付类型',
-        dataIndex: 's',
-        key: 's',
-        render:val=>`¥${val}`
+        dataIndex: 'payType',
+        key: 'payType',
+        render:val=>{
+          val==1?'线上支付':'线下支付'
+        }
       }
     ];
     return (
@@ -432,57 +416,43 @@ export default class incomeStore extends Component {
               <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                 <Col md={8} sm={24}>
                   <FormItem label="订单编号：">
-                    {getFieldDecorator('dingdan')(
+                    {getFieldDecorator('merchantOrderId')(
                       <Input placeholder="请输入订单编号" />
                     )}
                   </FormItem>
                 </Col>
-                <Col md={8} sm={24}>
-                  <FormItem
-                    label="合作方"
-                  >
-                    {getFieldDecorator('hezuo')(
-                      <Select
-                        placeholder="请选择合作方"
-                      >
-                        <option key={1} value={1}>aa</option>
-                        {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
 
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
                 <Col md={8} sm={24}>
                   <FormItem
                     label="支付类型"
                   >
-                    {getFieldDecorator('hezuo')(
+                    {getFieldDecorator('payType')(
                       <Select
                         placeholder="请选择支付类型"
                       >
-                        <option key={0} value={0}>线上支付</option>
-                        <option key={1} value={1}>线下支付</option>
+                        <option key={1} value={1}>线上支付</option>
+                        <option key={2} value={2}>线下支付</option>
                         {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
 
                       </Select>
                     )}
                   </FormItem>
                 </Col>
-                {/*<Col md={8} sm={24}>*/}
-                  {/*<Button type="primary" htmlType="submit">查询</Button>*/}
-                  {/*<Button style={{ marginLeft: 8 }} onClick={this.handleFormResetModal}>重置</Button>*/}
-                {/*</Col>*/}
-              </Row>
-              <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                <Col md={8} sm={24}></Col>
-                <Col md={8} sm={24}></Col>
                 <Col md={8} sm={24}>
-              <span style={{ float: 'right', marginBottom: 24 }}>
-                <Button type="primary" htmlType="submit">查询</Button>
-                <Button style={{ marginLeft: 8 }} onClick={this.handleFormResetModal}>重置</Button>
-              </span>
+                  <Button type="primary" htmlType="submit">查询</Button>
+                  <Button style={{ marginLeft: 8 }} onClick={this.handleFormResetModal}>重置</Button>
                 </Col>
               </Row>
+              {/*<Row gutter={{ md: 8, lg: 24, xl: 48 }}>*/}
+                {/*<Col md={8} sm={24}></Col>*/}
+                {/*<Col md={8} sm={24}></Col>*/}
+                {/*<Col md={8} sm={24}>*/}
+              {/*<span style={{ float: 'right', marginBottom: 24 }}>*/}
+                {/*<Button type="primary" htmlType="submit">查询</Button>*/}
+                {/*<Button style={{ marginLeft: 8 }} onClick={this.handleFormResetModal}>重置</Button>*/}
+              {/*</span>*/}
+                {/*</Col>*/}
+              {/*</Row>*/}
             </Form>
             <Table
               dataSource={settlementOrderData.list}

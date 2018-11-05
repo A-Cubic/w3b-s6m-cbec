@@ -1,22 +1,19 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function salesStatisticsMock(url) {
   return {
-    // 我的收益（门店）- 已结算收益 - 查看订单
-    'POST /llback/Balance/getIncomeStoreSettlementOrderData': getChannelList,
-    // 我的收益（门店）- 已结算收益
-    'POST /llback/Balance/getIncomeStoreSettlementData': getChannelList,
-    // 我的收益（门店）- 待结算收益
-    'POST /llback/Balance/getIncomeStoreUnSettlementData': getChannelList,
-    // 我的收益（门店）- 信息展示
-    'POST /llback/Balance/getIncomeStoreInformationData': mmmm,
+
     // 我的收益（代理）- 已结算收益 - 查看订单
-    'POST /llback/Balance/getIncomeASettlementOrderData': getChannelList,
+    // 我的收益（门店）- 已结算收益 - 查看订单
+    'POST /llback/Balance/GetSettleInfo': url,
     // 我的收益（代理）- 已结算收益
-    'POST /llback/Balance/getIncomeASettlementData': getChannelList,
+    // 我的收益（门店）- 已结算收益
+    'POST /llback/Balance/GetSettle': url,
     // 我的收益（代理）- 预估收益
-    'POST /llback/Balance/getIncomeAForecastData': getChannelList,
+    // 我的收益（门店）- 待结算收益
+    'POST /llback/Balance/GetEstimate': url,
     // 我的收益（代理）- 信息展示
-    'POST /llback/Balance/mes': mmmm,
+    // 我的收益（门店）- 信息展示
+    'POST /llback/Balance/GetTotalProfit': url,
     // 结算管理 - 供应商- 列表
     'POST /llback/Balance/GetBalanceListBySupplier': url,
     // 结算管理 - 运营- 列表

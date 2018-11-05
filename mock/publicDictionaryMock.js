@@ -1,6 +1,8 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function publicDictionaryMock(url) {
   return {
+    // 获取代理合作方
+    'POST /llback/Balance/GetPartner': url,
     // 获取平台渠道
     'POST /llback/Distributor/GetPlatform': url,
     // 获取销售商（渠道商）
@@ -16,4 +18,16 @@ export default function publicDictionaryMock(url) {
     // 获取快递
     'POST /llback/Order/GetExpress': url,
   };
+}
+export function getPlatform(req, res) {
+  res.send([
+    {
+      platformId: '0',
+      platformType: '合作方一',
+    },
+    {
+      platformId: '1',
+      platformType: '合作方二',
+    },
+  ]);
 }

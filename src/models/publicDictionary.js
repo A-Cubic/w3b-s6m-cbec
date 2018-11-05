@@ -1,5 +1,6 @@
 // 公共字典
 import {
+  getPartnerData,
   getChannelTypeData,
   getPurchaseData,
   getSupplier,
@@ -12,6 +13,8 @@ import {
 export default {
   namespace: 'publicDictionary',
   state:{
+    // 获取代理合作方
+    partnerArr:[],
     // 获取平台渠道类型
     channelTypeArr:[],
     // 获取销售商（渠道商）
@@ -29,6 +32,18 @@ export default {
 
   },
   effects:{
+    // 获取平台渠道类型
+    *getPartner({ payload },{ call,put}){
+
+      const response = yield call(getPartnerData, payload);
+      console.log('re',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getPartnerR',
+          payload: response,
+        });
+      }
+    },
     // 获取平台渠道类型
     *getChannelType({ payload },{ call,put}){
 
@@ -105,6 +120,12 @@ export default {
 
   },
   reducers:{
+    getPartnerR(state, action) {
+      return {
+        ...state,
+        partnerArr:action.payload,
+      };
+    },
     getChannelTypeR(state, action) {
       return {
         ...state,

@@ -53,6 +53,14 @@ export default {
             case 'agent':
               tUrl = '/orderManagement/agentOrder';
               break;
+              //  供货代理
+            case 'sagent':
+              tUrl = '/settlement/incomeA';
+              break;
+              //  采购代理
+            case 'pagent':
+              tUrl = '/settlement/incomeA';
+              break;
             //  分销商
             case 'distribution':
               tUrl = '/orderManagement/distributionOrder';

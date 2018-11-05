@@ -1,4 +1,11 @@
 import request from '../utils/request';
+// 获取代理合作方
+export async function getPartnerData(params) {
+  return request(`/llback/Balance/GetPartner`, {
+    method: 'POST',
+    body: params,
+  });
+}
 // 获取平台渠道类型
 export async function getChannelTypeData(params) {
   return request(`/llback/Distributor/GetPlatform`, {

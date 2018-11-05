@@ -1,29 +1,29 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
-// 我的收益（代理）- 已结算收益 - 查看订单
+// 我的收益（门店）- 已结算收益 - 查看订单
 export async function getIncomeStoreSettlementOrderData(params) {
-  return request(`/llback/Balance/getIncomeStoreSettlementOrderData`, {
+  return request(`/llback/Balance/GetSettleInfo`, {
     method: 'POST',
     body: params,
   });
 }
-// 我的收益（代理）- 已结算收益
+// 我的收益（门店）- 已结算收益
 export async function getIncomeStoreSettlementData(params) {
-  return request(`/llback/Balance/getIncomeStoreSettlementData`, {
+  return request(`/llback/Balance/GetSettle`, {
     method: 'POST',
     body: params,
   });
 }
 // 我的收益（门店）- 待结算收益
 export async function getIncomeStoreUnSettlementData(params) {
-  return request(`/llback/Balance/getIncomeStoreUnSettlementData`, {
+  return request(`/llback/Balance/GetEstimate`, {
     method: 'POST',
     body: params,
   });
 }
 // 我的收益（门店）- 信息展示
 export async function getIncomeStoreInformationData(params) {
-  return request(`/llback/Balance/getIncomeStoreInformationData`, {
+  return request(`/llback/Balance/GetTotalProfit`, {
     method: 'POST',
     body: params,
   });
@@ -31,28 +31,28 @@ export async function getIncomeStoreInformationData(params) {
 
 // 我的收益（代理）- 已结算收益 - 查看订单
 export async function getIncomeASettlementOrderData(params) {
-  return request(`/llback/Balance/getIncomeASettlementOrderData`, {
+  return request(`/llback/Balance/GetSettleInfo`, {
     method: 'POST',
     body: params,
   });
 }
 // 我的收益（代理）- 已结算收益
 export async function getIncomeASettlementData(params) {
-  return request(`/llback/Balance/getIncomeASettlementData`, {
+  return request(`/llback/Balance/GetSettle`, {
     method: 'POST',
     body: params,
   });
 }
 // 我的收益（代理）- 预估收益
 export async function getIncomeAForecastData(params) {
-  return request(`/llback/Balance/getIncomeAForecastData`, {
+  return request(`/llback/Balance/GetEstimate`, {
     method: 'POST',
     body: params,
   });
 }
 // 我的收益（代理）- 信息展示
 export async function getIncomeAInformationData(params) {
-  return request(`/llback/Balance/mes`, {
+  return request(`/llback/Balance/GetTotalProfit`, {
     method: 'POST',
     body: params,
   });

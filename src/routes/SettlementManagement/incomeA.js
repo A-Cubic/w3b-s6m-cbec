@@ -11,8 +11,8 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
-@connect(({settlementManagement,  loading }) => ({
-  settlementManagement,
+@connect(({settlementManagement,publicDictionary,  loading }) => ({
+  settlementManagement,publicDictionary
   // loading: loading.effects['salesStatistics/getSalesStatisticsListO'],
 }))
 @Form.create()
@@ -27,6 +27,10 @@ export default class incomeA extends Component {
     settlementOrderVisible:false
   }
   init(){
+    this.props.dispatch({
+      type: 'publicDictionary/getPartner',
+      payload: {},
+    });
     this.props.dispatch({
       type: 'settlementManagement/getIncomeAInformationData',
       payload: {},
@@ -89,12 +93,12 @@ export default class incomeA extends Component {
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
       if (err) return;
-      const rangeValue = fieldsValue['date'];
+      const rangeValue = fieldsValue['BalanceDate'];
       const values = rangeValue==undefined ? {
         ...fieldsValue,
       }:{
         ...fieldsValue,
-        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+        'BalanceDate': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
 
       this.setState({
@@ -150,13 +154,13 @@ export default class incomeA extends Component {
       <div style={{margin:'0 100px 0px',fontSize:16}}>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            当前预估收益（元）：<span style={{color: '#ff8282'}}>¥{informationData.mes}</span>
+            当前预估收益（元）：<span style={{color: '#ff8282'}}>¥{informationData.totalEstimate}</span>
           </Col>
           <Col md={8} sm={24}>
-            在途收益（元）：<span style={{color: '#ff8282'}}>¥{informationData.mes}</span>
+            在途收益（元）：<span style={{color: '#ff8282'}}>¥{informationData.totalUnpaid}</span>
           </Col>
           <Col md={8} sm={24}>
-            累积结算收益（元）：<span style={{color: '#ff8282'}}>¥{informationData.mes}</span>
+            累积结算收益（元）：<span style={{color: '#ff8282'}}>¥{informationData.totalProfit}</span>
           </Col>
         </Row>
       </div>
@@ -165,6 +169,7 @@ export default class incomeA extends Component {
   renderTabKeyOne(){
     const { getFieldDecorator } = this.props.form;
     const { settlementManagement:{incomeAgencyData:{forecastData} }} = this.props;
+    const { publicDictionary:{partnerArr}} = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -181,22 +186,21 @@ export default class incomeA extends Component {
         key: 'merchantOrderId',
       }, {
         title: '发货时间',
-        dataIndex: 'tradeTime',
-        key: 'tradeTime',
+        dataIndex: 'waybillTime',
+        key: 'waybillTime',
       }, {
         title: '合作方',
+        dataIndex: 'distribution',
+        key: 'distribution',
+      },{
+        title: '订单金额',
         dataIndex: 'tradeAmount',
         key: 'tradeAmount',
         render:val=>`¥${val}`
       },{
-        title: '订单金额',
-        dataIndex: 'purchase',
-        key: 'purchase',
-        render:val=>`¥${val}`
-      },{
         title: '收益',
-        dataIndex: 's',
-        key: 's',
+        dataIndex: 'profit',
+        key: 'profit',
         render:val=>`¥${val}`
       }
     ];
@@ -206,7 +210,7 @@ export default class incomeA extends Component {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="订单编号：">
-              {getFieldDecorator('dingdan')(
+              {getFieldDecorator('merchantOrderId')(
                 <Input placeholder="请输入订单编号" />
               )}
             </FormItem>
@@ -215,12 +219,12 @@ export default class incomeA extends Component {
             <FormItem
               label="合作方"
             >
-              {getFieldDecorator('hezuo')(
+              {getFieldDecorator('purchaseCode')(
                 <Select
                   placeholder="请选择合作方"
                 >
-                  <option key={1} value={1}>aa</option>
-                  {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
+                  {/*<option key={1} value={1}>aa</option>*/}
+                  {partnerArr.map(val => <Option key={val.purchaseCode} value={val.purchaseCode} label={val.purchaseName}>{val.purchaseName}</Option>)}
 
                 </Select>
               )}
@@ -237,7 +241,7 @@ export default class incomeA extends Component {
           <div style={{ float: 'right' }}>
             <span>订单总数：{forecastData.item?forecastData.pagination.total:0}， </span>
             <span>订单总额（元）：¥{forecastData.item?forecastData.item.totalSales:0}， </span>
-            <span>收益总额（元）：¥{forecastData.item?forecastData.item.totalPurchase:0} </span>
+            <span>收益总额（元）：¥{forecastData.item?forecastData.item.totalProfit:0} </span>
           </div>
         </div>
       </Form>
@@ -267,17 +271,18 @@ export default class incomeA extends Component {
         key: 'keyId',
       },{
         title: '结算日期',
-        dataIndex: 'tradeTime',
-        key: 'tradeTime',
+        dataIndex: 'createTime',
+        key: 'createTime',
       }, {
         title: '结算金额（元）',
-        dataIndex: 'tradeAmount',
-        key: 'tradeAmount',
+        dataIndex: 'price',
+        key: 'price',
         render:val=>`¥${val}`
       }, {
         title: '结算状态',
-        dataIndex: 'waybillTime',
-        key: 'waybillTime',
+        dataIndex: 'status',
+        key: 'status',
+        render:val=>{val==0?'在途':'已打款'}
       }, {
         title: '操作',
         dataIndex: 'operate',
@@ -294,7 +299,7 @@ export default class incomeA extends Component {
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={8} sm={24}>
               <FormItem label="结算日期">
-                {getFieldDecorator('date')(
+                {getFieldDecorator('BalanceDate')(
                   <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
                 )}
               </FormItem>
@@ -303,11 +308,12 @@ export default class incomeA extends Component {
               <FormItem
                 label="结算状态"
               >
-                {getFieldDecorator('platformType')(
+                {getFieldDecorator('accountStatus')(
                   <Select
                     placeholder="请选择结算状态"
                   >
-                    <option key={1} value={1}>aa</option>
+                    <option key={0} value={0}>在途</option>
+                    <option key={1} value={1}>已打款</option>
                     {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
 
                   </Select>
@@ -323,7 +329,7 @@ export default class incomeA extends Component {
           <Divider dashed />
           <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
             <div style={{ float: 'right' }}>
-              <span>总单数：{settlementData.item?settlementData.pagination.total:0}</span>
+              <span>总单数：{settlementData?settlementData.pagination.total:0}</span>
             </div>
           </div>
         </Form>
@@ -348,9 +354,10 @@ export default class incomeA extends Component {
     this.showModal(true)
   }
   render() {
-    // console.log(this.props.form)
+    console.log('sdada',this.props)
     const { getFieldDecorator } = this.props.form;
     const { settlementManagement:{incomeAgencyData:{settlementOrderData} }} = this.props;
+    const { publicDictionary:{partnerArr}} = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -367,22 +374,21 @@ export default class incomeA extends Component {
         key: 'merchantOrderId',
       }, {
         title: '发货时间',
-        dataIndex: 'tradeTime',
-        key: 'tradeTime',
+        dataIndex: 'waybillTime',
+        key: 'waybillTime',
       }, {
         title: '合作方',
+        dataIndex: 'distribution',
+        key: 'distribution',
+      },{
+        title: '订单金额',
         dataIndex: 'tradeAmount',
         key: 'tradeAmount',
         render:val=>`¥${val}`
       },{
-        title: '订单金额',
-        dataIndex: 'purchase',
-        key: 'purchase',
-        render:val=>`¥${val}`
-      },{
         title: '收益',
-        dataIndex: 's',
-        key: 's',
+        dataIndex: 'profit',
+        key: 'profit',
         render:val=>`¥${val}`
       }
     ];
@@ -430,7 +436,7 @@ export default class incomeA extends Component {
               <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                 <Col md={8} sm={24}>
                   <FormItem label="订单编号：">
-                    {getFieldDecorator('dingdan')(
+                    {getFieldDecorator('merchantOrderId')(
                       <Input placeholder="请输入订单编号" />
                     )}
                   </FormItem>
@@ -439,12 +445,12 @@ export default class incomeA extends Component {
                   <FormItem
                     label="合作方"
                   >
-                    {getFieldDecorator('hezuo')(
+                    {getFieldDecorator('purchaseCode')(
                       <Select
                         placeholder="请选择合作方"
                       >
-                        <option key={1} value={1}>aa</option>
-                        {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
+                        {/*<option key={1} value={1}>aa</option>*/}
+                        {partnerArr.map(val => <Option key={val.purchaseCode} value={val.purchaseCode} label={val.purchaseName}>{val.purchaseName}</Option>)}
 
                       </Select>
                     )}
