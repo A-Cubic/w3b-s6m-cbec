@@ -282,7 +282,7 @@ export default class incomeA extends Component {
         title: '结算状态',
         dataIndex: 'status',
         key: 'status',
-        render:val=>{val==0?'在途':'已打款'}
+        render:val=>`${val==0?'在途':'已打款'}`
       }, {
         title: '操作',
         dataIndex: 'operate',
@@ -312,8 +312,8 @@ export default class incomeA extends Component {
                   <Select
                     placeholder="请选择结算状态"
                   >
-                    <option key={0} value={0}>在途</option>
-                    <option key={1} value={1}>已打款</option>
+                    <Option key={0} value={0}>在途</Option>
+                    <Option key={1} value={1}>已打款</Option>
                     {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
 
                   </Select>
@@ -349,12 +349,12 @@ export default class incomeA extends Component {
     // console.log(record)
     this.props.dispatch({
       type: 'settlementManagement/getIncomeASettlementOrderData',
-      payload: {record},
+      payload: {accountCode:record.accountCode},
     });
     this.showModal(true)
   }
   render() {
-    console.log('sdada',this.props)
+    // console.log('sdada',this.props)
     const { getFieldDecorator } = this.props.form;
     const { settlementManagement:{incomeAgencyData:{settlementOrderData} }} = this.props;
     const { publicDictionary:{partnerArr}} = this.props;
@@ -503,6 +503,10 @@ export default class incomeA extends Component {
       modalFormValues: {},
     });
     this.props.form.resetFields();
+    this.props.dispatch({
+      type: 'settlementManagement/getIncomeASettlementOrderData',
+      payload: {},
+    });
   }
   handleTableChangeModal=(pagination, filtersArg, sorter)=>{
     const params = {

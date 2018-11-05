@@ -36,7 +36,7 @@ export default {
     *getPartner({ payload },{ call,put}){
 
       const response = yield call(getPartnerData, payload);
-      console.log('re',response)
+      // console.log('re',response)
       if (response !== undefined) {
         yield put({
           type: 'getPartnerR',

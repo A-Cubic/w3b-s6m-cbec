@@ -7,10 +7,9 @@ import moment from 'moment';
 import {getToken} from "../../utils/Global";
 const userId = getToken().userId;
 const RangePicker = DatePicker.RangePicker;
-const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
-
+const Option = Select.Option;
 @connect(({settlementManagement,  loading }) => ({
   settlementManagement,
   // loading: loading.effects['salesStatistics/getSalesStatisticsListO'],
@@ -194,9 +193,7 @@ export default class incomeStore extends Component {
         title: '支付类型',
         dataIndex: 'payType',
         key: 'payType',
-        render:val=>{
-          val==1?'线上支付':'线下支付'
-        }
+        render:val=>`${val==1?'线上支付':'线下支付'}`
       }
     ];
     return (
@@ -215,12 +212,12 @@ export default class incomeStore extends Component {
               <FormItem
                 label="支付类型"
               >
-                {getFieldDecorator('zhifu')(
+                {getFieldDecorator('payType')(
                   <Select
                     placeholder="请选择支付类型"
                   >
-                    <option key={0} value={0}>线上支付</option>
-                    <option key={1} value={1}>线下支付</option>
+                    <Option key={1} value={1}>线上支付</Option>
+                    <Option key={2} value={2}>线下支付</Option>
                     {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
 
                   </Select>
@@ -290,7 +287,7 @@ export default class incomeStore extends Component {
       <div>
         <Form onSubmit={this.onSearchTabKeyTwo} layout="inline">
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-            <Col md={8} sm={24}>
+            <Col md={10} sm={24}>
               <FormItem label="结算日期">
                 {getFieldDecorator('BalanceDate')(
                   <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
@@ -306,8 +303,8 @@ export default class incomeStore extends Component {
           <Divider dashed />
           <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
             <div style={{ float: 'right' }}>
-              总条数：<span className={styles.colorRed}>{settlementData.item?settlementData.pagination.total:0}</span> ,
-              结算总额：<span className={styles.colorRed}>¥{settlementData.item?settlementData.pagination.total:0}</span>
+              总条数：<span className={styles.colorRed}>{settlementData?settlementData.pagination.total:0}</span> ,
+              结算总额：<span className={styles.colorRed}>¥{settlementData.item?settlementData.item.totalProfit:0}</span>
             </div>
           </div>
         </Form>
@@ -324,10 +321,10 @@ export default class incomeStore extends Component {
     );
   }
   handleChildrenCheckOrder=(record)=>{
-    console.log(record)
+    // console.log(record)
     this.props.dispatch({
       type: 'settlementManagement/getIncomeStoreSettlementOrderData',
-      payload: {record},
+      payload: {accountCode:record.accountCode},
     });
     this.showModal(true)
   }
@@ -367,9 +364,7 @@ export default class incomeStore extends Component {
         title: '支付类型',
         dataIndex: 'payType',
         key: 'payType',
-        render:val=>{
-          val==1?'线上支付':'线下支付'
-        }
+        render:val=>`${val==1?'线上支付':'线下支付'}`
       }
     ];
     return (
@@ -430,8 +425,8 @@ export default class incomeStore extends Component {
                       <Select
                         placeholder="请选择支付类型"
                       >
-                        <option key={1} value={1}>线上支付</option>
-                        <option key={2} value={2}>线下支付</option>
+                        <Option key={1} value={1}>线上支付</Option>
+                        <Option key={2} value={2}>线下支付</Option>
                         {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
 
                       </Select>
@@ -495,6 +490,10 @@ export default class incomeStore extends Component {
       modalFormValues: {},
     });
     this.props.form.resetFields();
+    this.props.dispatch({
+      type: 'settlementManagement/getIncomeStoreSettlementOrderData',
+      payload: {},
+    });
   }
   handleTableChangeModal=(pagination, filtersArg, sorter)=>{
     const params = {
