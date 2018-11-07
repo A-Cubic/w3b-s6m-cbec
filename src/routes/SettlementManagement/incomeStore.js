@@ -20,6 +20,7 @@ const Option = Select.Option;
 
 export default class incomeStore extends Component {
   state={
+    accountCode:'',
     keyOneFormValues:{},
     keyTwoFormValues:{},
     modalFormValues:{},
@@ -321,6 +322,9 @@ export default class incomeStore extends Component {
     );
   }
   handleChildrenCheckOrder=(record)=>{
+    this.setState({
+      accountCode:record.accountCode
+    })
     // console.log(record)
     this.props.dispatch({
       type: 'settlementManagement/getIncomeStoreSettlementOrderData',
@@ -402,7 +406,7 @@ export default class incomeStore extends Component {
           title="详情"
           visible={this.state.settlementOrderVisible}
           onCancel={()=>{
-            this.showModal(false)
+            this.handleCancel(false)
           }}
           footer={null}
         >
@@ -479,6 +483,7 @@ export default class incomeStore extends Component {
       this.props.dispatch({
         type: 'settlementManagement/getIncomeStoreSettlementOrderData',
         payload: {
+          accountCode:this.state.accountCode,
           ...values,
           ...settlementOrderData.pagination
         },
@@ -492,11 +497,12 @@ export default class incomeStore extends Component {
     this.props.form.resetFields();
     this.props.dispatch({
       type: 'settlementManagement/getIncomeStoreSettlementOrderData',
-      payload: {},
+      payload: {accountCode:this.state.accountCode},
     });
   }
   handleTableChangeModal=(pagination, filtersArg, sorter)=>{
     const params = {
+      accountCode:this.state.accountCode,
       ...this.state.modalFormValues,
       ...pagination,
     };
@@ -510,7 +516,14 @@ export default class incomeStore extends Component {
     this.setState({
       settlementOrderVisible: !!flag,
     });
-    this.handleFormResetModal();
+    // this.handleFormResetModal();
+  }
+  handleCancel = (flag) => {
+    this.setState({
+      settlementOrderVisible: !!flag,
+    });
+    this.props.form.resetFields();
+    // this.handleFormResetModal();
   }
 }
 

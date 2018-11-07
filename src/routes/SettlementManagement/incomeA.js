@@ -21,6 +21,7 @@ const TabPane = Tabs.TabPane;
 
 export default class incomeA extends Component {
   state={
+    accountCode:'',
     keyOneFormValues:{},
     keyTwoFormValues:{},
     modalFormValues:{},
@@ -346,6 +347,9 @@ export default class incomeA extends Component {
     );
   }
   handleChildrenCheckOrder=(record)=>{
+    this.setState({
+      accountCode:record.accountCode
+    })
     // console.log(record)
     this.props.dispatch({
       type: 'settlementManagement/getIncomeASettlementOrderData',
@@ -427,7 +431,7 @@ export default class incomeA extends Component {
           title="详情"
           visible={this.state.settlementOrderVisible}
           onCancel={()=>{
-            this.showModal(false)
+            this.handleCancel(false)
           }}
           footer={null}
         >
@@ -492,6 +496,7 @@ export default class incomeA extends Component {
       this.props.dispatch({
         type: 'settlementManagement/getIncomeASettlementOrderData',
         payload: {
+          accountCode:this.state.accountCode,
           ...values,
           ...settlementOrderData.pagination
         },
@@ -505,11 +510,12 @@ export default class incomeA extends Component {
     this.props.form.resetFields();
     this.props.dispatch({
       type: 'settlementManagement/getIncomeASettlementOrderData',
-      payload: {},
+      payload: {accountCode:this.state.accountCode},
     });
   }
   handleTableChangeModal=(pagination, filtersArg, sorter)=>{
     const params = {
+      accountCode:this.state.accountCode,
       ...this.state.modalFormValues,
       ...pagination,
     };
@@ -523,14 +529,15 @@ export default class incomeA extends Component {
     this.setState({
       settlementOrderVisible: !!flag,
     });
-    this.handleFormResetModal();
+    // this.handleFormResetModal();
   }
-  // handleCancel = (e) => {
-  //   // console.log(e);
-  //   this.setState({
-  //     settlementOrderVisible: false,
-  //   });
-  // }
+  handleCancel = (flag) => {
+    this.setState({
+      settlementOrderVisible: !!flag,
+    });
+    this.props.form.resetFields();
+    // this.handleFormResetModal();
+  }
 }
 
 
