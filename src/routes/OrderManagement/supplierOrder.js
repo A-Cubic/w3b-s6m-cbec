@@ -101,14 +101,15 @@ export default class supplierOrder extends Component {
     const {orderManagement:{supplierOrder:{tableData}}}=this.props
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
+      // console.log('valuesdadadada',fieldsValue['date'])
 
       if (err) return;
       const rangeValue = fieldsValue['date'];
-      const values = rangeValue==undefined ? {
+      const values = rangeValue!==undefined ? {
         ...fieldsValue,
+        'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       }:{
         ...fieldsValue,
-        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
 
       this.setState({
@@ -233,7 +234,7 @@ export default class supplierOrder extends Component {
           <Col md={8} sm={24}>
             <FormItem label="时段">
               {getFieldDecorator('date')(
-                <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
+                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} onChange={this.onChangeaa}/>
               )}
             </FormItem>
           </Col>
@@ -255,6 +256,9 @@ export default class supplierOrder extends Component {
         </div>
       </Form>
     );
+  }
+  onChangeaa(){
+    console.log('~~~~~~~~here')
   }
   render() {
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr,wareHouseArr,expressArr} }= this.props;

@@ -108,7 +108,7 @@ export default class agentOrder extends Component {
         ...fieldsValue,
       }:{
         ...fieldsValue,
-        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+        'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
 
       this.setState({
