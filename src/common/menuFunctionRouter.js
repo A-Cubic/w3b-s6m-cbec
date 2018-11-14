@@ -134,10 +134,7 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/incomeStore')),
     },
 
-  //
-
-
-    
+  
 
   };
 };
