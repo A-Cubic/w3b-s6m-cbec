@@ -1,5 +1,15 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
+
+//代销 -商品库存
+export  async function getConsignmentStockData(params) {
+  return request(`/llback/Goods/getConsignmentStockData`,{
+    method: 'POST',
+    body: params,
+  })
+}
+
+
 // 商品管理 - 商品查看 - 运营/供应商/代理
 export async function getGoodsList(params) {
   return request(`/llback/Goods/GetGoodsList`, {

@@ -1,7 +1,8 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function goodsManagementMock(url) {
   return {
-
+    // 代销 -商品库存
+    'POST /llback/Goods/getConsignmentStockData': getChannelLists,
     // 商品管理 - 商品查看 - 运营/供应商/代理
     'POST /llback/Goods/GetGoodsList': url,
     // 商品管理 - 商品查看详情 - 供应
@@ -18,6 +19,41 @@ export default function goodsManagementMock(url) {
     'POST /llback/Goods/ExamineWarehouseGoods': url,
 
   };
+}
+
+
+export function getChannelLists(req, res) {
+  res.send({
+    list: [{
+      id: '1',
+      usercode: 'admin',
+      purchase: '管理员',
+      goodsid: '1',
+      barcode: '2',
+      goodsName: '3',
+      slt: '4',
+      platformId: '',
+      platformType: 'B2B',
+      pprice: '2',
+      pNum: 3,
+      supplierId: '53',
+      suppliername: 'qq供货',
+      profitPlatform: 0,
+      profitAgent: 0,
+      profitDealer: 0,
+      profitOther1: 0,
+      profitOther1Name: '0',
+      profitOther2: 0,
+      profitOther2Name: '0',
+      profitOther3: 0,
+      profitOther3Name: '0',
+    }],
+    pagination: {
+      current: 1,
+      total: 1,
+      pageSize: 10,
+    },
+  });
 }
 export function getPlatform(req, res) {
   res.send([

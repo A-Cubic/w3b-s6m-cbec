@@ -31,6 +31,11 @@ export default function(dynamicWrapper,app){
     '/goods/goodsAboutP': {
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutP')),
     },
+
+    //代销-商品-商品库存20181115
+    '/goods/consignmentStock': {
+      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/consignmentStock')),
+    },
     //分销管理 - 分销商管理 - 代理
     '/agent/agentMgt': {
       component: dynamicWrapper(app, ['distributionManagement'], () => import('../routes/DistributionManagement/distributorsMgt')),
@@ -134,7 +139,7 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/incomeStore')),
     },
 
-  
+
 
   };
 };

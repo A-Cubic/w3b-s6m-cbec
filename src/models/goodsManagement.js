@@ -3,6 +3,7 @@ import {notification} from "antd/lib/index";
 import {getBrandData} from '../services/publicDictionary_S'
 import {getCheckStepStatus, getGoodsPutaway, getWareHouseData} from '../services/api'
 import {
+  getConsignmentStockData,
   getGoodsList,getGoodsDetailsO,getGoodsDetailsA,getGoodsDetailsS,getDefaultRadios,
   getGoodsDetails,onAudit,
 } from '../services/goodsManagement_S'
@@ -42,8 +43,29 @@ export default {
       selectedId: []
     },
 
+
+    // 代销-商品库存
+    consignmentStockData:{
+      tableData:{
+        list: [],
+        pagination:{},
+      },
+    }
   },
   effects:{
+    // 代销-商品报价
+    *getConsignmentStockData({payload},{call,put}){
+      const response = yield call(getConsignmentStockData, payload)
+      if(response !== ''){
+        yield put({
+          type: 'getConsignmentStockDataR',
+          payload:response
+        })
+      }
+    },
+
+
+
     *getDataAndClose({ payload },{ call, put }){
       const response = yield call(getBrandData, payload);
       if(response !== ''){
@@ -179,6 +201,15 @@ export default {
     },
   },
   reducers:{
+    getConsignmentStockDataR(state, action){
+      return {
+        ...state,
+        consignmentStockData:{
+          ...state.consignmentStockData,
+          tableData:action.payload,
+        }
+      };
+    },
     changeVisible(state, action){
       state.goodsOnAudit.visible[action.payload.visibleType] = action.payload.visibleValue;
       return {...state};
