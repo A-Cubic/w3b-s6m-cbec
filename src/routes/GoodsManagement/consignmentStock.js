@@ -19,6 +19,7 @@ const userId = getToken().userId;
 @Form.create()
 export default class consignmentStock extends Component {
   state={
+    sortedInfo:null,
     formValues:{}
   }
   init(){
@@ -42,6 +43,7 @@ export default class consignmentStock extends Component {
 
       this.setState({
         formValues: values,
+        sortedInfo: null,
       });
       this.props.dispatch({
         type: 'goodsManagement/getConsignmentStockData',
@@ -56,13 +58,13 @@ export default class consignmentStock extends Component {
   }
   handleFormReset =()=>{
     this.props.form.resetFields();
+    this.setState({
+      formValues: {},
+    });
     this.init();
   }
   handleTableChange=(pagination, filters, sorter)=>{
     const sorterConditions = ['ascend','descend']
-    // console.log('Various parameters',  sorter);
-    // console.log(sorter.order);
-
 
     let sorters={}
     if (sorter.field) {
@@ -70,6 +72,12 @@ export default class consignmentStock extends Component {
         [sorter.field]: sorterConditions.findIndex(i => i==sorter.order)
       }
     }
+
+    this.setState({
+      sortedInfo: sorter,
+    },()=>{
+      console.log(this.state.sortedInfo);
+    });
     const params = {
       ...pagination,
       ...this.state.formValues,
@@ -107,6 +115,7 @@ export default class consignmentStock extends Component {
 
   render() {
     // console.log('1',this.props)
+    let { sortedInfo } = this.state;
     const { goodsManagement:{consignmentStockData:{tableData:{list, pagination},childCheckA}} } = this.props;
 
     const paginationProps = {
@@ -115,14 +124,14 @@ export default class consignmentStock extends Component {
       ...pagination,
     };
     const columns = [
-      {
-        title: '序号',
-        dataIndex: 'keyId',
-        key: 'keyId',
-      }, {
+    {
+      title: '序号',
+      dataIndex: 'keyId',
+      key: 'keyId',
+    }, {
       title: '商品（SKU）',
-      dataIndex: 'barcode',
-      key: 'barcode',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
       render: (val,record) => (
         <div>
           <span>{val}</span>
@@ -131,37 +140,41 @@ export default class consignmentStock extends Component {
       )
     }, {
       title: '商品条码',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
+      dataIndex: 'barcode',
+      key: 'barcode',
     }, {
       title: '品牌',
       dataIndex: 'brand',
       key: 'brand',
     },{
       title: '保质期',
-      dataIndex: 'a',
-      key: 'a',
+      dataIndex: 'shelfLife',
+      key: 'shelfLife',
       sorter:true,
+        sortOrder:sortedInfo?sortedInfo.columnKey === 'shelfLife' && sortedInfo.order:false
     },{
       title: '商品入库时间',
-      dataIndex: 's',
-      key: 's',
+      dataIndex: 'createTime',
+      key: 'createTime',
       sorter:true,
+      sortOrder:sortedInfo?sortedInfo.columnKey === 'createTime' && sortedInfo.order:false
     },{
         title: '当前库存',
-        dataIndex: 'c',
-        key: 'c',
+        dataIndex: 'pNum',
+        key: 'pNum',
         sorter:true,
+        sortOrder:sortedInfo?sortedInfo.columnKey === 'pNum' && sortedInfo.order:false
       },{
         title: '供货价',
-        dataIndex: 'price',
-        key: 'price',
+        dataIndex: 'pprice',
+        key: 'pprice',
         render:val=>`¥${val}`,
         sorter:true,
+        sortOrder:sortedInfo?sortedInfo.columnKey === 'pprice' && sortedInfo.order:false
       },{
         title: '库存同步时间',
-        dataIndex: 'operate',
-        key: 'operate',
+        dataIndex: 'sameTime',
+        key: 'sameTime',
       }
     ];
     return (

@@ -141,5 +141,11 @@ export default function(dynamicWrapper,app){
 
 
 
+
+    //测试demo
+    '/goods/test': {
+      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/test')),
+    },
+
   };
 };
