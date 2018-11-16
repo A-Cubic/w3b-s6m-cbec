@@ -3,7 +3,7 @@ import request from '../utils/request';
 
 //代销 -商品库存
 export  async function getConsignmentStockData(params) {
-  return request(`/llback/Goods/getConsignmentStockData`,{
+  return request(`/llback/Goods/SelectGoodsList`,{
     method: 'POST',
     body: params,
   })

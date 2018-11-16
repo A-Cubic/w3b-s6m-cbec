@@ -2,7 +2,7 @@
 export default function goodsManagementMock(url) {
   return {
     // 代销 -商品库存
-    'POST /llback/Goods/getConsignmentStockData': getChannelLists,
+    'POST /llback/Goods/SelectGoodsList': url,
     // 商品管理 - 商品查看 - 运营/供应商/代理
     'POST /llback/Goods/GetGoodsList': url,
     // 商品管理 - 商品查看详情 - 供应

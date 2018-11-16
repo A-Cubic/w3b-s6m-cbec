@@ -10,7 +10,6 @@ import {getToken} from "../../utils/Global";
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
-const userId = getToken().userId;
 @connect(({goodsManagement,publicDictionary, loading }) => ({
   goodsManagement,publicDictionary,
   loading: loading.effects['goodsManagement/getGoodsAboutData'],
@@ -48,7 +47,6 @@ export default class consignmentStock extends Component {
       this.props.dispatch({
         type: 'goodsManagement/getConsignmentStockData',
         payload: {
-          userId:userId,
           ...values,
         },
       });
@@ -60,6 +58,7 @@ export default class consignmentStock extends Component {
     this.props.form.resetFields();
     this.setState({
       formValues: {},
+      sortedInfo: null,
     });
     this.init();
   }
@@ -75,13 +74,10 @@ export default class consignmentStock extends Component {
 
     this.setState({
       sortedInfo: sorter,
-    },()=>{
-      console.log(this.state.sortedInfo);
     });
     const params = {
       ...pagination,
       ...this.state.formValues,
-      userId:userId,
       ...sorters,
     };
     // console.log(params)
@@ -91,15 +87,14 @@ export default class consignmentStock extends Component {
     });
   }
   renderForm(){
-    const { goodsManagement:{consignmentStockData:{tableData:{list, pagination}}} } = this.props;
+    const { goodsManagement:{consignmentStockData:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={12} sm={24}>
             <FormItem label="">
-              {getFieldDecorator('goodsName')(
+              {getFieldDecorator('information')(
                 <Input placeholder="可输入商品条码，商品名称，商品品牌进行查询" />
               )}
             </FormItem>
@@ -109,6 +104,12 @@ export default class consignmentStock extends Component {
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </Col>
         </Row>
+        <Divider dashed />
+        <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+          <div style={{ float: 'right' }}>
+            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0} </span>
+          </div>
+        </div>
       </Form>
     );
   }
@@ -116,7 +117,7 @@ export default class consignmentStock extends Component {
   render() {
     // console.log('1',this.props)
     let { sortedInfo } = this.state;
-    const { goodsManagement:{consignmentStockData:{tableData:{list, pagination},childCheckA}} } = this.props;
+    const { goodsManagement:{consignmentStockData:{tableData:{list, pagination}}} } = this.props;
 
     const paginationProps = {
       showSizeChanger: true,
@@ -134,8 +135,8 @@ export default class consignmentStock extends Component {
       key: 'goodsName',
       render: (val,record) => (
         <div>
-          <span>{val}</span>
-          <img src={ record.slt} alt="" width={80} style={{marginLeft:8}}/>
+          <img src={ record.slt} alt="" width={80} style={{marginRight:8,}}/>
+          <span style={{display:'inline-block',width:200}}>{val}</span>
         </div>
       )
     }, {
