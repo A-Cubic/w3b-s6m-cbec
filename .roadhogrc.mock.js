@@ -8,6 +8,7 @@ import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
 
+import rolePurchaserConsignmentMock from './mock/rolePurchaserConsignmentMock';
 import workbenchMock from './mock/workbenchMock';
 import salesStatisticsMock from './mock/salesStatisticsMock';
 import orderManagementMock from './mock/orderManagementMock';
@@ -23,6 +24,7 @@ const service_url =  'http://api.llwell.net/';// http://api.llwell.net/  http://
 const service_url2 =  'http://console.llwell.net/';// http://console.llwell.net/  http://localhost:51184/
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
+  ...rolePurchaserConsignmentMock(service_url2),
   ...publicDictionaryMock(service_url2),
   ...settlementManagementMock(service_url2),
   ...distributionManagementMock(service_url2),

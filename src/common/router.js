@@ -1,8 +1,10 @@
 import { createElement } from 'react';
 import dynamic from 'dva/dynamic';
 import pathToRegexp from 'path-to-regexp';
+import menuRoleRouter from "./menuRoleRouter";
 import menuFunctionRouter from "./menuFunctionRouter";
 import menuBusinessRouter from "./menuBusinessRouter";
+
 let routerDataCache;
 
 const modelNotExisted = (app, model) => (
@@ -70,6 +72,7 @@ function getFlatMenuData(menus) {
 
 export const getRouterData = (app) => {
   const routerConfig = {
+    ...menuRoleRouter(dynamicWrapper,app),
     ...menuFunctionRouter(dynamicWrapper,app),
     ...menuBusinessRouter(dynamicWrapper,app)
   };
