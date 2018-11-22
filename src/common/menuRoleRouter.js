@@ -14,7 +14,7 @@ export default function(dynamicWrapper,app){
     },
     //代销-财务-合同信息-20181121
     '/finance/contractInformation': {
-      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../roles/purchaser/consignment/contractInformation')),
+      component: dynamicWrapper(app, ['rolePurchaserConsignment'], () => import('../roles/purchaser/consignment/contractInformation')),
     },
     //代销-统计-货款结算-20181121
     '/statistics/paymentSettlement': {
