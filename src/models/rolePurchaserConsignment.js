@@ -1,6 +1,7 @@
 import { message} from 'antd';
 import {
   getConfirmReceiptData,
+  goodsSales
 } from '../services/rolePurchaserConsignment_S'
 export default {
   namespace: 'rolePurchaserConsignment',
@@ -17,6 +18,20 @@ export default {
     }
   },
   effects:{
+    //商品销售-列表查询
+    *goodsSales({ payload },{ call,put }){
+      const response = yield call(goodsSales, payload);
+     // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'goodsSalesR',
+          payload: response,
+        })
+      }
+    },
+
+
+
     // 收货确认
     *getConfirmReceiptData({ payload },{ call,put }){
       const response = yield call(getConfirmReceiptData, payload);
@@ -40,6 +55,16 @@ export default {
       }
     },
 
+
+    goodsSalesR(state, action){
+      return {
+        ...state,
+        confirmReceipt:{
+          ...state.confirmReceipt,
+          tableData:action.payload
+        }
+      }
+    },
 
   }
 }

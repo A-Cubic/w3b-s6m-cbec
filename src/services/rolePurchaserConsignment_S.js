@@ -8,3 +8,10 @@ export async function getConfirmReceiptData(params) {
     body: params,
   })
 }
+//商品销售-列表查询
+export async function goodsSales(params) {
+  return request(`/llback/Sales/goodsSalesx`,{
+    method: 'POST',
+    body: params,
+  })
+}
