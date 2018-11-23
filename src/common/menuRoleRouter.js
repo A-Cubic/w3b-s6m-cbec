@@ -18,7 +18,7 @@ export default function(dynamicWrapper,app){
     },
     //代销-统计-货款结算-20181121
     '/statistics/paymentSettlement': {
-      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../roles/purchaser/consignment/paymentSettlement')),
+      component: dynamicWrapper(app, ['rolePurchaserConsignment'], () => import('../roles/purchaser/consignment/paymentSettlement')),
     },
 
 

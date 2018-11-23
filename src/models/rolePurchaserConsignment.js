@@ -3,8 +3,10 @@ import {
   getConfirmReceiptData,getChildModelTableData,childModelSubmit,
   goodsSales,
   contractInformation,
+  getPaymentSettlementData
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
+import paymentSettlement from "../roles/purchaser/consignment/paymentSettlement";
 export default {
   namespace: 'rolePurchaserConsignment',
   state:{
@@ -47,9 +49,20 @@ export default {
         src:''
       }
 
-    }
+    },
 
     // -------- 货款结算 --------------
+    paymentSettlement:{
+      tableData:{
+        list: [],
+        pagination:{},
+      },
+      childModelTableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      }
+    }
   },
   effects:{
     // -------- 收货确认 --------------
@@ -153,6 +166,17 @@ export default {
       }
     },
     // -------- 货款结算 --------------
+
+    *getPaymentSettlementData({ payload },{ call,put }){
+      const response = yield call(getPaymentSettlementData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getPaymentSettlementDataR',
+          payload: response,
+        })
+      }
+    },
   },
   reducers:{
     getConfirmReceiptDataR(state, action){
@@ -220,6 +244,15 @@ export default {
       }
     },
 
+    getPaymentSettlementDataR(state, action){
+      return {
+        ...state,
+        paymentSettlement:{
+          ...state.paymentSettlement,
+          tableData:action.payload
+        }
+      }
+    },
 
   }
 }
