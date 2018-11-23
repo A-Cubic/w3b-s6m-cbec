@@ -1,15 +1,95 @@
 export default function rolePurchaserConsignmentMock() {
   return {
-    // 收货确认
-    'POST /llback/Sales/getConfirmReceiptData': GetOrderList,
+    // -------- 收货确认 --------------
+    // 收货确认 - 列表
+    'POST /llback/Warehouse/CollectGoods': GetOrderList,
+    // 操作内商品详情列表
+    'POST /llback/Warehouse/CollectGoodsList': GetOrderList,
+    // 操作内 收货确认/提交运单号
+    'POST /llback/Warehouse/ConfirmGoods': UpdateDistributor,
+    // 'POST /llback/Warehouse/ConfirmGoods': 'http://172.16.10.51:54195/',
+
+    // -------- 商品销售 --------------
+    // -------- 合同信息 --------------
+    // -------- 货款结算 --------------
 
   };
 }
 export function GetOrderList(req, res) {
   res.send({
     list: [{
-      id: '3004',
-      status: '待发货',
+      id: '1',
+      status: 0,
+      sendType: 1,
+      sendid: 1,
+      merchantOrderId: 'SH20180127144502664278',
+      tradeTime: '2018-01-27 14:45:02',
+      waybillno: '',
+      consigneeName: null,
+      tradeAmount: '1',
+      idNumber: null,
+      consigneeMobile: null,
+      addrProvince: null,
+      addrCity: null,
+      addrDistrict: null,
+      addrDetail: null,
+      orderGoods: null,
+    }, {
+      id: '2',
+      status: 1,
+      sendType: 1,
+      sendid: 2,
+      merchantOrderId: 'SH20180127144502664278',
+      tradeTime: '2018-01-27 14:45:02',
+      waybillno: '',
+      consigneeName: null,
+      tradeAmount: '1',
+      idNumber: null,
+      consigneeMobile: null,
+      addrProvince: null,
+      addrCity: null,
+      addrDistrict: null,
+      addrDetail: null,
+      orderGoods: null,
+    }, {
+      id: '3',
+      sendid: 3,
+      status: 0,
+      sendType: 2,
+      merchantOrderId: 'SH20180127144502664278',
+      tradeTime: '2018-01-27 14:45:02',
+      waybillno: '',
+      consigneeName: null,
+      tradeAmount: '1',
+      idNumber: null,
+      consigneeMobile: null,
+      addrProvince: null,
+      addrCity: null,
+      addrDistrict: null,
+      addrDetail: null,
+      orderGoods: null,
+    }, {
+      id: '4',
+      sendid: 4,
+      status: 1,
+      sendType: 2,
+      merchantOrderId: 'SH20180127144502664278',
+      tradeTime: '2018-01-27 14:45:02',
+      waybillno: '',
+      consigneeName: null,
+      tradeAmount: '1',
+      idNumber: null,
+      consigneeMobile: null,
+      addrProvince: null,
+      addrCity: null,
+      addrDistrict: null,
+      addrDetail: null,
+      orderGoods: null,
+    }, {
+      id: '5',
+      status: 2,
+      sendType: 2,
+      sendid: 5,
       merchantOrderId: 'SH20180127144502664278',
       tradeTime: '2018-01-27 14:45:02',
       waybillno: '',
@@ -27,6 +107,10 @@ export function GetOrderList(req, res) {
       current: 1,
       total: 8,
       pageSize: 10,
+    },
+    item: {
+      money: '50',
+      waybillNo: 'ssada',
     },
   });
 }

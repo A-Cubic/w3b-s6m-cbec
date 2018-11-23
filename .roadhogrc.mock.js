@@ -20,6 +20,7 @@ import publicDictionaryMock from './mock/publicDictionaryMock';
 // 是否禁用代理
 
 const noProxy = process.env.NO_PROXY === 'true';
+const h = 'http://172.16.10.51:54195'
 const service_url =  'http://api.llwell.net/';// http://api.llwell.net/  http://localhost:9999/
 const service_url2 =  'http://console.llwell.net/';// http://console.llwell.net/  http://localhost:51184/
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
