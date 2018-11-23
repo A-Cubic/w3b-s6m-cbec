@@ -1,7 +1,8 @@
 import { message} from 'antd';
 import {
   getConfirmReceiptData,getChildModelTableData,childModelSubmit,
-  goodsSales
+  goodsSales,
+  contractInformation,
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
 export default {
@@ -26,10 +27,28 @@ export default {
         list: [],
         pagination:{},
       }
-    }
-    // -------- 商品销售 --------------
+    },
 
+    // -------- 商品销售 --------------
+    goodsSales:{
+      tableData:{
+        list: [],
+        pagination:{},
+      },
+    },
     // -------- 合同信息 --------------
+    contractInformation:{
+      getData:{
+        item:{},
+        list:[]
+      },
+      childHelpData:{
+        visible:false,
+        src:''
+      }
+
+    }
+
     // -------- 货款结算 --------------
   },
   effects:{
@@ -112,8 +131,27 @@ export default {
       }
     },
 
-
     // -------- 合同信息 --------------
+    // 代销-财务-合同信息-图片放大20181121
+    *sendChildHelpData({ payload },{ call,put }){
+      // console.log(payload)
+      yield put({
+        type: 'sendChildHelpDataR',
+        payload: payload,
+      })
+    },
+
+    //代销-财务-合同信息-20181121
+    *contractInformation({ payload },{ call,put }){
+      const response = yield call(contractInformation, payload);
+      console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'contractInformationR',
+          payload: response,
+        })
+      }
+    },
     // -------- 货款结算 --------------
   },
   reducers:{
@@ -156,12 +194,32 @@ export default {
     goodsSalesR(state, action){
       return {
         ...state,
-        confirmReceipt:{
-          ...state.confirmReceipt,
+        goodsSales:{
+          ...state.goodsSales,
           tableData:action.payload
         }
       }
     },
+
+    contractInformationR(state, action){
+      return {
+        ...state,
+        contractInformation:{
+          ...state.contractInformation,
+          getData:action.payload
+        }
+      }
+    },
+    sendChildHelpDataR(state, action){
+      return {
+        ...state,
+        contractInformation:{
+          ...state.contractInformation,
+          childHelpData:action.payload
+        }
+      }
+    },
+
 
   }
 }

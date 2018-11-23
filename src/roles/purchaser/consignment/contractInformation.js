@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker } from 'antd';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
 import styles from './contractInformation.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
@@ -16,12 +16,30 @@ const FormItem = Form.Item;
 }))
 
 @Form.create()
-export default class receivingConfirmation extends Component {
-
+export default class contractInformation extends Component {
+  init(){
+    this.props.dispatch({
+      type:'rolePurchaserConsignment/contractInformation',
+      payload:{}
+    })
+  }
+  componentDidMount() {
+    this.init();
+  }
+  handleClickImg=(a)=>{
+    this.props.dispatch({
+      type:'rolePurchaserConsignment/sendChildHelpData',
+      payload:{
+        src:a,
+        visible:true
+      }
+    })
+  }
   render() {
+    //console.log('qssssa',this.props)
+    const {rolePurchaserConsignment:{contractInformation:{getData:{item,list}}}}= this.props
     return(
       <div>
-
         <Card>
           <div className={styles.header}>
             <Row>
@@ -35,27 +53,59 @@ export default class receivingConfirmation extends Component {
           <div className={styles.line}></div>
           <div className={styles.content}>
             <Row>
-              <Col span={8}>合同编号：<em>QJZK-1111</em></Col>
-              <Col span={8}>账单结算周期：<em>月结</em></Col>
-              <Col span={8}>合作模式：<em>代销</em></Col>
+              <Col span={8}>合同编号：<em>{item.contractCode}</em></Col>
+              <Col span={8}>账单结算周期：<em>{item.cycle}</em></Col>
+              <Col span={8}>合作模式：<em>{item.model}</em></Col>
             </Row>
           </div>
           <ul className={styles.hot}>
-            <li><img src="http://img.tukexw.com/img/66637bf69960c9e3.jpg"></img></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+            {
+              list.map((i,index) => {
+                return(
+                  <li key={index}><img src={i.imgUrl} onClick={()=>this.handleClickImg(i.imgUrl)}/></li>
+                )
+              })
+            }
           </ul>
-
         </Card>
-
+        <ShowImg />
       </div>
+    )
+  }
+}
+
+
+@connect(({rolePurchaserConsignment }) => ({
+  rolePurchaserConsignment,
+}))
+class ShowImg extends Component {
+  handleCancel = (e) => {
+    this.props.dispatch({
+      type:'rolePurchaserConsignment/sendChildHelpData',
+      payload:{
+        visible:false
+      }
+    })
+  }
+  render() {
+    const {rolePurchaserConsignment:{contractInformation:{childHelpData:{src,visible}}}}= this.props
+    console.log('child',this.props)
+    return(
+    <div>
+      <Modal
+          title="合同详情"
+          width={1000}
+          cancelText="关闭"
+          footer={null}
+          visible={visible}
+          // onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <div>
+            <img className={styles.bigimg} src={src}></img>
+          </div>
+        </Modal>
+    </div>
     )
   }
 }

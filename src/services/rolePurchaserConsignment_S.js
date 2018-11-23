@@ -32,6 +32,17 @@ export async function goodsSales(params) {
     body: params,
   })
 }
+
+
 // -------- 合同信息 --------------
+//代销-财务-合同信息-20181121
+export async function contractInformation(params) {
+  return request(`/llback/Sales/contractInformationx`,{
+    method: 'POST',
+    body: params,
+  })
+}
+
+
 // -------- 货款结算 --------------
 

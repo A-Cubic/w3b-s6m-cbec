@@ -9,15 +9,43 @@ export default function rolePurchaserConsignmentMock() {
     'POST /llback/Warehouse/ConfirmGoods': UpdateDistributor,
     // 'POST /llback/Warehouse/ConfirmGoods': 'http://172.16.10.51:54195/',
 
+
     // -------- 商品销售 --------------
     // 商品销售-列表查询
     'POST /llback/Sales/goodsSalesx': goodsSales,
+
+
     // -------- 合同信息 --------------
+    // 代销-财务-合同信息-20181121
+    'POST /llback/Sales/contractInformationx': contractInformation,
+
+
     // -------- 货款结算 --------------
 
   };
 }
-// 商品销售-列表查询
+
+
+export function contractInformation(req, res) {
+  res.send({
+    item: {
+      contractCode: '123456789',
+      cycle: '2',
+      model: '1',
+    },
+    list: [
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809420800199_cp_1.jpg',
+      },
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
+      },
+    ],
+    pagination: null,
+  });
+}
+
+
 export function goodsSales(req, res) {
   res.send({
     list: [{
