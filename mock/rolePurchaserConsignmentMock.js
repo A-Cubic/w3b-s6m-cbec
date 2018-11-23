@@ -46,49 +46,49 @@ export function contractInformation(req, res) {
 }
 export function goodsSales(req, res) {
   res.send({
-    "list": [
+    list: [
       {
-          "keyId": "1",
-          "goodsName": "Dr.select Dr.Select 玻尿酸卸妆啫喱",
-          "slt": "http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4580482175534_cp_2.jpg",
-          "barCode": "4580482175534",
-          "brand": "Dr.select",
-          "skuUnitPrice": 148,
-          "quantity": 1,
-          "supplyPrice": 117,
-          "tradeTime": "2018/2/9 18:08:48",
-          "money": 148
+        keyId: '1',
+        goodsName: 'Dr.select Dr.Select 玻尿酸卸妆啫喱',
+        slt: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4580482175534_cp_2.jpg',
+        barCode: '4580482175534',
+        brand: 'Dr.select',
+        skuUnitPrice: 148,
+        quantity: 1,
+        supplyPrice: 117,
+        tradeTime: '2018/2/9 18:08:48',
+        money: 148,
       },
       {
-          "keyId": "2",
-          "goodsName": "Skinature 蒲公英净肤洁面乳",
-          "slt": "http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809099261666_cp_2.jpg",
-          "barCode": "8809099261666",
-          "brand": "Skinature",
-          "skuUnitPrice": 88,
-          "quantity": 1,
-          "supplyPrice": 64,
-          "tradeTime": "2017/7/30 1:04:29",
-          "money": 88
+        keyId: '2',
+        goodsName: 'Skinature 蒲公英净肤洁面乳',
+        slt: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809099261666_cp_2.jpg',
+        barCode: '8809099261666',
+        brand: 'Skinature',
+        skuUnitPrice: 88,
+        quantity: 1,
+        supplyPrice: 64,
+        tradeTime: '2017/7/30 1:04:29',
+        money: 88,
       },
       {
-          "keyId": "3",
-          "goodsName": "vivekke 防晒喷雾",
-          "slt": "http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4582238542133_cp_2.jpg",
-          "barCode": "4582238542133",
-          "brand": "DOSHISHA",
-          "skuUnitPrice": 148,
-          "quantity": 1,
-          "supplyPrice": 105,
-          "tradeTime": "2017/7/24 11:48:28",
-          "money": 148
-      }
-  ],
-  "pagination": {
-      "current": 1,
-      "total": 3,
-      "pageSize": 10
-  }
+        keyId: '3',
+        goodsName: 'vivekke 防晒喷雾',
+        slt: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4582238542133_cp_2.jpg',
+        barCode: '4582238542133',
+        brand: 'DOSHISHA',
+        skuUnitPrice: 148,
+        quantity: 1,
+        supplyPrice: 105,
+        tradeTime: '2017/7/24 11:48:28',
+        money: 148,
+      },
+    ],
+    pagination: {
+      current: 1,
+      total: 3,
+      pageSize: 10,
+    },
   });
 }
 export function GetOrderList(req, res) {
