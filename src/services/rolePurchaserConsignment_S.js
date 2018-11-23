@@ -17,12 +17,21 @@ export async function getChildModelTableData(params) {
 }
 // 操作内 收货确认/提交运单号
 export async function childModelSubmit(params) {
-  return request(`/llback/Warehouse/ConfirmGoods`,{
+  return request(`/llback/Warehouse/ConfirmGoods`, {
     method: 'POST',
     body: params,
   })
 }
 
+
 // -------- 商品销售 --------------
+//商品销售-列表查询
+export async function goodsSales(params) {
+  return request(`/llback/Sales/goodsSalesx`,{
+    method: 'POST',
+    body: params,
+  })
+}
 // -------- 合同信息 --------------
 // -------- 货款结算 --------------
+

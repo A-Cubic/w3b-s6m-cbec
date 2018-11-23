@@ -10,11 +10,82 @@ export default function rolePurchaserConsignmentMock() {
     // 'POST /llback/Warehouse/ConfirmGoods': 'http://172.16.10.51:54195/',
 
     // -------- 商品销售 --------------
+    // 商品销售-列表查询
+    'POST /llback/Sales/goodsSalesx': goodsSales,
     // -------- 合同信息 --------------
     // -------- 货款结算 --------------
 
   };
 }
+// 商品销售-列表查询
+export function goodsSales(req, res) {
+  res.send({
+    list: [{
+      keyId: '1',
+      barcode: '耐克',
+      brand: '12111',
+      supplyPrice: '12',
+      salesUnitPrice: '12',
+      SalesVolumes: '1',
+      salesAmount: 12,
+      dateOfSale: 1,
+      img: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4532656009893_cp_1.jpg',
+      val: 'aaaaaaaaaaa',
+      goodsName: 'asdf',
+    }, {
+      keyId: '21',
+      barcode: '阿迪',
+      brand: '2212111',
+      supplyPrice: '212',
+      salesUnitPrice: '212',
+      SalesVolumes: '21',
+      salesAmount: 212,
+      dateOfSale: 21,
+      img: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4532656009893_cp_1.jpg',
+      goodsName: 'bbbbbbbbbb',
+    }, {
+      keyId: '21',
+      barcode: 'lives',
+      brand: '2212111',
+      supplyPrice: '212',
+      salesUnitPrice: '212',
+      SalesVolumes: '21',
+      salesAmount: 212,
+      dateOfSale: 21,
+      img: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4532656009893_cp_1.jpg',
+      goodsName: 'bbbbbbbbbb',
+    }, {
+      keyId: '21',
+      barcode: '22111111',
+      brand: '2212111',
+      supplyPrice: '212',
+      salesUnitPrice: '212',
+      SalesVolumes: '21',
+      salesAmount: 212,
+      dateOfSale: 21,
+      img: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4532656009893_cp_1.jpg',
+      goodsName: 'bbbbbbbbbb',
+    }, {
+      keyId: '21',
+      barcode: '22111111',
+      brand: '2212111',
+      supplyPrice: '212',
+      salesUnitPrice: '212',
+      SalesVolumes: '21',
+      salesAmount: 212,
+      dateOfSale: 21,
+      img: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/4532656009893_cp_1.jpg',
+      val: 'bbbbbbbbbb',
+    }],
+    pagination: {
+      current: 1,
+      total: 8,
+      pageSize: 10,
+    },
+  });
+}
+
+
 export function GetOrderList(req, res) {
   res.send({
     list: [{

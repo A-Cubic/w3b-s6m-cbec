@@ -10,11 +10,11 @@ export default function(dynamicWrapper,app){
     },
     //代销-订单-商品销售-20181121
     '/order/goodsSales': {
-      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../roles/purchaser/consignment/goodsSales')),
+      component: dynamicWrapper(app, ['rolePurchaserConsignment'], () => import('../roles/purchaser/consignment/goodsSales')),
     },
     //代销-财务-合同信息-20181121
     '/finance/contractInformation': {
-      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../roles/purchaser/consignment/contractInformation')),
+      component: dynamicWrapper(app, ['rolePurchaserConsignment'], () => import('../roles/purchaser/consignment/contractInformation')),
     },
     //代销-统计-货款结算-20181121
     '/statistics/paymentSettlement': {

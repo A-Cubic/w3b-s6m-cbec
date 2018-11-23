@@ -388,33 +388,33 @@ export default class supplierOrder extends Component {
 @Form.create()
 class ChildrenDelivery extends React.Component {
 
-  handleOk = (e) => {
-    e.preventDefault();
-    const that = this;
-    this.props.form.validateFields((err, fieldsValue)=>{
-      if(!err){
-        this.props.parent.dispatch({
-          type:'orderManagement/confirmDelivery',
-          payload:{
-            ...fieldsValue,
-            userId:userId,
-            orderId:this.props.parent.orderId
-          },
-          callback:function () {
-            that.props.parent.handleVisible(false,'childDelivery')
-            that.props.form.resetFields();
-            that.props.dispatch({
-              type: 'orderManagement/supplierOrderTable',
-              payload: {
-                userId:userId,
-                status:"全部"
-              },
-            });
-          }
-        })
-      }
-    })
-  }
+  // handleOk = (e) => {
+  //   e.preventDefault();
+  //   const that = this;
+  //   this.props.form.validateFields((err, fieldsValue)=>{
+  //     if(!err){
+  //       this.props.parent.dispatch({
+  //         type:'orderManagement/confirmDelivery',
+  //         payload:{
+  //           ...fieldsValue,
+  //           userId:userId,
+  //           orderId:this.props.parent.orderId
+  //         },
+  //         callback:function () {
+  //           that.props.parent.handleVisible(false,'childDelivery')
+  //           that.props.form.resetFields();
+  //           that.props.dispatch({
+  //             type: 'orderManagement/supplierOrderTable',
+  //             payload: {
+  //               userId:userId,
+  //               status:"全部"
+  //             },
+  //           });
+  //         }
+  //       })
+  //     }
+  //   })
+  // }
   handleOverseas =(e)=>{
     e.preventDefault();
     const that = this;

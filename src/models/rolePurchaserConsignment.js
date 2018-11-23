@@ -1,11 +1,13 @@
 import { message} from 'antd';
 import {
-  getConfirmReceiptData,getChildModelTableData,childModelSubmit
+  getConfirmReceiptData,getChildModelTableData,childModelSubmit,
+  goodsSales
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
 export default {
   namespace: 'rolePurchaserConsignment',
   state:{
+    // -------- 收货确认 --------------
     confirmReceipt:{
       tableData:{
         list: [],
@@ -25,6 +27,10 @@ export default {
         pagination:{},
       }
     }
+    // -------- 商品销售 --------------
+
+    // -------- 合同信息 --------------
+    // -------- 货款结算 --------------
   },
   effects:{
     // -------- 收货确认 --------------
@@ -98,6 +104,19 @@ export default {
 
 
     // -------- 商品销售 --------------
+    //商品销售-列表查询
+    *goodsSales({ payload },{ call,put }){
+        const response = yield call(goodsSales, payload);
+        // console.log('~res',response)
+        if(response!==undefined){
+          yield put({
+          type: 'goodsSalesR',
+          payload: response,
+        })
+      }
+    },
+
+
     // -------- 合同信息 --------------
     // -------- 货款结算 --------------
   },
@@ -137,7 +156,16 @@ export default {
           childReceiptModelVisible:action.payload
         }
       }
-    }
+    },
+    goodsSalesR(state, action){
+      return {
+        ...state,
+        confirmReceipt:{
+          ...state.confirmReceipt,
+          tableData:action.payload
+        }
+      }
+    },
 
   }
 }
