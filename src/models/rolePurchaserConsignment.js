@@ -82,7 +82,6 @@ export default {
       if (response !== undefined) {
         if(response.type==='1'){
           message.success("提交成功");
-
           yield put({
             type: 'childReceiptModelVisibleR',
             payload: false,
@@ -97,11 +96,8 @@ export default {
         }else{
           message.error(response.msg);
         }
-
       }
-
-    }
-
+    },
 
     // -------- 商品销售 --------------
     //商品销售-列表查询
