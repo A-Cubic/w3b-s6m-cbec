@@ -14,7 +14,8 @@ const FormItem = Form.Item;
   rolePurchaserConsignment,
   //loading: loading.effects['goodsManagement/getGoodsAboutData'],
 }))
-
+// -------- 合同信息 --------------
+    // 代销-财务-合同信息-20181121
 @Form.create()
 export default class contractInformation extends Component {
   init(){
@@ -94,9 +95,11 @@ class ShowImg extends Component {
     <div>
       <Modal
           title="合同详情"
-          width={1000}
+          width={650}
           cancelText="关闭"
-          footer={null}
+          footer={[
+            <Button key="back" onClick={this.handleCancel}>关闭</Button>
+          ]}
           visible={visible}
           // onOk={this.handleOk}
           onCancel={this.handleCancel}

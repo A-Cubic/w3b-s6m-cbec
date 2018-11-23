@@ -27,7 +27,7 @@ export async function childModelSubmit(params) {
 // -------- 商品销售 --------------
 //商品销售-列表查询
 export async function goodsSales(params) {
-  return request(`/llback/Sales/goodsSalesx`,{
+  return request(`/llback/Sales/GetGoods`,{
     method: 'POST',
     body: params,
   })
@@ -37,7 +37,7 @@ export async function goodsSales(params) {
 // -------- 合同信息 --------------
 //代销-财务-合同信息-20181121
 export async function contractInformation(params) {
-  return request(`/llback/Sales/contractInformationx`,{
+  return request(`/llback/Agreement/ContractInformation`,{
     method: 'POST',
     body: params,
   })

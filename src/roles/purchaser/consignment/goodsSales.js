@@ -12,42 +12,17 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 @connect(({rolePurchaserConsignment }) => ({
   rolePurchaserConsignment,
- // loading: loading.effects['goodsManagement/getGoodsAboutData'],
 }))
-
+// -------- 商品销售 --------------
+    // 商品销售-列表查询
 @Form.create()
 export default class goodsSales extends Component {
   state={
-    //sortedInfo:null,
     formValues:{},
     visible: false,
 
-
     visibleChildCheck:false,
   }
-
-  // showModal = () => {
-  //   this.setState({
-  //     visible: true,
-  //   });
-  // }
-
-  // handleOk = (e) => {
-  //   console.log(e);
-  //   this.setState({
-  //     visible: false,
-  //   });
-  // }
-
-  // handleCancel = (e) => {
-  //   console.log(e);
-  //   this.setState({
-  //     visible: false,
-  //   });
-  // }
-
-
-
 
   //****/
   init(){
@@ -55,7 +30,6 @@ export default class goodsSales extends Component {
       type:'rolePurchaserConsignment/goodsSales',
       payload:{}
     })
-    //console.log('qa',this.props)
   }
   componentDidMount() {
     this.init();
@@ -63,12 +37,7 @@ export default class goodsSales extends Component {
   onSearch=(e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
-      
-
       if (err) return;
-      
-      
-
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
         ...fieldsValue,
@@ -77,12 +46,8 @@ export default class goodsSales extends Component {
         'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
 
-      
-      
-      //console.log('values',rangeValue[0].format('YYYY-MM-DD'))
       this.setState({
         formValues: values,
-        //sortedInfo: null,
       });
       this.props.dispatch({
         type: 'rolePurchaserConsignment/goodsSales',
@@ -106,67 +71,28 @@ export default class goodsSales extends Component {
     console.log(111)
   }
   handleTableChange=(pagination, filters, sorter)=>{
-    // const sorterConditions = ['ascend','descend']
-
-    // let sorters={}
-    // if (sorter.field) {
-    //   sorters = {
-    //     [sorter.field]: sorterConditions.findIndex(i => i==sorter.order)
-    //   }
-    // }
-
-    // this.setState({
-    //   sortedInfo: null,
-    // });
     const params = {
       ...pagination,
       ...this.state.formValues,
-      //...sorters,
     };
-     //console.log('顺序',params)
     this.props.dispatch({
       type: 'rolePurchaserConsignment/goodsSales',
       payload: params,
     });
   }
 
-//const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
-
 handleVisible = (flag,who) => {
-  console.log('flag',flag,who)
-
   this.setState({
     visibleChildCheck:!!flag,
   });
-
-
-
-  // if(who=='childCheck'){
-  //   this.setState({
-  //     visibleChildCheck:!!flag,
-  //   });
-  // }else if(who=='childDelivery'){
-  //   this.setState({
-  //     visibleChildDelivery:!!flag,
-  //   });
-  // }
 }
 handleChildrenCheck =(record)=>{
   console.log('record',record,111)
-  // this.props.dispatch({
-  //   type: 'orderManagement/supplierOrderChildCheck',
-  //   payload: {
-  //     orderId:record.merchantOrderId,
-  //   },
-  // });
   this.handleVisible(true,'childCheck');
-  // setTimeout(()=>{
-  //   this.handleVisible(true,'childCheck');
-  // },0)
 }
 
   renderForm(){
-    const { rolePurchaserConsignment:{confirmReceipt:{tableData}} } = this.props;
+    const { rolePurchaserConsignment:{goodsSales:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -200,12 +126,17 @@ handleChildrenCheck =(record)=>{
     );
   }
 
-// type: 'rolePurchaserConsignment/goodsSales',
-  render() {
-    //console.log('1',this.props)
-    //let { sortedInfo } = this.state;
-    const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
+  // "barCode": "4580482175534",
+  // "brand": "Dr.select",
+  // "skuUnitPrice": 148,
+  // "quantity": 1,
+  // "supplyPrice": 117,
+  // "tradeTime": "2018/2/9 18:08:48",
+  // "money": 148
 
+
+  render() {
+    const { rolePurchaserConsignment:{goodsSales:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -221,47 +152,44 @@ handleChildrenCheck =(record)=>{
       dataIndex: 'goodsName',
       key: 'goodsName',
       render: (val,record) =>{ 
-
-        // console.log('val',val)
-        // console.log('record',record)
         return (
           <div>
-            <img src={record.img} alt="" width={80} style={{marginRight:8,}}/>
+            <img src={record.slt} alt="" width={80} style={{marginRight:8,}}/>
             <span style={{display:'inline-block',width:200}}>{val}</span>
           </div>
         )
     }}, {
       title: '商品条码',
-      dataIndex: 'barcode',
-      key: 'barcode',
+      dataIndex: 'barCode',
+      key: 'barCode',
     }, {
       title: '品牌',
       dataIndex: 'brand',
       key: 'brand',
     },{
       title: '供货价',
-      dataIndex: 'supplyPrice',
-      key: 'supplyPrice',
+      dataIndex: 'skuUnitPrice',
+      key: 'skuUnitPrice',
      
     },{
       title: '销售单价',
-      dataIndex: 'salesUnitPrice',
-      key: 'salesUnitPrice',
+      dataIndex: 'quantity',
+      key: 'quantity',
       
     },{
         title: '销售数量',
-        dataIndex: 'SalesVolumes',
-        key: 'SalesVolumes',
+        dataIndex: 'supplyPrice',
+        key: 'supplyPrice',
        
       },{
         title: '销售金额',
-        dataIndex: 'salesAmount',
-        key: 'salesAmount',
+        dataIndex: 'money',
+        key: 'money',
         
       },{
         title: '销售日期',
-        dataIndex: 'dateOfSale',
-        key: 'dateOfSale',
+        dataIndex: 'tradeTime',
+        key: 'tradeTime',
       }
       // ,{
       //   title: '弹窗',
@@ -274,9 +202,6 @@ handleChildrenCheck =(record)=>{
       //         <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>点击</a><br/>
 
       //         {/* <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/> */}
-
-            
-              
       //       </div>
       //     )
       //   }
@@ -413,29 +338,10 @@ class Test extends Component {
          // visible={this.props.parent.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          footer={[
-            <Button key="1" onClick={this.handleCancel}>关闭</Button>,
-            <Button key="2" type="primary" onClick={this.handleOverseas}>海外出货</Button>,
-            <Button key="3" type="primary" onClick={this.handleOk}>确定</Button>
-          ]}
+          footer={null}
         >
-        <div className={styles.tableListForm}>
-          <Form onSubmit={this.handleOk} layout="inline">
-            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col md={24} sm={24}>
-                <FormItem label="运单号">
-                  {getFieldDecorator('waybillno',{
-                    rules:[{
-                      required:true,message:'请填写运单号',
-                    }]
-                  })(
-                    <Input placeholder="请输入" />
-                  )}
-                </FormItem>
-              </Col>
-            
-              </Row>
-          </Form>
+        <div >
+          aaaa
         </div>
         </Modal>
       </div>
