@@ -45,4 +45,9 @@ export async function contractInformation(params) {
 
 
 // -------- 货款结算 --------------
-
+export async function getPaymentSettlementData(params) {
+  return request(`/llback/Sales/getPaymentSettlement`,{
+    method: 'POST',
+    body: params,
+  })
+}

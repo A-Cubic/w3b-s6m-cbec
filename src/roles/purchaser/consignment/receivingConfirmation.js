@@ -15,6 +15,7 @@ const FormItem = Form.Item;
 }))
 
 @Form.create()
+//  采购 - 代销 - 收货确认 - 20181123
 export default class receivingConfirmation extends Component {
   state={
     formValues:{}

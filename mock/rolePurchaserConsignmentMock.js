@@ -21,7 +21,7 @@ export default function rolePurchaserConsignmentMock() {
 
 
     // -------- 货款结算 --------------
-
+    'POST /llback/Sales/getPaymentSettlement': GetOrderList,
   };
 }
 
@@ -44,8 +44,6 @@ export function contractInformation(req, res) {
     pagination: null,
   });
 }
-
-
 export function goodsSales(req, res) {
   res.send({
     list: [{
@@ -112,8 +110,6 @@ export function goodsSales(req, res) {
     },
   });
 }
-
-
 export function GetOrderList(req, res) {
   res.send({
     list: [{
@@ -327,7 +323,6 @@ export function getWaybill(req, res) {
     mes: 'aaa',
   });
 }
-
 export function confirmDelivery(req, res) {
   res.send({
     type: 1,

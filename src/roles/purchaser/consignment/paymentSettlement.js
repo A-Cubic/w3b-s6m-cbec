@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker } from 'antd';
-import styles from './receivingConfirmation.less';
+import styles from './paymentSettlement.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
 import {getToken} from "../../../utils/Global";
@@ -10,20 +10,19 @@ import {getToken} from "../../../utils/Global";
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
-@connect(({goodsManagement,publicDictionary, loading }) => ({
-  goodsManagement,publicDictionary,
-  loading: loading.effects['goodsManagement/getGoodsAboutData'],
+@connect(({rolePurchaserConsignment }) => ({
+  rolePurchaserConsignment
 }))
 
 @Form.create()
-export default class receivingConfirmation extends Component {
+// 代销-统计-货款结算-20181126
+export default class paymentSettlement extends Component {
   state={
-    sortedInfo:null,
     formValues:{}
   }
   init(){
     this.props.dispatch({
-      type:'goodsManagement/getConsignmentStockData',
+      type:'rolePurchaserConsignment/getPaymentSettlementData',
       payload:{}
     })
   }
@@ -42,52 +41,35 @@ export default class receivingConfirmation extends Component {
 
       this.setState({
         formValues: values,
-        sortedInfo: null,
       });
       this.props.dispatch({
-        type: 'goodsManagement/getConsignmentStockData',
+        type: 'rolePurchaserConsignment/getPaymentSettlementData',
         payload: {
           ...values,
         },
       });
     });
 
-
   }
   handleFormReset =()=>{
     this.props.form.resetFields();
     this.setState({
       formValues: {},
-      sortedInfo: null,
     });
     this.init();
   }
   handleTableChange=(pagination, filters, sorter)=>{
-    const sorterConditions = ['ascend','descend']
-
-    let sorters={}
-    if (sorter.field) {
-      sorters = {
-        [sorter.field]: sorterConditions.findIndex(i => i==sorter.order)
-      }
-    }
-
-    this.setState({
-      sortedInfo: sorter,
-    });
     const params = {
       ...pagination,
       ...this.state.formValues,
-      ...sorters,
     };
-    // console.log(params)
     this.props.dispatch({
-      type: 'goodsManagement/getConsignmentStockData',
+      type: 'rolePurchaserConsignment/getPaymentSettlementData',
       payload: params,
     });
   }
   renderForm(){
-    const { goodsManagement:{consignmentStockData:{tableData}} } = this.props;
+    // const { rolePurchaserConsignment:{paymentSettlement:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -107,7 +89,7 @@ export default class receivingConfirmation extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0} </span>
+            <span>共查询出符合条件的数据：0 </span>
           </div>
         </div>
       </Form>
@@ -116,8 +98,7 @@ export default class receivingConfirmation extends Component {
 
   render() {
     // console.log('1',this.props)
-    let { sortedInfo } = this.state;
-    const { goodsManagement:{consignmentStockData:{tableData:{list, pagination}}} } = this.props;
+    const { rolePurchaserConsignment:{paymentSettlement:{tableData:{list, pagination}}} } = this.props;
 
     const paginationProps = {
       showSizeChanger: true,
@@ -126,56 +107,28 @@ export default class receivingConfirmation extends Component {
     };
     const columns = [
     {
-      title: '序号',
-      dataIndex: 'keyId',
-      key: 'keyId',
-    }, {
-      title: '商品（SKU）',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
-      render: (val,record) => (
-        <div>
-          <img src={ record.slt} alt="" width={80} style={{marginRight:8,}}/>
-          <span style={{display:'inline-block',width:200}}>{val}</span>
-        </div>
-      )
-    }, {
-      title: '商品条码',
-      dataIndex: 'barcode',
-      key: 'barcode',
-    }, {
-      title: '品牌',
-      dataIndex: 'brand',
-      key: 'brand',
-    },{
-      title: '保质期',
-      dataIndex: 'shelfLife',
-      key: 'shelfLife',
-      sorter:true,
-        sortOrder:sortedInfo?sortedInfo.columnKey === 'shelfLife' && sortedInfo.order:false
-    },{
-      title: '商品入库时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
-      sorter:true,
-      sortOrder:sortedInfo?sortedInfo.columnKey === 'createTime' && sortedInfo.order:false
-    },{
-        title: '当前库存',
-        dataIndex: 'pNum',
-        key: 'pNum',
-        sorter:true,
-        sortOrder:sortedInfo?sortedInfo.columnKey === 'pNum' && sortedInfo.order:false
-      },{
-        title: '供货价',
-        dataIndex: 'pprice',
-        key: 'pprice',
-        render:val=>`¥${val}`,
-        sorter:true,
-        sortOrder:sortedInfo?sortedInfo.columnKey === 'pprice' && sortedInfo.order:false
-      },{
-        title: '库存同步时间',
+        title: '',
         dataIndex: 'sameTime',
         key: 'sameTime',
+        render:(text, record) =>(
+          <div>
+            <Card
+              bordered={false}
+            >
+              <div className={styles.tableList}>
+                <div className={styles.tableListForm}>
+
+
+
+                  aaa
+
+
+
+                </div>
+              </div>
+            </Card>
+          </div>
+        ),
       }
     ];
     return (
@@ -187,8 +140,9 @@ export default class receivingConfirmation extends Component {
             </div>
           </div>
         </Card>
-        <Card className={styles.mT10}>
           <Table dataSource={list}
+                 showHeader={false}
+                 className={styles.rowClass}
                  // scroll={{ x: 1500}}
                  rowKey={record => record.id}
                  columns={columns}
@@ -196,7 +150,6 @@ export default class receivingConfirmation extends Component {
                  onChange={this.handleTableChange}
                  // loading={submitting}
           />
-        </Card>
       </div>
     );
   }
