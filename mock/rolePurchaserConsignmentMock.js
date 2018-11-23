@@ -4,9 +4,31 @@ export default function rolePurchaserConsignmentMock() {
     'POST /llback/Sales/getConfirmReceiptData': GetOrderList,
     //商品销售-列表查询
     'POST /llback/Sales/goodsSalesx': goodsSales,
-
+    //代销-财务-合同信息-20181121
+    'POST /llback/Sales/contractInformationx': contractInformation,
   };
 }
+
+export function contractInformation(req, res) {
+  res.send({
+    item: {
+      contractCode: "123456789",
+      cycle: "2",
+      model: "1"
+    },
+    list: [
+        {
+          "imgUrl": "http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809420800199_cp_1.jpg"
+        },
+        {
+          "imgUrl": "http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg"
+        }
+    ],
+    pagination: null
+    });
+}
+
+
 //商品销售-列表查询
 export function goodsSales(req, res) {
   res.send({

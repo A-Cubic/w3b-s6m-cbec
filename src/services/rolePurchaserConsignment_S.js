@@ -1,6 +1,17 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
+
+
+
+//代销-财务-合同信息-20181121
+export async function contractInformation(params) {
+  return request(`/llback/Sales/contractInformationx`,{
+    method: 'POST',
+    body: params,
+  })
+}
+
 // 收货确认
 export async function getConfirmReceiptData(params) {
   return request(`/llback/Sales/getConfirmReceiptData`,{
