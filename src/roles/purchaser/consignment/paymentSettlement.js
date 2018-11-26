@@ -117,11 +117,51 @@ export default class paymentSettlement extends Component {
             >
               <div className={styles.tableList}>
                 <div className={styles.tableListForm}>
-
-
-
-                  aaa
-
+                  <Row>
+                    <Col span={12}><p style={{fontWeight:"bold"}}>账期：<em style={{color:"red",fontWeight:"normal",fontStyle:"normal"}}>2018.01.01~2018.01.31</em></p></Col>
+                    <Col span={12}><p style={{textAlign:"right",color:"#737373 85%" }}>结算单20180101011</p></Col>
+                  </Row>
+                  <div className={styles.line}></div>
+                  <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+                    <Col md={6} sm={12}  xs={12}  >
+                      <div className={styles.hot}>
+                        <h1 style={{border:"5px solid #A7C8E3"}}>￥2000.00</h1>
+                        <h2>采购货款</h2>
+                      </div>
+                    </Col>
+                    <Col md={6} sm={12} xs={12}>
+                      <div className={styles.hot}>
+                        <h1 style={{border:"5px solid #000"}}>￥2000.00</h1>
+                        <h2>采购货款</h2>
+                      </div>
+                    </Col>
+                    <Col md={6} sm={12} xs={12}>
+                      <div className={styles.hot}>
+                        <h1 style={{border:"5px solid #C8C8C8"}}>￥2000.00</h1>
+                        <h2>采购货款</h2>
+                      </div>
+                    </Col>
+                    <Col md={6} sm={12} xs={12}>
+                      <div className={styles.hot}>
+                        <h1 style={{border:"5px solid #B4E3A7"}}>￥2000.00</h1>
+                        <h2>采购货款</h2>
+                      </div>
+                    </Col>
+                  </Row>
+                  <div className={styles.line}></div>
+                  <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+                    <Col md={12}>
+                      <span className={styles.settled}>待结算</span>
+                      <span className={styles.settlement}>已结算</span>
+                    </Col>
+                    <Col md={12}>
+                      <div style={{ float:"right" }}>
+                        <Button  style={{ marginRight:7 }} type="primary" ghost>结算明细</Button>
+                        <Button style={{ marginRight:7 }} type="primary" >打印</Button>
+                        <span style={{ marginRight:7 }} className={styles.settled}>对账中…</span>
+                      </div>
+                    </Col>
+                  </Row>
 
 
                 </div>
@@ -132,7 +172,7 @@ export default class paymentSettlement extends Component {
       }
     ];
     return (
-      <div>
+      <div className={styles.qa}>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
