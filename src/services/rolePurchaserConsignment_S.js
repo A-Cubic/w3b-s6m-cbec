@@ -45,8 +45,23 @@ export async function contractInformation(params) {
 
 
 // -------- 货款结算 --------------
+// 货款结算 - 列表
 export async function getPaymentSettlementData(params) {
   return request(`/llback/Sales/getPaymentSettlement`,{
+    method: 'POST',
+    body: params,
+  })
+}
+// 货款结算 - 查看结算明细 - 货款
+export async function getSettlementDetailsData(params) {
+  return request(`/llback/Sales/getSettlementDetailsData`,{
+    method: 'POST',
+    body: params,
+  })
+}
+// 货款结算 - 查看结算明细 - 其他
+export async function getSettlementDetailsElseData(params) {
+  return request(`/llback/Sales/getSettlementDetailsElseData`,{
     method: 'POST',
     body: params,
   })

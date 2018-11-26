@@ -3,7 +3,7 @@ import {
   getConfirmReceiptData,getChildModelTableData,childModelSubmit,
   goodsSales,
   contractInformation,
-  getPaymentSettlementData
+  getPaymentSettlementData,getSettlementDetailsData,getSettlementDetailsElseData
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
 import paymentSettlement from "../roles/purchaser/consignment/paymentSettlement";
@@ -57,7 +57,14 @@ export default {
         list: [],
         pagination:{},
       },
-      childModelTableData:{
+      childDetailsModelVisible:false,
+      childDetailsModelHelpId: '',
+      childModelDetailsTableTab1Data:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+      childModelDetailsTableTab2Data:{
         item:{},
         list: [],
         pagination:{},
@@ -170,7 +177,7 @@ export default {
 
 
     // -------- 货款结算 --------------
-
+    // 货款结算 - 列表
     *getPaymentSettlementData({ payload },{ call,put }){
       const response = yield call(getPaymentSettlementData, payload);
       // console.log('~res',response)
@@ -178,6 +185,39 @@ export default {
         yield put({
           type: 'getPaymentSettlementDataR',
           payload: response,
+        })
+      }
+    },
+    // 货款结算 - 查看结算明细
+    *getSettlementDetailsData({ payload },{ call,put }){
+      const responseTab1 = yield call(getSettlementDetailsData, payload);
+      const responseTab2 = yield call(getSettlementDetailsElseData, payload);
+      // console.log('~res',response)
+      if(responseTab1!==undefined){
+        yield put({
+          type: 'getSettlementDetailsDataR',
+          payload: {responseTab1,responseTab2,childDetailsModelVisible:true,childDetailsModelHelpId:payload},
+        })
+      }
+    },
+    // 货款结算 - 查看结算明细 - 货款分页
+    *childModelDetailsTableTab1Data({ payload },{ call,put }){
+      const response = yield call(getSettlementDetailsData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'childModelDetailsTableTabDataR',
+          payload: {data:response,tab:'childModelDetailsTableTab1Data'},
+        })
+      }
+    },// 货款结算 - 查看结算明细 - 其他分页
+    *childModelDetailsTableTab2Data({ payload },{ call,put }){
+      const response = yield call(getSettlementDetailsElseData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'childModelDetailsTableTabDataR',
+          payload: {data:response,tab:'childModelDetailsTableTab2Data'},
         })
       }
     },
@@ -256,12 +296,44 @@ export default {
 
 
     // -------- 货款结算 --------------
+
     getPaymentSettlementDataR(state, action){
       return {
         ...state,
         paymentSettlement:{
           ...state.paymentSettlement,
           tableData:action.payload
+        }
+      }
+    },
+    getSettlementDetailsDataR(state, action){
+      // console.log(action.payload)
+      return {
+        ...state,
+        paymentSettlement:{
+          ...state.paymentSettlement,
+          childModelDetailsTableTab1Data:action.payload.responseTab1,
+          childModelDetailsTableTab2Data:action.payload.responseTab2,
+          childDetailsModelVisible:action.payload.childDetailsModelVisible,
+          childDetailsModelHelpId:action.payload.childDetailsModelHelpId
+        }
+      }
+    },
+    childModelDetailsTableTabDataR(state, action){
+      return {
+        ...state,
+        paymentSettlement:{
+          ...state.paymentSettlement,
+          [action.payload.tab]:action.payload.data,
+        }
+      }
+    },
+    childDetailsModelVisibleR(state, action){
+      return {
+        ...state,
+        paymentSettlement:{
+          ...state.paymentSettlement,
+          childDetailsModelVisible:action.payload
         }
       }
     },

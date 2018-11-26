@@ -1,37 +1,73 @@
 // const h = 'http://172.16.10.51:54195/'
-export default function rolePurchaserConsignmentMock() {
+export default function rolePurchaserConsignmentMock(url) {
   return {
     // -------- 收货确认 --------------
     // 收货确认 - 列表
-    'POST /llback/Warehouse/CollectGoods': GetOrderList,
+    'POST /llback/Warehouse/CollectGoods': url,
     // 操作内商品详情列表
-    'POST /llback/Warehouse/CollectGoodsList': GetOrderList,
+    'POST /llback/Warehouse/CollectGoodsList': url,
     // 操作内 收货确认/提交运单号
-    'POST /llback/Warehouse/ConfirmGoods': UpdateDistributor,
+    'POST /llback/Warehouse/ConfirmGoods': url,
     // 'POST /llback/Warehouse/ConfirmGoods': 'http://172.16.10.51:54195/',
 
 
     // -------- 商品销售 --------------
     // 商品销售-列表查询
-    'POST /llback/Sales/GetGoods': goodsSales,
+    'POST /llback/Sales/GetGoods': url,
 
 
     // -------- 合同信息 --------------
     // 代销-财务-合同信息-20181121
-    'POST /llback/Agreement/ContractInformation': contractInformation,
+    'POST /llback/Agreement/ContractInformation': url,
 
 
     // -------- 货款结算 --------------
-    'POST /llback/Sales/getPaymentSettlement': GetOrderList,
+    // 货款结算 - 列表
+    'POST /llback/Sales/getPaymentSettlement': getPayment,
+    // 货款结算 - 查看结算明细 - 货款
+    'POST /llback/Sales/getSettlementDetailsData': getPayment,
+    // 货款结算 - 查看结算明细 - 其他
+    'POST /llback/Sales/getSettlementDetailsElseData': getPayment,
   };
 }
-
+export function getPayment(req, res) {
+  res.send({
+    list: [{
+      keyId: '2',
+      date: '20180101~20180131',
+      order: '215451245',
+      goMoney: '2000.00',
+      tuiMoney: '1000.00',
+      elseMoney: '500.00',
+      doMoney: '500.00',
+      status: 0,
+    }, {
+      keyId: '3',
+      date: '20171201~20171231',
+      order: '215451244',
+      goMoney: '2000.00',
+      tuiMoney: '1000.00',
+      elseMoney: '500.00',
+      doMoney: '500.00',
+      status: 1,
+    }],
+    pagination: {
+      current: 1,
+      total: 3,
+      pageSize: 10,
+    },
+    item: {
+      money: '50',
+      waybillNo: 'ssada',
+    },
+  });
+}
 export function contractInformation(req, res) {
   res.send({
     item: {
       contractCode: '123456789',
-      cycle: '2',
-      model: '1',
+      cycle: '月结',
+      model: '代销',
     },
     list: [
       {
