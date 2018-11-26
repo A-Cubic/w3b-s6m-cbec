@@ -106,7 +106,7 @@ handleChildrenCheck =(record)=>{
           </Col>
           <Col md={9} sm={24}>
             <FormItem label="">
-              {getFieldDecorator('information')(
+              {getFieldDecorator('select')(
                 <Input style={{ width: '100%' }} placeholder="可输入商品条码，商品名称，商品品牌进行查询" />
               )}
             </FormItem>
@@ -151,7 +151,7 @@ handleChildrenCheck =(record)=>{
       title: '商品（SKU）',
       dataIndex: 'goodsName',
       key: 'goodsName',
-      render: (val,record) =>{ 
+      render: (val,record) =>{
         return (
           <div>
             <img src={record.slt} alt="" width={80} style={{marginRight:8,}}/>
@@ -170,22 +170,22 @@ handleChildrenCheck =(record)=>{
       title: '供货价',
       dataIndex: 'skuUnitPrice',
       key: 'skuUnitPrice',
-     
+
     },{
       title: '销售单价',
       dataIndex: 'quantity',
       key: 'quantity',
-      
+
     },{
         title: '销售数量',
         dataIndex: 'supplyPrice',
         key: 'supplyPrice',
-       
+
       },{
         title: '销售金额',
         dataIndex: 'money',
         key: 'money',
-        
+
       },{
         title: '销售日期',
         dataIndex: 'tradeTime',

@@ -1,3 +1,4 @@
+// const h = 'http://172.16.10.51:54195/'
 export default function rolePurchaserConsignmentMock() {
   return {
     // -------- 收货确认 --------------
@@ -12,12 +13,12 @@ export default function rolePurchaserConsignmentMock() {
 
     // -------- 商品销售 --------------
     // 商品销售-列表查询
-    'POST /llback/Sales/GetGoods': 'http://172.16.10.51:54195/',
+    'POST /llback/Sales/GetGoods': goodsSales,
 
 
     // -------- 合同信息 --------------
     // 代销-财务-合同信息-20181121
-    'POST /llback/Agreement/ContractInformation': 'http://172.16.10.51:54195/',
+    'POST /llback/Agreement/ContractInformation': contractInformation,
 
 
     // -------- 货款结算 --------------
