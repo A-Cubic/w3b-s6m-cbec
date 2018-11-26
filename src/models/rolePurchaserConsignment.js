@@ -131,6 +131,7 @@ export default {
       }
     },
 
+
     // -------- 商品销售 --------------
     //商品销售-列表查询
     *goodsSales({ payload },{ call,put }){
@@ -143,6 +144,7 @@ export default {
         })
       }
     },
+
 
     // -------- 合同信息 --------------
     // 代销-财务-合同信息-图片放大20181121
@@ -165,6 +167,8 @@ export default {
         })
       }
     },
+
+
     // -------- 货款结算 --------------
 
     *getPaymentSettlementData({ payload },{ call,put }){
@@ -179,6 +183,7 @@ export default {
     },
   },
   reducers:{
+    // -------- 收货确认 --------------
     getConfirmReceiptDataR(state, action){
       return {
         ...state,
@@ -215,6 +220,9 @@ export default {
         }
       }
     },
+
+
+    // -------- 商品销售 --------------
     goodsSalesR(state, action){
       return {
         ...state,
@@ -225,6 +233,8 @@ export default {
       }
     },
 
+
+    // -------- 合同信息 --------------
     contractInformationR(state, action){
       return {
         ...state,
@@ -244,6 +254,8 @@ export default {
       }
     },
 
+
+    // -------- 货款结算 --------------
     getPaymentSettlementDataR(state, action){
       return {
         ...state,

@@ -108,6 +108,7 @@ export default class paymentSettlement extends Component {
     const columns = [
     {
         title: '',
+
         dataIndex: 'sameTime',
         key: 'sameTime',
         render:(text, record) =>(
@@ -182,6 +183,7 @@ export default class paymentSettlement extends Component {
         </Card>
           <Table dataSource={list}
                  showHeader={false}
+                 rowClassName={styles.td}
                  className={styles.rowClass}
                  // scroll={{ x: 1500}}
                  rowKey={record => record.id}
