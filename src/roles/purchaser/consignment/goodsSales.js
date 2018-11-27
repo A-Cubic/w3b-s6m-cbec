@@ -4,8 +4,10 @@ import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
 import styles from './receivingConfirmation.less';
 import moment from 'moment';
-import { getCurrentUrl } from '../../../services/api'
-import {getToken} from "../../../utils/Global";
+import {getCurrentUrl, getUploadUrl} from '../../../services/api'
+import {getHeader, getToken} from "../../../utils/Global";
+const userId = getToken().userId;
+import {message} from "antd/lib/index";
 
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -20,7 +22,6 @@ export default class goodsSales extends Component {
   state={
     formValues:{},
     visible: false,
-
     visibleChildCheck:false,
   }
 
@@ -56,8 +57,6 @@ export default class goodsSales extends Component {
         },
       });
     });
-
-
   }
   handleFormReset =()=>{
     this.props.form.resetFields();
@@ -81,16 +80,37 @@ export default class goodsSales extends Component {
     });
   }
 
-handleVisible = (flag,who) => {
-  this.setState({
-    visibleChildCheck:!!flag,
-  });
-}
-handleChildrenCheck =(record)=>{
-  console.log('record',record,111)
-  this.handleVisible(true,'childCheck');
-}
-
+  handleVisible = (flag,who) => {
+    this.setState({
+      visibleChildCheck:!!flag,
+    });
+  }
+  // 下载销售模板
+  downloadTemplate=()=>{
+    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/order.xlsx'
+  }
+  // 上传销售数据
+  handleUploadChange=(info)=>{
+    if(info.file.status === 'done') {
+      this.props.dispatch({
+        type: 'rolePurchaserConsignment/uploadOrderbill',
+        payload: {
+          userId:userId,
+          fileTemp: info.file.response.fileName[0]
+        },
+        callback: this.onUploadCallback,
+      });
+    }
+  }
+  onUploadCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      message.error(msg,8);
+    }else{
+      message.success("上传成功",5);
+    }
+    this.init();
+  }
   renderForm(){
     const { rolePurchaserConsignment:{goodsSales:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
@@ -125,15 +145,6 @@ handleChildrenCheck =(record)=>{
       </Form>
     );
   }
-
-  // "barCode": "4580482175534",
-  // "brand": "Dr.select",
-  // "skuUnitPrice": 148,
-  // "quantity": 1,
-  // "supplyPrice": 117,
-  // "tradeTime": "2018/2/9 18:08:48",
-  // "money": 148
-
 
   render() {
     const { rolePurchaserConsignment:{goodsSales:{tableData:{list, pagination}}} } = this.props;
@@ -191,46 +202,25 @@ handleChildrenCheck =(record)=>{
         dataIndex: 'tradeTime',
         key: 'tradeTime',
       }
-      // ,{
-      //   title: '弹窗',
-      //   dataIndex: 'windio',
-      //   key: 'windio',
-      //   render: (val,record) => {
-      //     return (
-      //       <div>
-      //         {/* <a href="javascript:;" onClick={()=>this.handlCheck(record)}>点击</a><br/> */}
-      //         <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>点击</a><br/>
-
-      //         {/* <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/> */}
-      //       </div>
-      //     )
-      //   }
-      // }
     ];
-
-    const parenta  = {
-      //visible:visibleChildCheck,
-      handleVisible : this.handleVisible,
+    const props = {
+      action: getUploadUrl(),
+      headers: getHeader(),
+      showUploadList: false,
+      // listType: 'picture',
+      // accept:'image/*',
+      onChange: this.handleUploadChange,
+      multiple: false,
+      // customRequest:this.upload,
     };
-    const TestParenta  = {
-     // visible:visibleChildDelivery,
-      handleVisible : this.handleVisible,
-     // expressArr:expressArr,
-      dispatch:this.props.dispatch,
-      orderId:this.state.orderId
-    };
-
-
-
     return (
       <div>
         <Card bordered={false}>
-
           <div style={{display: 'inline-flex',marginBottom:20,}} className={styles.hot}>
             <Button  type="primary" onClick={this.downloadTemplate} style={{ marginLeft: 8 }}>
               <Icon type="download" />下载销售模板
             </Button>
-            <Upload >
+            <Upload {...props}>
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="upload" /> 上传销售数据
               </Button>
@@ -242,11 +232,6 @@ handleChildrenCheck =(record)=>{
               {this.renderForm()}
             </div>
           </div>
-        {/* </Card>
-
-
-
-        <Card className={styles.mT10}> */}
           <Table dataSource={list}
                  // scroll={{ x: 1500}}
                  rowKey={record => record.id}
@@ -256,96 +241,9 @@ handleChildrenCheck =(record)=>{
                  // loading={submitting}
           />
         </Card>
-        <Test
-          parenta = {TestParenta}
-        />
       </div>
     );
   }
 }
 
 
-@connect(({rolePurchaserConsignment }) => ({
-  rolePurchaserConsignment,
- // loading: loading.effects['goodsManagement/getGoodsAboutData'],
-}))
-
-@Form.create()
-class Test extends Component {
-
-  // handleOk = (e) => {
-  //   e.preventDefault();
-  //   const that = this;
-  //   this.props.form.validateFields((err, fieldsValue)=>{
-  //     if(!err){
-  //       this.props.parent.dispatch({
-  //         type:'orderManagement/confirmDelivery',
-  //         payload:{
-  //           ...fieldsValue,
-  //           userId:userId,
-  //           orderId:this.props.parent.orderId
-  //         },
-  //         callback:function () {
-  //           that.props.parent.handleVisible(false,'childDelivery')
-  //           that.props.form.resetFields();
-  //           that.props.dispatch({
-  //             type: 'orderManagement/supplierOrderTable',
-  //             payload: {
-  //               userId:userId,
-  //               status:"全部"
-  //             },
-  //           });
-  //         }
-  //       })
-  //     }
-  //   })
-  // }
-  handleOverseas =(e)=>{
-    e.preventDefault();
-    const that = this;
-    // this.props.parent.dispatch({
-    //   type:'orderManagement/shipmentOverseas',
-    //   payload:{
-    //     userId:userId,
-    //     orderId:this.props.parent.orderId
-    //   },
-    //   callback:function () {
-    //     that.props.parent.handleVisible(false,'childDelivery')
-    //     that.props.form.resetFields();
-    //     that.props.dispatch({
-    //       type: 'orderManagement/supplierOrderTable',
-    //       payload: {
-    //         userId:userId,
-    //         status:"全部"
-    //       },
-    //     });
-    //   }
-    // })
-  }
-  handleCancel = (e) => {
-    this.props.parent.handleVisible(false,'childDelivery')
-    this.props.form.resetFields();
-  }
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    // const {parent:{expressArr}} = this.props
-    // console.log(this.props)
-    return (
-      <div>
-        <Modal
-          title="发货"
-         // visible={this.props.parent.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          footer={null}
-        >
-        <div >
-          aaaa
-        </div>
-        </Modal>
-      </div>
-    );
-  }
-
-}

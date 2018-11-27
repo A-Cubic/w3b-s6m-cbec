@@ -7,6 +7,7 @@ import {
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
 import paymentSettlement from "../roles/purchaser/consignment/paymentSettlement";
+import {getUploadOrderbill} from "../services/orderManagement_S";
 export default {
   namespace: 'rolePurchaserConsignment',
   state:{
@@ -140,7 +141,7 @@ export default {
 
 
     // -------- 商品销售 --------------
-    //商品销售-列表查询
+    //商品销售 - 列表查询
     *goodsSales({ payload },{ call,put }){
         const response = yield call(goodsSales, payload);
         // console.log('~res',response)
@@ -151,7 +152,14 @@ export default {
         })
       }
     },
-
+    //商品销售 - 上传销售数据
+    *uploadOrderbill({ payload,callback },{ call,put}){
+      const response = yield call(getUploadOrderbill, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
+      }
+    },
 
     // -------- 合同信息 --------------
     // 代销-财务-合同信息-图片放大20181121
