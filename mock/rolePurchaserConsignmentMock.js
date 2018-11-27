@@ -28,12 +28,14 @@ export default function rolePurchaserConsignmentMock(url) {
     'POST /llback/Sales/getSettlementDetailsData': getPayment,
     // 货款结算 - 查看结算明细 - 其他
     'POST /llback/Sales/getSettlementDetailsElseData': getPayment,
+
+    'POST /llback/Sales/getChildModelPrintData': getPayment,
   };
 }
 export function getPayment(req, res) {
   res.send({
     list: [{
-      keyId: '2',
+      keyId: '1',
       date: '20180101~20180131',
       order: '215451245',
       goMoney: '2000.00',
@@ -42,7 +44,7 @@ export function getPayment(req, res) {
       doMoney: '500.00',
       status: 0,
     }, {
-      keyId: '3',
+      keyId: '2',
       date: '20171201~20171231',
       order: '215451244',
       goMoney: '2000.00',
@@ -59,6 +61,13 @@ export function getPayment(req, res) {
     item: {
       money: '50',
       waybillNo: 'ssada',
+      settlementNumber: '20180101001',
+      supplierName: '岂止科技（大连）有限公司',
+      receiptAmount: '壹贰叁肆伍陆柒捌玖拾',
+      settlementAccountPeriod: '2018.01.01~2018.01.31',
+      contractNumber: 'QZKJ-0001',
+      dateOfPrinting: '2018.01.01',
+      printer: '胖球1'
     },
   });
 }

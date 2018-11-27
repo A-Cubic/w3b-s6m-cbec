@@ -195,7 +195,7 @@ export default class paymentSettlement extends Component {
                         <Button  style={{ marginRight:7 }} type="primary" ghost onClick={()=>this.handleChildDetailsModel(record)}>结算明细</Button>
                         {record.status==0?
                           <span style={{ marginRight:7 }} className={styles.settled}>对账中…</span>:
-                          <Button style={{ marginRight:7 }} type="primary" >打印</Button>
+                          <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleChildPrintModel(record)} >打印</Button>
                         }
                       </div>
                     </Col>
@@ -228,6 +228,7 @@ export default class paymentSettlement extends Component {
                  // loading={submitting}
           />
         <ChildDetails />
+        <ChildPrint />
       </div>
     );
   }
@@ -238,7 +239,18 @@ export default class paymentSettlement extends Component {
       payload: record.keyId,
     });
   }
+  //打印弹窗
+  handleChildPrintModel=(record)=>{
+    console.log(record)
+    
+    this.props.dispatch({
+      type: 'rolePurchaserConsignment/childModelPrintData',
+      payload: record.keyId,
+    });
+  }
 }
+
+
 // 结算明细
 @connect(({rolePurchaserConsignment }) => ({
   rolePurchaserConsignment
@@ -398,5 +410,91 @@ class ChildDetails extends Component {
         </Modal>
       </div>
     )
+  }
+}
+
+
+@connect(({rolePurchaserConsignment }) => ({
+  rolePurchaserConsignment
+}))
+class ChildPrint extends Component {
+  handlePrintCancel=()=>{
+    this.props.dispatch({
+      type:'rolePurchaserConsignment/childPrintDetailModelVisibleR',
+      payload:false
+    })
+  }
+  render(){
+
+    const { rolePurchaserConsignment:{paymentSettlement:{childPrintModelVisible,childModelPrint} }} = this.props;
+    console.log(this.props)
+    const columnsPrinta = [
+      {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      }, {
+        title: '类别',
+        dataIndex: 'status',
+        key: 'status',
+      }, {
+        title: '说明',
+        dataIndex: 'order',
+        key: 'order',
+      },{
+        title: '金额',
+        dataIndex: 'goMoney',
+        key: 'goMoney',
+        //render:val=>`¥${val}`,
+      }
+    ];
+    return (
+      <div>
+        <Modal
+          width={ '765px' }
+          //style={{maxWidth:1200}}
+          //title="结算明细"
+          visible={childPrintModelVisible}
+          //visible={true}
+          // onOk={this.handleOk}
+          onCancel={this.handlePrintCancel}
+          footer={null}
+          closable={null}
+        >
+          <div style={{height:1100}}>
+            <Row className={styles.hotTitle}>
+              <Col span={24}>采购商品结算单</Col>
+            </Row>
+            <Row>
+              <Col className={styles.hotInformation} span={12}>
+                <b>结算单号：{childModelPrint.item.settlementNumber}</b>
+                <b>供应商名称：{childModelPrint.item.supplierName}</b>
+                <b>收据金额(大写)：{childModelPrint.item.receiptAmount}</b>
+              </Col>
+              <Col className={styles.hotInformation} span={12}>
+                <b>结算账期：{childModelPrint.item.settlementAccountPeriod}</b>
+                <b>合同编号：{childModelPrint.item.contractNumber}</b>
+                <b>打印日期：{childModelPrint.item.dateOfPrinting}</b>
+              </Col>
+            </Row>
+      
+            <Table className={styles.hotTable} dataSource={childModelPrint.list}
+              // scroll={{ x: 1500}}
+                  rowKey={record => record.keyId}
+                  columns={columnsPrinta}
+                  pagination={false}
+                  // pagination={paginationProps2}
+                  // onChange={this.handleTableChangeTab2}
+              // loading={submitting}
+            />
+            <Row className={styles.Printer}>
+              <Col span={24}>打印人：{childModelPrint.item.printer}</Col>
+            </Row>  
+            
+            
+          </div>
+        </Modal>
+      </div>
+    )  
   }
 }

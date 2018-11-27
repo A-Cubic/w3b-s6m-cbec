@@ -66,3 +66,10 @@ export async function getSettlementDetailsElseData(params) {
     body: params,
   })
 }
+
+export async function getChildModelPrintData(params) {
+  return request(`/llback/Sales/getChildModelPrintData`,{
+    method: 'POST',
+    body: params,
+  })
+}
