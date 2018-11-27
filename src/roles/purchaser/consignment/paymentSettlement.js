@@ -195,7 +195,7 @@ export default class paymentSettlement extends Component {
                         <Button  style={{ marginRight:7 }} type="primary" ghost onClick={()=>this.handleChildDetailsModel(record)}>结算明细</Button>
                         {record.status==0?
                           <span style={{ marginRight:7 }} className={styles.settled}>对账中…</span>:
-                          <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleChildPrintModel(record)} >打印</Button>
+                          <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleChildPrintModel(record)}>预览打印</Button>
                         }
                       </div>
                     </Col>
@@ -241,8 +241,6 @@ export default class paymentSettlement extends Component {
   }
   //打印弹窗
   handleChildPrintModel=(record)=>{
-    console.log(record)
-    
     this.props.dispatch({
       type: 'rolePurchaserConsignment/childModelPrintData',
       payload: record.keyId,
@@ -418,16 +416,14 @@ class ChildDetails extends Component {
   rolePurchaserConsignment
 }))
 class ChildPrint extends Component {
-  handlePrintCancel=()=>{
+  handleCancel=()=>{
     this.props.dispatch({
-      type:'rolePurchaserConsignment/childPrintDetailModelVisibleR',
+      type:'rolePurchaserConsignment/childPrintModelVisibleR',
       payload:false
     })
   }
   render(){
-
     const { rolePurchaserConsignment:{paymentSettlement:{childPrintModelVisible,childModelPrint} }} = this.props;
-    console.log(this.props)
     const columnsPrinta = [
       {
         title: '序号',
@@ -452,16 +448,17 @@ class ChildPrint extends Component {
       <div>
         <Modal
           width={ '765px' }
+          // width={ '595px' }
           //style={{maxWidth:1200}}
           //title="结算明细"
           visible={childPrintModelVisible}
           //visible={true}
           // onOk={this.handleOk}
-          onCancel={this.handlePrintCancel}
+          onCancel={this.handleCancel}
           footer={null}
           closable={null}
         >
-          <div style={{height:1100}}>
+          <div id={'aaaa'}>
             <Row className={styles.hotTitle}>
               <Col span={24}>采购商品结算单</Col>
             </Row>
@@ -477,7 +474,7 @@ class ChildPrint extends Component {
                 <b>打印日期：{childModelPrint.item.dateOfPrinting}</b>
               </Col>
             </Row>
-      
+
             <Table className={styles.hotTable} dataSource={childModelPrint.list}
               // scroll={{ x: 1500}}
                   rowKey={record => record.keyId}
@@ -489,12 +486,12 @@ class ChildPrint extends Component {
             />
             <Row className={styles.Printer}>
               <Col span={24}>打印人：{childModelPrint.item.printer}</Col>
-            </Row>  
-            
-            
+            </Row>
+
+
           </div>
         </Modal>
       </div>
-    )  
+    )
   }
 }

@@ -18,7 +18,7 @@ export default function rolePurchaserConsignmentMock(url) {
 
     // -------- 合同信息 --------------
     // 代销-财务-合同信息-20181121
-    'POST /llback/Agreement/ContractInformation': url,
+    'POST /llback/Agreement/ContractInformation': contractInformation,
 
 
     // -------- 货款结算 --------------
@@ -67,7 +67,7 @@ export function getPayment(req, res) {
       settlementAccountPeriod: '2018.01.01~2018.01.31',
       contractNumber: 'QZKJ-0001',
       dateOfPrinting: '2018.01.01',
-      printer: '胖球1'
+      printer: '胖球1',
     },
   });
 }

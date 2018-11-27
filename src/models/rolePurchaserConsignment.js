@@ -235,7 +235,7 @@ export default {
         })
       }
     },
-    *childModelPrintData({ payload },{ call,put }){
+    *childModelPrintData({ payload,callback },{ call,put }){
       const response = yield call(getChildModelPrintData, payload);
       // console.log('~res',response)
       if(response!==undefined){
@@ -243,6 +243,11 @@ export default {
           type: 'childModelPrintDataR',
           payload: {response,childPrintModelVisible:true},
         })
+        yield
+          setTimeout(function () {
+          window.print()
+        },1000)
+
       }
     },
 
@@ -362,7 +367,7 @@ export default {
         }
       }
     },
-    childPrintDetailModelVisibleR(state, action){
+    childPrintModelVisibleR(state, action){
       return {
         ...state,
         paymentSettlement:{
@@ -374,7 +379,6 @@ export default {
 
 
     childModelPrintDataR(state, action){
-      console.log(action.payload)
       return {
         ...state,
         paymentSettlement:{
