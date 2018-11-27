@@ -3,7 +3,7 @@ import {
   getConfirmReceiptData,getChildModelTableData,childModelSubmit,
   goodsSales,
   contractInformation,
-  getPaymentSettlementData,getSettlementDetailsData,getSettlementDetailsElseData
+  getPaymentSettlementData,getSettlementDetailsData,getSettlementDetailsElseData,getChildModelPrintData
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
 import paymentSettlement from "../roles/purchaser/consignment/paymentSettlement";
@@ -69,6 +69,12 @@ export default {
         item:{},
         list: [],
         pagination:{},
+      },
+      childPrintModelVisible:false,
+      childModelPrint:{
+        item:{},
+        list:[],
+        pagination:{}
       }
     }
   },
@@ -229,6 +235,17 @@ export default {
         })
       }
     },
+    *childModelPrintData({ payload },{ call,put }){
+      const response = yield call(getChildModelPrintData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'childModelPrintDataR',
+          payload: {response,childPrintModelVisible:true},
+        })
+      }
+    },
+
   },
   reducers:{
     // -------- 收货确认 --------------
@@ -345,6 +362,27 @@ export default {
         }
       }
     },
+    childPrintDetailModelVisibleR(state, action){
+      return {
+        ...state,
+        paymentSettlement:{
+          ...state.paymentSettlement,
+          childPrintModelVisible:action.payload
+        }
+      }
+    },
 
+
+    childModelPrintDataR(state, action){
+      console.log(action.payload)
+      return {
+        ...state,
+        paymentSettlement:{
+          ...state.paymentSettlement,
+          childModelPrint:action.payload.response,
+          childPrintModelVisible:action.payload.childPrintModelVisible
+        }
+      }
+    }
   }
 }
