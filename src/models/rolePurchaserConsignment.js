@@ -235,6 +235,7 @@ export default {
         })
       }
     },
+    // 货款结算 - 打印
     *childModelPrintData({ payload,callback },{ call,put }){
       const response = yield call(getChildModelPrintData, payload);
       // console.log('~res',response)
@@ -376,7 +377,6 @@ export default {
         }
       }
     },
-
 
     childModelPrintDataR(state, action){
       return {

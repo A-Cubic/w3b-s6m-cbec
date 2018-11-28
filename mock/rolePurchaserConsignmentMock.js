@@ -18,7 +18,7 @@ export default function rolePurchaserConsignmentMock(url) {
 
     // -------- 合同信息 --------------
     // 代销-财务-合同信息-20181121
-    'POST /llback/Agreement/ContractInformation': contractInformation,
+    'POST /llback/Agreement/ContractInformation': url,
 
 
     // -------- 货款结算 --------------
