@@ -104,7 +104,7 @@ export default class paymentSettlement extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="结算单号">
-              {getFieldDecorator('order')(
+              {getFieldDecorator('status')(
                 <Input placeholder="请输入结算单号" />
               )}
             </FormItem>
@@ -120,7 +120,7 @@ export default class paymentSettlement extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0} </span>
+            <span>共查询出符合条件的数据：{tableData?tableData.list.length:0} </span>
           </div>
         </div>
       </Form>
@@ -153,31 +153,31 @@ export default class paymentSettlement extends Component {
                 <div className={styles.tableListForm}>
                   <Row>
                     <Col span={12}><p style={{fontWeight:"bold"}}>账期：<em style={{color:"red",fontWeight:"normal",fontStyle:"normal"}}>{record.date}</em></p></Col>
-                    <Col span={12}><p style={{textAlign:"right",color:"#737373 85%" }}>结算单{record.order}</p></Col>
+                    <Col span={12}><p style={{textAlign:"right",color:"#737373 85%" }}>结算单{record.accountCode}</p></Col>
                   </Row>
                   <div className={styles.line}></div>
                   <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                     <Col md={6} sm={12}  xs={12}  >
                       <div className={styles.hot}>
-                        <h1 style={{border:"5px solid #A7C8E3"}}>￥{record.goMoney}</h1>
+                        <h1 style={{border:"5px solid #A7C8E3"}}>￥{record.purchasemoney}</h1>
                         <h2>采购货款</h2>
                       </div>
                     </Col>
                     <Col md={6} sm={12} xs={12}>
                       <div className={styles.hot}>
-                        <h1 style={{border:"5px solid #000"}}>￥{record.tuiMoney}</h1>
+                        <h1 style={{border:"5px solid #000"}}>￥{record.refundmoney}</h1>
                         <h2>采退货款</h2>
                       </div>
                     </Col>
                     <Col md={6} sm={12} xs={12}>
                       <div className={styles.hot}>
-                        <h1 style={{border:"5px solid #C8C8C8"}}>￥{record.elseMoney}</h1>
+                        <h1 style={{border:"5px solid #C8C8C8"}}>￥{record.othermoney}</h1>
                         <h2>其他费用</h2>
                       </div>
                     </Col>
                     <Col md={6} sm={12} xs={12}>
                       <div className={styles.hot}>
-                        <h1 style={{border:"5px solid #B4E3A7"}}>￥{record.doMoney}</h1>
+                        <h1 style={{border:"5px solid #B4E3A7"}}>￥{record.paymoney}</h1>
                         <h2>实际应付款</h2>
                       </div>
                     </Col>
@@ -221,7 +221,7 @@ export default class paymentSettlement extends Component {
                  rowClassName={styles.td}
                  className={styles.rowClass}
                  // scroll={{ x: 1500}}
-                 rowKey={record => record.id}
+                 rowKey={record => record.keyId}
                  columns={columns}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
@@ -236,14 +236,14 @@ export default class paymentSettlement extends Component {
     // console.log(record)
     this.props.dispatch({
       type: 'rolePurchaserConsignment/getSettlementDetailsData',
-      payload: record.keyId,
+      payload: {accountCode:record.accountCode},
     });
   }
   //打印弹窗
   handleChildPrintModel=(record)=>{
     this.props.dispatch({
       type: 'rolePurchaserConsignment/childModelPrintData',
-      payload: record.keyId,
+      payload: {accountCode:record.accountCode},
     });
   }
 }
@@ -265,7 +265,7 @@ class ChildDetails extends Component {
     const { rolePurchaserConsignment:{paymentSettlement:{childDetailsModelHelpId,childModelDetailsTableTab1Data}} } = this.props;
     const params = {
       ...pagination,
-      sendId:childDetailsModelHelpId
+      accountCode:childDetailsModelHelpId
     };
     this.props.dispatch({
       type: 'rolePurchaserConsignment/childModelDetailsTableTab1Data',
@@ -276,7 +276,7 @@ class ChildDetails extends Component {
     const { rolePurchaserConsignment:{paymentSettlement:{childDetailsModelHelpId,childModelDetailsTableTab2Data}} } = this.props;
     const params = {
       ...pagination,
-      sendId:childDetailsModelHelpId
+      accountCode:childDetailsModelHelpId
     };
     this.props.dispatch({
       type: 'rolePurchaserConsignment/childModelDetailsTableTab2Data',
@@ -312,35 +312,35 @@ class ChildDetails extends Component {
         )
       }, {
         title: '商品条码',
-        dataIndex: 'barcode',
-        key: 'barcode',
+        dataIndex: 'barCode',
+        key: 'barCode',
       }, {
         title: '品牌',
         dataIndex: 'brand',
         key: 'brand',
       },{
         title: '供货价',
-        dataIndex: 'supplyPrice',
-        key: 'supplyPrice',
+        dataIndex: 'purchasePrice',
+        key: 'purchasePrice',
         render:val=>`¥${val}`,
       },{
         title: '销售单价',
-        dataIndex: 'aa',
-        key: 'aa',
+        dataIndex: 'skuUnitPrice',
+        key: 'skuUnitPrice',
         render:val=>`¥${val}`,
       },{
         title: '销售数量',
-        dataIndex: 'goodsNum',
-        key: 'goodsNum',
+        dataIndex: 'quantity',
+        key: 'quantity',
       },{
         title: '销售金额',
-        dataIndex: 'bb',
-        key: 'bb',
+        dataIndex: 'money',
+        key: 'money',
         render:val=>`¥${val}`,
       },{
         title: '销售日期',
-        dataIndex: 'goodsTotal',
-        key: 'goodsTotal',
+        dataIndex: 'tradeTime',
+        key: 'tradeTime',
       }
     ];
     const columnsTab2 = [
@@ -350,25 +350,25 @@ class ChildDetails extends Component {
         key: 'keyId',
       }, {
         title: '调整年份',
-        dataIndex: 'barcode',
-        key: 'barcode',
+        dataIndex: 'year',
+        key: 'year',
       }, {
         title: '调整月份',
-        dataIndex: 'brand',
-        key: 'brand',
+        dataIndex: 'month',
+        key: 'month',
       },{
         title: '调整金额',
-        dataIndex: 'supplyPrice',
-        key: 'supplyPrice',
+        dataIndex: 'price',
+        key: 'price',
         render:val=>`¥${val}`,
       },{
         title: '调整项目',
-        dataIndex: 'aa',
-        key: 'aa',
+        dataIndex: 'adjustName',
+        key: 'adjustName',
       },{
         title: '调整事由',
-        dataIndex: 'goodsNum',
-        key: 'goodsNum',
+        dataIndex: 'detail',
+        key: 'detail',
       }
     ];
 
@@ -431,17 +431,17 @@ class ChildPrint extends Component {
         key: 'keyId',
       }, {
         title: '类别',
-        dataIndex: 'status',
-        key: 'status',
+        dataIndex: 'type',
+        key: 'type',
       }, {
         title: '说明',
-        dataIndex: 'order',
-        key: 'order',
+        dataIndex: 'explain',
+        key: 'explain',
       },{
         title: '金额',
-        dataIndex: 'goMoney',
-        key: 'goMoney',
-        //render:val=>`¥${val}`,
+        dataIndex: 'price',
+        key: 'price',
+        render:val=>`¥${val}`,
       }
     ];
     return (
@@ -464,14 +464,15 @@ class ChildPrint extends Component {
             </Row>
             <Row>
               <Col className={styles.hotInformation} span={12}>
-                <b>结算单号：{childModelPrint.item.settlementNumber}</b>
-                <b>供应商名称：{childModelPrint.item.supplierName}</b>
-                <b>收据金额(大写)：{childModelPrint.item.receiptAmount}</b>
+                <b>结算单号：{childModelPrint.item.accountCode}</b>
+                {/*<b>供应商名称：{childModelPrint.item.supplierName}</b>*/}
+                <b>供应商名称：岂止科技（大连）有限公司</b>
+                <b>收据金额(大写)：{childModelPrint.item.money}</b>
               </Col>
               <Col className={styles.hotInformation} span={12}>
-                <b>结算账期：{childModelPrint.item.settlementAccountPeriod}</b>
-                <b>合同编号：{childModelPrint.item.contractNumber}</b>
-                <b>打印日期：{childModelPrint.item.dateOfPrinting}</b>
+                <b>结算账期：{childModelPrint.item.date}</b>
+                <b>合同编号：{childModelPrint.item.contractCode}</b>
+                <b>打印日期：{childModelPrint.item.today}</b>
               </Col>
             </Row>
 
@@ -485,7 +486,7 @@ class ChildPrint extends Component {
               // loading={submitting}
             />
             <Row className={styles.Printer}>
-              <Col span={24}>打印人：{childModelPrint.item.printer}</Col>
+              <Col span={24}>打印人：{childModelPrint.item.name}</Col>
             </Row>
 
 

@@ -180,7 +180,7 @@ export default {
     //代销-财务-合同信息-20181121
     *contractInformation({ payload },{ call,put }){
       const response = yield call(contractInformation, payload);
-      console.log('~res',response)
+      // console.log('~res',response)
       if(response!==undefined){
         yield put({
           type: 'contractInformationR',
@@ -210,7 +210,7 @@ export default {
       if(responseTab1!==undefined){
         yield put({
           type: 'getSettlementDetailsDataR',
-          payload: {responseTab1,responseTab2,childDetailsModelVisible:true,childDetailsModelHelpId:payload},
+          payload: {responseTab1,responseTab2,childDetailsModelVisible:true,childDetailsModelHelpId:payload.accountCode},
         })
       }
     },
@@ -224,7 +224,8 @@ export default {
           payload: {data:response,tab:'childModelDetailsTableTab1Data'},
         })
       }
-    },// 货款结算 - 查看结算明细 - 其他分页
+    },
+    // 货款结算 - 查看结算明细 - 其他分页
     *childModelDetailsTableTab2Data({ payload },{ call,put }){
       const response = yield call(getSettlementDetailsElseData, payload);
       // console.log('~res',response)

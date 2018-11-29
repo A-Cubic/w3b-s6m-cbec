@@ -23,13 +23,13 @@ export default function rolePurchaserConsignmentMock(url) {
 
     // -------- 货款结算 --------------
     // 货款结算 - 列表
-    'POST /llback/Sales/getPaymentSettlement': getPayment,
+    'POST /llback/Balance/GetPayment': url,
     // 货款结算 - 查看结算明细 - 货款
-    'POST /llback/Sales/getSettlementDetailsData': getPayment,
+    'POST /llback/Balance/GetPaymentDetailed': url,
     // 货款结算 - 查看结算明细 - 其他
-    'POST /llback/Sales/getSettlementDetailsElseData': getPayment,
-
-    'POST /llback/Sales/getChildModelPrintData': getPayment,
+    'POST /llback/Balance/GetPaymentOtherDetailed': url,
+    // 货款结算 - 查看结算明细 - 打印
+    'POST /llback/Balance/GetPaymentPrinting': url,
   };
 }
 export function getPayment(req, res) {

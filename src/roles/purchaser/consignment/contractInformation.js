@@ -61,12 +61,17 @@ export default class contractInformation extends Component {
           </div>
           <ul className={styles.hot}>
             {
-              list.map((i,index) => {
-                return(
-                  <li key={index}><img src={i.imgUrl} onClick={()=>this.handleClickImg(i.imgUrl)}/></li>
-                )
-              })
-            }
+              list==[]?
+                list.map((i,index) => {
+                  return(
+                    <li key={index}><img src={i.imgUrl} onClick={()=>this.handleClickImg(i.imgUrl)}/></li>
+                  )
+                }):
+                <div style={{textAlign:'center',fontSize:15}}>
+                  <Divider dashed />
+                  暂时没有合同相关数据
+                </div>
+              }
           </ul>
         </Card>
         <ShowImg />
@@ -90,7 +95,6 @@ class ShowImg extends Component {
   }
   render() {
     const {rolePurchaserConsignment:{contractInformation:{childHelpData:{src,visible}}}}= this.props
-    console.log('child',this.props)
     return(
     <div>
       <Modal
