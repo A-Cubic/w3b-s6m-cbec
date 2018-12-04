@@ -109,7 +109,7 @@ class ShowImg extends Component {
           onCancel={this.handleCancel}
         >
           <div>
-            <img className={styles.bigimg} src={src}></img>
+            <img className={styles.bigImg} src={src}></img>
           </div>
         </Modal>
     </div>

@@ -217,9 +217,9 @@ export default class goodsSales extends Component {
       <div>
         <Card bordered={false}>
           <div style={{display: 'inline-flex',marginBottom:20,}} className={styles.hot}>
-            <Button  type="primary" onClick={this.downloadTemplate} style={{ marginLeft: 8 }}>
-              <Icon type="download" />下载销售模板
-            </Button>
+            {/*<Button  type="primary" onClick={this.downloadTemplate} style={{ marginLeft: 8 }}>*/}
+              {/*<Icon type="download" />下载销售模板*/}
+            {/*</Button>*/}
             <Upload {...props}>
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="upload" /> 上传销售数据

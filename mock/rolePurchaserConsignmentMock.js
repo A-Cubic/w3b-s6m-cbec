@@ -14,6 +14,7 @@ export default function rolePurchaserConsignmentMock(url) {
     // -------- 商品销售 --------------
     // 商品销售-列表查询
     'POST /llback/Sales/GetGoods': url,
+    'POST /llback/Order/UploadOrderDX': url,
 
 
     // -------- 合同信息 --------------

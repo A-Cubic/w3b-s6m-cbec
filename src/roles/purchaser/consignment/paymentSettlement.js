@@ -489,7 +489,6 @@ class ChildPrint extends Component {
               <Col span={24}>打印人：{childModelPrint.item.name}</Col>
             </Row>
 
-
           </div>
         </Modal>
       </div>

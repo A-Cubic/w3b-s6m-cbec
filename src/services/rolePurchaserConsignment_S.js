@@ -32,7 +32,13 @@ export async function goodsSales(params) {
     body: params,
   })
 }
-
+// 导入订单
+export async function getUploadOrderbillDX(params) {
+  return request(`/llback/Order/UploadOrderDX`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 // -------- 合同信息 --------------
 //代销-财务-合同信息-20181121

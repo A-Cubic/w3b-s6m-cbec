@@ -1,13 +1,12 @@
 import { message} from 'antd';
 import {
   getConfirmReceiptData,getChildModelTableData,childModelSubmit,
-  goodsSales,
+  goodsSales,getUploadOrderbillDX,
   contractInformation,
   getPaymentSettlementData,getSettlementDetailsData,getSettlementDetailsElseData,getChildModelPrintData
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
 import paymentSettlement from "../roles/purchaser/consignment/paymentSettlement";
-import {getUploadOrderbill} from "../services/orderManagement_S";
 export default {
   namespace: 'rolePurchaserConsignment',
   state:{
@@ -160,7 +159,7 @@ export default {
     },
     //商品销售 - 上传销售数据
     *uploadOrderbill({ payload,callback },{ call,put}){
-      const response = yield call(getUploadOrderbill, payload);
+      const response = yield call(getUploadOrderbillDX, payload);
       // console.log('~',response)
       if (response !== undefined) {
         callback(response)
