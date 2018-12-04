@@ -1,12 +1,13 @@
 import { message} from 'antd';
 import {
   getConfirmReceiptData,getChildModelTableData,childModelSubmit,
+  dataStatistics,
   goodsSales,getUploadOrderbillDX,
   contractInformation,
   getPaymentSettlementData,getSettlementDetailsData,getSettlementDetailsElseData,getChildModelPrintData
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
-import paymentSettlement from "../roles/purchaser/consignment/paymentSettlement";
+// import paymentSettlement from "../roles/purchaser/consignment/paymentSettlement";
 export default {
   namespace: 'rolePurchaserConsignment',
   state:{
@@ -31,6 +32,13 @@ export default {
       }
     },
 
+    // -------- 数据统计 --------------
+    dataStatistics:{
+      tableData:{
+        list: [],
+        pagination:{},
+      },
+    },
     // -------- 商品销售 --------------
     goodsSales:{
       tableData:{
@@ -141,6 +149,20 @@ export default {
         }else{
           message.error(response.msg);
         }
+      }
+    },
+
+
+    // -------- 数据统计 --------------
+    //数据统计 - 列表查询
+    *dataStatistics({ payload },{ call,put }){
+        const response = yield call(dataStatistics, payload);
+        // console.log('~res',response)
+        if(response!==undefined){
+          yield put({
+          type: 'dataStatisticsR',
+          payload: response,
+        })
       }
     },
 
@@ -288,6 +310,18 @@ export default {
         confirmReceipt:{
           ...state.confirmReceipt,
           childReceiptModelVisible:action.payload
+        }
+      }
+    },
+
+
+    // -------- 数据查询 --------------
+    dataStatisticsR(state, action){
+      return {
+        ...state,
+        dataStatistics:{
+          ...state.dataStatistics,
+          tableData:action.payload
         }
       }
     },

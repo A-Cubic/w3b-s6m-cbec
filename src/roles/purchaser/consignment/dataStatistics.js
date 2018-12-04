@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
-import styles from './receivingConfirmation.less';
+import styles from './dataStatistics.less';
 import moment from 'moment';
 import {getCurrentUrl, getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
@@ -18,7 +18,7 @@ const FormItem = Form.Item;
 // -------- 商品销售 --------------
     // 商品销售-列表查询
 @Form.create()
-export default class goodsSales extends Component {
+export default class dataStatistics extends Component {
   state={
     formValues:{},
     visible: false,
@@ -28,7 +28,7 @@ export default class goodsSales extends Component {
   //****/
   init(){
     this.props.dispatch({
-      type:'rolePurchaserConsignment/goodsSales',
+      type:'rolePurchaserConsignment/dataStatistics',
       payload:{}
     })
   }
@@ -51,7 +51,7 @@ export default class goodsSales extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'rolePurchaserConsignment/goodsSales',
+        type: 'rolePurchaserConsignment/dataStatistics',
         payload: {
           ...values,
         },
@@ -75,7 +75,7 @@ export default class goodsSales extends Component {
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'rolePurchaserConsignment/goodsSales',
+      type: 'rolePurchaserConsignment/dataStatistics',
       payload: params,
     });
   }
@@ -112,13 +112,13 @@ export default class goodsSales extends Component {
     this.init();
   }
   renderForm(){
-    const { rolePurchaserConsignment:{goodsSales:{tableData}} } = this.props;
+    const { rolePurchaserConsignment:{dataStatistics:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem >
+            <FormItem label="单据日期：">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
@@ -147,7 +147,7 @@ export default class goodsSales extends Component {
   }
 
   render() {
-    const { rolePurchaserConsignment:{goodsSales:{tableData:{list, pagination}}} } = this.props;
+    const { rolePurchaserConsignment:{dataStatistics:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -159,64 +159,53 @@ export default class goodsSales extends Component {
       dataIndex: 'keyId',
       key: 'keyId',
     }, {
-      title: '订单号',
+      title: '商品（SKU）',
       dataIndex: 'goodsName',
       key: 'goodsName',
-    }, {
-      title: '商品数量',
+      render: (val,record) =>{
+        return (
+          <div>
+            <img src={record.slt} alt="" width={80} style={{marginRight:8,}}/>
+            <span style={{display:'inline-block',width:200}}>{val}</span>
+          </div>
+        )
+    }}, {
+      title: '商品条码',
       dataIndex: 'barCode',
       key: 'barCode',
     }, {
-      title: '订单金额',
+      title: '品牌',
       dataIndex: 'brand',
       key: 'brand',
-        render:val=>`¥${val}`
     },{
-      title: '订单时间',
+      title: '供货价',
       dataIndex: 'skuUnitPrice',
       key: 'skuUnitPrice',
+        render:val=>`¥${val}`
 
     },{
-      title: '应收金额',
+      title: '销售单价',
       dataIndex: 'supplyPrice',
       key: 'supplyPrice',
-      render:val=>`¥${val}`
+        render:val=>`¥${val}`
+
     },{
-        title: '支付方式',
+        title: '销售数量',
         dataIndex: 'quantity',
         key: 'quantity',
+
       },{
-        title: '支付金额',
+        title: '销售金额',
         dataIndex: 'money',
         key: 'money',
         render:val=>`¥${val}`
+
       },{
-        title: '优惠名称',
+        title: '销售日期',
         dataIndex: 'tradeTime',
         key: 'tradeTime',
-      },{
-        title: '优惠金额',
-        dataIndex: 'ss',
-        key: 'ss',
-        render:val=>`¥${val}`
       }
     ];
-    const expandedRowRender = item => {
-      const columnsRow = [
-        { title: '商品名称', dataIndex: 'a', key: 'a' },
-        { title: '商品数量', dataIndex: 'b', key: 'b', render:val=>`${val}个`},
-        { title: '商品金额', dataIndex: 'c', key: 'c',render:val=>`¥${val}` },
-      ];
-      return(
-
-        <Table
-          columns={columnsRow}
-          dataSource={item.detailsList}
-          rowKey={item => item.keyId}
-          pagination={false}
-          />
-      )
-    };
     const props = {
       action: getUploadUrl(),
       headers: getHeader(),
@@ -230,16 +219,16 @@ export default class goodsSales extends Component {
     return (
       <div>
         <Card bordered={false}>
-          <div style={{display: 'inline-flex',marginBottom:20,}} className={styles.hot}>
-            {/*<Button  type="primary" onClick={this.downloadTemplate} style={{ marginLeft: 8 }}>*/}
-              {/*<Icon type="download" />下载销售模板*/}
-            {/*</Button>*/}
-            <Upload {...props}>
-              <Button style={{ marginLeft: 8 }}>
-                <Icon type="upload" /> 上传销售数据
-              </Button>
-            </Upload>
-          </div>
+          {/*<div style={{display: 'inline-flex',marginBottom:20,}} className={styles.hot}>*/}
+            {/*/!*<Button  type="primary" onClick={this.downloadTemplate} style={{ marginLeft: 8 }}>*!/*/}
+              {/*/!*<Icon type="download" />下载销售模板*!/*/}
+            {/*/!*</Button>*!/*/}
+            {/*<Upload {...props}>*/}
+              {/*<Button style={{ marginLeft: 8 }}>*/}
+                {/*<Icon type="upload" /> 上传销售数据*/}
+              {/*</Button>*/}
+            {/*</Upload>*/}
+          {/*</div>*/}
 
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
@@ -248,9 +237,8 @@ export default class goodsSales extends Component {
           </div>
           <Table dataSource={list}
                  // scroll={{ x: 1500}}
-                 rowKey={record => record.keyId}
+                 rowKey={record => record.id}
                  columns={columns}
-                 expandedRowRender={expandedRowRender}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
                  // loading={submitting}
@@ -258,25 +246,6 @@ export default class goodsSales extends Component {
         </Card>
       </div>
     );
-  }
-  ex=(obj)=>{
-    console.log('a',obj)
-
-      const columns = [
-        { title: 'Date', dataIndex: 'a', key: 'a' },
-        { title: 'Name', dataIndex: 'b', key: 'b' },
-
-      ];
-
-
-      return (
-        <Table
-          columns={columns}
-          dataSource={obj.children}
-          rowKey={record => record.id}
-          pagination={false}
-        />
-      );
   }
 }
 

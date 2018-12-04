@@ -11,9 +11,14 @@ export default function rolePurchaserConsignmentMock(url) {
     // 'POST /llback/Warehouse/ConfirmGoods': 'http://172.16.10.51:54195/',
 
 
+    // -------- 数据统计 --------------
+    // 数据统计-列表查询
+    'POST /llback/Sales/GetGoods': url,
+
+
     // -------- 商品销售 --------------
     // 商品销售-列表查询
-    'POST /llback/Sales/GetGoods': url,
+    'POST /llback/Sales/goodsSales': getPayment,
     'POST /llback/Order/UploadOrderDX': url,
 
 
@@ -44,6 +49,12 @@ export function getPayment(req, res) {
       elseMoney: '500.00',
       doMoney: '500.00',
       status: 0,
+      detailsList: [{
+        keyId: '1',
+        a: '20171201~20171231',
+        b: '215451244',
+        c: '1231',
+      }],
     }, {
       keyId: '2',
       date: '20171201~20171231',
@@ -53,6 +64,12 @@ export function getPayment(req, res) {
       elseMoney: '500.00',
       doMoney: '500.00',
       status: 1,
+      detailsList: [{
+        keyId: '2',
+        a: '20171201~20171231',
+        b: '215451244',
+        c: '32546',
+      }],
     }],
     pagination: {
       current: 1,

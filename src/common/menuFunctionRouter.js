@@ -134,8 +134,12 @@ export default function(dynamicWrapper,app){
     '/settlement/incomeA': {
       component: dynamicWrapper(app, ['settlementManagement','publicDictionary'], () => import('../routes/SettlementManagement/incomeA')),
     },
-    // 我的收益 - 门店20181025
+    // 我的收益 - 门店20181025  - BBC
     '/settlement/incomeStore': {
+      component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/incomeStore')),
+    },
+    // 我的收益 - 门店20181025 - 直邮
+    '/direct/incomeStoreP': {
       component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/incomeStore')),
     },
 

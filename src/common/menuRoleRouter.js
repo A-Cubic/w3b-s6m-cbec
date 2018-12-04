@@ -8,7 +8,11 @@ export default function(dynamicWrapper,app){
     '/consignment/receivingConfirmation': {
       component: dynamicWrapper(app, ['rolePurchaserConsignment'], () => import('../roles/purchaser/consignment/receivingConfirmation')),
     },
-    //代销-订单-商品销售-20181121
+    //代销-订单-数据统计-20181204
+    '/consignment/statistics': {
+      component: dynamicWrapper(app, ['rolePurchaserConsignment'], () => import('../roles/purchaser/consignment/dataStatistics')),
+    },
+    //代销-订单-商品销售-20181204
     '/consignment/goodsSales': {
       component: dynamicWrapper(app, ['rolePurchaserConsignment'], () => import('../roles/purchaser/consignment/goodsSales')),
     },
