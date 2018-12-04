@@ -28,7 +28,7 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutA')),
     },
     //商品管理 - 商品查看 - 采购purchase
-    '/goods/goodsAboutP': {
+    '/direct/goodsAboutP': {
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutP')),
     },
 
@@ -70,7 +70,7 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/operatorOrder')),
     },
     //订单管理 - 渠道商
-    '/orderManagement/channelOrder': {
+    '/direct/channelOrder': {
       component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/channelOrder')),
     },
     //订单管理 - 代理
@@ -119,7 +119,7 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/settlementMgtS')),
     },
     // 结算管理 - 采购
-    '/settlement/settlementP': {
+    '/direct/settlementP': {
       component: dynamicWrapper(app, ['settlementManagement'], () => import('../routes/SettlementManagement/settlementMgtP')),
     },
     // 结算管理 - 代理

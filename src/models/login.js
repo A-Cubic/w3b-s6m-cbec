@@ -43,7 +43,7 @@ export default {
               break;
             //  渠道商
             case 'purchasers':
-              tUrl = '/orderManagement/channelOrder';
+              tUrl = '/direct/channelOrder';
               break;
             //  运营客服
             case 'operate':
