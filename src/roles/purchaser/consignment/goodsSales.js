@@ -181,21 +181,24 @@ export default class goodsSales extends Component {
       title: '供货价',
       dataIndex: 'skuUnitPrice',
       key: 'skuUnitPrice',
+        render:val=>`¥${val}`
 
     },{
       title: '销售单价',
-      dataIndex: 'quantity',
-      key: 'quantity',
+      dataIndex: 'supplyPrice',
+      key: 'supplyPrice',
+        render:val=>`¥${val}`
 
     },{
         title: '销售数量',
-        dataIndex: 'supplyPrice',
-        key: 'supplyPrice',
+        dataIndex: 'quantity',
+        key: 'quantity',
 
       },{
         title: '销售金额',
         dataIndex: 'money',
         key: 'money',
+        render:val=>`¥${val}`
 
       },{
         title: '销售日期',
