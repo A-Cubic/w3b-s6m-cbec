@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Menu,Dropdown,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
 import styles from './receivingConfirmation.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
@@ -75,7 +75,7 @@ export default class receivingConfirmation extends Component {
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="订单日期">
+            <FormItem label="单据日期">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
@@ -117,7 +117,14 @@ export default class receivingConfirmation extends Component {
             </FormItem>
           </Col>
         </Row>
-        <Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={16} sm={24}>
+            <FormItem label="关键字：">
+              {getFieldDecorator('search')(
+                <Input placeholder="请输入商品条码，商品名称，商品品牌进行查询" />
+              )}
+            </FormItem>
+          </Col>
           <Col md={8} sm={24}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
@@ -146,6 +153,10 @@ export default class receivingConfirmation extends Component {
       dataIndex: 'keyId',
       key: 'keyId',
     }, {
+      title: '单据编号',
+      dataIndex: 'a',
+      key: 'a',
+    }, {
       title: '单据类型',
       dataIndex: 'sendType',
       key: 'sendType',
@@ -155,6 +166,14 @@ export default class receivingConfirmation extends Component {
       dataIndex: 'goodsTotal',
       key: 'goodsTotal',
     }, {
+      title: '发货日期',
+      dataIndex: 'b',
+      key: 'b',
+    },{
+      title: '预计发货时间',
+      dataIndex: 'c',
+      key: 'c',
+    },{
       title: '发货人',
       dataIndex: 'sendName',
       key: 'sendName',
@@ -175,7 +194,20 @@ export default class receivingConfirmation extends Component {
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
-        render: (val,record) =>
+        render: (val,record) =>{
+          const menu = (
+            <Menu onClick={(e) => this.exportType(e)}>
+              <Menu.Item key="0" >
+                美团模板
+              </Menu.Item>
+              {/*<Menu.Divider/>*/}
+              <Menu.Item key="1" >
+                流连优选模板
+              </Menu.Item>
+
+            </Menu>
+          );
+          return(
           <div>
             {
               record.sendType==1?
@@ -188,8 +220,12 @@ export default class receivingConfirmation extends Component {
                 record.status==2?
                   <a href="javascript:;" onClick={()=>this.handleChildReceiptModel(record)}>填写运单号</a>:
                   <a href="javascript:;" onClick={()=>this.handleChildReceiptModel(record)}>查看</a>
-            }
+            }<br/>
+            <Dropdown overlay={menu} trigger={['click']}>
+            <a href="#">导出</a>
+            </Dropdown><br/>
           </div>
+          )}
       }
     ];
     return (
@@ -215,6 +251,20 @@ export default class receivingConfirmation extends Component {
         <ReceiptModel />
       </div>
     );
+  }
+  exportType(e){
+    // console.log('e',e.key)
+    switch (e.key){
+      case '0':
+        console.log(e.key)
+        break;
+      case '1':
+        console.log(e.key)
+        break;
+      default:
+        console.log('default')
+        break;
+    }
   }
   handleChildReceiptModel(record){
     let type;

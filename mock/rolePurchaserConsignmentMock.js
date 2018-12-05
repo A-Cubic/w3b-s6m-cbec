@@ -3,7 +3,7 @@ export default function rolePurchaserConsignmentMock(url) {
   return {
     // -------- 收货确认 --------------
     // 收货确认 - 列表
-    'POST /llback/Warehouse/CollectGoods': url,
+    'POST /llback/Warehouse/CollectGoods': GetOrderList,
     // 操作内商品详情列表
     'POST /llback/Warehouse/CollectGoodsList': url,
     // 操作内 收货确认/提交运单号
@@ -158,8 +158,8 @@ export function GetOrderList(req, res) {
   res.send({
     list: [{
       id: '1',
-      status: 0,
-      sendType: 1,
+      status: '0',
+      sendType: '1',
       sendid: 1,
       merchantOrderId: 'SH20180127144502664278',
       tradeTime: '2018-01-27 14:45:02',
@@ -175,8 +175,8 @@ export function GetOrderList(req, res) {
       orderGoods: null,
     }, {
       id: '2',
-      status: 1,
-      sendType: 1,
+      status: '1',
+      sendType: '1',
       sendid: 2,
       merchantOrderId: 'SH20180127144502664278',
       tradeTime: '2018-01-27 14:45:02',
@@ -193,8 +193,8 @@ export function GetOrderList(req, res) {
     }, {
       id: '3',
       sendid: 3,
-      status: 0,
-      sendType: 2,
+      status: '0',
+      sendType: '2',
       merchantOrderId: 'SH20180127144502664278',
       tradeTime: '2018-01-27 14:45:02',
       waybillno: '',
@@ -210,8 +210,8 @@ export function GetOrderList(req, res) {
     }, {
       id: '4',
       sendid: 4,
-      status: 1,
-      sendType: 2,
+      status: '1',
+      sendType: '2',
       merchantOrderId: 'SH20180127144502664278',
       tradeTime: '2018-01-27 14:45:02',
       waybillno: '',
@@ -226,8 +226,8 @@ export function GetOrderList(req, res) {
       orderGoods: null,
     }, {
       id: '5',
-      status: 2,
-      sendType: 2,
+      status: '2',
+      sendType: '2',
       sendid: 5,
       merchantOrderId: 'SH20180127144502664278',
       tradeTime: '2018-01-27 14:45:02',

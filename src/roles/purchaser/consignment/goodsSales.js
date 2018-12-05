@@ -66,9 +66,6 @@ export default class goodsSales extends Component {
     });
     this.init();
   }
-  handlCheck(){
-    console.log(111)
-  }
   handleTableChange=(pagination, filters, sorter)=>{
     const params = {
       ...pagination,
@@ -139,7 +136,11 @@ export default class goodsSales extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0} </span>
+            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0} ，</span>
+            <span>订单金额：¥{tableData?tableData.item.salesNumTotal:0}， </span>
+            <span>优惠金额：¥{tableData?tableData.item.salesPriceTotal:0}， </span>
+            <span>应收金额：¥{tableData?tableData.item.costTotal:0}， </span>
+            <span>供货金额：¥{tableData?tableData.item.grossProfitTotal:0}</span>
           </div>
         </div>
       </Form>
@@ -208,7 +209,6 @@ export default class goodsSales extends Component {
         { title: '商品金额', dataIndex: 'c', key: 'c',render:val=>`¥${val}` },
       ];
       return(
-
         <Table
           columns={columnsRow}
           dataSource={item.detailsList}
@@ -260,15 +260,10 @@ export default class goodsSales extends Component {
     );
   }
   ex=(obj)=>{
-    console.log('a',obj)
-
       const columns = [
         { title: 'Date', dataIndex: 'a', key: 'a' },
         { title: 'Name', dataIndex: 'b', key: 'b' },
-
       ];
-
-
       return (
         <Table
           columns={columns}

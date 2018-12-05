@@ -143,23 +143,28 @@ export default class consignmentStock extends Component {
       title: '商品条码',
       dataIndex: 'barcode',
       key: 'barcode',
-    }, {
-      title: '品牌',
-      dataIndex: 'brand',
-      key: 'brand',
-    },{
-      title: '保质期',
+    },
+    //   {
+    //   title: '品牌',
+    //   dataIndex: 'brand',
+    //   key: 'brand',
+    // },
+      {
+      title: '保质期（天）',
       dataIndex: 'shelfLife',
       key: 'shelfLife',
       sorter:true,
-        sortOrder:sortedInfo?sortedInfo.columnKey === 'shelfLife' && sortedInfo.order:false
-    },{
-      title: '商品入库时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
-      sorter:true,
-      sortOrder:sortedInfo?sortedInfo.columnKey === 'createTime' && sortedInfo.order:false
-    },{
+        sortOrder:sortedInfo?sortedInfo.columnKey === 'shelfLife' && sortedInfo.order:false,
+        render:val=>`${val}（天）`
+      },
+    //   {
+    //   title: '商品入库时间',
+    //   dataIndex: 'createTime',
+    //   key: 'createTime',
+    //   sorter:true,
+    //   sortOrder:sortedInfo?sortedInfo.columnKey === 'createTime' && sortedInfo.order:false
+    // },
+      {
         title: '当前库存',
         dataIndex: 'pNum',
         key: 'pNum',
@@ -172,6 +177,14 @@ export default class consignmentStock extends Component {
         render:val=>`¥${val}`,
         sorter:true,
         sortOrder:sortedInfo?sortedInfo.columnKey === 'pprice' && sortedInfo.order:false
+      },{
+        title: '预计补货时间',
+        dataIndex: 'a',
+        key: 'a',
+      },{
+        title: '预计补货数量',
+        dataIndex: 'b',
+        key: 'b',
       },{
         title: '库存同步时间',
         dataIndex: 'sameTime',
