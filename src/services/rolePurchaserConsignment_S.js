@@ -22,6 +22,13 @@ export async function childModelSubmit(params) {
     body: params,
   })
 }
+// 收货确认 - 导出 收货单
+export async function exportOrder(params) {
+  return request(`/llback/Warehouse/ExportSendGoods`, {
+    method: 'POST',
+    body: params,
+  })
+}
 
 
 // -------- 数据统计 --------------

@@ -1,12 +1,13 @@
 import { message} from 'antd';
 import {
-  getConfirmReceiptData,getChildModelTableData,childModelSubmit,
+  getConfirmReceiptData,getChildModelTableData,childModelSubmit,exportOrder,
   dataStatistics,
   goodsSales,getUploadOrderbillDX,
   contractInformation,
   getPaymentSettlementData,getSettlementDetailsData,getSettlementDetailsElseData,getChildModelPrintData
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
+import {getDownloadToSendOrder} from "../services/orderManagement_S";
 // import paymentSettlement from "../roles/purchaser/consignment/paymentSettlement";
 export default {
   namespace: 'rolePurchaserConsignment',
@@ -151,7 +152,21 @@ export default {
         }
       }
     },
-
+    // 收货确认 - 导出 收货单
+    *exportOrder({ payload, callback }, { call, put }) {
+      const response = yield call(exportOrder, payload);
+      if (response !== undefined) {
+        if(response.type==1){
+          message.success('导出成功');
+          let downloadUrl = response.msg;
+          window.location.href = downloadUrl;
+        }else{
+          message.error(response.msg)
+        }
+      }else{
+        message.error(response.msg);
+      }
+    },
 
     // -------- 数据统计 --------------
     //数据统计 - 列表查询

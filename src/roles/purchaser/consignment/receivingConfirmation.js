@@ -192,13 +192,14 @@ export default class receivingConfirmation extends Component {
         key: 'operate',
         render: (val,record) =>{
           const menu = (
-            <Menu onClick={(e) => this.exportType(e)}>
-              <Menu.Item key="0" >
-                美团模板
-              </Menu.Item>
+            <Menu onClick={(e) => this.exportType(e,record.sendid)}>
+
               {/*<Menu.Divider/>*/}
               <Menu.Item key="1" >
                 流连优选模板
+              </Menu.Item>
+              <Menu.Item key="2" >
+                美团模板
               </Menu.Item>
 
             </Menu>
@@ -248,19 +249,27 @@ export default class receivingConfirmation extends Component {
       </div>
     );
   }
-  exportType(e){
-    // console.log('e',e.key)
+  exportType(e,sendid){
+    let exportType ;
     switch (e.key){
-      case '0':
-        console.log(e.key)
-        break;
       case '1':
-        console.log(e.key)
+        exportType ='1'
+        break;
+      case '2':
+        exportType ='2'
         break;
       default:
-        console.log('default')
+        exportType ='1'
         break;
     }
+    let params = {
+      sendid:sendid,
+      exportType:exportType
+    }
+    this.props.dispatch({
+      type: 'rolePurchaserConsignment/exportOrder',
+      payload: params,
+    })
   }
   handleChildReceiptModel(record){
     let type;

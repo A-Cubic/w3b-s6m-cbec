@@ -3,13 +3,14 @@ export default function rolePurchaserConsignmentMock(url) {
   return {
     // -------- 收货确认 --------------
     // 收货确认 - 列表
-    'POST /llback/Warehouse/CollectGoods': url,
+    'POST /llback/Warehouse/CollectGoods': GetOrderList,
     // 操作内商品详情列表
     'POST /llback/Warehouse/CollectGoodsList': url,
     // 操作内 收货确认/提交运单号
     'POST /llback/Warehouse/ConfirmGoods': url,
     // 'POST /llback/Warehouse/ConfirmGoods': 'http://172.16.10.51:54195/',
-
+    // 收货确认 - 导出 收货单
+    'POST /llback/Warehouse/ExportSendGoods': SendOrder,
 
     // -------- 数据统计 --------------
     // 数据统计-列表查询
@@ -358,13 +359,14 @@ export function getorder(req, res) {
 }
 export function SendOrder(req, res) {
   res.send({
-    url: 'https://ant.design/components/select-cn/',
+    msg: 'https://ant.design/components/select-cn/',
+    type: 1,
   });
 }
 export function getWaybill(req, res) {
   res.send({
     type: 1,
-    mes: 'aaa',
+    msg: 'aaa',
   });
 }
 export function confirmDelivery(req, res) {
