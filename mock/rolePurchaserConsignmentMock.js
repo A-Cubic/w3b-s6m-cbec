@@ -3,7 +3,7 @@ export default function rolePurchaserConsignmentMock(url) {
   return {
     // -------- 收货确认 --------------
     // 收货确认 - 列表
-    'POST /llback/Warehouse/CollectGoods': GetOrderList,
+    'POST /llback/Warehouse/CollectGoods': url,
     // 操作内商品详情列表
     'POST /llback/Warehouse/CollectGoodsList': url,
     // 操作内 收货确认/提交运单号
@@ -13,12 +13,12 @@ export default function rolePurchaserConsignmentMock(url) {
 
     // -------- 数据统计 --------------
     // 数据统计-列表查询
-    'POST /llback/Sales/GetGoods': url,
+    'POST /llback/Sales/dataStatistics': GetOrderList,
 
 
     // -------- 商品销售 --------------
     // 商品销售-列表查询
-    'POST /llback/Sales/goodsSales': getPayment,
+    'POST /llback/Sales/GetGoods': url,
     'POST /llback/Order/UploadOrderDX': url,
 
 

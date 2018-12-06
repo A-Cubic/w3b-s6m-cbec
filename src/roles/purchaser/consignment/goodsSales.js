@@ -136,11 +136,12 @@ export default class goodsSales extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0} ，</span>
-            <span>订单金额：¥{tableData?tableData.item.salesNumTotal:0}， </span>
-            <span>优惠金额：¥{tableData?tableData.item.salesPriceTotal:0}， </span>
-            <span>应收金额：¥{tableData?tableData.item.costTotal:0}， </span>
-            <span>供货金额：¥{tableData?tableData.item.grossProfitTotal:0}</span>
+            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
+            <span>商品总数：{tableData.item?tableData.item.totalnum:0}， </span>
+            <span>订单金额：¥{tableData.item?tableData.item.totalOrderMoney:0}， </span>
+            <span>优惠金额：¥{tableData.item?tableData.item.totalDiscountMoney:0}， </span>
+            <span>应收金额：¥{tableData.item?tableData.item.totalReceivable:0}， </span>
+            <span>供货金额：¥{tableData.item?tableData.item.totalSupplyMoney:0}</span>
           </div>
         </div>
       </Form>
@@ -161,57 +162,57 @@ export default class goodsSales extends Component {
       key: 'keyId',
     }, {
       title: '订单号',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
+      dataIndex: 'orderId',
+      key: 'orderId',
     }, {
       title: '商品数量',
-      dataIndex: 'barCode',
-      key: 'barCode',
+      dataIndex: 'num',
+      key: 'num',
     }, {
       title: '订单金额',
-      dataIndex: 'brand',
-      key: 'brand',
+      dataIndex: 'orderMoney',
+      key: 'orderMoney',
         render:val=>`¥${val}`
     },{
-      title: '订单时间',
-      dataIndex: 'skuUnitPrice',
-      key: 'skuUnitPrice',
+      title: '结账时间',
+      dataIndex: 'payTime',
+      key: 'payTime',
 
     },{
       title: '应收金额',
-      dataIndex: 'supplyPrice',
-      key: 'supplyPrice',
+      dataIndex: 'receivable',
+      key: 'receivable',
       render:val=>`¥${val}`
     },{
         title: '支付方式',
-        dataIndex: 'quantity',
-        key: 'quantity',
+        dataIndex: 'payType',
+        key: 'payType',
       },{
         title: '支付金额',
-        dataIndex: 'money',
-        key: 'money',
+        dataIndex: 'paymoney',
+        key: 'paymoney',
         render:val=>`¥${val}`
       },{
         title: '优惠名称',
-        dataIndex: 'tradeTime',
-        key: 'tradeTime',
+        dataIndex: 'discountName',
+        key: 'discountName',
       },{
         title: '优惠金额',
-        dataIndex: 'ss',
-        key: 'ss',
+        dataIndex: 'discountMoney',
+        key: 'discountMoney',
         render:val=>`¥${val}`
       }
     ];
     const expandedRowRender = item => {
       const columnsRow = [
-        { title: '商品名称', dataIndex: 'a', key: 'a' },
-        { title: '商品数量', dataIndex: 'b', key: 'b', render:val=>`${val}个`},
-        { title: '商品金额', dataIndex: 'c', key: 'c',render:val=>`¥${val}` },
+        { title: '商品名称', dataIndex: 'goodsName', key: 'goodsName' },
+        { title: '商品数量', dataIndex: 'quantity', key: 'quantity', render:val=>`${val}个`},
+        { title: '商品金额', dataIndex: 'goodsPrice', key: 'goodsPrice',render:val=>`¥${val}` },
       ];
       return(
         <Table
           columns={columnsRow}
-          dataSource={item.detailsList}
+          dataSource={item.list}
           rowKey={item => item.keyId}
           pagination={false}
           />

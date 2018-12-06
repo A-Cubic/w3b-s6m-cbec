@@ -9,6 +9,7 @@ export default {
       name: undefined,
       avatar: undefined,
       notifyCount: 0,
+      rolesArr:[],
     },
   },
 
@@ -41,6 +42,7 @@ export default {
     saveCurrentUser(state, action) {
       return {
         ...state,
+        ...state.currentUser,
         currentUser: action.payload,
       };
     },

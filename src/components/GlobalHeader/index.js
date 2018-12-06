@@ -7,7 +7,7 @@ import { Link } from 'dva/router';
 import NoticeIcon from '../NoticeIcon';
 import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
-
+const SubMenu = Menu.SubMenu;
 const { Header } = Layout;
 
 export default class GlobalHeader extends PureComponent {
@@ -53,15 +53,30 @@ export default class GlobalHeader extends PureComponent {
     window.dispatchEvent(event);
   }
   render() {
+
+    console.log('hereeeeee',this.props)
     const {
       currentUser, collapsed, fetchingNotices, isMobile, logo,
       onNoticeVisibleChange, onMenuClick, onNoticeClear,
     } = this.props;
+    const rolesArr = [{roleId:1,roleName:'供货商'},{roleId:2,roleName:'分销商'}]
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
+        <SubMenu title={
+          <span>
+            <Icon type="user" />切换角色
+          </span>
+          }>
+          {rolesArr.map(val => <Menu.Item key={val.roleId} type={val.roleId}>{val.roleName}</Menu.Item>)}
+          {/*<Menu.Item type="roleOne">3rd menu item</Menu.Item>*/}
+          {/*<Menu.Item type="roleTwo">4th menu item</Menu.Item>*/}
+        </SubMenu>
         <Menu.Item disabled><Icon type="user" />个人中心</Menu.Item>
         <Menu.Item disabled><Icon type="setting" />设置</Menu.Item>
         <Menu.Item key="changePwd" ><Icon type="unlock" />修改密码</Menu.Item>
+
+        {/*{channelTypeArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}*/}
+
 
 
         {/*<Menu.Item key="triggerError"><Icon type="close-circle" />触发报错</Menu.Item>*/}

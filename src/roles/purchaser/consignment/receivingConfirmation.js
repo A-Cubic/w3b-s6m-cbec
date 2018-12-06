@@ -119,9 +119,9 @@ export default class receivingConfirmation extends Component {
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={16} sm={24}>
-            <FormItem label="关键字：">
-              {getFieldDecorator('search')(
-                <Input placeholder="请输入商品条码，商品名称，商品品牌进行查询" />
+            <FormItem label="单据编号：">
+              {getFieldDecorator('sendid')(
+                <Input placeholder="请输入单据编号" />
               )}
             </FormItem>
           </Col>
@@ -154,8 +154,8 @@ export default class receivingConfirmation extends Component {
       key: 'keyId',
     }, {
       title: '单据编号',
-      dataIndex: 'a',
-      key: 'a',
+      dataIndex: 'sendid',
+      key: 'sendid',
     }, {
       title: '单据类型',
       dataIndex: 'sendType',
@@ -166,13 +166,9 @@ export default class receivingConfirmation extends Component {
       dataIndex: 'goodsTotal',
       key: 'goodsTotal',
     }, {
-      title: '发货日期',
-      dataIndex: 'b',
-      key: 'b',
-    },{
-      title: '预计发货时间',
-      dataIndex: 'c',
-      key: 'c',
+      title: '预计发货日期',
+      dataIndex: 'sendTime',
+      key: 'sendTime',
     },{
       title: '发货人',
       dataIndex: 'sendName',

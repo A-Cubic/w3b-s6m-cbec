@@ -27,7 +27,7 @@ export async function childModelSubmit(params) {
 // -------- 数据统计 --------------
 //数据统计-列表查询
 export async function dataStatistics(params) {
-  return request(`/llback/Sales/GetGoods`,{
+  return request(`/llback/Sales/dataStatistics`,{
     method: 'POST',
     body: params,
   })
@@ -36,7 +36,7 @@ export async function dataStatistics(params) {
 // -------- 商品销售 --------------
 //商品销售-列表查询
 export async function goodsSales(params) {
-  return request(`/llback/Sales/goodsSales`,{
+  return request(`/llback/Sales/GetGoods`,{
     method: 'POST',
     body: params,
   })

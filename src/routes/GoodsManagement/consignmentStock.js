@@ -179,16 +179,16 @@ export default class consignmentStock extends Component {
         sortOrder:sortedInfo?sortedInfo.columnKey === 'pprice' && sortedInfo.order:false
       },{
         title: '预计补货时间',
-        dataIndex: 'a',
-        key: 'a',
+        dataIndex: 'sendTime',
+        key: 'sendTime',
       },{
         title: '预计补货数量',
-        dataIndex: 'b',
-        key: 'b',
+        dataIndex: 'goodsNum',
+        key: 'goodsNum',
       },{
         title: '库存同步时间',
-        dataIndex: 'sameTime',
-        key: 'sameTime',
+        dataIndex: 'confirmTime',
+        key: 'confirmTime',
       }
     ];
     return (
