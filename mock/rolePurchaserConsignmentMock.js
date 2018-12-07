@@ -3,14 +3,15 @@ export default function rolePurchaserConsignmentMock(url) {
   return {
     // -------- 收货确认 --------------
     // 收货确认 - 列表
-    'POST /llback/Warehouse/CollectGoods': GetOrderList,
+    'POST /llback/Warehouse/CollectGoods': url,
     // 操作内商品详情列表
     'POST /llback/Warehouse/CollectGoodsList': url,
     // 操作内 收货确认/提交运单号
     'POST /llback/Warehouse/ConfirmGoods': url,
     // 'POST /llback/Warehouse/ConfirmGoods': 'http://172.16.10.51:54195/',
     // 收货确认 - 导出 收货单
-    'POST /llback/Warehouse/ExportSendGoods': SendOrder,
+    'POST /llback/Warehouse/ExportSendGoods': url,
+
 
     // -------- 数据统计 --------------
     // 数据统计-列表查询
