@@ -134,6 +134,7 @@ export default class Register extends Component {
         this.props.dispatch({
           type: 'register/rename',
           payload: {
+            captcha:'AAA',
             ...values,
             // type: 2,
           },
@@ -275,33 +276,8 @@ export default class Register extends Component {
                       ],
                     })(<Input size="large" placeholder="请输入账号" />)}
                   </FormItem>
-                  <FormItem
-                    {...formItemLayout}
-                    label ='验证码'>
-                    <Row gutter={8}>
-                      <Col span={16}>
-                        {getFieldDecorator('captcha', {
-                          rules: [
-                            {
-                              required: true,
-                              message: '请输入6位验证码！',
-                              len: 6
-                            },
-                          ],
-                        })(<Input size="large" placeholder="验证码"/>)}
-                      </Col>
-                      <Col span={8}>
-                        <Button
-                          size="large"
-                          disabled={count}
-                          className={styles.getCaptcha}
-                          onClick={ this.onGetCaptcha }
-                        >
-                          {count ? `${count} s` : '获取验证码'}
-                        </Button>
-                      </Col>
-                    </Row>
-                  </FormItem>
+                 
+
                     <FormItem
                       help={this.state.help}
                        {...formItemLayout}
