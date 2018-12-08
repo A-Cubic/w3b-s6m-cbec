@@ -104,6 +104,9 @@ export default function(dynamicWrapper,app){
     '/user/forgot/': {
       component: dynamicWrapper(app, ['register'], () => import('../routes/User/Rename')),
     },
+    '/user/change/': {
+      component: dynamicWrapper(app, ['register'], () => import('../routes/User/Changename')),
+    },
     '/user/register/:type': {
       component: dynamicWrapper(app, ['register'], () => import('../routes/User/Register')),
     },

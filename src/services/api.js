@@ -104,6 +104,12 @@ export async function realRegisterSubmit(params) {
     body: params,
   });
 }
+export async function realChangenameSubmit(params) {
+  return request(`/llback/user/register/renameNew`,{
+    method: 'POST',
+    body: params,
+  })
+}
 export async function realRenameSubmit(params) {
   return request(`${apiUrl}/llback/user/register/rename`, {
     method: 'POST',

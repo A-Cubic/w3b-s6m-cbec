@@ -37,6 +37,8 @@ const proxy = {
   ...channelManagementMock(service_url2),
   ...goodsManagementMock(service_url2),
 
+
+  'POST /llback/user/register/renameNew': service_url2,
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
     $desc: '获取当前用户接口',

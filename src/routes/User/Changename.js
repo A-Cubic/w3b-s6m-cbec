@@ -132,8 +132,9 @@ export default class Register extends Component {
       if (!err) {
         // console.log(values);
         this.props.dispatch({
-          type: 'register/rename',
+          type: 'register/changename',
           payload: {
+
             ...values,
             // type: 2,
           },
@@ -265,7 +266,7 @@ export default class Register extends Component {
                           required: true,
                           message: '请输入账号！',
                         }, {
-                          validator: this.handleMail,
+                         // validator: this.handleMail,
                         }
                         // ,
                         // {
@@ -277,30 +278,15 @@ export default class Register extends Component {
                   </FormItem>
                   <FormItem
                     {...formItemLayout}
-                    label ='验证码'>
-                    <Row gutter={8}>
-                      <Col span={16}>
-                        {getFieldDecorator('captcha', {
-                          rules: [
-                            {
-                              required: true,
-                              message: '请输入6位验证码！',
-                              len: 6
-                            },
-                          ],
-                        })(<Input size="large" placeholder="验证码"/>)}
-                      </Col>
-                      <Col span={8}>
-                        <Button
-                          size="large"
-                          disabled={count}
-                          className={styles.getCaptcha}
-                          onClick={ this.onGetCaptcha }
-                        >
-                          {count ? `${count} s` : '获取验证码'}
-                        </Button>
-                      </Col>
-                    </Row>
+                    label ='旧密码'>
+                    {getFieldDecorator('oldpwd', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请输入旧密码！',
+                        },
+                      ],
+                    })(<Input size="large" type="password" placeholder="请输入旧密码" />)}
                   </FormItem>
 
                     <FormItem

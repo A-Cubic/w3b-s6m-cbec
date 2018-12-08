@@ -141,7 +141,7 @@ class BasicLayout extends React.PureComponent {
     }
     // 修改密码
     if (key === 'changePwd') {
-      this.props.dispatch(routerRedux.push('/user/forgot'));
+      this.props.dispatch(routerRedux.push('/user/change'));
 
       // this.props.dispatch({
       //   type: 'login/logout',
