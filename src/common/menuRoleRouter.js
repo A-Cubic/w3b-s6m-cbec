@@ -1,5 +1,8 @@
 export default function(dynamicWrapper,app){
   return {
+
+    //-------------代销业务-------------
+
     //代销-商品-商品库存-20181115
     '/consignment/consignmentStock': {
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/consignmentStock')),
@@ -25,8 +28,20 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['rolePurchaserConsignment'], () => import('../roles/purchaser/consignment/paymentSettlement')),
     },
 
+    //-------------批量采购-------------
 
-
+    //批量采购-发起询价-
+    '/bulkPurchases/initiateInquiry': {
+      component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
+    },
+    //批量采购-询价列表-
+    '/bulkPurchases/inquiryList': {
+      component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/inquiryList')),
+    },
+    //批量采购-采购列表-
+    '/bulkPurchases/purchaseList': {
+      component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/purchaseList')),
+    },
 
 
     //测试demo
