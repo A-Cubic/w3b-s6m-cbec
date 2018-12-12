@@ -15,14 +15,22 @@ const FormItem = Form.Item;
 }))
 
 @Form.create()
-// 代销 - 统计 - 货款结算 - 20181126
-export default class initiateInquiry extends Component {
+// 采购商 - 询价列表 - 20181211
+export default class inquiryList extends Component {
   state={
-    formValues:{}
+    //formValues:{}
+    fileList:[],
+    visibleChildCheck:false,
+    visibleChildDelivery:false,
+    orderId:'',
+    visible: false,
+    formValues:{},
+    warehouseId:'',
+    hidd:false,
   }
   init(){
     this.props.dispatch({
-      type:'rolePurchaserConsignment/getPaymentSettlementData',
+      type:'rolePurchaserBulkPurchases/getInquiryListData',
       payload:{}
     })
   }
@@ -46,7 +54,7 @@ export default class initiateInquiry extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'rolePurchaserConsignment/getPaymentSettlementData',
+        type: 'rolePurchaserBulkPurchases/getInquiryListData',
         payload: {
           ...values,
         },
@@ -67,41 +75,29 @@ export default class initiateInquiry extends Component {
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'rolePurchaserConsignment/getPaymentSettlementData',
+      type: 'rolePurchaserConsignment/getInquiryListData',
       payload: params,
     });
   }
   renderForm(){
     // console.log(this.props)
+    const { rolePurchaserBulkPurchases:{inquiryList:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
+
+
+    //console.log('~~~',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
+          <Col md={12} sm={24}>
             <FormItem label="账期范围">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="结算状态">
-              {getFieldDecorator('status',{
-              })(
-                <Select
-                  placeholder="请选择"
-                  optionFilterProp="label"
-                  // onChange={this.onSelectChange}
-                >
-                  <Option value="">全部</Option>
-                  <Option value="0">待结算</Option>
-                  <Option value="1">已结算</Option>
-
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
+          
+          <Col md={12} sm={24}>
             <FormItem label="结算单号">
               {getFieldDecorator('status')(
                 <Input placeholder="请输入结算单号" />
@@ -112,7 +108,26 @@ export default class initiateInquiry extends Component {
         </Row>
         <Row>
           <Col md={12} sm={24}>
-            <Button type="primary" htmlType="submit">查询</Button>
+            <FormItem label="结算状态">
+              {getFieldDecorator('status',{
+              })(
+                <Select
+                  placeholder="请选择"
+                  optionFilterProp="label"
+                  // onChange={this.onSelectChange}
+                >
+                  <Option value="">全部</Option>
+                  <Option value="0">询价中</Option>
+                  <Option value="1">已报价</Option>
+                  <Option value="2">已完成</Option>
+                  <Option value="3">已过期</Option>
+
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={10} sm={24}>
+            <Button style={{ marginLeft:16 }} type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </Col>
         </Row>
@@ -133,77 +148,46 @@ export default class initiateInquiry extends Component {
     //   showQuickJumper: true,
     //   ...pagination,
     // };
+
+    const { rolePurchaserBulkPurchases:{inquiryList:{tableData:{list, pagination}}} } = this.props;   
+    //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...pagination,
+    };
+
+
     const columns = [
-    {
-        title: '',
+      {
+        title: '序号',
         dataIndex: 'keyId',
         key: 'keyId',
-        render:(val, record) =>{
-          // console.log('record',record)
-          return (
+      }, {
+        title: '询价单号',
+        dataIndex: 'order',
+        key: 'order',
+      }, {
+        title: '询价单标题',
+        dataIndex: 'date',
+        key: 'date',
+        //render:val=>`${val==1?'收货单':'退货单'}`
+      }, {
+        title: '状态',
+        dataIndex: 'goodsTotal',
+        key: 'goodsTotal',
+      }, {
+        title: '操作',
+        dataIndex: 'sendTime',
+        key: 'sendTime',
+        render: (val,record) =>
           <div>
-            <Card
-              bodyStyle={record.status==0?{background:'#fffbe6',boxShadow: '0 4px 12px 0 rgba(0,0,0,0.20)',borderRadius: 4}:{boxShadow: '0 4px 12px 0 rgba(0,0,0,0.20)',borderRadius: 4}}
-              bordered={false}
-            >
-              <div className={styles.tableList}>
-                <div className={styles.tableListForm}>
-                  <Row>
-                    <Col span={12}><p style={{fontWeight:"bold"}}>账期：<em style={{color:"red",fontWeight:"normal",fontStyle:"normal"}}>{record.date}</em></p></Col>
-                    <Col span={12}><p style={{textAlign:"right",color:"#737373 85%" }}>结算单{record.accountCode}</p></Col>
-                  </Row>
-                  <div className={styles.line}></div>
-                  <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-                    <Col md={6} sm={12}  xs={12}  >
-                      <div className={styles.hot}>
-                        <h1 style={{border:"5px solid #A7C8E3"}}>￥{record.purchasemoney}</h1>
-                        <h2>采购货款</h2>
-                      </div>
-                    </Col>
-                    <Col md={6} sm={12} xs={12}>
-                      <div className={styles.hot}>
-                        <h1 style={{border:"5px solid #000"}}>￥{record.refundmoney}</h1>
-                        <h2>采退货款</h2>
-                      </div>
-                    </Col>
-                    <Col md={6} sm={12} xs={12}>
-                      <div className={styles.hot}>
-                        <h1 style={{border:"5px solid #C8C8C8"}}>￥{record.othermoney}</h1>
-                        <h2>其他费用</h2>
-                      </div>
-                    </Col>
-                    <Col md={6} sm={12} xs={12}>
-                      <div className={styles.hot}>
-                        <h1 style={{border:"5px solid #B4E3A7"}}>￥{record.paymoney}</h1>
-                        <h2>实际应付款</h2>
-                      </div>
-                    </Col>
-                  </Row>
-                  <div className={styles.line}></div>
-                  <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-                    <Col md={12}>
-                      {record.status==0?
-                        <span className={styles.settled}>待结算</span>:
-                        <span className={styles.settlement}>已结算</span>
-                      }
-                    </Col>
-                    <Col md={12}>
-                      <div style={{ float:"right" }}>
-                        <Button  style={{ marginRight:7 }} type="primary" ghost onClick={()=>this.handleChildDetailsModel(record)}>结算明细</Button>
-                        {record.status==0?
-                          <span style={{ marginRight:7 }} className={styles.settled}>对账中…</span>:
-                          <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleChildPrintModel(record)}>预览打印</Button>
-                        }
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-            </Card>
+            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)} >查看</a><br/>
           </div>
-        )},
       }
     ];
+
+    
     return (
       <div className={styles.qa}>
         <Card bordered={false}>
@@ -212,21 +196,109 @@ export default class initiateInquiry extends Component {
               {this.renderForm()}
             </div>
           </div>
-        </Card>
-          <Table dataSource={[]}
-                 showHeader={false}
+        
+          <Table dataSource={list}
                  // scroll={{ x: 1500}}
                  rowKey={record => record.keyId}
                  columns={columns}
-                 // pagination={paginationProps}
-                 // onChange={this.handleTableChange}
+                 rowClassName={record => record.status==0||record.status==2?styles.columnsBgColor:''}
+                 pagination={paginationProps}
+                 onChange={this.handleTableChange}
                  // loading={submitting}
           />
-
+          <PurchaseOrder />
+        </Card>  
       </div>
     );
   }
 
+  handleChildrenCheck = (record) => {
+   
+    this.props.dispatch({
+      type: 'rolePurchaserBulkPurchases/childrenCheck',
+      payload: {}
+    })
+  }
+   
+
 }
 
 
+@connect(({rolePurchaserBulkPurchases }) => ({
+  rolePurchaserBulkPurchases
+}))
+class PurchaseOrder extends Component {
+
+  handleCancel = () => {
+    this.props.dispatch({
+      type:'rolePurchaserBulkPurchases/childrenCheckDelR',
+      payload:false
+    })
+  }
+
+  
+
+  render(){
+    
+    //const { rolePurchaserBulkPurchases:{myqa:{show,tableData:{list,pagination}}} } = this.props;
+    const {rolePurchaserBulkPurchases:{seeList:{show,tableData:{list,pagination}}}} = this.props
+    //console.log('22ok',this.props)
+
+    const columns = [
+      {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      }, {
+        title: '询价单号',
+        dataIndex: 'order',
+        key: 'order',
+      }, {
+        title: '询价单标题',
+        dataIndex: 'date',
+        key: 'date',
+        
+      }, {
+        title: '状态',
+        dataIndex: 'goodsTotal',
+        key: 'goodsTotal',
+      }, {
+        title: '操作',
+        dataIndex: 'sendTime',
+        key: 'sendTime',
+        render: (val,record) =>
+          <div>
+            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)} >查看</a><br/>
+          </div>
+      }
+    ];
+
+
+
+    return(
+      <div>
+        <Modal
+          visible= {show}
+          onCancel={this.handleCancel}
+          width={1000}
+        >
+          <Card>
+            
+            <Table dataSource={list}
+                  // scroll={{ x: 1500}}
+                  columns={columns}
+                  onChange={this.handleTableChange}
+                  // loading={submitting}
+                  rowKey={record => record.keyId}
+            />
+
+          </Card>
+         
+
+        </Modal>
+      </div>
+    )
+
+  }
+
+}
