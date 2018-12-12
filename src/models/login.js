@@ -41,9 +41,9 @@ export default {
             case 'supplier':
               tUrl = '/workbenchS';
               break;
-            //  渠道商
+            //  采购商
             case 'purchasers':
-              tUrl = '/direct/channelOrder';
+              tUrl = '/consignment/goodsSales';
               break;
             //  运营客服
             case 'operate':
