@@ -203,7 +203,7 @@ export default class consignmentStock extends Component {
         <Card className={styles.mT10}>
           <Table dataSource={list}
                  // scroll={{ x: 1500}}
-                 rowKey={record => record.id}
+                 rowKey={record => record.keyId}
                  columns={columns}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}

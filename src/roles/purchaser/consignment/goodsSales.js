@@ -270,7 +270,7 @@ export default class goodsSales extends Component {
         <Table
           columns={columns}
           dataSource={obj.children}
-          rowKey={record => record.id}
+          rowKey={record => record.rowKey}
           pagination={false}
         />
       );
