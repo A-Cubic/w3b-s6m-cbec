@@ -18,6 +18,15 @@ export default {
         list: [],
         pagination:{},
       },
+
+      address:'',
+      name:'',
+      phone:'',
+      date:'',
+      sex: 0,
+      des:'',
+      list:[],
+
     },
 
     // -------- 询价列表 --------------
@@ -35,6 +44,8 @@ export default {
         pagination:{},
       },
     },
+    // -------- 询价列表/采购列表 - 查看列表详情 --------------
+    listDetails:{},
     // 查看
     seeList:{
       show: false,
@@ -47,6 +58,7 @@ export default {
   },
   effects:{
     // -------- 发起询价 --------------
+    //
     *getInitiateInquiry({ payload },{ call,put }){
       const response = yield call(getInitiateInquiryData, payload);
      // console.log('~res',response)
@@ -59,6 +71,7 @@ export default {
     },
 
     // -------- 询价列表 --------------
+    //
     *getInquiryListData({ payload },{ call,put }){
       const response = yield call(getInquiryListData, payload);
       //console.log('~res',response)
@@ -70,6 +83,7 @@ export default {
       }
     },
     // -------- 采购列表 --------------
+    //
     *getPurchaseListData({ payload },{ call,put }){
       const response = yield call(getPurchaseListData, payload);
       //console.log('~res',response)
@@ -80,7 +94,7 @@ export default {
         })
       }
     },
-    // 查看事件        
+    // 查看事件
     *childrenCheck({ payload }, { call, put }) {
       const response = yield call(childrenCheck, payload)
       //console.log('查看事件',response)
@@ -91,6 +105,8 @@ export default {
         })
       }
     },
+
+    // -------- 询价列表/采购列表 - 查看列表详情 --------------
   },
   reducers:{
     // -------- 发起询价 --------------
@@ -137,16 +153,21 @@ export default {
     },
 
 
-      //删除
-      childrenCheckDelR(state, action) {
-        return {
-          ...state,
-          seeList: {
-            ...state.seeList,
-            show: action.payload.show
-          }
+    //删除
+    childrenCheckDelR(state, action) {
+      return {
+        ...state,
+        seeList: {
+          ...state.seeList,
+          show: action.payload.show
         }
-      },
+      }
+    },
+
+
+    // -------- 询价列表/采购列表 - 查看列表详情 --------------
+
+
   }
 }
 

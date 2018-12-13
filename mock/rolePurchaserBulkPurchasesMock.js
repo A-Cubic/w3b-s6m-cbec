@@ -14,10 +14,9 @@ export default function rolePurchaserBulkPurchasesMock() {
     // 查看
     'POST /llback/Warehouse/childrenCheck': getPurchaseOrder,
 
-
+    // -------- 询价列表/采购列表 - 查看列表详情 --------------
   };
 }
-
 
 
 // 表单 分页 item
@@ -140,7 +139,7 @@ export function goodsSales(req, res) {
   });
 }
 
-//下拉菜单
+// 下拉菜单
 export function getPlatform(req, res) {
   res.send([
     {
@@ -162,34 +161,31 @@ export function UpdateDistributor(req, res) {
 }
 
 // 模拟采购单
-
 export function getPurchaseOrder(req, res) {
   res.send({
     list: [{
       keyId: '1',
-      goodsName:'',
-      brand:'nike',
+      brand: 'nike',
       order: '215451245',
-      goodsName:'XX',
+      goodsName: 'XX',
       goMoney: '2000.00',
-    
+
     }, {
       keyId: '2',
-      goodsName:'',
-      brand:'adds',
+      brand: 'adds',
       order: '315451245',
-      goodsName:'JJ',
+      goodsName: 'JJ',
       goMoney: '3000.00',
     }],
     item: {
-      name:'XXX',
-      sex:'男',
-      phone:'1355555555555',
-      data:'2019.09.01',
-      describe:'兰芝化妆品',
-      goodsmoney:'2000',
-      freight:'150',
-      taxation:'200.00'
+      name: 'XXX',
+      sex: '男',
+      phone: '1355555555555',
+      data: '2019.09.01',
+      describe: '兰芝化妆品',
+      goodsmoney: '2000',
+      freight: '150',
+      taxation: '200.00',
 
     },
   });

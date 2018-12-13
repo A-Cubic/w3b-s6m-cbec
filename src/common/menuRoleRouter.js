@@ -42,6 +42,14 @@ export default function(dynamicWrapper,app){
     '/bulkPurchases/purchaseList': {
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/purchaseList')),
     },
+    //批量采购 - 询价列表/采购列表 - 查看列表详情
+    '/bulkPurchases/listDetails': {
+      component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/listDetails')),
+    },
+    //批量采购 - 发起询价/询价列表 - 询价单
+    '/bulkPurchases/inquiryForm': {
+      component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
+    },
 
 
     //测试demo
