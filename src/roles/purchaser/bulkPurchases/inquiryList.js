@@ -18,15 +18,15 @@ const FormItem = Form.Item;
 // 采购商 - 询价列表 - 20181211
 export default class inquiryList extends Component {
   state={
-    //formValues:{}
-    fileList:[],
-    visibleChildCheck:false,
-    visibleChildDelivery:false,
-    orderId:'',
-    visible: false,
-    formValues:{},
-    warehouseId:'',
-    hidd:false,
+    formValues:{}
+    // fileList:[],
+    // visibleChildCheck:false,
+    // visibleChildDelivery:false,
+    // orderId:'',
+    // visible: false,
+    // formValues:{},
+    // warehouseId:'',
+    // hidd:false,
   }
   init(){
     this.props.dispatch({

@@ -15,6 +15,10 @@ export default function rolePurchaserBulkPurchasesMock() {
     'POST /llback/Warehouse/childrenCheck': getPurchaseOrder,
 
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
+    'POST /llback/Warehouse/getpurchaseOrder': getPayment,
+
+    // -------- 询价列表/采购列表 - 点击详情 --------------
+    'POST /llback/Warehouse/getdetailsCheck': getPayment,
   };
 }
 
@@ -43,7 +47,7 @@ export function getPayment(req, res) {
       order: '215451244',
       goMoney: '2000.00',
       tuiMoney: '1000.00',
-      elseMoney: '500.00',
+      elseMoney: '',
       doMoney: '500.00',
       status: 1,
       detailsList: [{
@@ -67,7 +71,7 @@ export function getPayment(req, res) {
       settlementAccountPeriod: '2018.01.01~2018.01.31',
       contractNumber: 'QZKJ-0001',
       dateOfPrinting: '2018.01.01',
-      printer: '胖球1',
+      printer: '胖球2',
     },
   });
 }

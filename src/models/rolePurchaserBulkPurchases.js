@@ -6,6 +6,11 @@ import {
   getInquiryListData,
   // -------- 采购列表 --------------
   getPurchaseListData,
+  // -------- 采购列表-采购单 --------------
+  getpurchaseOrder,
+  // -------- 采购列表-采购单-点击详情 --------------
+  getdetailsCheck,
+  
   //查看
   childrenCheck
 } from '../services/rolePurchaserBulkPurchases_S'
@@ -45,7 +50,13 @@ export default {
       },
     },
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
-    listDetails:{},
+    listDetails:{
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
     // 查看
     seeList:{
       show: false,
@@ -54,7 +65,14 @@ export default {
         item:{}
       },
     },
-
+     // 询价列表/采购列表 - 点击详情
+     detailsList:{
+      show: false,
+      tableData:{
+        list: [],
+        item:{}
+      },
+    },
   },
   effects:{
     // -------- 发起询价 --------------
@@ -94,6 +112,8 @@ export default {
         })
       }
     },
+
+    
     // 查看事件
     *childrenCheck({ payload }, { call, put }) {
       const response = yield call(childrenCheck, payload)
@@ -107,7 +127,32 @@ export default {
     },
 
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
+    *getpurchaseOrder({ payload },{ call,put }){
+      const response = yield call(getpurchaseOrder, payload);
+      console.log('~查看列表详情',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getpurchaseOrderR',
+          payload: response,
+        })
+      }
+    },
   },
+
+  // 采购列表-采购单-点击详情
+  *getdetailsCheck({ payload }, { call, put }) {
+    const response = yield call(getdetailsCheck, payload)
+    //console.log('查看事件',response)
+    if (response !== '') {
+      yield put({
+        type: 'getdetailsCheckR',
+        payload: { response, show: true }
+      })
+    }
+  },
+
+
+
   reducers:{
     // -------- 发起询价 --------------
     getInitiateInquiryR(state, action){
@@ -151,8 +196,19 @@ export default {
         },
       };
     },
-
-
+    
+    // 采购列表-采购单-点击详情
+    getdetailsCheckR(state, action) {
+      return {
+        ...state,
+        detailsList: {
+          ...state.detailsList,
+          tableData: action.payload.response,
+          //childTestModelVisible:action.payload.childTestModelVisible
+          show: action.payload.show
+        },
+      };
+    },
     //删除
     childrenCheckDelR(state, action) {
       return {
@@ -163,10 +219,27 @@ export default {
         }
       }
     },
-
+     // 采购列表-采购单-点击详情-隐藏
+     getdetailsCheckDelR(state, action) {
+      return {
+        ...state,
+        detailsList: {
+          ...state.detailsList,
+          show: action.payload.show
+        }
+      }
+    },
 
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
-
+    getpurchaseOrderR(state, action){
+      return {
+        ...state,
+        listDetails:{
+          ...state.listDetails,
+          tableData:action.payload
+        }
+      }
+    },
 
   }
 }

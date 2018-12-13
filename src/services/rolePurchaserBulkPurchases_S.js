@@ -33,3 +33,17 @@ export async function childrenCheck(params) {
   });
 }
 // -------- 询价列表/采购列表 - 查看列表详情 --------------
+export async function getpurchaseOrder(params) {
+  return request(`/llback/Warehouse/getpurchaseOrder`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// -------- 询价列表/采购列表 - 点击详情 --------------
+export async function getdetailsCheck(params) {
+  return request(`/llback/Warehouse/getdetailsCheck`, {
+    method: 'POST',
+    body: params,
+  });
+}
