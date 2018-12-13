@@ -149,14 +149,14 @@ export default class consignmentStock extends Component {
     //   dataIndex: 'brand',
     //   key: 'brand',
     // },
-      {
-      title: '保质期（天）',
-      dataIndex: 'shelfLife',
-      key: 'shelfLife',
-      sorter:true,
-        sortOrder:sortedInfo?sortedInfo.columnKey === 'shelfLife' && sortedInfo.order:false,
-        render:val=>`${val}（天）`
-      },
+    //   {
+    //   title: '保质期（天）',
+    //   dataIndex: 'shelfLife',
+    //   key: 'shelfLife',
+    //   sorter:true,
+    //     sortOrder:sortedInfo?sortedInfo.columnKey === 'shelfLife' && sortedInfo.order:false,
+    //     render:val=>`${val}（天）`
+    //   },
     //   {
     //   title: '商品入库时间',
     //   dataIndex: 'createTime',
