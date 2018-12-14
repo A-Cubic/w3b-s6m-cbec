@@ -4,7 +4,7 @@ import request from '../utils/request';
 
 // 发起询价-列表
 export async function getInitiateInquiryData(params) {
-  return request(`/llback/Warehouse/a`,{
+  return request(`/llback/Warehouse/getInitiateInquiryData`,{
     method: 'POST',
     body: params,
   })

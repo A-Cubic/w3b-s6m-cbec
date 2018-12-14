@@ -3,7 +3,7 @@ export default function rolePurchaserBulkPurchasesMock() {
   return {
     // -------- 发起询价 --------------
     // 发起询价 -
-    'POST /llback/Warehouse/a': goodsSales,
+    'POST /llback/Warehouse/getInitiateInquiryData': getPayment,
 
 
     // -------- 询价列表 --------------

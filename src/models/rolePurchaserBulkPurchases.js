@@ -23,14 +23,17 @@ export default {
         list: [],
         pagination:{},
       },
-
-      address:'',
-      name:'',
-      phone:'',
-      date:'',
-      sex: 0,
-      des:'',
-      list:[],
+    information:{
+      purchasesn: "2018121313045638",
+      sendType:"日本提货",
+      contacts:"张",
+      sex:"1",
+      tel:"13681313111",
+      deliveryTime:"2018-10-11",
+      remark:"asda大"
+    }  
+    
+      
 
     },
 
@@ -77,12 +80,12 @@ export default {
   effects:{
     // -------- 发起询价 --------------
     //
-    *getInitiateInquiry({ payload },{ call,put }){
+    *getInitiateInquiryData({ payload },{ call,put }){
       const response = yield call(getInitiateInquiryData, payload);
-     // console.log('~res',response)
+      //console.log('~res发起询价',response)
       if(response!==undefined){
         yield put({
-          type: 'getInitiateInquiryR',
+          type: 'getInitiateInquiryDataR',
           payload: response,
         })
       }
@@ -129,7 +132,7 @@ export default {
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
     *getpurchaseOrder({ payload },{ call,put }){
       const response = yield call(getpurchaseOrder, payload);
-      console.log('~查看列表详情',response)
+      //console.log('~查看列表详情',response)
       if(response!==undefined){
         yield put({
           type: 'getpurchaseOrderR',
@@ -155,7 +158,7 @@ export default {
 
   reducers:{
     // -------- 发起询价 --------------
-    getInitiateInquiryR(state, action){
+    getInitiateInquiryDataR(state, action){
       return {
         ...state,
         initiateInquiry:{
