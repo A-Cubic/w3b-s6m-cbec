@@ -1,7 +1,7 @@
 import { message} from 'antd';
 import {
   // -------- 发起询价 --------------
-  getInitiateInquiryData,
+  getInitiateInquiryData, getPreservationData,getUploadOrderbillDX,
   // -------- 询价列表 --------------
   getInquiryListData,
   // -------- 采购列表 --------------
@@ -24,16 +24,24 @@ export default {
         pagination:{},
       },
     information:{
-      purchasesn: "2018121313045638",
-      sendType:"日本提货",
-      contacts:"张",
-      sex:"1",
-      tel:"13681313111",
-      deliveryTime:"2018-10-11",
-      remark:"asda大"
-    }  
-    
-      
+      purchasesn: "",
+      sendType:"",
+      contacts:"",
+      sex:0,
+      tel:"",
+      deliveryTime:null,
+      remark:""
+    }, 
+    // -------- 发起询价 保存接口--------------
+    preservation:{
+      purchasesn: "",
+      sendType:"",
+      contacts:"",
+      sex:1,
+      tel:"",
+      deliveryTime:null,
+      remark:""
+    }    
 
     },
 
@@ -79,7 +87,7 @@ export default {
   },
   effects:{
     // -------- 发起询价 --------------
-    //
+    
     *getInitiateInquiryData({ payload },{ call,put }){
       const response = yield call(getInitiateInquiryData, payload);
       //console.log('~res发起询价',response)
@@ -91,8 +99,39 @@ export default {
       }
     },
 
+    // -------- 发起询价-保存接口 --------------
+    *getPreservationData({ payload },{ call,put }){
+      const response = yield call(getPreservationData, payload);
+     console.log('~res保存接口',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getPreservationDataR',
+          payload: response,
+        })
+      }
+    },
+
+    //发起询价 - 导入询价商品
+    *uploadOrderbill({ payload,callback },{ call,put}){
+      const response = yield call(getUploadOrderbillDX, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
+      }
+    },
+
+
+    //发起询价 - 导入询价商品
+    *uploadImportInquiry({ payload,callback },{ call,put}){
+      const response = yield call(getUploadOrderbillDX, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
+      }
+    },
+
+
     // -------- 询价列表 --------------
-    //
     *getInquiryListData({ payload },{ call,put }){
       const response = yield call(getInquiryListData, payload);
       //console.log('~res',response)
@@ -167,12 +206,24 @@ export default {
         }
       }
     },
-    // -------- 询价列表 --------------
-    getInquiryListDataR(state, action){
+    // -------- 发起询价-保存接口 --------------
+    getPreservationDataR(state, action){
       return {
         ...state,
         inquiryList:{
           ...state.inquiryList,
+          tableData:action.payload
+        }
+      }
+    },
+
+
+    // -------- 询价列表 --------------
+    getInquiryListDataR(state, action){
+      return {
+        ...state,
+        initiateInquiry:{
+          ...state.initiateInquiry,
           tableData:action.payload
         }
       }

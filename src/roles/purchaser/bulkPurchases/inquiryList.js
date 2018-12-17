@@ -85,7 +85,7 @@ export default class inquiryList extends Component {
     const { getFieldDecorator } = this.props.form;
 
 
-    //console.log('~~~',this.props)
+    console.log('询价~~~',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>

@@ -5,7 +5,12 @@ import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider
 import styles from './initiateInquiry.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
-import {getToken} from "../../../utils/Global";
+//import {getToken} from "../../../utils/Global";
+
+import {getUploadUrl} from '../../../services/api'
+import {getHeader, getToken} from "../../../utils/Global";
+const userId = getToken().userId;
+
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -15,7 +20,7 @@ const FormItem = Form.Item;
 }))
 
 @Form.create()
-// 代销 - 统计 - 货款结算 - 20181126
+// 代销 - 统计 - 发起询价 - 20181214
 export default class initiateInquiry extends Component {
   state={
     formValues:{},
@@ -48,7 +53,8 @@ export default class initiateInquiry extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'rolePurchaserBulkPurchases/getInquiryListData',
+        // type: 'rolePurchaserBulkPurchases/getInquiryListData',
+       type: 'rolePurchaserBulkPurchases/getPreservationData',
         payload: {
           ...values,
         },
@@ -83,21 +89,48 @@ export default class initiateInquiry extends Component {
       value: e.target.value,
     });
   }
+  // 上传销售数据
+  handleUploadChange=(info)=>{
+    if(info.file.status === 'done') {
+      this.props.dispatch({
+        type: 'rolePurchaserBulkPurchases/uploadOrderbill',
+        payload: {
+          userId:userId,
+          fileTemp: info.file.response.fileName[0]
+        },
+        callback: this.onUploadCallback,
+      });
+    }
+  }
+  onUploadCallback = (params) => {
+    const msg = params.msg;
+    if(params.type==="0"){
+      message.error(msg,8);
+    }else{
+      message.success("上传成功",5);
+    }
+    this.init();
+  }
+
+
   renderForm(){
     // console.log(this.props)
     const RadioGroup = Radio.Group;
     const { getFieldDecorator } = this.props.form;
-    const {rolePurchaserBulkPurchases:{initiateInquiry}} = this.props
+    //const {rolePurchaserBulkPurchases:{initiateInquiry}} = this.props
 
+    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
+    
+    //const {rolePurchaserBulkPurchases:{initiateInquiry:{preservation} } = this.props;
 
-    //console.log('询价',this.props)
-    const { rolePurchaserBulkPurchases:{initiateInquiry:{tableData:{list, pagination}}} } = this.props;   
+    
+    
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
       ...pagination,
     };
-
+    console.log('询价',this.props)
     const columns = [
       {
         title: '序号',
@@ -124,11 +157,19 @@ export default class initiateInquiry extends Component {
       }
     ];
 
-
+    const props = {
+      action: getUploadUrl(),
+      headers: getHeader(),
+      showUploadList: false,
+      // listType: 'picture',
+      // accept:'image/*',
+      onChange: this.handleUploadChange,
+      multiple: false,
+      // customRequest:this.upload,
+    };
 
     return (
       <Form onSubmit={this.onSearch} layout="inline">
-
         <div className={styles.titleName}>询价单</div>
         <div className={styles.takeGoods}>
           <span></span>
@@ -138,21 +179,21 @@ export default class initiateInquiry extends Component {
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
            <FormItem label="提货地点：">
-              {getFieldDecorator('platformCostType',{
-                    //initialValue: childEdit.platformCostType,
-                    rules: [{ required: true, }],
-                  })(
-                    <Select
+
+              {getFieldDecorator('sendType',{
+                  initialValue:'0'
+                })(
+                  <Select
                       placeholder="日本提货"
                       // onChange={this.handleSelectChange}
                       //defaultValue="0"
                     >
                     <Option value="0">日本提货</Option>
                     <Option value="1">韩国提货</Option>
-                    <Option value="3">香港提货</Option>
-                    <Option value="4">国内提货</Option>
+                    <Option value="2">香港提货</Option>
+                    <Option value="3">国内提货</Option>
                     </Select>
-                  )}
+                )}   
           
             </FormItem>
           </Col>
@@ -167,8 +208,8 @@ export default class initiateInquiry extends Component {
           <Col md={7} sm={24}></Col> 
           <Col md={10} sm={24}>
             <FormItem label="姓名：  ">
-              {getFieldDecorator('platformCost', {
-                //initialValue: childEdit.platformCost,
+              {getFieldDecorator('contacts', {
+                initialValue: information.contacts,
                 rules: [{ required: true, message: '请输入姓名' }],
               })(
                 <Input placeholder="请输入姓名"/>
@@ -177,19 +218,30 @@ export default class initiateInquiry extends Component {
           </Col>   
           <Col md={7} sm={24}>
          
-            <RadioGroup onChange={this.onChange} value={this.state.value} className={styles.sex}>
+            {/* <RadioGroup onChange={this.onChange} value={this.state.value} className={styles.sex}>
               <Radio value={1}>男士</Radio>
               <Radio value={2}>女士</Radio>
-            </RadioGroup>
-          
+            </RadioGroup> */}
+                
+            {getFieldDecorator('sex',{
+                initialValue:information.sex
+              })(
+                <RadioGroup  onChange={this.onChange}   className={styles.sex} >
+                  <Radio  value={0}>男士</Radio>
+                  <Radio value={1}>女士</Radio>
+                </RadioGroup>
+              )}     
+
+
+
           </Col>                
         </Row>
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={7} sm={24}></Col> 
           <Col md={10} sm={24}>
             <FormItem label="联系电话:">
-              {getFieldDecorator('platformCost', {
-                //initialValue: childEdit.platformCost,
+              {getFieldDecorator('tel', {
+                initialValue: information.tel,
                 rules: [{ required: true, message: '请输入联系电话' }],
               })(
                 <Input placeholder="请输入联系电话"/>
@@ -201,12 +253,13 @@ export default class initiateInquiry extends Component {
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={7} sm={24}></Col> 
           <Col md={10} sm={24}>
-            <FormItem label="账期范围">
-              {getFieldDecorator('date', {
-                //initialValue: childEdit.platformCost,
-                rules: [{ required: true, message: '请输入联系电话' }],
+            <FormItem label="采购截止日期：">
+              {getFieldDecorator('deliveryTime', {
+                initialValue: information.deliveryTime,
+                 rules: [{ required: true, message: '请输入采购截止日期' }],
               })(
-                <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
+                <DatePicker  style={{ width: '100%' }} onChange={this.onTest}/>
+                //<DatePicker style={{ width: '100%' }}  placeholder="" />
               )}
             </FormItem>      
           </Col>   
@@ -221,8 +274,8 @@ export default class initiateInquiry extends Component {
           <Col md={7} sm={24}></Col> 
           <Col md={10} sm={24}>
             <FormItem label="询价单描述：:">
-              {getFieldDecorator('platformCost', {
-                //initialValue: childEdit.platformCost,
+              {getFieldDecorator('remark', {
+                initialValue: information.remark,
                 rules: [{ required: true, message: '请输入询价单描述' }],
               })(
                 <Input placeholder="请输入询价单描述"/>
@@ -235,11 +288,11 @@ export default class initiateInquiry extends Component {
 
         
         <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
-          <Icon type="download" />下载运单模板
+          <Icon type="download" />下载询价模板
         </Button>
-        <Upload >
+        <Upload  {...props}>
           <Button style={{ marginLeft: 8 }}>
-            <Icon type="cloud-upload-o" /> 导入运单信息
+            <Icon type="cloud-upload-o" /> 导入询价商品
           </Button>
         </Upload>
 
@@ -249,19 +302,22 @@ export default class initiateInquiry extends Component {
                  rowKey={record => record.keyId}
                  columns={columns}
                  pagination={paginationProps}
-                 onChange={this.handleTableChange}
+               //  onChange={this.handleTableChange}
                  // loading={submitting}
           />
         <Row>
           <Col md={12} sm={24}>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>保存</Button>
-            <Button type="primary" htmlType="submit">提交</Button>
+            <Button style={{ marginLeft: 8 }} htmlType="submit">保存</Button>
+            <Button type="primary" onClick={this.handleFormReset} >提交</Button>
           </Col>
         </Row>  
       </Form>
     );
   }
-
+  onTest(date, dateString){
+    console.log('sdsdsds', date);
+    console.log('sssssssssss', dateString);
+  }
   render() {
 
    

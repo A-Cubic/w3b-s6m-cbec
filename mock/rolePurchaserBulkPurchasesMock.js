@@ -2,9 +2,11 @@
 export default function rolePurchaserBulkPurchasesMock() {
   return {
     // -------- 发起询价 --------------
-    // 发起询价 -
     'POST /llback/Warehouse/getInitiateInquiryData': getPayment,
-
+    // 发起询价 - 保存
+    'POST /llback/Warehouse/getPreservationData': getPayment,
+    //  发起询价- 导入订单
+    'POST /llback/Warehouse/getUploadOrderbillDX': getPayment,
 
     // -------- 询价列表 --------------
     'POST /llback/Warehouse/getInquiryListData': getPayment,
@@ -21,7 +23,6 @@ export default function rolePurchaserBulkPurchasesMock() {
     'POST /llback/Warehouse/getdetailsCheck': getPayment,
   };
 }
-
 
 // 表单 分页 item
 export function getPayment(req, res) {

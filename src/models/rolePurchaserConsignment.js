@@ -197,7 +197,7 @@ export default {
     //商品销售 - 上传销售数据
     *uploadOrderbill({ payload,callback },{ call,put}){
       const response = yield call(getUploadOrderbillDX, payload);
-      // console.log('~',response)
+       console.log('~',response)
       if (response !== undefined) {
         callback(response)
       }

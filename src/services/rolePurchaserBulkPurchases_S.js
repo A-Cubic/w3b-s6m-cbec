@@ -2,6 +2,10 @@
 import request from '../utils/request';
 // -------- 发起询价 --------------
 
+
+
+
+
 // 发起询价-列表
 export async function getInitiateInquiryData(params) {
   return request(`/llback/Warehouse/getInitiateInquiryData`,{
@@ -9,6 +13,23 @@ export async function getInitiateInquiryData(params) {
     body: params,
   })
 }
+// 发起询价- 保存
+export async function getPreservationData(params) {
+  return request(`/llback/Warehouse/getPreservationData`,{
+    method: 'POST',
+    body: params,
+  })
+}
+// 发起询价- 导入订单
+export async function getUploadOrderbillDX(params) {
+  return request(`/llback/Warehouse/getUploadOrderbillDX`,{
+    method: 'POST',
+    body: params,
+  });
+}
+
+
+
 // -------- 询价列表 --------------
 export async function getInquiryListData(params) {
   return request(`/llback/Warehouse/getInquiryListData`,{
