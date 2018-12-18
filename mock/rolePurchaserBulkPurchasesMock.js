@@ -5,8 +5,14 @@ export default function rolePurchaserBulkPurchasesMock() {
     'POST /llback/Warehouse/getInitiateInquiryData': getPayment,
     // 发起询价 - 保存
     'POST /llback/Warehouse/getPreservationData': getPayment,
+    // 发起询价 - 提交
+    'POST /llback/Warehouse/getSubmissionData': getPayment,
     //  发起询价- 导入订单
     'POST /llback/Warehouse/getUploadOrderbillDX': getPayment,
+    //  发起询价- 删除
+    'POST /llback/Warehouse/deleteInterface': del,
+    //  发起询价- 分页
+    'POST /llback/Warehouse/getPagingData': getPayment,
 
     // -------- 询价列表 --------------
     'POST /llback/Warehouse/getInquiryListData': getPayment,
@@ -23,6 +29,32 @@ export default function rolePurchaserBulkPurchasesMock() {
     'POST /llback/Warehouse/getdetailsCheck': getPayment,
   };
 }
+
+
+export function del(req, res) {
+  res.send({
+    "item": {
+      "msg": null,
+      "type": "1"
+    },
+    "list": [
+        {
+          "keyId": "1",
+          "purchasesn": "2018121313045638",
+          "goodsName": "兰芝精华液",
+          "barcode": "11111",
+          "brand": "",
+          "total": "100"
+        }
+    ],
+    "pagination": {
+        "current": 1,
+        "total": 1,
+        "pageSize": 10
+    }
+  })
+}
+
 
 // 表单 分页 item
 export function getPayment(req, res) {
@@ -57,6 +89,21 @@ export function getPayment(req, res) {
         b: '215451244',
         c: '32546',
       }],
+    }, {
+      keyId: '3',
+      date: '20171201~20171231',
+      order: '215451244',
+      goMoney: '2000.00',
+      tuiMoney: '1000.00',
+      elseMoney: '',
+      doMoney: '500.00',
+      status: 1,
+      detailsList: [{
+        keyId: '2',
+        a: '20171201~20171231',
+        b: '215451244',
+        c: '32546',
+      }],
     }],
     pagination: {
       current: 1,
@@ -64,7 +111,7 @@ export function getPayment(req, res) {
       pageSize: 10,
     },
     item: {
-      money: '50',
+      money: '501',
       waybillNo: 'ssada',
       settlementNumber: '20180101001',
       supplierName: '岂止科技（大连）有限公司',

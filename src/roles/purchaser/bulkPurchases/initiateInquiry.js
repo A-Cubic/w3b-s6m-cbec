@@ -20,12 +20,11 @@ const FormItem = Form.Item;
 }))
 
 @Form.create()
-// 代销 - 统计 - 发起询价 - 20181214
+// 批量采购 - 发起询价 - 20181214
 export default class initiateInquiry extends Component {
   state={
     formValues:{},
-    value: 1,
-    
+    dataSource:[]
   }
   init(){
     this.props.dispatch({
@@ -36,7 +35,8 @@ export default class initiateInquiry extends Component {
   componentDidMount() {
     this.init();
   }
-  onSearch=(e)=>{
+  //保存
+  onPreservation=(e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -53,8 +53,8 @@ export default class initiateInquiry extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        // type: 'rolePurchaserBulkPurchases/getInquiryListData',
-       type: 'rolePurchaserBulkPurchases/getPreservationData',
+       // type: 'rolePurchaserBulkPurchases/getInquiryListData',
+      type: 'rolePurchaserBulkPurchases/getPreservationData',
         payload: {
           ...values,
         },
@@ -73,22 +73,78 @@ export default class initiateInquiry extends Component {
     });
     this.init();
   }
+  //分页
   handleTableChange=(pagination, filters, sorter)=>{
     const params = {
       ...pagination,
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'rolePurchaserBulkPurchases/getInquiryListData',
+      //type: 'rolePurchaserBulkPurchases/getInquiryListData',
+      type: 'rolePurchaserBulkPurchases/getPagingData',
       payload: params,
     });
   }
-  onChange = (e) => {
-    console.log('radio checked', e.target.value);
-    this.setState({
-      value: e.target.value,
+  //删除
+  handleDelCheck = (e, record, index)=>{
+    console.log(record.order)
+    const _this = this;
+    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
+    console.log('fs',list)
+    let key = record.key
+
+    const dataSource = [...list];
+    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+
+    this.props.dispatch({
+      type: 'rolePurchaserBulkPurchases/deleteInterface',
+      payload: {
+        purchasesn:record.order,
+        barcode:record.date,
+      },
+      callback:function () {
+       // _this.init();
+       _this.handleDelete
+      }
+
     });
   }
+
+  // handleDelete = (key) => {
+  //   console.log(1111)
+  //   const dataSource = [...this.state.dataSource];
+  //   this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+  // }
+
+
+
+  //提交
+  handleOnSubmission = (e)=>{
+    e.preventDefault();
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('values',fieldsValue)
+
+      if (err) return;
+      const rangeValue = fieldsValue['date'];
+      const values = rangeValue==undefined ? {
+        ...fieldsValue,
+      }:{
+        ...fieldsValue,
+        'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+      };
+      this.setState({
+        formValues: values,
+      });
+      this.props.dispatch({
+       // type: 'rolePurchaserBulkPurchases/getInquiryListData',
+      type: 'rolePurchaserBulkPurchases/getSubmissionData',
+        payload: {
+          ...values,
+        },
+      });
+    });
+  }
+
   // 上传销售数据
   handleUploadChange=(info)=>{
     if(info.file.status === 'done') {
@@ -123,14 +179,12 @@ export default class initiateInquiry extends Component {
     
     //const {rolePurchaserBulkPurchases:{initiateInquiry:{preservation} } = this.props;
 
-    
-    
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
       ...pagination,
     };
-    console.log('询价',this.props)
+    //console.log('询价',this.props)
     const columns = [
       {
         title: '序号',
@@ -151,9 +205,15 @@ export default class initiateInquiry extends Component {
         key: 'goodsTotal',
       }, {
         title: '操作',
-        dataIndex: 'sendTime',
-        key: 'sendTime',
-       
+        dataIndex: 'goMoney',
+        key: 'goMoney',
+        render: (text, record, index) => {
+          return (
+            <Fragment>
+              <a href="javascript:;" onClick={(e) => this.handleDelCheck(e, record, index)}>删除</a><br/>
+            </Fragment>
+          )
+        }
       }
     ];
 
@@ -169,7 +229,7 @@ export default class initiateInquiry extends Component {
     };
 
     return (
-      <Form onSubmit={this.onSearch} layout="inline">
+      <Form onSubmit={this.onPreservation} layout="inline">
         <div className={styles.titleName}>询价单</div>
         <div className={styles.takeGoods}>
           <span></span>
@@ -217,12 +277,7 @@ export default class initiateInquiry extends Component {
             </FormItem>            
           </Col>   
           <Col md={7} sm={24}>
-         
-            {/* <RadioGroup onChange={this.onChange} value={this.state.value} className={styles.sex}>
-              <Radio value={1}>男士</Radio>
-              <Radio value={2}>女士</Radio>
-            </RadioGroup> */}
-                
+      
             {getFieldDecorator('sex',{
                 initialValue:information.sex
               })(
@@ -231,8 +286,6 @@ export default class initiateInquiry extends Component {
                   <Radio value={1}>女士</Radio>
                 </RadioGroup>
               )}     
-
-
 
           </Col>                
         </Row>
@@ -284,9 +337,6 @@ export default class initiateInquiry extends Component {
           </Col>   
           <Col md={7} sm={24}></Col>                
         </Row>           
-
-
-        
         <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
           <Icon type="download" />下载询价模板
         </Button>
@@ -302,14 +352,16 @@ export default class initiateInquiry extends Component {
                  rowKey={record => record.keyId}
                  columns={columns}
                  pagination={paginationProps}
-               //  onChange={this.handleTableChange}
+                 onChange={this.handleTableChange}
                  // loading={submitting}
           />
         <Row>
-          <Col md={12} sm={24}>
-            <Button style={{ marginLeft: 8 }} htmlType="submit">保存</Button>
-            <Button type="primary" onClick={this.handleFormReset} >提交</Button>
+          <Col md={9} sm={24}></Col>      
+          <Col md={6} sm={24}>
+            <Button style={{ marginLeft: 48 }} htmlType="submit">保存</Button>
+            <Button style={{ marginLeft: 48 }}type="primary" onClick={this.handleOnSubmission} style={{marginLeft:"20px"}}>提交</Button>
           </Col>
+          <Col md={9} sm={24}></Col>      
         </Row>  
       </Form>
     );
@@ -319,8 +371,6 @@ export default class initiateInquiry extends Component {
     console.log('sssssssssss', dateString);
   }
   render() {
-
-   
     return (
       <div className={styles.qa}>
         <Card bordered={false}>
@@ -329,10 +379,6 @@ export default class initiateInquiry extends Component {
               {this.renderForm()}
             </div>
           </div>
-       
-
-  
-
         </Card>
       </div>
     );

@@ -1,7 +1,7 @@
 import { message} from 'antd';
 import {
   // -------- 发起询价 --------------
-  getInitiateInquiryData, getPreservationData,getUploadOrderbillDX,
+  getInitiateInquiryData, getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,
   // -------- 询价列表 --------------
   getInquiryListData,
   // -------- 采购列表 --------------
@@ -20,28 +20,20 @@ export default {
     // -------- 发起询价 --------------
     initiateInquiry:{
       tableData:{
+        item:{},
         list: [],
         pagination:{},
       },
-    information:{
-      purchasesn: "",
-      sendType:"",
-      contacts:"",
-      sex:0,
-      tel:"",
-      deliveryTime:null,
-      remark:""
-    }, 
-    // -------- 发起询价 保存接口--------------
-    preservation:{
-      purchasesn: "",
-      sendType:"",
-      contacts:"",
-      sex:1,
-      tel:"",
-      deliveryTime:null,
-      remark:""
-    }    
+  
+      information:{
+        purchasesn: "",
+        sendType:"",
+        contacts:"",
+        sex:0,
+        tel:"",
+        deliveryTime:null,
+        remark:""
+      },
 
     },
 
@@ -111,6 +103,33 @@ export default {
       }
     },
 
+     // -------- 发起询价-提交接口 --------------
+     *getSubmissionData({ payload },{ call,put }){
+      const response = yield call(getSubmissionData, payload);
+     console.log('~res保存接口',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getSubmissionDataR',
+          payload: response,
+        })
+      }
+    },
+
+
+
+    // -------- 发起询价-分页 --------------
+    *getPagingData({ payload },{ call,put }){
+      const response = yield call(getPagingData, payload);
+      //console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getPagingDataR',
+          payload: response,
+        })
+      }
+    },
+
+
     //发起询价 - 导入询价商品
     *uploadOrderbill({ payload,callback },{ call,put}){
       const response = yield call(getUploadOrderbillDX, payload);
@@ -119,6 +138,26 @@ export default {
         callback(response)
       }
     },
+
+    //发起询价 - 删除
+    *deleteInterface({payload, callback},{call,put}){
+      const response = yield call(deleteInterface,payload);
+       //console.log('~删除',response.item.type)
+      if (response !== undefined) {
+        if (response.type==1) {
+          callback();
+          message.success('删除成功');
+          yield put({
+            type:'deleteInterfaceR',
+            payload: response
+          })
+        }else{
+          message.error(response.msg);
+        }
+      }
+    },
+
+
 
 
     //发起询价 - 导入询价商品
@@ -142,6 +181,10 @@ export default {
         })
       }
     },
+
+
+
+
     // -------- 采购列表 --------------
     //
     *getPurchaseListData({ payload },{ call,put }){
@@ -210,12 +253,46 @@ export default {
     getPreservationDataR(state, action){
       return {
         ...state,
-        inquiryList:{
-          ...state.inquiryList,
+        information:{
+          ...state.information,
           tableData:action.payload
         }
       }
     },
+
+    // -------- 发起询价-提交接口 --------------
+    getSubmissionDataR(state, action){
+      return {
+        ...state,
+        information:{
+          ...state.information,
+          tableData:action.payload
+        }
+      }
+    },
+    // -------- 发起询价- 分页 --------------
+    getPagingDataR(state, action){
+      return {
+        ...state,
+        initiateInquiry:{
+          ...state.initiateInquiry,
+          tableData:action.payload
+        }
+      }
+    },
+
+    //发起询价 - 删除
+    deleteInterfaceR(state,action){
+        console.log('sssss',action.payload)
+
+      return{
+        ...state,
+        initiateInquiry:{
+          ...state.initiateInquiry,
+          tableData:action.payload
+        }
+      }
+    },    
 
 
     // -------- 询价列表 --------------
@@ -250,6 +327,7 @@ export default {
         },
       };
     },
+    
     
     // 采购列表-采购单-点击详情
     getdetailsCheckR(state, action) {
@@ -294,6 +372,9 @@ export default {
         }
       }
     },
+
+   
+
 
   }
 }

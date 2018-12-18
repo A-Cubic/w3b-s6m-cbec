@@ -20,9 +20,32 @@ export async function getPreservationData(params) {
     body: params,
   })
 }
+// 发起询价- 提交
+export async function getSubmissionData(params) {
+  return request(`/llback/Warehouse/getSubmissionData`,{
+    method: 'POST',
+    body: params,
+  })
+}
+// 发起询价- 分页
+export async function getPagingData(params) {
+  return request(`/llback/Warehouse/getPagingData`,{
+    method: 'POST',
+    body: params,
+  })
+}
+
 // 发起询价- 导入订单
 export async function getUploadOrderbillDX(params) {
   return request(`/llback/Warehouse/getUploadOrderbillDX`,{
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 发起询价- 删除
+export async function deleteInterface(params) {
+  return request(`/llback/Warehouse/deleteInterface`,{
     method: 'POST',
     body: params,
   });

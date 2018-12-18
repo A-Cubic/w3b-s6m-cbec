@@ -262,6 +262,9 @@ export default {
         }
       }
     },
+
+    
+
     getCodeR(state,action){
       return{
         ...state,
