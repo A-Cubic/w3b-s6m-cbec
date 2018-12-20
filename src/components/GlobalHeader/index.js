@@ -66,7 +66,7 @@ export default class GlobalHeader extends PureComponent {
           <span>
             <Icon type="user" />切换角色
           </span>
-          }>
+          } disabled>
           {rolesArr.map(val => <Menu.Item key={val.roleId} type={val.roleId}>{val.roleName}</Menu.Item>)}
           {/*<Menu.Item type="roleOne">3rd menu item</Menu.Item>*/}
           {/*<Menu.Item type="roleTwo">4th menu item</Menu.Item>*/}
