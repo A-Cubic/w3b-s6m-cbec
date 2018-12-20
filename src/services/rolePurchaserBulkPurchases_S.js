@@ -6,30 +6,27 @@ import request from '../utils/request';
 
 
 
-// 发起询价-列表
-export async function getInitiateInquiryData(params) {
-  return request(`/llback/Warehouse/getInitiateInquiryData`,{
-    method: 'POST',
-    body: params,
-  })
-}
+
 // 发起询价- 保存
 export async function getPreservationData(params) {
-  return request(`/llback/Warehouse/getPreservationData`,{
+  // return request(`/llback/Warehouse/getPreservationData`,{
+  return request(`/llback/Purchase/InquiryPreservation`,{
     method: 'POST',
     body: params,
   })
 }
 // 发起询价- 提交
 export async function getSubmissionData(params) {
-  return request(`/llback/Warehouse/getSubmissionData`,{
+  //return request(`/llback/Warehouse/getSubmissionData`,{
+  return request(`/llback/Purchase/InquirySubmission`,{
     method: 'POST',
     body: params,
   })
 }
 // 发起询价- 分页
 export async function getPagingData(params) {
-  return request(`/llback/Warehouse/getPagingData`,{
+   //return request(`/llback/Warehouse/getPagingData`,{
+  return request(`/llback/Purchase/Goodspagination`,{
     method: 'POST',
     body: params,
   })
@@ -38,6 +35,7 @@ export async function getPagingData(params) {
 // 发起询价- 导入订单
 export async function getUploadOrderbillDX(params) {
   return request(`/llback/Warehouse/getUploadOrderbillDX`,{
+  //return request(`/llback/Purchase/OnLoadGoodsList`,{
     method: 'POST',
     body: params,
   });
@@ -45,7 +43,8 @@ export async function getUploadOrderbillDX(params) {
 
 // 发起询价- 删除
 export async function deleteInterface(params) {
-  return request(`/llback/Warehouse/deleteInterface`,{
+   //return request(`/llback/Warehouse/deleteInterface`,{
+  return request(`/llback/Purchase/GoodsDelete`,{
     method: 'POST',
     body: params,
   });

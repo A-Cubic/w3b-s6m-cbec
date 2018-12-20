@@ -1,7 +1,7 @@
 import { message} from 'antd';
 import {
   // -------- 发起询价 --------------
-  getInitiateInquiryData, getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,
+  getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,
   // -------- 询价列表 --------------
   getInquiryListData,
   // -------- 采购列表 --------------
@@ -19,6 +19,8 @@ export default {
   state:{
     // -------- 发起询价 --------------
     initiateInquiry:{
+      delList:[],
+      pur:'',
       tableData:{
         item:{},
         list: [],
@@ -34,7 +36,6 @@ export default {
         deliveryTime:null,
         remark:""
       },
-
     },
 
     // -------- 询价列表 --------------
@@ -91,11 +92,12 @@ export default {
       }
     },
 
-    // -------- 发起询价-保存接口 --------------
-    *getPreservationData({ payload },{ call,put }){
+    //  发起询价-保存接口 
+    *getPreservationData({ payload,callback  },{ call,put }){
       const response = yield call(getPreservationData, payload);
-     console.log('~res保存接口',response)
+    // console.log('~res111保存接口',response)
       if(response!==undefined){
+        callback(response)
         yield put({
           type: 'getPreservationDataR',
           payload: response,
@@ -103,11 +105,12 @@ export default {
       }
     },
 
-     // -------- 发起询价-提交接口 --------------
-     *getSubmissionData({ payload },{ call,put }){
+     // 发起询价-提交接口 
+     *getSubmissionData({ payload,callback  },{ call,put }){
       const response = yield call(getSubmissionData, payload);
-     console.log('~res保存接口',response)
+    // console.log('~resxxxx提交接口',response)
       if(response!==undefined){
+        callback(response)
         yield put({
           type: 'getSubmissionDataR',
           payload: response,
@@ -115,13 +118,12 @@ export default {
       }
     },
 
-
-
-    // -------- 发起询价-分页 --------------
-    *getPagingData({ payload },{ call,put }){
+    //  发起询价-分页 
+    *getPagingData({ payload,callback },{ call,put }){
       const response = yield call(getPagingData, payload);
-      //console.log('~res',response)
+      //console.log('~res分页',response)
       if(response!==undefined){
+      //  callback(response)
         yield put({
           type: 'getPagingDataR',
           payload: response,
@@ -133,39 +135,34 @@ export default {
     //发起询价 - 导入询价商品
     *uploadOrderbill({ payload,callback },{ call,put}){
       const response = yield call(getUploadOrderbillDX, payload);
-      // console.log('~',response)
+      // console.log('~uploadOrderbill',response)
       if (response !== undefined) {
         callback(response)
+        yield put({
+          type: 'uploadOrderbillR',
+          payload: response,
+        })
       }
     },
 
     //发起询价 - 删除
     *deleteInterface({payload, callback},{call,put}){
       const response = yield call(deleteInterface,payload);
-       //console.log('~删除',response.item.type)
+    //  console.log('~qqxxxxx删除',response)
+     //  console.log('~xxxxx删除',response.item.type)
       if (response !== undefined) {
-        if (response.type==1) {
-          callback();
+        if (response.item.type==1) {
           message.success('删除成功');
           yield put({
             type:'deleteInterfaceR',
-            payload: response
+            payload: {payload}
           })
+          
+          // callback(response);
+         // console.log('xxxx',response)
         }else{
-          message.error(response.msg);
+          message.error('失败');
         }
-      }
-    },
-
-
-
-
-    //发起询价 - 导入询价商品
-    *uploadImportInquiry({ payload,callback },{ call,put}){
-      const response = yield call(getUploadOrderbillDX, payload);
-      // console.log('~',response)
-      if (response !== undefined) {
-        callback(response)
       }
     },
 
@@ -249,7 +246,7 @@ export default {
         }
       }
     },
-    // -------- 发起询价-保存接口 --------------
+    // 发起询价-保存接口
     getPreservationDataR(state, action){
       return {
         ...state,
@@ -260,18 +257,44 @@ export default {
       }
     },
 
-    // -------- 发起询价-提交接口 --------------
+    // 发起询价-提交接口 
     getSubmissionDataR(state, action){
+     // console.log('state',state.initiateInquiry.tableData.list )
+      const onempty =state.initiateInquiry.tableData.list
+      const delList = []
       return {
         ...state,
         information:{
           ...state.information,
           tableData:action.payload
+        },
+        initiateInquiry:{
+          ...state.initiateInquiry,
+          tableData:{
+            ...state.initiateInquiry.tableData,
+            list:delList
+          }
         }
+        
       }
     },
-    // -------- 发起询价- 分页 --------------
+
+    // return {
+    //   ...state,
+    //   initiateInquiry:{
+    //     ...state.initiateInquiry,
+    //     tableData:{
+    //       ...state.initiateInquiry.tableData,
+    //       list:newData
+    //     }
+    //   }
+    // }
+
+
+
+    //  发起询价- 分页 
     getPagingDataR(state, action){
+     // console.log('action',action.payload.list[0].purchasesn)
       return {
         ...state,
         initiateInquiry:{
@@ -281,19 +304,47 @@ export default {
       }
     },
 
-    //发起询价 - 删除
-    deleteInterfaceR(state,action){
-        console.log('sssss',action.payload)
-
-      return{
+    // 发起询价- 导入询价商品 
+    uploadOrderbillR(state, action){
+      return {
         ...state,
         initiateInquiry:{
           ...state.initiateInquiry,
+          pur:action.payload.list[0].purchasesn,
           tableData:action.payload
         }
       }
-    },    
+    },
 
+
+    //发起询价 - 删除
+    deleteInterfaceR(state,action){
+      //console.log('sssss',action.payload.payload.barcode)
+      //console.log('ssssssssdsdsdss',state.initiateInquiry.tableData.list)
+      //console.log('barcode',barcode)   
+      //console.log('inList',inList)
+      const barcode = action.payload.payload.barcode
+      const inList = state.initiateInquiry.tableData.list
+      const index = action.payload.payload.index
+      const dataSource = [...inList]
+      const newData=dataSource.filter(item => item.barcode != inList[index].barcode)
+     // console.log('newData',newData)
+      return {
+        ...state,
+        initiateInquiry:{
+          ...state.initiateInquiry,
+          tableData:{
+            ...state.initiateInquiry.tableData,
+            list:newData
+          }
+        }
+      }
+    },    
+    // tableData:{
+    //   item:{},
+    //   list: [],
+    //   pagination:{},
+    // },
 
     // -------- 询价列表 --------------
     getInquiryListDataR(state, action){
@@ -327,7 +378,6 @@ export default {
         },
       };
     },
-    
     
     // 采购列表-采购单-点击详情
     getdetailsCheckR(state, action) {
@@ -372,10 +422,6 @@ export default {
         }
       }
     },
-
-   
-
-
   }
 }
 

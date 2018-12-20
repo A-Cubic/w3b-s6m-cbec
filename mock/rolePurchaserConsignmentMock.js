@@ -79,15 +79,8 @@ export function getPayment(req, res) {
       pageSize: 10,
     },
     item: {
-      money: '50',
-      waybillNo: 'ssada',
-      settlementNumber: '20180101001',
-      supplierName: '岂止科技（大连）有限公司',
-      receiptAmount: '壹贰叁肆伍陆柒捌玖拾',
-      settlementAccountPeriod: '2018.01.01~2018.01.31',
-      contractNumber: 'QZKJ-0001',
-      dateOfPrinting: '2018.01.01',
-      printer: '胖球1',
+      msg: 成功,
+      type: 1,
     },
   });
 }

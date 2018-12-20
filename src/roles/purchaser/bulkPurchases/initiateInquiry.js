@@ -6,7 +6,7 @@ import styles from './initiateInquiry.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
 //import {getToken} from "../../../utils/Global";
-
+import {message} from "antd/lib/index";
 import {getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
 const userId = getToken().userId;
@@ -24,16 +24,11 @@ const FormItem = Form.Item;
 export default class initiateInquiry extends Component {
   state={
     formValues:{},
-    dataSource:[]
+    delList:[]
   }
-  init(){
-    this.props.dispatch({
-      type:'rolePurchaserBulkPurchases/getInitiateInquiryData',
-      payload:{}
-    })
-  }
+
   componentDidMount() {
-    this.init();
+    //this.init();
   }
   //保存
   onPreservation=(e)=>{
@@ -58,10 +53,24 @@ export default class initiateInquiry extends Component {
         payload: {
           ...values,
         },
+        callback:this.onPreservationCallback
       });
     });
-
   }
+  onPreservationCallback = (params) => {
+    //console.log('xxxxparams',params.type)
+    if(params.type==="1"){
+      message.success("保存成功");
+      this.handleFormReset()
+      this.props.form.resetFields();
+      this.setState({
+        formValues: {},
+      });
+     }else{
+      message.error("保存失败");
+     }
+  }
+
   //下载运单模板
   downloadTemplate=()=>{
     window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/Waybill.xlsx'
@@ -71,7 +80,7 @@ export default class initiateInquiry extends Component {
     this.setState({
       formValues: {},
     });
-    this.init();
+    //this.init();
   }
   //分页
   handleTableChange=(pagination, filters, sorter)=>{
@@ -79,58 +88,50 @@ export default class initiateInquiry extends Component {
       ...pagination,
       ...this.state.formValues,
     };
+    //console.log('分页',params,pagination, filters, sorter)
     this.props.dispatch({
       //type: 'rolePurchaserBulkPurchases/getInquiryListData',
+      //type: 'rolePurchaserBulkPurchases/getPagingData',
       type: 'rolePurchaserBulkPurchases/getPagingData',
-      payload: params,
+      //payload: params,
+       payload: {
+         ...params,
+         purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur
+       },
     });
   }
+  
   //删除
   handleDelCheck = (e, record, index)=>{
-    console.log(record.order)
-    const _this = this;
-    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
-    console.log('fs',list)
-    let key = record.key
-
-    const dataSource = [...list];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-
+   // console.log(record.order)
+    // const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
+    // const _this = this;
+    // console.log('fs',list)
+    // const dataSource = [...list];
+    // console.log('aafs',list[index].keyId)
+    // this.setState({ dataSource: dataSource.filter(item => item.keyId != list[index].keyId) });
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/deleteInterface',
       payload: {
-        purchasesn:record.order,
-        barcode:record.date,
+        purchasesn:record.purchasesn,
+        barcode:record.barcode,
+        index:index
       },
-      callback:function () {
-       // _this.init();
-       _this.handleDelete
-      }
-
     });
   }
-
-  // handleDelete = (key) => {
-  //   console.log(1111)
-  //   const dataSource = [...this.state.dataSource];
-  //   this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-  // }
-
-
 
   //提交
   handleOnSubmission = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
-
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
         ...fieldsValue,
       }:{
         ...fieldsValue,
-        'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+        //'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
       this.setState({
         formValues: values,
@@ -141,8 +142,22 @@ export default class initiateInquiry extends Component {
         payload: {
           ...values,
         },
+        callback: this.onSubmissionCallback
       });
     });
+  }
+  onSubmissionCallback = (params) => {
+    //console.log('params',params.type)
+    if(params.type==="1"){
+      this.handleFormReset()
+      this.props.form.resetFields();
+      this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list.remove
+      this.setState({
+        formValues: {},
+      });
+      
+     }else{
+     }
   }
 
   // 上传销售数据
@@ -151,40 +166,35 @@ export default class initiateInquiry extends Component {
       this.props.dispatch({
         type: 'rolePurchaserBulkPurchases/uploadOrderbill',
         payload: {
-          userId:userId,
-          fileTemp: info.file.response.fileName[0]
+          purchasesn:'',
+          // fileTemp: info.file.responseresponse.fileName[0]
+          fileTemp:info.file.name
         },
-        callback: this.onUploadCallback,
+        callback: this.onUploadCallback
       });
     }
   }
   onUploadCallback = (params) => {
     const msg = params.msg;
-    if(params.type==="0"){
-      message.error(msg,8);
+    if(params.item.type==="0"){
+      
+     message.error(params.item.msg);
     }else{
       message.success("上传成功",5);
     }
-    this.init();
+    //this.init();
   }
 
-
   renderForm(){
-    // console.log(this.props)
     const RadioGroup = Radio.Group;
     const { getFieldDecorator } = this.props.form;
-    //const {rolePurchaserBulkPurchases:{initiateInquiry}} = this.props
-
-    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
-    
-    //const {rolePurchaserBulkPurchases:{initiateInquiry:{preservation} } = this.props;
-
+    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,pur,tableData:{list, pagination}}} } = this.props;
+    //console.log('props', this.props)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
       ...pagination,
     };
-    //console.log('询价',this.props)
     const columns = [
       {
         title: '序号',
@@ -192,17 +202,16 @@ export default class initiateInquiry extends Component {
         key: 'keyId',
       }, {
         title: '询价商品名称',
-        dataIndex: 'order',
-        key: 'order',
+        dataIndex: 'goodsName',
+        key: 'goodsName',
       }, {
         title: '询价商品条码',
-        dataIndex: 'date',
-        key: 'date',
-        //render:val=>`${val==1?'收货单':'退货单'}`
+        dataIndex: 'barcode',
+        key: 'barcode',
       }, {
         title: '询价数量',
-        dataIndex: 'goodsTotal',
-        key: 'goodsTotal',
+        dataIndex: 'total',
+        key: 'total',
       }, {
         title: '操作',
         dataIndex: 'goMoney',
@@ -216,7 +225,6 @@ export default class initiateInquiry extends Component {
         }
       }
     ];
-
     const props = {
       action: getUploadUrl(),
       headers: getHeader(),
@@ -227,7 +235,6 @@ export default class initiateInquiry extends Component {
       multiple: false,
       // customRequest:this.upload,
     };
-
     return (
       <Form onSubmit={this.onPreservation} layout="inline">
         <div className={styles.titleName}>询价单</div>
@@ -241,20 +248,17 @@ export default class initiateInquiry extends Component {
            <FormItem label="提货地点：">
 
               {getFieldDecorator('sendType',{
-                  initialValue:'0'
+                  initialValue:'1'
                 })(
                   <Select
                       placeholder="日本提货"
-                      // onChange={this.handleSelectChange}
-                      //defaultValue="0"
                     >
-                    <Option value="0">日本提货</Option>
-                    <Option value="1">韩国提货</Option>
-                    <Option value="2">香港提货</Option>
-                    <Option value="3">国内提货</Option>
+                    <Option value="1">日本提货</Option>
+                    <Option value="2">韩国提货</Option>
+                    <Option value="3">香港提货</Option>
+                    <Option value="6">国内提货</Option>
                     </Select>
                 )}   
-          
             </FormItem>
           </Col>
           <Col md={7} sm={24}></Col>
@@ -269,7 +273,7 @@ export default class initiateInquiry extends Component {
           <Col md={10} sm={24}>
             <FormItem label="姓名：  ">
               {getFieldDecorator('contacts', {
-                initialValue: information.contacts,
+                initialValue: initiateInquiry.contacts,
                 rules: [{ required: true, message: '请输入姓名' }],
               })(
                 <Input placeholder="请输入姓名"/>
@@ -286,7 +290,6 @@ export default class initiateInquiry extends Component {
                   <Radio value={1}>女士</Radio>
                 </RadioGroup>
               )}     
-
           </Col>                
         </Row>
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -336,16 +339,17 @@ export default class initiateInquiry extends Component {
             </FormItem>         
           </Col>   
           <Col md={7} sm={24}></Col>                
-        </Row>           
-        <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
-          <Icon type="download" />下载询价模板
-        </Button>
-        <Upload  {...props}>
-          <Button style={{ marginLeft: 8 }}>
-            <Icon type="cloud-upload-o" /> 导入询价商品
+        </Row>    
+        <div style={{marginBottom:'20px'}}>
+          <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
+            <Icon type="download" />下载询价模板
           </Button>
-        </Upload>
-
+          <Upload  {...props}>
+            <Button style={{ marginLeft: 8 }}>
+              <Icon type="cloud-upload-o" /> 导入询价商品
+            </Button>
+          </Upload>          
+        </div>       
         <Table dataSource={list}
                 // showHeader={false}
                  // scroll={{ x: 1500}}
@@ -355,7 +359,7 @@ export default class initiateInquiry extends Component {
                  onChange={this.handleTableChange}
                  // loading={submitting}
           />
-        <Row>
+        <Row style={{marginTop:'15px', marginBottom:'5px'}}>
           <Col md={9} sm={24}></Col>      
           <Col md={6} sm={24}>
             <Button style={{ marginLeft: 48 }} htmlType="submit">保存</Button>
@@ -366,10 +370,7 @@ export default class initiateInquiry extends Component {
       </Form>
     );
   }
-  onTest(date, dateString){
-    console.log('sdsdsds', date);
-    console.log('sssssssssss', dateString);
-  }
+ 
   render() {
     return (
       <div className={styles.qa}>
