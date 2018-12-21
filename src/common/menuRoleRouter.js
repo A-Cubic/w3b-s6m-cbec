@@ -52,6 +52,20 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
     },
 
+    //------------增加-------
+    //批量采购 - 询价中
+    '/bulkPurchases/inTheInquiry': {
+      component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/inTheInquiry')),
+    },
+    //批量采购 - 报价中/已报价（二次）/已完成
+    '/bulkPurchases/quoteWithDetails': {
+      component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
+    },
+    //批量采购 - 已报价
+    '/bulkPurchases/quoted': {
+      component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
+    },
+
 
     //测试demo
     '/goods/test': {
