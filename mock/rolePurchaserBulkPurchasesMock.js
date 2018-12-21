@@ -14,12 +14,12 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     //  发起询价- 导入订单
-     'POST /llback/Warehouse/getUploadOrderbillDX': goodsSales,
-     //'POST /llback/Purchase/OnLoadGoodsList': 'http://192.168.191.1:54195/',
+     //'POST /llback/Warehouse/getUploadOrderbillDX': goodsSales,
+     'POST /llback/Purchase/OnLoadGoodsList': 'http://192.168.191.1:54195/',
 
 
 
-    'POST /llback/Warehouse/getUploadOrderbillDX': goodsSales,
+    //'POST /llback/Warehouse/getUploadOrderbillDX': goodsSales,
 
     //  发起询价- 删除
     //'POST /llback/Warehouse/deleteInterface': del,
@@ -31,12 +31,29 @@ export default function rolePurchaserBulkPurchasesMock(url) {
    'POST /llback/Purchase/Goodspagination': 'http://192.168.191.1:54195/',
 
     // -------- 询价列表 --------------
-    'POST /llback/Warehouse/getInquiryListData': getPayment,
+   'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
+    //'POST /llback/Purchase/InquiryList': 'http://192.168.191.1:54195/',
+
+
+    //询价列表 - 查看
+    'POST /llback/Warehouse/getSeeData': listOfEnquiries,  
+   //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+
     // -------- 采购列表 --------------
     'POST /llback/Warehouse/getPurchaseListData': getPayment,
 
     // 查看
-    'POST /llback/Warehouse/childrenCheck': getPurchaseOrder,
+   // 'POST /llback/Warehouse/getSeeData': getPurchaseOrder,
+
+
+
+
+
+
+
+
+
+
 
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
     'POST /llback/Warehouse/getpurchaseOrder': getPayment,
@@ -44,6 +61,36 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     // -------- 询价列表/采购列表 - 点击详情 --------------
     'POST /llback/Warehouse/getdetailsCheck': getPayment,
   };
+}
+//   -------- 询价列表 --------------
+export function listOfEnquiries(req, res) {
+  res.send({
+    item: {
+      msg: null,
+      type: "1"
+    },
+    list: [
+        {
+          keyId: "1",
+          purchasesn: "1018121316055337",
+          createtime: "2018.12.17",
+          remark: "asda大",
+          status: "1"
+        },
+        {
+          keyId: "2",
+          purchasesn: "2018121316055337",
+          createtime: "2018.12.17",
+          remark: "2asda大",
+          status: "7"
+        }
+    ],
+    pagination: {
+        current: 1,
+        total: 1,
+        pageSize: 10
+    }
+  })
 }
 
 

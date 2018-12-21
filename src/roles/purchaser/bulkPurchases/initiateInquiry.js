@@ -29,6 +29,22 @@ export default class initiateInquiry extends Component {
 
   componentDidMount() {
     //this.init();
+    const {match,dispatch}=this.props;
+    console.log('fs',JSON.parse(match.params.biography))
+    //const b=JSON.parse(match.params.biography)}
+    
+    const b = JSON.parse(match.params.biography)
+    console.log('b',b)
+
+    this.props.dispatch({
+      type: 'rolePurchaserBulkPurchases/getSeeData',
+      //payload: params,
+      payload: {
+        purchasesn:b.purchasesn,
+        status:b.status
+      },
+    });
+
   }
   //保存
   onPreservation=(e)=>{
@@ -363,7 +379,7 @@ export default class initiateInquiry extends Component {
           <Col md={9} sm={24}></Col>      
           <Col md={6} sm={24}>
             <Button style={{ marginLeft: 48 }} htmlType="submit">保存</Button>
-            <Button style={{ marginLeft: 48 }}type="primary" onClick={this.handleOnSubmission} style={{marginLeft:"20px"}}>提交</Button>
+            <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnSubmission} >提交</Button>
           </Col>
           <Col md={9} sm={24}></Col>      
         </Row>  

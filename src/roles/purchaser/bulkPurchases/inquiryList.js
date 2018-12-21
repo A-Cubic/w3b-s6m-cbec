@@ -38,10 +38,11 @@ export default class inquiryList extends Component {
     this.init();
   }
   onSearch=(e)=>{
+    
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
-
+      // console.log('values111',fieldsValue)
+      console.log('this.props',this.props.rolePurchaserBulkPurchases.inquiryList.tableData.pagination)
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
@@ -57,6 +58,8 @@ export default class inquiryList extends Component {
         type: 'rolePurchaserBulkPurchases/getInquiryListData',
         payload: {
           ...values,
+          current:this.props.rolePurchaserBulkPurchases.inquiryList.tableData.pagination.current,
+          pageSize:this.props.rolePurchaserBulkPurchases.inquiryList.tableData.pagination.pageSize
         },
       });
     });
@@ -74,23 +77,27 @@ export default class inquiryList extends Component {
       ...pagination,
       ...this.state.formValues,
     };
+    console.log('params',params)
     this.props.dispatch({
-      type: 'rolePurchaserConsignment/getInquiryListData',
-      payload: params,
+      type: 'rolePurchaserBulkPurchases/getInquiryListData',
+      //payload: params,
+      payload: {
+        ...params,
+      },
     });
   }
   renderForm(){
-    // console.log(this.props)
+    console.log(this.props.rolePurchaserBulkPurchases.inquiryList.tableData)
     const { rolePurchaserBulkPurchases:{inquiryList:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
 
 
-    console.log('询价~~~',this.props)
+    //console.log('询价~~~',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={12} sm={24}>
-            <FormItem label="账期范围">
+            <FormItem label="单据日期：">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
@@ -98,9 +105,9 @@ export default class inquiryList extends Component {
           </Col>
           
           <Col md={12} sm={24}>
-            <FormItem label="结算单号">
-              {getFieldDecorator('status')(
-                <Input placeholder="请输入结算单号" />
+            <FormItem label="">
+              {getFieldDecorator('select')(
+                <Input placeholder="请输入询价单号及询价单描述进行搜索" />
               )}
             </FormItem>
           </Col>
@@ -117,17 +124,20 @@ export default class inquiryList extends Component {
                   // onChange={this.onSelectChange}
                 >
                   <Option value="">全部</Option>
-                  <Option value="0">询价中</Option>
-                  <Option value="1">已报价</Option>
-                  <Option value="2">已完成</Option>
-                  <Option value="3">已过期</Option>
-
+                  <Option value="1">询价中</Option>
+                  <Option value="2">已报价</Option>
+                  <Option value="3">报价中</Option>
+                  <Option value="4">已报价(二次)</Option>
+                  <Option value="5">已完成</Option>
+                  <Option value="6">已关闭</Option>
+                  <Option value="7">待提交</Option>
+                  
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col md={10} sm={24}>
-            <Button style={{ marginLeft:16 }} type="primary" htmlType="submit">查询</Button>
+            <Button style={{ marginLeft:26 }} type="primary" htmlType="submit">搜索</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </Col>
         </Row>
@@ -142,12 +152,6 @@ export default class inquiryList extends Component {
   }
 
   render() {
-
-    // const paginationProps = {
-    //   showSizeChanger: true,
-    //   showQuickJumper: true,
-    //   ...pagination,
-    // };
 
     const { rolePurchaserBulkPurchases:{inquiryList:{tableData:{list, pagination}}} } = this.props;   
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
@@ -165,24 +169,32 @@ export default class inquiryList extends Component {
         key: 'keyId',
       }, {
         title: '询价单号',
-        dataIndex: 'order',
-        key: 'order',
+        dataIndex: 'purchasesn',
+        key: 'purchasesn',
       }, {
-        title: '询价单标题',
-        dataIndex: 'date',
-        key: 'date',
+        title: '询价日期',
+        dataIndex: 'createtime',
+        key: 'createtime',
+      },{
+        title: '询价单描述',
+        dataIndex: 'remark',
+        key: 'remark',
         //render:val=>`${val==1?'收货单':'退货单'}`
       }, {
         title: '状态',
-        dataIndex: 'goodsTotal',
-        key: 'goodsTotal',
+        dataIndex: 'status',
+        render: (val) => {
+          return(<div>
+            {['','询价中','已报价','报价中','已报价(二次)','已完成','已关闭','待提交'][`${val}`]}
+          </div>)
+        }
       }, {
         title: '操作',
         dataIndex: 'sendTime',
         key: 'sendTime',
         render: (val,record) =>
           <div>
-            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)} >查看</a><br/>
+            <a href="javascript:;" onClick={()=>this.handleViewState(record)} >查看</a><br/>
           </div>
       }
     ];
@@ -201,104 +213,169 @@ export default class inquiryList extends Component {
                  // scroll={{ x: 1500}}
                  rowKey={record => record.keyId}
                  columns={columns}
-                 rowClassName={record => record.status==0||record.status==2?styles.columnsBgColor:''}
+                 //rowClassName={record => record.status==0||record.status==2?styles.columnsBgColor:''}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
                  // loading={submitting}
           />
-          <PurchaseOrder />
+          {/* <PurchaseOrder /> */}
         </Card>  
       </div>
     );
   }
 
-  handleChildrenCheck = (record) => {
+  handleViewState(record){
+    console.log(record)
+  //  this.props.dispatch({
+  //     type: 'rolePurchaserBulkPurchases/getSeeData',
+  //     //payload: params,
+  //     payload: {
+  //       purchasesn:record.purchasesn,
+  //       status:record.status
+  //     },
+  //   });
+  //dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
+  //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
+    this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(record)  ));
+    //JSON.parse JSON.stringify
+
+    let type;
+    switch (record.status){
+      
+      case '1':
+          type=1; //询价中
+          console.log(type)
+          break;
+        case '2':
+          type=2; //已报价
+          console.log(type)
+          break;
+        case '3':
+          type=3; //报价中
+          console.log(type)
+          break;
+        case '4':
+          type=4; //已报价(二次)
+          console.log(type)
+          break;
+        case '5':
+          type=5; //已完成
+          console.log(type)
+          break;
+        case '6':
+          type=6; //已关闭
+          console.log(type)
+          break;
+        case '7':
+          type=7; //待提交
+          console.log(type)
+          break;
+        default:
+          console.log(1)
+          break;
+    }
+    //console.log(record)
+    
    
-    this.props.dispatch({
-      type: 'rolePurchaserBulkPurchases/childrenCheck',
-      payload: {}
-    })
   }
+
+
+
+
+
+
+
+
+
+
+
+
+  // handleChildrenCheck = (record) => {
+  //   this.props.dispatch({
+  //     type: 'rolePurchaserBulkPurchases/childrenCheck',
+  //     payload: {}
+  //   })
+  // }
    
 
 }
 
 
-@connect(({rolePurchaserBulkPurchases }) => ({
-  rolePurchaserBulkPurchases
-}))
-class PurchaseOrder extends Component {
+// @connect(({rolePurchaserBulkPurchases }) => ({
+//   rolePurchaserBulkPurchases
+// }))
+// class PurchaseOrder extends Component {
 
-  handleCancel = () => {
-    this.props.dispatch({
-      type:'rolePurchaserBulkPurchases/childrenCheckDelR',
-      payload:false
-    })
-  }
+//   handleCancel = () => {
+//     this.props.dispatch({
+//       type:'rolePurchaserBulkPurchases/childrenCheckDelR',
+//       payload:false
+//     })
+//   }
 
   
 
-  render(){
+//   render(){
     
-    //const { rolePurchaserBulkPurchases:{myqa:{show,tableData:{list,pagination}}} } = this.props;
-    const {rolePurchaserBulkPurchases:{seeList:{show,tableData:{list,pagination}}}} = this.props
-    //console.log('22ok',this.props)
+//     //const { rolePurchaserBulkPurchases:{myqa:{show,tableData:{list,pagination}}} } = this.props;
+//     const {rolePurchaserBulkPurchases:{seeList:{show,tableData:{list,pagination}}}} = this.props
+//     //console.log('22ok',this.props)
 
-    const columns = [
-      {
-        title: '序号',
-        dataIndex: 'keyId',
-        key: 'keyId',
-      }, {
-        title: '询价单号',
-        dataIndex: 'order',
-        key: 'order',
-      }, {
-        title: '询价单标题',
-        dataIndex: 'date',
-        key: 'date',
+//     const columns = [
+//       {
+//         title: '序号',
+//         dataIndex: 'keyId',
+//         key: 'keyId',
+//       }, {
+//         title: '询价单号',
+//         dataIndex: 'order',
+//         key: 'order',
+//       }, {
+//         title: '询价单标题',
+//         dataIndex: 'date',
+//         key: 'date',
         
-      }, {
-        title: '状态',
-        dataIndex: 'goodsTotal',
-        key: 'goodsTotal',
-      }, {
-        title: '操作',
-        dataIndex: 'sendTime',
-        key: 'sendTime',
-        render: (val,record) =>
-          <div>
-            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)} >查看</a><br/>
-          </div>
-      }
-    ];
+//       }, {
+//         title: '状态',
+//         dataIndex: 'goodsTotal',
+//         key: 'goodsTotal',
+//       }, {
+//         title: '操作',
+//         dataIndex: 'sendTime',
+//         key: 'sendTime',
+//         render: (val,record) =>
+//           <div>
+//             <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)} >查看</a><br/>
+//           </div>
+//       }
+//     ];
 
 
 
-    return(
-      <div>
-        <Modal
-          visible= {show}
-          onCancel={this.handleCancel}
-          width={1000}
-        >
-          <Card>
+//     return(
+//       <div>
+//         <Modal
+//           visible= {show}
+//           onCancel={this.handleCancel}
+//           width={1000}
+//         >
+//           <Card>
             
-            <Table dataSource={list}
-                  // scroll={{ x: 1500}}
-                  columns={columns}
-                  onChange={this.handleTableChange}
-                  // loading={submitting}
-                  rowKey={record => record.keyId}
-            />
+//             <Table dataSource={list}
+//                   // scroll={{ x: 1500}}
+//                   columns={columns}
+//                   onChange={this.handleTableChange}
+//                   // loading={submitting}
+//                   rowKey={record => record.keyId}
+//             />
 
-          </Card>
+//           </Card>
          
 
-        </Modal>
-      </div>
-    )
+//         </Modal>
+//       </div>
+//     )
 
-  }
+//   }
 
-}
+// }

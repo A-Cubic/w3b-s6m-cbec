@@ -3,7 +3,7 @@ import {
   // -------- 发起询价 --------------
   getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,
   // -------- 询价列表 --------------
-  getInquiryListData,
+  getInquiryListData,getSeeData,
   // -------- 采购列表 --------------
   getPurchaseListData,
   // -------- 采购列表-采购单 --------------
@@ -41,6 +41,7 @@ export default {
     // -------- 询价列表 --------------
     inquiryList:{
       tableData:{
+        item:"",
         list: [],
         pagination:{},
       },
@@ -166,11 +167,11 @@ export default {
       }
     },
 
-
+    
     // -------- 询价列表 --------------
     *getInquiryListData({ payload },{ call,put }){
       const response = yield call(getInquiryListData, payload);
-      //console.log('~res',response)
+      //console.log('~询价列表res',response)
       if(response!==undefined){
         yield put({
           type: 'getInquiryListDataR',
@@ -179,7 +180,17 @@ export default {
       }
     },
 
-
+     // 询价列表 - 查看 getSeeData
+     *getSeeData({ payload,callback },{ call,put}){
+      const response = yield call(getSeeData, payload);
+       console.log('~查看',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getSeeDataR',
+          payload: response,
+        })
+      }
+    },
 
 
     // -------- 采购列表 --------------
@@ -195,18 +206,21 @@ export default {
       }
     },
 
+   
+
+
     
-    // 查看事件
-    *childrenCheck({ payload }, { call, put }) {
-      const response = yield call(childrenCheck, payload)
-      //console.log('查看事件',response)
-      if (response !== '') {
-        yield put({
-          type: 'childrenCheckR',
-          payload: { response, show: true }
-        })
-      }
-    },
+    // // 木用查看事件
+    // *childrenCheck({ payload }, { call, put }) {
+    //   const response = yield call(childrenCheck, payload)
+    //   //console.log('查看事件',response)
+    //   if (response !== '') {
+    //     yield put({
+    //       type: 'childrenCheckR',
+    //       payload: { response, show: true }
+    //     })
+    //   }
+    // },
 
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
     *getpurchaseOrder({ payload },{ call,put }){
@@ -248,11 +262,19 @@ export default {
     },
     // 发起询价-保存接口
     getPreservationDataR(state, action){
+      const delList = []
       return {
         ...state,
         information:{
           ...state.information,
           tableData:action.payload
+        },
+        initiateInquiry:{
+          ...state.initiateInquiry,
+          tableData:{
+            ...state.initiateInquiry.tableData,
+            list:delList
+          }
         }
       }
     },
@@ -348,10 +370,11 @@ export default {
 
     // -------- 询价列表 --------------
     getInquiryListDataR(state, action){
+     // console.log('action',action)
       return {
         ...state,
-        initiateInquiry:{
-          ...state.initiateInquiry,
+        inquiryList:{
+          ...state.inquiryList,
           tableData:action.payload
         }
       }
@@ -366,18 +389,31 @@ export default {
         }
       }
     },
-    // 查看
-    childrenCheckR(state, action) {
+    // 采购列表 - 查看 getSeeData
+    getSeeDataR(state, action){
+     // console.log(action,state)
       return {
         ...state,
-        seeList: {
-          ...state.seeList,
-          tableData: action.payload.response,
-          //childTestModelVisible:action.payload.childTestModelVisible
-          show: action.payload.show
-        },
-      };
+        inquiryList:{
+          ...state.inquiryList,
+          tableData:action.payload
+        }
+      }
     },
+
+
+    // 查看
+    // childrenCheckR(state, action) {
+    //   return {
+    //     ...state,
+    //     seeList: {
+    //       ...state.seeList,
+    //       tableData: action.payload.response,
+    //       //childTestModelVisible:action.payload.childTestModelVisible
+    //       show: action.payload.show
+    //     },
+    //   };
+    // },
     
     // 采购列表-采购单-点击详情
     getdetailsCheckR(state, action) {

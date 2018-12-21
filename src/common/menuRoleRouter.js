@@ -31,7 +31,8 @@ export default function(dynamicWrapper,app){
     //-------------批量采购-------------
 
     //批量采购-发起询价-
-    '/bulkPurchases/initiateInquiry': {
+    ///trade/order-s/info/:id'
+    '/bulkPurchases/initiateInquiry/:biography': {
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
     },
     //批量采购-询价列表-
