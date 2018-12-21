@@ -149,14 +149,14 @@ export default class consignmentStock extends Component {
     //   dataIndex: 'brand',
     //   key: 'brand',
     // },
-      {
-      title: '保质期（天）',
-      dataIndex: 'shelfLife',
-      key: 'shelfLife',
-      sorter:true,
-        sortOrder:sortedInfo?sortedInfo.columnKey === 'shelfLife' && sortedInfo.order:false,
-        render:val=>`${val}（天）`
-      },
+    //   {
+    //   title: '保质期（天）',
+    //   dataIndex: 'shelfLife',
+    //   key: 'shelfLife',
+    //   sorter:true,
+    //     sortOrder:sortedInfo?sortedInfo.columnKey === 'shelfLife' && sortedInfo.order:false,
+    //     render:val=>`${val}（天）`
+    //   },
     //   {
     //   title: '商品入库时间',
     //   dataIndex: 'createTime',
@@ -203,7 +203,7 @@ export default class consignmentStock extends Component {
         <Card className={styles.mT10}>
           <Table dataSource={list}
                  // scroll={{ x: 1500}}
-                 rowKey={record => record.id}
+                 rowKey={record => record.keyId}
                  columns={columns}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
