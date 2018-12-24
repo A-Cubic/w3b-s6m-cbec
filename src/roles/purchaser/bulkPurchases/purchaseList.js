@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs  } from 'antd';
-import styles from './purchaseList.less';
+import styles from './inquiryList.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
 import {getToken} from "../../../utils/Global";
@@ -15,8 +15,8 @@ const FormItem = Form.Item;
 }))
 
 @Form.create()
-// 采购商 - 采购列表 - 20181211
-export default class PurchaseList extends Component {
+// 采购商 - 采购列表 - 20181224
+export default class inquiryForm extends Component {
   state={
     formValues:{}
   }
@@ -30,10 +30,11 @@ export default class PurchaseList extends Component {
     this.init();
   }
   onSearch=(e)=>{
+    
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
-
+      // console.log('values111',fieldsValue)
+      console.log('this.props',this.props.rolePurchaserBulkPurchases.inquiryList.tableData.pagination)
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
@@ -49,6 +50,8 @@ export default class PurchaseList extends Component {
         type: 'rolePurchaserBulkPurchases/getPurchaseListData',
         payload: {
           ...values,
+          current:this.props.rolePurchaserBulkPurchases.purchaseList.tableData.pagination.current,
+          pageSize:this.props.rolePurchaserBulkPurchases.purchaseList.tableData.pagination.pageSize
         },
       });
     });
@@ -66,46 +69,71 @@ export default class PurchaseList extends Component {
       ...pagination,
       ...this.state.formValues,
     };
+    console.log('params',params)
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/getPurchaseListData',
-      payload: params,
+      //payload: params,
+      payload: {
+        ...params,
+      },
     });
   }
   renderForm(){
-    ///console.log('list',this.props)
-    //const { getFieldDecorator } = this.props.form;
-
+    //console.log(this.props.rolePurchaserBulkPurchases.inquiryList.tableData)
     const { rolePurchaserBulkPurchases:{purchaseList:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-   // console.log('list2',this.props)
-     
+
+
+    //console.log('询价~~~',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="">
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={12} sm={24}>
+            <FormItem label="单据日期：">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
             </FormItem>
           </Col>
           
-          <Col md={8} sm={24}>
-            <FormItem label="采购单号">
-              {getFieldDecorator('order')(
+          <Col md={12} sm={24}>
+            <FormItem label="采购单号：">
+              {getFieldDecorator('select')(
                 <Input placeholder="请输入采购单号进行搜索" />
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <Button type="primary" htmlType="submit">查询</Button>
+
+        </Row>
+        <Row>
+          <Col md={12} sm={24}>
+            <FormItem label="结算状态">
+              {getFieldDecorator('status',{
+              })(
+                <Select
+                  placeholder="请选择"
+                  optionFilterProp="label"
+                  // onChange={this.onSelectChange}
+                >
+                  {/* <Option value="">全部</Option> */}
+                  <Option value="1">待完成</Option>
+                  <Option value="2">已完成</Option>
+                  <Option value="9">已关闭</Option>
+                 
+                  
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={10} sm={24}>
+            <Button style={{ marginLeft:26 }} type="primary" htmlType="submit">搜索</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-          </Col>        
+          </Col>
         </Row>
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-          
+            {/*<span>共查询出符合条件的数据：{tableData?tableData.list.length:0} </span>*/}
           </div>
         </div>
       </Form>
@@ -113,14 +141,7 @@ export default class PurchaseList extends Component {
   }
 
   render() {
-    
-    // const paginationProps = {
-    //   showSizeChanger: true,
-    //   showQuickJumper: true,
-    //   ...pagination,
-    // };
 
-    //console.log('fs',this.props)
     const { rolePurchaserBulkPurchases:{purchaseList:{tableData:{list, pagination}}} } = this.props;   
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
@@ -128,7 +149,7 @@ export default class PurchaseList extends Component {
       showQuickJumper: true,
       ...pagination,
     };
-    
+
 
     const columns = [
       {
@@ -137,27 +158,42 @@ export default class PurchaseList extends Component {
         key: 'keyId',
       }, {
         title: '采购单号',
-        dataIndex: 'order',
-        key: 'order',
+        dataIndex: 'purchasesn',
+        key: 'purchasesn',
       }, {
         title: '采购日期',
-        dataIndex: 'date',
-        key: 'date',
-        //render:val=>`${val==1?'收货单':'退货单'}`
-      }, {
+        dataIndex: 'purchaseTime',
+        key: 'purchaseTime',
+      },{
         title: '数量',
-        dataIndex: 'goodsTotal',
-        key: 'goodsTotal',
-      }, {
+        dataIndex: 'num',
+        key: 'num',
+        //render:val=>`${val==1?'收货单':'退货单'}`
+      }, ,{
         title: '金额',
+        dataIndex: 'money',
+        key: 'money',
+        //render:val=>`${val==1?'收货单':'退货单'}`
+      },{
+        title: '状态',
+        dataIndex: 'stage',
+        render: (val) => {
+          return(<div>
+            {['','待完成','已完成','','','','','','','已关闭',][`${val}`]}
+          </div>)
+        }
+      }, {
+        title: '操作',
         dataIndex: 'sendTime',
         key: 'sendTime',
-      },{
-        title: '操作',
-        dataIndex: 'sendName',
-        key: 'sendName',
+        render: (val,record) =>
+          <div>
+            <a href="javascript:;" onClick={()=>this.handleViewState(record)} >查看</a><br/>
+          </div>
       }
     ];
+
+    
     return (
       <div className={styles.qa}>
         <Card bordered={false}>
@@ -167,30 +203,65 @@ export default class PurchaseList extends Component {
             </div>
           </div>
         
-          {/* <Table dataSource={[]}
-                 showHeader={false}
+          <Table dataSource={list}
                  // scroll={{ x: 1500}}
                  rowKey={record => record.keyId}
                  columns={columns}
-                 // pagination={paginationProps}
-                 // onChange={this.handleTableChange}
-                 // loading={submitting}
-          /> */}
-
-          <Table dataSource={list}
-                
-                 rowKey={record => record.keyId}
-                 columns={columns}
-                 rowClassName={record => record.status==0||record.status==2?styles.columnsBgColor:''}
+                 //rowClassName={record => record.status==0||record.status==2?styles.columnsBgColor:''}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
-                 
+                 // loading={submitting}
           />
-        </Card>
+          {/* <PurchaseOrder /> */}
+        </Card>  
       </div>
     );
   }
 
-}
+  handleViewState(record){
+    console.log(record)
+  //  this.props.dispatch({
+  //     type: 'rolePurchaserBulkPurchases/getSeeData',
+  //     //payload: params,
+  //     payload: {
+  //       purchasesn:record.purchasesn,
+  //       status:record.status
+  //     },
+  //   });
+  //dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
+  //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
+    const data = {purchasesn:record.purchasesn,stage:record.stage}
+    this.props.dispatch(routerRedux.push('/bulkPurchases/listDetails/' + JSON.stringify(data)  ));
+    console.log(record) 
+    
+    //JSON.parse JSON.stringify
 
+    let type;
+    switch (record.stage){
+    
+      case '1':
+          type=1; //待完成
+          console.log(type)
+          break;
+        case '2':
+          type=2; //已完成
+          console.log(type)
+          break;
+        case '9':
+          type=9; //已关闭
+          console.log(type)
+          break;
+       
+        default:
+          console.log(1)
+          break;
+    }
+    //console.log(record)
+    
+   
+  }
+
+
+
+}
 

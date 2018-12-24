@@ -42,7 +42,7 @@ export default class inquiryList extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values111',fieldsValue)
-      console.log('this.props',this.props.rolePurchaserBulkPurchases.inquiryList.tableData.pagination)
+     // console.log('this.props',this.props.rolePurchaserBulkPurchases.inquiryList.tableData.pagination)
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
@@ -123,7 +123,7 @@ export default class inquiryList extends Component {
                   optionFilterProp="label"
                   // onChange={this.onSelectChange}
                 >
-                  <Option value="">全部</Option>
+                  {/* <Option value="">全部</Option> */}
                   <Option value="1">询价中</Option>
                   <Option value="2">已报价</Option>
                   <Option value="3">报价中</Option>
@@ -284,101 +284,5 @@ export default class inquiryList extends Component {
 
 
 
-
-
-
-
-
-
-
-
-
-  // handleChildrenCheck = (record) => {
-  //   this.props.dispatch({
-  //     type: 'rolePurchaserBulkPurchases/childrenCheck',
-  //     payload: {}
-  //   })
-  // }
-   
-
 }
 
-
-// @connect(({rolePurchaserBulkPurchases }) => ({
-//   rolePurchaserBulkPurchases
-// }))
-// class PurchaseOrder extends Component {
-
-//   handleCancel = () => {
-//     this.props.dispatch({
-//       type:'rolePurchaserBulkPurchases/childrenCheckDelR',
-//       payload:false
-//     })
-//   }
-
-  
-
-//   render(){
-    
-//     //const { rolePurchaserBulkPurchases:{myqa:{show,tableData:{list,pagination}}} } = this.props;
-//     const {rolePurchaserBulkPurchases:{seeList:{show,tableData:{list,pagination}}}} = this.props
-//     //console.log('22ok',this.props)
-
-//     const columns = [
-//       {
-//         title: '序号',
-//         dataIndex: 'keyId',
-//         key: 'keyId',
-//       }, {
-//         title: '询价单号',
-//         dataIndex: 'order',
-//         key: 'order',
-//       }, {
-//         title: '询价单标题',
-//         dataIndex: 'date',
-//         key: 'date',
-        
-//       }, {
-//         title: '状态',
-//         dataIndex: 'goodsTotal',
-//         key: 'goodsTotal',
-//       }, {
-//         title: '操作',
-//         dataIndex: 'sendTime',
-//         key: 'sendTime',
-//         render: (val,record) =>
-//           <div>
-//             <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)} >查看</a><br/>
-//           </div>
-//       }
-//     ];
-
-
-
-//     return(
-//       <div>
-//         <Modal
-//           visible= {show}
-//           onCancel={this.handleCancel}
-//           width={1000}
-//         >
-//           <Card>
-            
-//             <Table dataSource={list}
-//                   // scroll={{ x: 1500}}
-//                   columns={columns}
-//                   onChange={this.handleTableChange}
-//                   // loading={submitting}
-//                   rowKey={record => record.keyId}
-//             />
-
-//           </Card>
-         
-
-//         </Modal>
-//       </div>
-//     )
-
-//   }
-
-// }

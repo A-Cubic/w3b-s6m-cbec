@@ -34,34 +34,90 @@ export default function rolePurchaserBulkPurchasesMock(url) {
    'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
     //'POST /llback/Purchase/InquiryList': 'http://192.168.191.1:54195/',
 
-
     //询价列表 - 查看
     'POST /llback/Warehouse/getSeeData': see,  
    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
     // -------- 采购列表 --------------
-    'POST /llback/Warehouse/getPurchaseListData': getPayment,
+    //'POST /llback/Warehouse/getPurchaseListData': listOfEnquiries,//getPurchaseListData
+    'POST /llback/Purchase/PurchaseList': 'http://192.168.191.1:54195/',
 
-    // 查看
-   // 'POST /llback/Warehouse/getpurchaseOrder': getPayment,
+    // -------- 询价列表/采购列表 --------------
+    'POST /llback/Warehouse/getpurchaseOrder': getPurchaseListData,
+    //'POST /llback/Purchase/PurchaseDetails': 'http://192.168.191.1:54195/',
+
+    //询价列表/采购列表-点击详情   
+    'POST /llback/Purchase/PurchaseDetails': getPurchaseOrder,
     
-   'POST /llback/Warehouse/getClickDetails': getPurchaseOrder,
-
-
-
-
-
-
-
-
-
-
-    // -------- 询价列表/采购列表 - 查看列表详情 --------------
-    'POST /llback/Warehouse/getpurchaseOrder': getPurchaseOrder,
-
-    // -------- 询价列表/采购列表 - 点击详情 --------------
-    'POST /llback/Warehouse/getdetailsCheck': getPayment,
   };
+}
+
+
+//- ------- 采购列表 --------------
+export function getPurchaseListData(req, res) {
+  res.send({
+    item: {
+      sendType: "日本提货",
+      status:"1",
+      contacts: "张",
+      sex: "1",
+      tel: "13681313111",
+      deliveryTime: "2018.10.11",
+      remark: "asda大",
+      tax: "0.00",
+      waybillfee: "0.00",
+      purchasePrice: "0.00",
+    },
+    list: [
+        {
+          keyId: "1",
+          purchasesn: "2018121313045638",
+          goodsName: "兰芝精华液",
+          barcode: "11111",
+          brand: "",
+          total: "10",
+          maxAvailableNum: "140",
+          minAvailableNum: "10",
+          supplyPrice: "16.67",
+          purchaseNum: "60",
+          totalPrice: "1000",
+          supplierNumType: "1"
+        },
+        {
+          keyId: "2",
+          purchasesn: "2018121313045638",
+          goodsName: "2兰芝精华液",
+          barcode: "21111",
+          brand: "2",
+          total: "20",
+          maxAvailableNum: "2140",
+          minAvailableNum: "210",
+          supplyPrice: "216.67",
+          purchaseNum: "260",
+          totalPrice: "2000",
+          supplierNumType: "2"
+        },
+        {
+          keyId: "3",
+          purchasesn: "32018121313045638",
+          goodsName: "32兰芝精华液",
+          barcode: "321111",
+          brand: "32",
+          total: "320",
+          maxAvailableNum: "32140",
+          minAvailableNum: "3210",
+          supplyPrice: "3216.67",
+          purchaseNum: "3260",
+          totalPrice: "32000",
+          supplierNumType: "3"
+        },
+    ],
+    pagination: {
+        current: 1,
+        total: 1,
+        pageSize: 10
+    }
+  })
 }
 //   -------- 询价列表 --------------
 export function listOfEnquiries(req, res) {
@@ -76,14 +132,36 @@ export function listOfEnquiries(req, res) {
           purchasesn: "1018121316055337",
           createtime: "2018.12.17",
           remark: "asda大",
-          status: "1"
+          status: "1",
+          purchaseTime: "2018.12.21",
+          num: "60",
+          money: "1,000.00",
+          stage: "1"
+          
         },
         {
           keyId: "2",
           purchasesn: "2018121316055337",
           createtime: "2018.12.17",
           remark: "2asda大",
-          status: "7"
+          status: "7",
+          purchaseTime: "2018.12.21",
+          num: "60",
+          money: "1,000.00",
+          stage: "2"
+
+        },
+        {
+          keyId: "3",
+          purchasesn: "2018121316055337",
+          createtime: "2018.12.17",
+          remark: "2asda大",
+          status: "3",
+          purchaseTime: "2018.12.21",
+          num: "60",
+          money: "1,000.00",
+          stage: "9"
+
         }
     ],
     pagination: {
@@ -278,28 +356,27 @@ export function UpdateDistributor(req, res) {
 export function getPurchaseOrder(req, res) {
   res.send({
     list: [{
-      keyId: '1',
-      brand: 'nike',
-      order: '215451245',
-      goodsName: 'XX',
-      goMoney: '2000.00',
+      keyId: "1",
+      id: "314",
+      supplyId: "GH1",
+      minOfferNum: "0",
+      maxOfferNum: "100",
+      offerPrice: "10",
+      demand: "500",
+      purchaseAmount: "5000"
 
     }, {
-      keyId: '2',
-      brand: 'adds',
-      order: '315451245',
-      goodsName: 'JJ',
-      goMoney: '3000.00',
+      keyId: "2",
+      id: "3214",
+      supplyId: "2GH1",
+      minOfferNum: "20",
+      maxOfferNum: "2100",
+      offerPrice: "210",
+      demand: "2500",
+      purchaseAmount: "25000"
     }],
     item: {
-      name: 'XXX',
-      sex: '男',
-      phone: '1355555555555',
-      data: '2019.09.01',
-      describe: '兰芝化妆品',
-      goodsmoney: '2000',
-      freight: '150',
-      taxation: '200.00',
+      
 
     },
   });
