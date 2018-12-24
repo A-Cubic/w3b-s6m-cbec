@@ -30,18 +30,18 @@ export default class initiateInquiry extends Component {
   componentDidMount() {
     //this.init();
     const {match,dispatch}=this.props;
-    console.log('fs',JSON.parse(match.params.biography))
+    //console.log('fs',JSON.parse(match.params.biography))
     //const b=JSON.parse(match.params.biography)}
     
-    const b = JSON.parse(match.params.biography)
-    console.log('b',b)
+    const getData = JSON.parse(match.params.biography)
+    //console.log('getData',getData)
 
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/getSeeData',
       //payload: params,
       payload: {
-        purchasesn:b.purchasesn,
-        status:b.status
+        purchasesn:getData.purchasesn,
+        status:getData.status
       },
     });
 

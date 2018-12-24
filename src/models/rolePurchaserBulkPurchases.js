@@ -9,8 +9,8 @@ import {
   // -------- 采购列表-采购单 --------------
   getpurchaseOrder,
   // -------- 采购列表-采购单-点击详情 --------------
-  getdetailsCheck,
-  
+  getdetailsCheck,getClickDetails,
+
   //查看
   childrenCheck
 } from '../services/rolePurchaserBulkPurchases_S'
@@ -206,11 +206,32 @@ export default {
       }
     },
 
-   
+    // // 采购列表 - 点击详情
+    // *getdetailsCheckDel({ payload }, { call, put }) {
+    //   const response = yield call(getdetailsCheckDel, payload)
+    //   console.log('查看事件',response)
+    //   if (response !== '') {
+    //     yield put({
+    //       type: 'getdetailsCheckDelR',
+    //       payload: { response, show: true }
+    //     })
+    //   }
+    // },
+    //getClickDetails
+    *getClickDetails({ payload },{ call,put }){
+      const response = yield call(getClickDetails, payload);
+      console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getClickDetailsR',
+          payload: {response,show: true}
+        })
+      }
+    },
 
 
     
-    // // 木用查看事件
+    // 木用查看事件
     // *childrenCheck({ payload }, { call, put }) {
     //   const response = yield call(childrenCheck, payload)
     //   //console.log('查看事件',response)
@@ -225,7 +246,7 @@ export default {
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
     *getpurchaseOrder({ payload },{ call,put }){
       const response = yield call(getpurchaseOrder, payload);
-      //console.log('~查看列表详情',response)
+      //console.log('~xxxxxxxxxx查看列表详情',response)
       if(response!==undefined){
         yield put({
           type: 'getpurchaseOrderR',
@@ -234,11 +255,12 @@ export default {
       }
     },
   },
-
+  
   // 采购列表-采购单-点击详情
   *getdetailsCheck({ payload }, { call, put }) {
+    console.log()
     const response = yield call(getdetailsCheck, payload)
-    //console.log('查看事件',response)
+    console.log('查看事件',response)
     if (response !== '') {
       yield put({
         type: 'getdetailsCheckR',
@@ -300,18 +322,6 @@ export default {
         
       }
     },
-
-    // return {
-    //   ...state,
-    //   initiateInquiry:{
-    //     ...state.initiateInquiry,
-    //     tableData:{
-    //       ...state.initiateInquiry.tableData,
-    //       list:newData
-    //     }
-    //   }
-    // }
-
 
 
     //  发起询价- 分页 
@@ -391,14 +401,21 @@ export default {
     },
     // 采购列表 - 查看 getSeeData
     getSeeDataR(state, action){
-     // console.log(action,state)
+     console.log('action',action.payload)
+     console.log('state',state.initiateInquiry.information)
       return {
         ...state,
-        inquiryList:{
-          ...state.inquiryList,
+        initiateInquiry:{
+          ...state.initiateInquiry,
+          pur:action.payload.list[0].purchasesn,
           tableData:action.payload
-        }
+        },
+        information:{
+          ...state.initiateInquiry.information,
+          information:action.payload
+        },
       }
+
     },
 
 
@@ -417,6 +434,7 @@ export default {
     
     // 采购列表-采购单-点击详情
     getdetailsCheckR(state, action) {
+     
       return {
         ...state,
         detailsList: {
@@ -437,7 +455,23 @@ export default {
         }
       }
     },
-     // 采购列表-采购单-点击详情-隐藏
+    //getClickDetailsR
+    getClickDetailsR(state, action) {
+      return {
+        ...state,
+        detailsList: {
+          ...state.detailsList,
+          tableData: action.payload.response,
+          //childTestModelVisible:action.payload.childTestModelVisible
+          show: action.payload.show
+        },
+      };
+    },
+
+
+
+
+     // 采购列表-采购单-点击详情-隐藏 错误
      getdetailsCheckDelR(state, action) {
       return {
         ...state,

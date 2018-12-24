@@ -44,14 +44,6 @@ export default class listDetails extends Component {
 
 
   render() {
-
-    // const paginationProps = {
-    //   showSizeChanger: true,
-    //   showQuickJumper: true,
-    //   ...pagination,
-    // };
-
-    
     const { rolePurchaserBulkPurchases:{listDetails:{tableData:{item,list, pagination}}} } = this.props;
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
@@ -60,7 +52,7 @@ export default class listDetails extends Component {
       ...pagination,
     };
 
-    //console.log('fs',this.props)
+    console.log('xxxxxxxxxxxfs',this.props)
     const columns = [
       {
         title: '序号',
@@ -68,8 +60,8 @@ export default class listDetails extends Component {
         key: 'keyId',
       }, {
         title: '采购商品名称',
-        dataIndex: 'date',
-        key: 'date',
+        dataIndex: 'purchasesn',
+        key: 'purchasesn',
       }, {
         title: '采购商品条码',
         dataIndex: 'order',
@@ -96,14 +88,14 @@ export default class listDetails extends Component {
     return (
       <div >
         <Card bordered={false} >
-
+        
           <div className={styles.titleName}>采购单</div>
           <div className={styles.takeGoods}>
             <span></span>
             提货信息
           </div>
           <div className={styles.takeAdd}>
-            <p>提货地点：{item.supplierName}</p>
+            <p>提货地点：</p>
           </div>
           <div className={styles.line}></div>
           <div className={styles.takeGoods}>
@@ -111,9 +103,9 @@ export default class listDetails extends Component {
             采购商信息
           </div>
           <div className={styles.information}>
-            <p>姓名：{item.printer}{item.dateOfPrinting}</p>
-            <p>联系电话：{item.supplierName}</p>
-            <p>采购截止日期：{item.supplierName}</p>
+            <p>姓名：</p>
+            <p>联系电话：</p>
+            <p>采购截止日期：</p>
           </div>
           <div className={styles.line}></div>
           <div className={styles.takeGoods}>
@@ -121,7 +113,7 @@ export default class listDetails extends Component {
             采购商品
           </div>
           <div className={styles.describe}>
-            <p>询价单描述：<span>{item.supplierName}</span></p>
+            <p>询价单描述：<span></span></p>
           </div>
           <Table dataSource={list}
 
@@ -137,7 +129,7 @@ export default class listDetails extends Component {
             费用计算
           </div>
           <div className={styles.money}>
-          商品金额：<span>{item.money}</span>　运费：<span>￥200.00</span>　税费：<span>￥200.00</span>
+          商品金额：<span></span>　运费：<span>￥200.00</span>　税费：<span>￥200.00</span>
           </div>
           <PurchaseOrder />
         </Card>
@@ -145,9 +137,8 @@ export default class listDetails extends Component {
     );
   }
   handleDetailsCheck = (record) => {
-   console.log(1111)
     this.props.dispatch({
-      type: 'rolePurchaserBulkPurchases/getdetailsCheck',
+      type: 'rolePurchaserBulkPurchases/getClickDetails',
       payload: {}
     })
   }
@@ -170,7 +161,7 @@ class PurchaseOrder extends Component {
   render(){
     
     const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
-    console.log('22ok',this.props)
+    //console.log('22ok',this.props)
 
     const columns = [
       {
@@ -209,7 +200,14 @@ class PurchaseOrder extends Component {
         >
           <Card>
 
-              <div>11111</div>
+              {/* <div>11111</div> */}
+              <Table dataSource={list}
+                // scroll={{ x: 1500}}
+                columns={columns}
+                onChange={this.handleTableChange}
+                // loading={submitting}
+                rowKey={record => record.keyId}
+              />
 
           </Card>
          

@@ -17,8 +17,8 @@ export async function getPreservationData(params) {
 }
 // 发起询价- 提交
 export async function getSubmissionData(params) {
-  //return request(`/llback/Warehouse/getSubmissionData`,{
-  return request(`/llback/Purchase/InquirySubmission`,{
+  return request(`/llback/Warehouse/getSubmissionData`,{
+  //return request(`/llback/Purchase/InquirySubmission`,{
     method: 'POST',
     body: params,
   })
@@ -96,9 +96,19 @@ export async function getpurchaseOrder(params) {
   });
 }
 
+
+
 // -------- 询价列表/采购列表 - 点击详情 --------------
 export async function getdetailsCheck(params) {
   return request(`/llback/Warehouse/getdetailsCheck`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//getClickDetails
+export async function getClickDetails(params) {
+  return request(`/llback/Warehouse/getClickDetails`, {
     method: 'POST',
     body: params,
   });

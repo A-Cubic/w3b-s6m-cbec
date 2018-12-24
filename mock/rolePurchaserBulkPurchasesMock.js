@@ -8,8 +8,8 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     'POST /llback/Purchase/InquiryPreservation': 'http://192.168.191.1:54195/',
 
     // 发起询价 - 提交
-    //'POST /llback/Warehouse/getSubmissionData': getPayment,
-    'POST /llback/Purchase/InquirySubmission': 'http://192.168.191.1:54195/',
+    'POST /llback/Warehouse/getSubmissionData': getPayment,
+    //'POST /llback/Purchase/InquirySubmission': 'http://192.168.191.1:54195/',
 
 
 
@@ -36,15 +36,16 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     //询价列表 - 查看
-    'POST /llback/Warehouse/getSeeData': listOfEnquiries,  
+    'POST /llback/Warehouse/getSeeData': see,  
    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
     // -------- 采购列表 --------------
     'POST /llback/Warehouse/getPurchaseListData': getPayment,
 
     // 查看
-   // 'POST /llback/Warehouse/getSeeData': getPurchaseOrder,
-
+   // 'POST /llback/Warehouse/getpurchaseOrder': getPayment,
+    
+   'POST /llback/Warehouse/getClickDetails': getPurchaseOrder,
 
 
 
@@ -56,7 +57,7 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
-    'POST /llback/Warehouse/getpurchaseOrder': getPayment,
+    'POST /llback/Warehouse/getpurchaseOrder': getPurchaseOrder,
 
     // -------- 询价列表/采购列表 - 点击详情 --------------
     'POST /llback/Warehouse/getdetailsCheck': getPayment,
@@ -67,7 +68,7 @@ export function listOfEnquiries(req, res) {
   res.send({
     item: {
       msg: null,
-      type: "1"
+      type: "1",
     },
     list: [
         {
@@ -83,6 +84,48 @@ export function listOfEnquiries(req, res) {
           createtime: "2018.12.17",
           remark: "2asda大",
           status: "7"
+        }
+    ],
+    pagination: {
+        current: 1,
+        total: 1,
+        pageSize: 10
+    }
+  })
+}
+// 查看接口
+export function see(req, res) {
+  res.send({
+    item: {
+      msg: null,
+      type: "1",
+      sendType: "日本提货",
+      status:"1",
+      contacts: "张",
+      sex: "1",
+      tel: "13681313111",
+      deliveryTime: "2018.10.11",
+      remark: "asda大",
+      tax: "0.00",
+      waybillfee: "0.00",
+      purchasePrice: "0.00"
+    },
+    list: [
+        {
+          keyId: "1",
+          purchasesn: "2018121313045638",
+          goodsName: "兰芝精华液",
+          barcode: "11111",
+          brand: "1111",
+          total: "100"
+        },
+        {
+          keyId: "2",
+          purchasesn: "2018121313045638",
+          goodsName: "2兰芝精华液",
+          barcode: "21111",
+          brand: "2222",
+          total: "2100"
         }
     ],
     pagination: {
@@ -131,6 +174,7 @@ export function del(req, res) {
 export function getPayment(req, res) {
   res.send({
     item: null,
+    supplierName:'1',
     list: [
       {
         keyId: "2",

@@ -225,7 +225,7 @@ export default class inquiryList extends Component {
   }
 
   handleViewState(record){
-    console.log(record)
+    //console.log(record)
   //  this.props.dispatch({
   //     type: 'rolePurchaserBulkPurchases/getSeeData',
   //     //payload: params,
@@ -236,7 +236,10 @@ export default class inquiryList extends Component {
   //   });
   //dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
   //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
-    this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(record)  ));
+    if(record.status === '7'){
+      this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(record)  ));
+    }
+    
     //JSON.parse JSON.stringify
 
     let type;
