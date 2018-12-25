@@ -54,7 +54,7 @@ export default function(dynamicWrapper,app){
 
     //------------增加-------
     //批量采购 - 询价中
-    '/bulkPurchases/inTheInquiry': {
+    '/bulkPurchases/inTheInquiry/:biography': {
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/inTheInquiry')),
     },
     //批量采购 - 报价中/已报价（二次）/已完成

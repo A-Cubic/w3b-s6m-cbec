@@ -219,7 +219,7 @@ export default class inquiryForm extends Component {
   }
 
   handleViewState(record){
-    console.log(record)
+   // console.log(record)
   //  this.props.dispatch({
   //     type: 'rolePurchaserBulkPurchases/getSeeData',
   //     //payload: params,
@@ -232,7 +232,7 @@ export default class inquiryForm extends Component {
   //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
     const data = {purchasesn:record.purchasesn,stage:record.stage}
     this.props.dispatch(routerRedux.push('/bulkPurchases/listDetails/' + JSON.stringify(data)  ));
-    console.log(record) 
+    //console.log(record) 
     
     //JSON.parse JSON.stringify
 

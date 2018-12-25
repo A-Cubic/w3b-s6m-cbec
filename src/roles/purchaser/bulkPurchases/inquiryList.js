@@ -225,7 +225,7 @@ export default class inquiryList extends Component {
   }
 
   handleViewState(record){
-    //console.log(record)
+    console.log('xxxrecord',record)
   //  this.props.dispatch({
   //     type: 'rolePurchaserBulkPurchases/getSeeData',
   //     //payload: params,
@@ -236,8 +236,11 @@ export default class inquiryList extends Component {
   //   });
   //dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
   //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
+    const getdata = {purchasesn:record.purchasesn,status:record.status}
     if(record.status === '7'){
-      this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(record)  ));
+      this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(getdata)  ));
+    } else if(record.status === '1'){
+      this.props.dispatch(routerRedux.push('/bulkPurchases/inTheInquiry/' + JSON.stringify(getdata)  ));
     }
     
     //JSON.parse JSON.stringify

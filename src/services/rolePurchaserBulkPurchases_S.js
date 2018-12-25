@@ -69,7 +69,14 @@ export async function getSeeData(params) {
     body: params,
   })
 }
-
+// 询价列表 - 询价中
+export async function getlistInquiry(params) {
+  return request(`/llback/Warehouse/getlistInquiry`,{
+  //return request(`/llback/Purchase/InquiryListDetailed`,{
+    method: 'POST',
+    body: params,
+  })
+}
 
 
 // -------- 采购列表 --------------
@@ -82,19 +89,31 @@ export async function getPurchaseListData(params) {
 }
 
 
-// -------- 询价列表/采购列表 --------------
+//  采购列表 - 查看   询价列表/
 export async function getpurchaseOrder(params) {
-  return request(`/llback/Warehouse/getpurchaseOrder`, {
-   // return request(`/llback/Purchase/PurchaseDetails`, {
+  return request(`/llback/Purchase/PurchaseDetails`, {
     method: 'POST',
     body: params,
   });
 }
 
 
-// -------- 询价列表/采购列表 - 点击详情 --------------
+//  询价列表/采购列表 - 点击详情 
+
+
 export async function getClickDetails(params) {
-  return request(`/llback/Warehouse/getClickDetails`, {
+  //return request(`/llback/Warehouse/getClickDetails`, {
+  return request(`/llback/Purchase/OtherGoodsDetails`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//  采购列表- 分页 
+export async function getpurchasepaging(params) {
+  //return request(`/llback/Warehouse/getClickDetails`, {
+// return request(`/llback/Purchase/getpurchasepaging`, {
+  return request(`/llback/Purchase/OtherInquiryPagesn`, {
     method: 'POST',
     body: params,
   });

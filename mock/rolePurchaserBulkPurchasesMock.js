@@ -38,16 +38,27 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     'POST /llback/Warehouse/getSeeData': see,  
    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
+    //询价列表 - 询价中
+    'POST /llback/Warehouse/getlistInquiry': see,
+    //'POST /llback/Purchase/PurchaseDetails': 'http://192.168.191.1:54195/',
+
+
+
     // -------- 采购列表 --------------
     //'POST /llback/Warehouse/getPurchaseListData': listOfEnquiries,//getPurchaseListData
     'POST /llback/Purchase/PurchaseList': 'http://192.168.191.1:54195/',
 
-    // -------- 询价列表/采购列表 --------------
-    'POST /llback/Warehouse/getpurchaseOrder': getPurchaseListData,
-    //'POST /llback/Purchase/PurchaseDetails': 'http://192.168.191.1:54195/',
+    // 采购列表 - 查看  询价列表
+    //'POST /llback/Purchase/PurchaseDetails': getPurchaseOrder,
+    'POST /llback/Purchase/PurchaseDetails': 'http://192.168.191.1:54195/',
+    //  采购列表 - 分页
+    //'POST /llback/Purchase/getpurchasepaging': getPurchaseOrder,
+    'POST /llback/Purchase/OtherInquiryPagesn': 'http://192.168.191.1:54195/',
+
 
     //询价列表/采购列表-点击详情   
-    'POST /llback/Purchase/PurchaseDetails': getPurchaseOrder,
+     //'POST /llback/Warehouse/getClickDetails': getPurchaseOrder,
+     'POST /llback/Purchase/OtherGoodsDetails': 'http://192.168.191.1:54195/',
     
   };
 }
@@ -70,7 +81,7 @@ export function getPurchaseListData(req, res) {
     },
     list: [
         {
-          keyId: "1",
+          keyId: "2",
           purchasesn: "2018121313045638",
           goodsName: "兰芝精华液",
           barcode: "11111",
@@ -84,7 +95,7 @@ export function getPurchaseListData(req, res) {
           supplierNumType: "1"
         },
         {
-          keyId: "2",
+          keyId: "3",
           purchasesn: "2018121313045638",
           goodsName: "2兰芝精华液",
           barcode: "21111",
@@ -98,7 +109,7 @@ export function getPurchaseListData(req, res) {
           supplierNumType: "2"
         },
         {
-          keyId: "3",
+          keyId: "4",
           purchasesn: "32018121313045638",
           goodsName: "32兰芝精华液",
           barcode: "321111",
@@ -128,7 +139,7 @@ export function listOfEnquiries(req, res) {
     },
     list: [
         {
-          keyId: "1",
+          keyId: "11",
           purchasesn: "1018121316055337",
           createtime: "2018.12.17",
           remark: "asda大",
@@ -140,11 +151,11 @@ export function listOfEnquiries(req, res) {
           
         },
         {
-          keyId: "2",
+          keyId: "12",
           purchasesn: "2018121316055337",
           createtime: "2018.12.17",
           remark: "2asda大",
-          status: "7",
+          status: "2",
           purchaseTime: "2018.12.21",
           num: "60",
           money: "1,000.00",
@@ -160,9 +171,57 @@ export function listOfEnquiries(req, res) {
           purchaseTime: "2018.12.21",
           num: "60",
           money: "1,000.00",
-          stage: "9"
+          stage: "3"
 
-        }
+        },
+        {
+          keyId: "4",
+          purchasesn: "2018121316055337",
+          createtime: "2018.12.17",
+          remark: "2asda大",
+          status: "4",
+          purchaseTime: "2018.12.21",
+          num: "60",
+          money: "1,000.00",
+          stage: "4"
+
+        },
+        {
+          keyId: "5",
+          purchasesn: "2018121316055337",
+          createtime: "2018.12.17",
+          remark: "2asda大",
+          status: "5",
+          purchaseTime: "2018.12.21",
+          num: "60",
+          money: "1,000.00",
+          stage: "5"
+
+        },
+        {
+          keyId: "6",
+          purchasesn: "2018121316055337",
+          createtime: "2018.12.17",
+          remark: "2asda大",
+          status: "6",
+          purchaseTime: "2018.12.21",
+          num: "60",
+          money: "1,000.00",
+          stage: "6"
+
+        },
+        {
+          keyId: "7",
+          purchasesn: "2018121316055337",
+          createtime: "2018.12.17",
+          remark: "2asda大",
+          status: "7",
+          purchaseTime: "2018.12.21",
+          num: "60",
+          money: "1,000.00",
+          stage: "7"
+
+        },
     ],
     pagination: {
         current: 1,
@@ -224,7 +283,7 @@ export function del(req, res) {
     list: [
         {
           keyId: "1",
-          purchasesn: "2018121313045638",
+          purchasesn: "20181213130456387",
           goodsName: "兰芝精华液",
           barcode: "11111",
           brand: "",
@@ -256,7 +315,7 @@ export function getPayment(req, res) {
     list: [
       {
         keyId: "2",
-        purchasesn: "2018121313045638",
+        purchasesn: "2018121313045635",
         goodsName: "2兰芝精华液",
         barcode: "211111",
         brand: "2",

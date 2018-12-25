@@ -6,6 +6,7 @@ import styles from './listDetails.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
 import {getToken} from "../../../utils/Global";
+import { isRegExp } from 'util';
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -22,7 +23,7 @@ export default class listDetails extends Component {
   }
   init(){
     const {match,dispatch}=this.props;
-    console.log('match',match)
+   // console.log('match',match)
     const getData = JSON.parse(match.params.biography)
     this.props.dispatch({
       type:'rolePurchaserBulkPurchases/getpurchaseOrder',
@@ -36,15 +37,23 @@ export default class listDetails extends Component {
     this.init();
   }
 
-
+  //分页 
   handleTableChange=(pagination, filters, sorter)=>{
     const params = {
       ...pagination,
       ...this.state.formValues,
     };
+   // console.log('11111',this.props.rolePurchaserBulkPurchases.listDetails.tableData.list[0].purchasesn)
+   // console.log('22222',this.props.rolePurchaserBulkPurchases.listDetails.tableData.item.stage)
     this.props.dispatch({
+      // type: 'rolePurchaserBulkPurchases/getpurchasepaging',
       type: 'rolePurchaserBulkPurchases/getpurchaseOrder',
-      payload: params,
+     // payload: params,
+      payload: {
+        ...params,
+        purchasesn:this.props.rolePurchaserBulkPurchases.listDetails.tableData.list[0].purchasesn,
+        stage:this.props.rolePurchaserBulkPurchases.listDetails.tableData.item.stage
+      },
     });
   }
 
@@ -58,7 +67,7 @@ export default class listDetails extends Component {
       ...pagination,
     };
 
-    console.log('xxxxxxxxxxxfs',this.props)
+    //console.log('xxxxxxxxxxxfs',this.props.rolePurchaserBulkPurchases.listDetails.tableData.list)
     const columns = [
       {
         title: '序号',
@@ -85,10 +94,22 @@ export default class listDetails extends Component {
         title: '操作',
         dataIndex: 'elseMoney',
         key: 'elseMoney',
-        render: (val,record) =>
-          <div>
-            <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>2详情</a><br/>
-          </div>
+        render: (val,record) =>{
+          if(record.supplierNumType == 2){
+            return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情</a><br/>
+              </div>
+            )
+          }
+        }
+            
+          
+          // <div>
+          //   <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>
+          //   {/* render:supplierNumType=>`${supplierNumType==1?'':'详情'}` */}
+          //   </a><br/>
+          // </div>
       }
     ];
     return (
@@ -101,7 +122,7 @@ export default class listDetails extends Component {
             提货信息
           </div>
           <div className={styles.takeAdd}>
-            <p>提货地点：{item.sendType}</p>
+            <p>提货地点：{item.typeName}</p>
           </div>
           <div className={styles.line}></div>
           <div className={styles.takeGoods}>
@@ -143,7 +164,7 @@ export default class listDetails extends Component {
     );
   }
   handleDetailsCheck = (record) => {
-    console.log('详情',record)
+   // console.log('详情',record)
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/getClickDetails',
       payload: {
@@ -160,7 +181,7 @@ export default class listDetails extends Component {
 class PurchaseOrder extends Component {
   
   handleCancel = () => {
-    console.log('del')
+   // console.log('del')
     this.props.dispatch({
       type:'rolePurchaserBulkPurchases/getdetailsCheckDelR',
       payload:false
@@ -170,8 +191,9 @@ class PurchaseOrder extends Component {
 
   render(){
     
-    const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
-    //console.log('22ok',this.props)
+   // const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
+   const {rolePurchaserBulkPurchases:{detailsList:{show,tableData}}} = this.props
+    //console.log('22ok',this.props.rolePurchaserBulkPurchases.detailsList.tableData)
 
     const columns = [
       {
@@ -204,8 +226,6 @@ class PurchaseOrder extends Component {
       }
     ];
 
-
-
     return(
       <div>
         <Modal
@@ -216,7 +236,7 @@ class PurchaseOrder extends Component {
           <Card>
 
               {/* <div>11111</div> */}
-              <Table dataSource={list}
+              <Table dataSource={tableData}
                 // scroll={{ x: 1500}}
                 columns={columns}
                 //onChange={this.handleTableChange}

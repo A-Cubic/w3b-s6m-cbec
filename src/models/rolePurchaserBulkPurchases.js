@@ -4,8 +4,10 @@ import {
   getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,
   // -------- 询价列表 --------------
   getInquiryListData,getSeeData,
-  // -------- 采购列表 --------------
-  getPurchaseListData,
+  //询价列表 -询价中
+  getlistInquiry,
+  // -------- 采购列表 分页 --------------
+  getPurchaseListData, getpurchasepaging,
   // -------- 采购列表-采购单 --------------
   getpurchaseOrder,
   // -------- 采购列表-采购单-点击详情 --------------
@@ -19,7 +21,7 @@ export default {
     // -------- 发起询价 --------------
     initiateInquiry:{
       // delList:[],
-      // pur:'',
+      pur:'',
       tableData:{
         item:{
           purchasesn: "",
@@ -53,6 +55,14 @@ export default {
         pagination:{},
       },
     },
+    //询价列表 - 询价中
+    listInquiry:{
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
 
     // -------- 采购列表 --------------
     purchaseList:{
@@ -81,10 +91,7 @@ export default {
      // 询价列表/采购列表- 点击详情
      detailsList:{
       show: false,
-      tableData:{
-        list: [],
-        item:{}
-      },
+      tableData:[]
     },
   },
   effects:{
@@ -199,6 +206,18 @@ export default {
         })
       }
     },
+    // 询价列表 - 询价中
+    *getlistInquiry({ payload },{ call,put }){
+      const response = yield call(getlistInquiry, payload);
+      console.log('~xxxxxxxxxx询价中',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getlistInquiryR',
+          payload: response,
+        })
+      }
+    },
+
 
 
     // -------- 采购列表 --------------
@@ -225,6 +244,20 @@ export default {
         })
       }
     },
+
+     //  采购列表-分页 
+     *getpurchasepaging({ payload,callback },{ call,put }){
+      const response = yield call(getpurchasepaging, payload);
+      //console.log('~res分页',response)
+      if(response!==undefined){
+      //  callback(response)
+        yield put({
+          type: 'getpurchasepagingR',
+          payload: response,
+        })
+      }
+    },
+
 
     // -------- 采购列表 - 查看列表详情 --------------
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
@@ -391,6 +424,17 @@ export default {
        }
  
      },
+     // 询价列表 - 询价中
+     getlistInquiryR(state, action){
+      return {
+        ...state,
+        listInquiry:{
+          ...state.listInquiry,
+          tableData:action.payload
+        }
+      }
+    },
+
 
     // -------- 采购列表 --------------
     getPurchaseListDataR(state, action){
@@ -405,7 +449,7 @@ export default {
      },
    
 
-    //采购列表-采购单-点击详情删除
+    //采购列表-采购单-点击详情
     childrenCheckDelR(state, action) {
       return {
         ...state,
@@ -426,6 +470,19 @@ export default {
         }
       }
     },
+    //  采购列表- 分页 
+    getpurchasepagingR(state, action){
+      // console.log('action',action.payload.list[0].purchasesn)
+       return {
+         ...state,
+         listDetails:{
+           ...state.listDetails,
+           tableData:action.payload
+         }
+       }
+     },
+
+
     //采购列表
     //-------- 询价列表/采购列表 - 查看列表详情 --------------
     getpurchaseOrderR(state, action){
