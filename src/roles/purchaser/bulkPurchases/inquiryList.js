@@ -194,7 +194,10 @@ export default class inquiryList extends Component {
         key: 'sendTime',
         render: (val,record) =>
           <div>
-            <a href="javascript:;" onClick={()=>this.handleViewState(record)} >查看</a><br/>
+            <a href="javascript:;" onClick={()=>this.handleViewState(record)} >
+              {record.status !=6?<div>查看</div>:<div></div>}
+              {record.status ==7?<div>删除</div>:<div></div>}
+            </a><br/>
           </div>
       }
     ];
