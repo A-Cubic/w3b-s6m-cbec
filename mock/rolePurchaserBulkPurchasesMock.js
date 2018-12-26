@@ -8,8 +8,8 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     'POST /llback/Purchase/InquiryPreservation': 'http://192.168.191.1:54195/',
 
     // 发起询价 - 提交
-    'POST /llback/Warehouse/getSubmissionData': getPayment,
-    //'POST /llback/Purchase/InquirySubmission': 'http://192.168.191.1:54195/',
+    //'POST /llback/Warehouse/getSubmissionData': getPayment,
+    'POST /llback/Purchase/InquirySubmission': 'http://192.168.191.1:54195/',
 
 
 
@@ -39,8 +39,16 @@ export default function rolePurchaserBulkPurchasesMock(url) {
    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
     //询价列表 - 询价中
-    'POST /llback/Warehouse/getlistInquiry': see,
-    //'POST /llback/Purchase/PurchaseDetails': 'http://192.168.191.1:54195/',
+    //'POST /llback/Warehouse/getlistInquiry': see,
+    'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+
+    //询价列表 - 报价中
+    'POST /llback/Warehouse/getquotedPrice': see,
+    //'POST /Purchase/llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+
+    //询价列表 -报价中-详情   
+    //'POST /llback/Warehouse/getAllListdetails': see,
+    'POST /llback/Purchase/OtherGoodsDetails': 'http://192.168.191.1:54195/',
 
 
 
@@ -48,16 +56,19 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     //'POST /llback/Warehouse/getPurchaseListData': listOfEnquiries,//getPurchaseListData
     'POST /llback/Purchase/PurchaseList': 'http://192.168.191.1:54195/',
 
+
     // 采购列表 - 查看  询价列表
-    //'POST /llback/Purchase/PurchaseDetails': getPurchaseOrder,
+    //'POST /llback/Purchase/PurchaseDetails': see,
     'POST /llback/Purchase/PurchaseDetails': 'http://192.168.191.1:54195/',
+
+
     //  采购列表 - 分页
     //'POST /llback/Purchase/getpurchasepaging': getPurchaseOrder,
     'POST /llback/Purchase/OtherInquiryPagesn': 'http://192.168.191.1:54195/',
 
 
     //询价列表/采购列表-点击详情   
-     //'POST /llback/Warehouse/getClickDetails': getPurchaseOrder,
+    // 'POST /llback/Warehouse/getClickDetails': getPurchaseOrder,
      'POST /llback/Purchase/OtherGoodsDetails': 'http://192.168.191.1:54195/',
     
   };
@@ -171,7 +182,7 @@ export function listOfEnquiries(req, res) {
           purchaseTime: "2018.12.21",
           num: "60",
           money: "1,000.00",
-          stage: "3"
+          stage: "9"
 
         },
         {
@@ -245,7 +256,8 @@ export function see(req, res) {
       remark: "asda大",
       tax: "0.00",
       waybillfee: "0.00",
-      purchasePrice: "0.00"
+      purchasePrice: "0.00",
+
     },
     list: [
         {
@@ -253,16 +265,29 @@ export function see(req, res) {
           purchasesn: "2018121313045638",
           goodsName: "兰芝精华液",
           barcode: "11111",
-          brand: "1111",
-          total: "100"
+          brand: "",
+          total: "10",
+          maxAvailableNum: "980",
+          minAvailableNum: "70",
+          supplyPrice: "16.67",
+          purchaseNum: "60",
+          totalPrice: "1000",
+          supplierNumType: "2"
+          
         },
         {
           keyId: "2",
           purchasesn: "2018121313045638",
-          goodsName: "2兰芝精华液",
-          barcode: "21111",
-          brand: "2222",
-          total: "2100"
+          goodsName: "兰芝精华液",
+          barcode: "11111",
+          brand: "",
+          total: "10",
+          maxAvailableNum: "980",
+          minAvailableNum: "70",
+          supplyPrice: "16.67",
+          purchaseNum: "60",
+          totalPrice: "1000",
+          supplierNumType: "1"
         }
     ],
     pagination: {
@@ -272,7 +297,6 @@ export function see(req, res) {
     }
   })
 }
-
 
 export function del(req, res) {
   res.send({
@@ -414,7 +438,7 @@ export function UpdateDistributor(req, res) {
 // 模拟采购单
 export function getPurchaseOrder(req, res) {
   res.send({
-    list: [{
+    tableData: [{
       keyId: "1",
       id: "314",
       supplyId: "GH1",
@@ -433,10 +457,6 @@ export function getPurchaseOrder(req, res) {
       offerPrice: "210",
       demand: "2500",
       purchaseAmount: "25000"
-    }],
-    item: {
-      
-
-    },
+    }]
   });
 }

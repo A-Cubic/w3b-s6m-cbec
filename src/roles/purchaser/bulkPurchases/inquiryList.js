@@ -241,6 +241,8 @@ export default class inquiryList extends Component {
       this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(getdata)  ));
     } else if(record.status === '1'){
       this.props.dispatch(routerRedux.push('/bulkPurchases/inTheInquiry/' + JSON.stringify(getdata)  ));
+    } else if(record.status === '3'){
+      this.props.dispatch(routerRedux.push('/bulkPurchases/quoteWithDetails/' + JSON.stringify(getdata)  ));
     }
     
     //JSON.parse JSON.stringify

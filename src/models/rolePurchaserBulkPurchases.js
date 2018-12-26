@@ -3,7 +3,7 @@ import {
   // -------- 发起询价 --------------
   getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,
   // -------- 询价列表 --------------
-  getInquiryListData,getSeeData,
+  getInquiryListData,getSeeData, getquotedPrice,getAllListdetails,
   //询价列表 -询价中
   getlistInquiry,
   // -------- 采购列表 分页 --------------
@@ -63,6 +63,20 @@ export default {
         pagination:{},
       },
     },
+    //询价列表 - 报价中
+    listQuotedQrice:{
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
+    // 询价列表-报价中 - 点击详情
+    inquiryDetailsList:{
+      show: false,
+      tableData:[]
+    },
+
 
     // -------- 采购列表 --------------
     purchaseList:{
@@ -198,7 +212,7 @@ export default {
      // 询价列表 - 查看 getSeeData
      *getSeeData({ payload,callback },{ call,put}){
       const response = yield call(getSeeData, payload);
-       console.log('~查看',response)
+     //  console.log('~查看',response)
       if (response !== undefined) {
         yield put({
           type: 'getSeeDataR',
@@ -214,6 +228,31 @@ export default {
         yield put({
           type: 'getlistInquiryR',
           payload: response,
+        })
+      }
+    },
+
+    // 询价列表 - 报价中
+    *getquotedPrice({ payload },{ call,put }){
+      const response = yield call(getquotedPrice, payload);
+      console.log('~xxxx报价中',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getquotedPriceR',
+          payload: response,
+        })
+      }
+    },
+
+    
+    // // 询价列表 - 报价中-点击详情
+    *getAllListdetails({ payload },{ call,put }){
+      const response = yield call(getAllListdetails, payload);
+      console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getAllListdetailsR',
+          payload: {response,show: true}
         })
       }
     },
@@ -263,7 +302,7 @@ export default {
     // -------- 询价列表/采购列表 - 查看列表详情 --------------
     *getpurchaseOrder({ payload },{ call,put }){
       const response = yield call(getpurchaseOrder, payload);
-      console.log('~xxxxxxxxxx查看列表详情',response)
+      //console.log('~xxxxxxxxxx查看列表详情',response)
       if(response!==undefined){
         yield put({
           type: 'getpurchaseOrderR',
@@ -271,6 +310,8 @@ export default {
         })
       }
     },
+
+
   },
   
   // // 采购列表-采购单-点击详情
@@ -408,8 +449,8 @@ export default {
     },
      // 询价列表 - 查看 getSeeData
      getSeeDataR(state, action){
-      console.log('action',action.payload)
-      console.log('state',state.initiateInquiry.information)
+      //console.log('action',action.payload)
+      //console.log('state',state.initiateInquiry.information)
        return {
          ...state,
          initiateInquiry:{
@@ -434,7 +475,39 @@ export default {
         }
       }
     },
+    // 询价列表 - 报价中
+    getquotedPriceR(state, action){
+      return {
+        ...state,
+        listQuotedQrice:{
+          ...state.listQuotedQrice,
+          tableData:action.payload
+        }
+      }
+    },
+    // 询价列表 - 报价中-详情
+    getAllListdetailsR(state, action) {
+      return {
+        ...state,
+        inquiryDetailsList: {
+          ...state.inquiryDetailsList,
+          tableData: action.payload.response,
+          //childTestModelVisible:action.payload.childTestModelVisible
+          show: action.payload.show
+        },
+      };
+    },
 
+     // 询价列表-报价中-点击详情-隐藏 
+     getAllListdetailsDelR(state, action) {
+      return {
+        ...state,
+        inquiryDetailsList: {
+          ...state.inquiryDetailsList,
+          show: action.payload.show
+        }
+      }
+    },
 
     // -------- 采购列表 --------------
     getPurchaseListDataR(state, action){
@@ -460,7 +533,7 @@ export default {
       }
     },
   
-     // 采购列表-采购单-点击详情-隐藏 错误
+     // 采购列表-采购单-点击详情-隐藏 
      getdetailsCheckDelR(state, action) {
       return {
         ...state,

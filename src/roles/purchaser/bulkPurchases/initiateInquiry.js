@@ -35,15 +35,17 @@ export default class initiateInquiry extends Component {
     
     const getData = JSON.parse(match.params.biography)
     //console.log('getData',getData)
-
-    this.props.dispatch({
-      type: 'rolePurchaserBulkPurchases/getSeeData',
-      //payload: params,
-      payload: {
-        purchasesn:getData.purchasesn,
-        status:getData.status
-      },
-    });
+    if(getData.status == 7) {
+      this.props.dispatch({
+        type: 'rolePurchaserBulkPurchases/getSeeData',
+        //payload: params,
+        payload: {
+          purchasesn:getData.purchasesn,
+          status:getData.status
+        },
+      });
+    }
+    
 
   }
   //保存

@@ -193,7 +193,7 @@ class PurchaseOrder extends Component {
     
    // const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
    const {rolePurchaserBulkPurchases:{detailsList:{show,tableData}}} = this.props
-    //console.log('22ok',this.props.rolePurchaserBulkPurchases.detailsList.tableData)
+    console.log('22ok',this.props.rolePurchaserBulkPurchases.detailsList.tableData)
 
     const columns = [
       {

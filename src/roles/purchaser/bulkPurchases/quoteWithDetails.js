@@ -6,6 +6,7 @@ import styles from './listDetails.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
 import {getToken} from "../../../utils/Global";
+import { isRegExp } from 'util';
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -15,36 +16,67 @@ const FormItem = Form.Item;
 }))
 
 @Form.create()
-// 采购商 - 采购列表 - 20181211
-export default class listDetails extends Component {
+// 采购商 - 采购列表-报价中 - 20181211
+export default class quotedPrice extends Component {
   state={
     formValues:{}
   }
-  init(){
-    this.props.dispatch({
-      type:'rolePurchaserBulkPurchases/getpurchaseOrder',
-      payload:{}
-    })
-  }
+  // init(){
+  //   const {match,dispatch}=this.props;
+  //  // console.log('match',match)
+  //   const getData = JSON.parse(match.params.biography)
+  //   this.props.dispatch({
+  //     type:'rolePurchaserBulkPurchases/getpurchaseOrder',
+  //     payload:{
+  //       purchasesn:getData.purchasesn,
+  //       stage:getData.stage
+  //     }
+  //   })
+  // }
   componentDidMount() {
-    this.init();
+    //this.init();
+
+    const {match,dispatch}=this.props;
+    //console.log('match',match)
+    const getData = JSON.parse(match.params.biography)
+
+    if(getData.status == 3){
+      this.props.dispatch({
+        type:'rolePurchaserBulkPurchases/getquotedPrice',
+        payload:{
+          purchasesn:getData.purchasesn,
+          status:getData.status
+        }
+      })
+    }
+    
+
+
   }
 
-
+  //分页 
   handleTableChange=(pagination, filters, sorter)=>{
     const params = {
       ...pagination,
       ...this.state.formValues,
     };
+   // console.log('11111',this.props.rolePurchaserBulkPurchases.listDetails.tableData.list[0].purchasesn)
+   // console.log('22222',this.props.rolePurchaserBulkPurchases.listDetails.tableData.item.stage)
     this.props.dispatch({
-      type: 'rolePurchaserBulkPurchases/getpurchaseOrder',
-      payload: params,
+      // type: 'rolePurchaserBulkPurchases/getpurchasepaging',
+      type: 'rolePurchaserBulkPurchases/getquotedPrice',
+     // payload: params,
+      payload: {
+        ...params,
+        purchasesn:this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.list[0].purchasesn,
+        status:this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status
+      },
     });
   }
 
 
   render() {
-    const { rolePurchaserBulkPurchases:{listDetails:{tableData:{item,list, pagination}}} } = this.props;
+    const { rolePurchaserBulkPurchases:{listQuotedQrice:{tableData:{item,list, pagination}}} } = this.props;
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
@@ -52,39 +84,64 @@ export default class listDetails extends Component {
       ...pagination,
     };
 
-    console.log('xxxxxxxxxxxfs',this.props)
+    console.log('qqqqqfs',this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status)
     const columns = [
       {
         title: '序号',
         dataIndex: 'keyId',
         key: 'keyId',
       }, {
-        title: '采购商品名称',
-        dataIndex: 'purchasesn',
-        key: 'purchasesn',
+        title: '询价商品名称',
+        dataIndex: 'goodsName',
+        key: 'goodsName',
       }, {
-        title: '采购商品条码',
-        dataIndex: 'order',
-        key: 'order',
+        title: '询价商品条码',
+        dataIndex: 'barcode',
+        key: 'barcode',
         //render:val=>`${val==1?'收货单':'退货单'}`
       }, {
-        title: '采购单价',
-        dataIndex: 'goMoney',
-        key: 'goMoney',
+        title: '询价数量',
+        dataIndex: 'total',
+        key: 'total',
       }, {
+        title: '可供数量',
+        dataIndex: 'maxAvailableNum',
+        key: 'maxAvailableNum',
+      },{
+        title: '供货单价',
+        dataIndex: 'supplyPrice',
+        key: 'supplyPrice',
+      },{
+        title: '采购数量',
+        dataIndex: 'purchaseNum',
+        key: 'purchaseNum',
+      },{
         title: '总金额',
-        dataIndex: 'tuiMoney',
-        key: 'tuiMoney',
+        dataIndex: 'totalPrice',
+        key: 'totalPrice',
       },{
         title: '操作',
         dataIndex: 'elseMoney',
         key: 'elseMoney',
-        render: (val,record) =>
-          <div>
-            <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>2详情</a><br/>
-          </div>
+        render: (val,record) =>{
+          if(record.supplierNumType == 2){
+            return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情</a><br/>
+              </div>
+            )
+          }
+        }
+            
+        
+          // <div>
+          //   <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>
+          //   {/* render:supplierNumType=>`${supplierNumType==1?'':'详情'}` */}
+          //   </a><br/>
+          // </div>
       }
     ];
+    
     return (
       <div >
         <Card bordered={false} >
@@ -95,7 +152,7 @@ export default class listDetails extends Component {
             提货信息
           </div>
           <div className={styles.takeAdd}>
-            <p>提货地点：</p>
+            <p>提货地点：{item.typeName}</p>
           </div>
           <div className={styles.line}></div>
           <div className={styles.takeGoods}>
@@ -103,9 +160,9 @@ export default class listDetails extends Component {
             采购商信息
           </div>
           <div className={styles.information}>
-            <p>姓名：</p>
-            <p>联系电话：</p>
-            <p>采购截止日期：</p>
+            <p>姓名：{item.contacts}</p>
+            <p>联系电话：{item.tel}</p>
+            <p>采购截止日期：{item.deliveryTime}</p>
           </div>
           <div className={styles.line}></div>
           <div className={styles.takeGoods}>
@@ -113,7 +170,7 @@ export default class listDetails extends Component {
             采购商品
           </div>
           <div className={styles.describe}>
-            <p>询价单描述：<span></span></p>
+            <p>询价单描述：{item.remark}<span></span></p>
           </div>
           <Table dataSource={list}
 
@@ -129,18 +186,41 @@ export default class listDetails extends Component {
             费用计算
           </div>
           <div className={styles.money}>
-          商品金额：<span></span>　运费：<span>￥200.00</span>　税费：<span>￥200.00</span>
+          商品金额：<span>{item.purchasePrice}</span>　运费：<span>￥{item.waybillfee}</span>　税费：<span>￥{item.tax}</span>
           </div>
           <PurchaseOrder />
+            
+           {
+              this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status==1?<div onClick={()=>this.demo()}>777</div>:<div>888</div>
+           }
+          
+            {/* render: (val,record) =>{
+              if(record.supplierNumType == 2){
+                return (
+                  <div>
+                    <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情</a><br/>
+                  </div>
+                )
+              }
+            } */}
+          
+
         </Card>
       </div>
     );
   }
   handleDetailsCheck = (record) => {
+    console.log('详情',record)
     this.props.dispatch({
-      type: 'rolePurchaserBulkPurchases/getClickDetails',
-      payload: {}
+      type: 'rolePurchaserBulkPurchases/getAllListdetails',
+      payload: {
+        purchasesn:record.purchasesn,
+        barcode:record.barcode
+      }
     })
+  }
+  demo = () => {
+    alert(111)
   }
 }
 
@@ -150,9 +230,9 @@ export default class listDetails extends Component {
 class PurchaseOrder extends Component {
   
   handleCancel = () => {
-    console.log('del')
+   // console.log('del')
     this.props.dispatch({
-      type:'rolePurchaserBulkPurchases/getdetailsCheckDelR',
+      type:'rolePurchaserBulkPurchases/getAllListdetailsDelR',
       payload:false
     })
   }
@@ -160,8 +240,9 @@ class PurchaseOrder extends Component {
 
   render(){
     
-    const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
-    //console.log('22ok',this.props)
+   // const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
+   const {rolePurchaserBulkPurchases:{inquiryDetailsList:{show,tableData}}} = this.props
+    console.log('22ok',this.props.rolePurchaserBulkPurchases.inquiryDetailsList.tableData)
 
     const columns = [
       {
@@ -169,27 +250,39 @@ class PurchaseOrder extends Component {
         dataIndex: 'keyId',
         key: 'keyId',
       }, {
-        title: '询价单号',
-        dataIndex: 'order',
-        key: 'order',
+        title: '供货编号',
+        dataIndex: 'id',
+        key: 'id',
       }, {
-        title: '询价单标题',
-        dataIndex: 'date',
-        key: 'date',
+        title: '供货单价',
+        dataIndex: 'offerPrice',
+        key: 'offerPrice',
+        
+      },  {
+        title: '可供数量',
+        dataIndex: 'maxOfferNum',
+        key: 'maxOfferNum',
+        render: (val,record) =>{
+         
+            return (
+              <div>
+                {record.minOfferNum}-{record.maxOfferNum}
+              </div>
+            )
+          
+        }
         
       }, {
-        title: '状态',
-        dataIndex: 'goodsTotal',
-        key: 'goodsTotal',
+        title: '采购数量',
+        dataIndex: 'demand',
+        key: 'demand',
       }, {
-        title: '操作',
-        dataIndex: 'sendTime',
-        key: 'sendTime',
+        title: '采购金额',
+        dataIndex: 'purchaseAmount',
+        key: 'purchaseAmount',
       
       }
     ];
-
-
 
     return(
       <div>
@@ -201,10 +294,10 @@ class PurchaseOrder extends Component {
           <Card>
 
               {/* <div>11111</div> */}
-              <Table dataSource={list}
+              <Table dataSource={tableData}
                 // scroll={{ x: 1500}}
                 columns={columns}
-                onChange={this.handleTableChange}
+                //onChange={this.handleTableChange}
                 // loading={submitting}
                 rowKey={record => record.keyId}
               />
