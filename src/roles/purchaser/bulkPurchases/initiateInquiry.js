@@ -206,8 +206,8 @@ export default class initiateInquiry extends Component {
   renderForm(){
     const RadioGroup = Radio.Group;
     const { getFieldDecorator } = this.props.form;
-    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,pur,tableData:{list, pagination}}} } = this.props;
-    //console.log('props', this.props)
+    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,pur,tableData:{item,list, pagination}}} } = this.props;
+    console.log('helloprops', this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -266,7 +266,8 @@ export default class initiateInquiry extends Component {
            <FormItem label="提货地点：">
 
               {getFieldDecorator('sendType',{
-                  initialValue:'1'
+                  //initialValue:'1'
+                  initialValue:item.type
                 })(
                   <Select
                       placeholder="日本提货"
@@ -291,7 +292,7 @@ export default class initiateInquiry extends Component {
           <Col md={10} sm={24}>
             <FormItem label="姓名：  ">
               {getFieldDecorator('contacts', {
-                initialValue: initiateInquiry.contacts,
+                initialValue: item.contacts,
                 rules: [{ required: true, message: '请输入姓名' }],
               })(
                 <Input placeholder="请输入姓名"/>
@@ -301,7 +302,7 @@ export default class initiateInquiry extends Component {
           <Col md={7} sm={24}>
       
             {getFieldDecorator('sex',{
-                initialValue:information.sex
+                initialValue:parseInt(item.sex )
               })(
                 <RadioGroup  onChange={this.onChange}   className={styles.sex} >
                   <Radio  value={0}>男士</Radio>
@@ -315,7 +316,7 @@ export default class initiateInquiry extends Component {
           <Col md={10} sm={24}>
             <FormItem label="联系电话:">
               {getFieldDecorator('tel', {
-                initialValue: information.tel,
+                initialValue: item.tel,
                 rules: [{ required: true, message: '请输入联系电话' }],
               })(
                 <Input placeholder="请输入联系电话"/>
@@ -327,10 +328,13 @@ export default class initiateInquiry extends Component {
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={7} sm={24}></Col> 
           <Col md={10} sm={24}>
-            <FormItem label="采购截止日期：">
+            {/* <FormItem label="采购截止日期："> */}
+            <FormItem label='采购截止日期：'>
               {getFieldDecorator('deliveryTime', {
-                initialValue: information.deliveryTime,
-                 rules: [{ required: true, message: '请输入采购截止日期' }],
+                // initialValue: information.deliveryTime,
+                 initialValue: information.deliveryTime,
+                 rules: [{ required: true, message: '1xxx请输入采购截止日期' }],
+                 
               })(
                 <DatePicker  style={{ width: '100%' }} onChange={this.onTest}/>
                 //<DatePicker style={{ width: '100%' }}  placeholder="" />
@@ -349,7 +353,7 @@ export default class initiateInquiry extends Component {
           <Col md={10} sm={24}>
             <FormItem label="询价单描述：:">
               {getFieldDecorator('remark', {
-                initialValue: information.remark,
+                initialValue: item.remark,
                 rules: [{ required: true, message: '请输入询价单描述' }],
               })(
                 <Input placeholder="请输入询价单描述"/>

@@ -62,7 +62,7 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/quoteWithDetails')),
     },
     //批量采购 - 已报价
-    '/bulkPurchases/quoted': {
+    '/bulkPurchases/quoted/:biography': {
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/quoted')),
     },
 

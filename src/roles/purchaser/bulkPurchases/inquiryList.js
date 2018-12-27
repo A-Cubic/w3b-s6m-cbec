@@ -194,9 +194,9 @@ export default class inquiryList extends Component {
         key: 'sendTime',
         render: (val,record) =>
           <div>
-            <a href="javascript:;" onClick={()=>this.handleViewState(record)} >
-              {record.status !=6?<div>查看</div>:<div></div>}
-              {record.status ==7?<div>删除</div>:<div></div>}
+            <a href="javascript:;"  >
+              {record.status !=6?<div onClick={()=>this.handleViewState(record)}>查看</div>:<div></div>}
+              {record.status ==7?<div onClick={(e) => this.handleDel(e, record)}>删除</div>:<div></div>}
             </a><br/>
           </div>
       }
@@ -226,6 +226,26 @@ export default class inquiryList extends Component {
       </div>
     );
   }
+  //删除
+  handleDel = (e, record)=>{
+    // console.log(record.order)
+     // const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
+     // const _this = this;
+     // console.log('fs',list)
+     // const dataSource = [...list];
+     // console.log('aafs',list[index].keyId)
+     // this.setState({ dataSource: dataSource.filter(item => item.keyId != list[index].keyId) });
+
+
+     this.props.dispatch({
+       type: 'rolePurchaserBulkPurchases/deleteList',
+       payload: {
+         purchasesn:record.purchasesn,
+         //barcode:record.barcode,
+         //index:index
+       },
+     });
+   }
 
   handleViewState(record){
     console.log('xxxrecord',record)
@@ -244,45 +264,49 @@ export default class inquiryList extends Component {
       this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(getdata)  ));
     } else if(record.status === '1'){
       this.props.dispatch(routerRedux.push('/bulkPurchases/inTheInquiry/' + JSON.stringify(getdata)  ));
-    } else if(record.status === '3'){
+    } else if(record.status === '3' ){
+      this.props.dispatch(routerRedux.push('/bulkPurchases/quoteWithDetails/' + JSON.stringify(getdata)  ));
+    } else if(record.status === '2' ){
+      this.props.dispatch(routerRedux.push('/bulkPurchases/quoted/' + JSON.stringify(getdata)  ));
+    }else {
       this.props.dispatch(routerRedux.push('/bulkPurchases/quoteWithDetails/' + JSON.stringify(getdata)  ));
     }
     
     //JSON.parse JSON.stringify
 
-    let type;
+    //let type;
     switch (record.status){
       
       case '1':
-          type=1; //询价中
-          console.log(type)
+         // type=1; //询价中
+         
           break;
         case '2':
-          type=2; //已报价
-          console.log(type)
+         // type=2; //已报价
+          
           break;
         case '3':
-          type=3; //报价中
-          console.log(type)
+        //  type=3; //报价中
+          
           break;
         case '4':
-          type=4; //已报价(二次)
-          console.log(type)
+        //  type=4; //已报价(二次)
+          
           break;
         case '5':
-          type=5; //已完成
-          console.log(type)
+       //   type=5; //已完成
+         
           break;
         case '6':
-          type=6; //已关闭
-          console.log(type)
+        //  type=6; //已关闭
+         
           break;
         case '7':
-          type=7; //待提交
-          console.log(type)
+        //  type=7; //待提交
+        
           break;
         default:
-          console.log(1)
+          //console.log(1)
           break;
     }
     //console.log(record)

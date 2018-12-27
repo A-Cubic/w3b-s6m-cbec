@@ -163,6 +163,24 @@ export default class listDetails extends Component {
       </div>
     );
   }
+  // //删除
+  // handleDel = (e, record, index)=>{
+  //   // console.log(record.order)
+  //    // const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
+  //    // const _this = this;
+  //    // console.log('fs',list)
+  //    // const dataSource = [...list];
+  //    // console.log('aafs',list[index].keyId)
+  //    // this.setState({ dataSource: dataSource.filter(item => item.keyId != list[index].keyId) });
+  //    this.props.dispatch({
+  //      type: 'rolePurchaserBulkPurchases/deleteList',
+  //      payload: {
+  //        purchasesn:record.purchasesn,
+  //        //barcode:record.barcode,
+  //        //index:index
+  //      },
+  //    });
+  //  }
   handleDetailsCheck = (record) => {
    // console.log('详情',record)
     this.props.dispatch({

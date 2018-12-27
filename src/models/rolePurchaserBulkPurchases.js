@@ -1,9 +1,9 @@
 import { message} from 'antd';
 import {
   // -------- 发起询价 --------------
-  getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,
+  getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,deleteList,getquotedPriceOver,
   // -------- 询价列表 --------------
-  getInquiryListData,getSeeData, getquotedPrice,getAllListdetails,
+  getInquiryListData,getSeeData, getquotedPrice,getAllListdetails,getPlaceAnOrder,completedDetails,
   //询价列表 -询价中
   getlistInquiry,
   // -------- 采购列表 分页 --------------
@@ -32,9 +32,9 @@ export default {
           deliveryTime:null,
           remark:""
         },
-        list: [],
-        pagination:{},
-      },
+      list: [],
+      pagination:{},
+    },
   
       information:{
         purchasesn: "",
@@ -76,7 +76,21 @@ export default {
       show: false,
       tableData:[]
     },
+    
+     //询价列表 - 已报价
+     listQuotedQriceOver:{
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
 
+     //询价列表 - 已报价 - 点击详情
+     inquiryDetailsListDetails:{
+      show: false,
+      tableData:[]
+    },
 
     // -------- 采购列表 --------------
     purchaseList:{
@@ -107,6 +121,16 @@ export default {
       show: false,
       tableData:[]
     },
+
+    placeAnOrder:{
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
+
+
   },
   effects:{
     // -------- 发起询价 --------------
@@ -209,6 +233,28 @@ export default {
       }
     },
 
+    //询价列表 - 删除
+    *deleteList({payload, callback},{call,put}){
+      const response = yield call(deleteList,payload);
+     console.log('~qqxxxxx删除',response)
+     console.log('~qqxxxxxpayload',payload)
+     //console.log('~xxxxx删除',response.item.type)
+      if (response !== undefined) {
+        if (response.type==1) {
+          message.success('删除成功');
+          yield put({
+            type:'deleteListR',
+            payload: payload
+          })
+          
+          // callback(response);
+         // console.log('xxxx',response)
+        }else{
+          message.error('失败');
+        }
+      }
+    },
+
      // 询价列表 - 查看 getSeeData
      *getSeeData({ payload,callback },{ call,put}){
       const response = yield call(getSeeData, payload);
@@ -256,6 +302,47 @@ export default {
         })
       }
     },
+    // 询价列表-已报价(二次) - 立即下单
+    *getPlaceAnOrder({ payload,callback },{ call,put}){
+      const response = yield call(getPlaceAnOrder, payload);
+     //  console.log('~查看',response)
+      if (response !== undefined) {
+        if (response.type==1) {
+          yield put({
+            type: 'getPlaceAnOrderR',
+            payload: response,
+          })
+        } else {
+
+        }
+      }
+    },
+
+
+    // 询价列表 - 已报价
+    *getquotedPriceOver({ payload },{ call,put }){
+      const response = yield call(getquotedPriceOver, payload);
+      console.log('~xxxx报价中',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getquotedPriceOverR',
+          payload: response,
+        })
+      }
+    },
+
+    // 询价列表 - 已报价-点击详情
+    *completedDetails({ payload },{ call,put }){
+    const response = yield call(completedDetails, payload);
+    console.log('~res',response)
+    if(response!==undefined){
+      yield put({
+        type: 'completedDetailsR',
+        payload: {response,show: true}
+      })
+    }
+  },
+
 
 
 
@@ -430,11 +517,7 @@ export default {
         }
       }
     },    
-    // tableData:{
-    //   item:{},
-    //   list: [],
-    //   pagination:{},
-    // },
+   
 
     // -------- 询价列表 --------------
     getInquiryListDataR(state, action){
@@ -447,6 +530,42 @@ export default {
         }
       }
     },
+
+   
+
+
+    // //询价列表 - 删除
+    deleteListR(state,action){
+
+      //console.log('sssss',action.payload.payload.barcode)
+      //console.log('ssssssssdsdsdss',state.initiateInquiry.tableData.list)
+      //console.log('barcode',barcode)   
+      //console.log('inList',inList)
+      //const barcode = action.payload.payload.barcode
+      console.log('555',state)
+
+      const inList = state.inquiryList.tableData.list
+      console.log('inList',inList)
+      console.log('action',action.payload.purchasesn)
+      const bb = action.payload.purchasesn
+      //const index = action.payload.payload.index
+      const dataSource = [...inList]
+      // const newData=dataSource.filter(item => item.barcode != inList[index].barcode)purchasesn
+      const newData=dataSource.filter(item => item.purchasesn != bb)
+      console.log('newData',newData)
+      return {
+        ...state,
+        inquiryList:{
+          ...state.inquiryList,
+          tableData:{
+            ...state.inquiryList.tableData,
+            list:newData
+          }
+        }
+      }
+    },    
+
+
      // 询价列表 - 查看 getSeeData
      getSeeDataR(state, action){
       //console.log('action',action.payload)
@@ -507,8 +626,58 @@ export default {
           show: action.payload.show
         }
       }
+     },
+
+
+      // 询价列表 - 已报价
+    getquotedPriceOverR(state, action){
+      return {
+        ...state,
+        listQuotedQriceOver:{
+          ...state.listQuotedQriceOver,
+          tableData:action.payload
+        }
+      }
     },
 
+    // 询价列表 - 已报价-详情
+    completedDetailsR(state, action) {
+      return {
+        ...state,
+        inquiryDetailsListDetails  : {
+          ...state.inquiryDetailsListDetails  ,
+          tableData: action.payload.response,
+          //childTestModelVisible:action.payload.childTestModelVisible
+          show: action.payload.show
+        },
+      };
+    },
+
+
+
+    // 询价列表-已报价-点击详情-隐藏 
+    gethideR(state, action) {
+      return {
+        ...state,
+        inquiryDetailsListDetails: {
+          ...state.inquiryDetailsListDetails,
+          show: action.payload.show
+        }
+      }
+     },
+
+
+     getPlaceAnOrderR(state, action){
+      //console.log('action',action.payload)
+      //console.log('state',state.initiateInquiry.information)
+       return {
+         ...state,
+         placeAnOrder:{
+           ...state.placeAnOrder,
+           tableData:action.payload
+         },
+       }
+      }, 
     // -------- 采购列表 --------------
     getPurchaseListDataR(state, action){
       // console.log('action',action)

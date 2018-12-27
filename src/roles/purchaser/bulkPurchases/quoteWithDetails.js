@@ -40,7 +40,7 @@ export default class quotedPrice extends Component {
     //console.log('match',match)
     const getData = JSON.parse(match.params.biography)
 
-    if(getData.status == 3){
+    if(getData.status == 3 || getData.status == 4 || getData.status == 4){
       this.props.dispatch({
         type:'rolePurchaserBulkPurchases/getquotedPrice',
         payload:{
@@ -48,7 +48,7 @@ export default class quotedPrice extends Component {
           status:getData.status
         }
       })
-    }
+    } 
     
 
 
@@ -189,21 +189,19 @@ export default class quotedPrice extends Component {
           商品金额：<span>{item.purchasePrice}</span>　运费：<span>￥{item.waybillfee}</span>　税费：<span>￥{item.tax}</span>
           </div>
           <PurchaseOrder />
-            
            {
-              this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status==1?<div onClick={()=>this.demo()}>777</div>:<div>888</div>
+              this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status==4?
+                // <div onClick={()=>this.demo()}>777</div>:
+                <Row style={{marginTop:'30px', marginBottom:'35px'}}>
+                  <Col md={9} sm={24}></Col>      
+                  <Col md={6} sm={24}>
+                    <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnPlaceAnOrder} >立即下单</Button>
+                    <Button style={{ marginLeft: 48 }} onClick={this.handleReturn}>取消</Button>
+                  </Col>
+                  <Col md={9} sm={24}></Col>      
+                </Row>: 
+                <div></div>
            }
-          
-            {/* render: (val,record) =>{
-              if(record.supplierNumType == 2){
-                return (
-                  <div>
-                    <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情</a><br/>
-                  </div>
-                )
-              }
-            } */}
-          
 
         </Card>
       </div>
@@ -219,8 +217,23 @@ export default class quotedPrice extends Component {
       }
     })
   }
-  demo = () => {
-    alert(111)
+  handleOnPlaceAnOrder = () => {
+    //const { this.props:{listQuotedQrice:{listQuotedQrice:{item,list, pagination}}} } = this.props;
+    const {match,dispatch}=this.props;
+    const getData = JSON.parse(match.params.biography)
+    //console.log('qqqqq',getData)
+    this.props.dispatch({
+      type: 'rolePurchaserBulkPurchases/getPlaceAnOrder',
+      //payload: params,
+      payload: {
+        purchasesn:getData.purchasesn,
+        status:getData.status
+      },
+    });
+    
+  }
+  handleReturn = () => {
+    this.props.dispatch(routerRedux.push('/bulkPurchases/inquiryList/' ))
   }
 }
 

@@ -34,22 +34,41 @@ export default function rolePurchaserBulkPurchasesMock(url) {
    'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
     //'POST /llback/Purchase/InquiryList': 'http://192.168.191.1:54195/',
 
+
+    //  询价列表- 删除
+    'POST /llback/Warehouse/deleteList': del,
+    //'POST /llback/Purchase/InquiryListDelete': 'http://192.168.191.1:54195/',
+
+
+
     //询价列表 - 查看
-    'POST /llback/Warehouse/getSeeData': see,  
-   //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+    //'POST /llback/Warehouse/getSeeData': see,  
+    'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
     //询价列表 - 询价中
-    //'POST /llback/Warehouse/getlistInquiry': see,
+   // 'POST /llback/Warehouse/getlistInquiry': see,
     'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
     //询价列表 - 报价中
-    'POST /llback/Warehouse/getquotedPrice': see,
-    //'POST /Purchase/llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+    //'POST /llback/Warehouse/getquotedPrice': see,
+   'POST /Purchase/llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
     //询价列表 -报价中-详情   
     //'POST /llback/Warehouse/getAllListdetails': see,
     'POST /llback/Purchase/OtherGoodsDetails': 'http://192.168.191.1:54195/',
 
+    //询价列表-已报价(二次) - 立即下单
+    //'POST /llback/Warehouse/getPlaceAnOrder': see,
+     'POST /llback/Purchase/OfferSub': 'http://192.168.191.1:54195/',
+
+
+    //询价列表 - 已报价
+    'POST /llback/Warehouse/getquotedPriceOver': see,
+    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+
+   //询价列表 - 已报价 - 点击详情
+   'POST /llback/Warehouse/completedDetails': see,
+   //'POST /llback/Purchase/GoodsDetails': 'http://192.168.191.1:54195/',
 
 
     // -------- 采购列表 --------------
@@ -93,7 +112,7 @@ export function getPurchaseListData(req, res) {
     list: [
         {
           keyId: "2",
-          purchasesn: "2018121313045638",
+          purchasesn: "2018121313045636",
           goodsName: "兰芝精华液",
           barcode: "11111",
           brand: "",
@@ -107,7 +126,7 @@ export function getPurchaseListData(req, res) {
         },
         {
           keyId: "3",
-          purchasesn: "2018121313045638",
+          purchasesn: "2018121313045637",
           goodsName: "2兰芝精华液",
           barcode: "21111",
           brand: "2",
@@ -121,7 +140,7 @@ export function getPurchaseListData(req, res) {
         },
         {
           keyId: "4",
-          purchasesn: "32018121313045638",
+          purchasesn: "32018121313045639",
           goodsName: "32兰芝精华液",
           barcode: "321111",
           brand: "32",
@@ -163,7 +182,7 @@ export function listOfEnquiries(req, res) {
         },
         {
           keyId: "12",
-          purchasesn: "2018121316055337",
+          purchasesn: "2018121316055338",
           createtime: "2018.12.17",
           remark: "2asda大",
           status: "2",
@@ -175,7 +194,7 @@ export function listOfEnquiries(req, res) {
         },
         {
           keyId: "3",
-          purchasesn: "2018121316055337",
+          purchasesn: "2018121316055339",
           createtime: "2018.12.17",
           remark: "2asda大",
           status: "3",
@@ -187,7 +206,7 @@ export function listOfEnquiries(req, res) {
         },
         {
           keyId: "4",
-          purchasesn: "2018121316055337",
+          purchasesn: "2018121316055340",
           createtime: "2018.12.17",
           remark: "2asda大",
           status: "4",
@@ -199,7 +218,7 @@ export function listOfEnquiries(req, res) {
         },
         {
           keyId: "5",
-          purchasesn: "2018121316055337",
+          purchasesn: "2018121316055341",
           createtime: "2018.12.17",
           remark: "2asda大",
           status: "5",
@@ -211,7 +230,7 @@ export function listOfEnquiries(req, res) {
         },
         {
           keyId: "6",
-          purchasesn: "2018121316055337",
+          purchasesn: "2018121316055342",
           createtime: "2018.12.17",
           remark: "2asda大",
           status: "6",
@@ -223,7 +242,7 @@ export function listOfEnquiries(req, res) {
         },
         {
           keyId: "7",
-          purchasesn: "2018121316055337",
+          purchasesn: "2018121316055343",
           createtime: "2018.12.17",
           remark: "2asda大",
           status: "7",
@@ -246,7 +265,7 @@ export function see(req, res) {
   res.send({
     item: {
       msg: null,
-      type: "1",
+      type: "2",
       sendType: "日本提货",
       status:"1",
       contacts: "张",
@@ -254,9 +273,9 @@ export function see(req, res) {
       tel: "13681313111",
       deliveryTime: "2018.10.11",
       remark: "asda大",
-      tax: "0.00",
-      waybillfee: "0.00",
-      purchasePrice: "0.00",
+      tax: "10.00",
+      waybillfee: "20.00",
+      purchasePrice: "30.00",
 
     },
     list: [

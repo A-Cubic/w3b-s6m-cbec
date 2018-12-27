@@ -37,3 +37,5 @@ export default class consignmentStock extends Component {
     );
   }
 }
+
+

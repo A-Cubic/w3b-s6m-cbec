@@ -55,16 +55,23 @@ export async function deleteInterface(params) {
 // -------- 询价列表 --------------
 export async function getInquiryListData(params) {
   return request(`/llback/Warehouse/getInquiryListData`,{
-  //return request(`/llback/Purchase/InquiryList`,{
+ //return request(`/llback/Purchase/InquiryList`,{
     method: 'POST',
     body: params,
   })
 }
-
+// 询价列表 - 删除
+export async function deleteList(params) {
+  return request(`/llback/Warehouse/deleteList`,{
+ // return request(`/llback/Purchase/InquiryListDelete`,{
+    method: 'POST',
+    body: params,
+  })
+}
 // 询价列表 - 查看
 export async function getSeeData(params) {
-  return request(`/llback/Warehouse/getSeeData`,{
-  //return request(`/llback/Purchase/InquiryListDetailed`,{
+  //return request(`/llback/Warehouse/getSeeData`,{
+  return request(`/llback/Purchase/InquiryListDetailed`,{
     method: 'POST',
     body: params,
   })
@@ -79,8 +86,8 @@ export async function getlistInquiry(params) {
 }
 // 询价列表 - 报价中   llback/Purchase/OtherGoodsDetails
 export async function getquotedPrice(params) {
-  return request(`/llback/Warehouse/getquotedPrice`,{
-  //return request(`/llback/Purchase/InquiryListDetailed`,{
+ // return request(`/llback/Warehouse/getquotedPrice`,{
+  return request(`/llback/Purchase/InquiryListDetailed`,{
     method: 'POST',
     body: params,
   })
@@ -94,9 +101,30 @@ export async function getAllListdetails(params) {
     body: params,
   });
 }
-
-
-
+//  // 询价列表-已报价(二次) - 立即下单
+export async function getPlaceAnOrder(params) {
+  //return request(`/llback/Warehouse/getPlaceAnOrder`, {
+   return request(`/llback/Purchase/OfferSub`, {
+     method: 'POST',
+     body: params,
+   });
+ }
+//  // 询价列表-已报价
+export async function getquotedPriceOver(params) {
+  return request(`/llback/Warehouse/getquotedPriceOver`, {
+   //return request(`/llback/Purchase/InquiryListDetailed`, {
+     method: 'POST',
+     body: params,
+   });
+ }
+//  询价列表 - 已报价-点击详情 
+export async function completedDetails(params) {
+  return request(`/llback/Warehouse/completedDetails`, {
+   //return request(`/llback/Purchase/GoodsDetails`, {
+     method: 'POST',
+     body: params,
+   });
+ }
 
 // -------- 采购列表 --------------
 export async function getPurchaseListData(params) {
