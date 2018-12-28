@@ -137,22 +137,21 @@ export default class quotedPriceOver extends Component {
         title: '操作',
         dataIndex: 'elseMoney',
         key: 'elseMoney',
-        render: (val,record) =>{
-          if(record.supplierNumType == 2){
-            return (
-              <div>
-                <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情</a><br/>
-              </div>
-            )
-          }
-        }
-            
-        
-          // <div>
-          //   <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>
-          //   {/* render:supplierNumType=>`${supplierNumType==1?'':'详情'}` */}
-          //   </a><br/>
-          // </div>
+        // render: (val,record) =>{
+        //   if(record.supplierNumType == 2){
+        //     return (
+        //       <div>
+        //         <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情</a><br/>
+        //       </div>
+        //     )
+        //   }
+        // }
+        render: (val,record) =>
+          <div>
+              {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
+              {record.status !=3?<a onClick={(e) => this.handleDel(e, record)}>删除</a>:<div></div>}
+          </div>    
+          
       }
     ];
     
@@ -203,19 +202,15 @@ export default class quotedPriceOver extends Component {
           商品金额：<span>{item.purchasePrice}</span>　运费：<span>￥{item.waybillfee}</span>　税费：<span>￥{item.tax}</span>
           </div>
           <PurchaseOrder />
-           {
-              this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status==4?
-                // <div onClick={()=>this.demo()}>777</div>:
-                <Row style={{marginTop:'30px', marginBottom:'35px'}}>
-                  <Col md={9} sm={24}></Col>      
-                  <Col md={6} sm={24}>
-                    <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnPlaceAnOrder} >立即下单</Button>
-                    <Button style={{ marginLeft: 48 }} onClick={this.handleReturn}>取消</Button>
-                  </Col>
-                  <Col md={9} sm={24}></Col>      
-                </Row>: 
-                <div></div>
-           }
+          
+            <Row style={{marginTop:'30px', marginBottom:'35px'}}>
+              <Col md={9} sm={24}></Col>      
+              <Col md={6} sm={24}>
+                <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleSubmission} >提交</Button>
+                <Button style={{ marginLeft: 48 }} onClick={this.handleCancel}>取消</Button>
+              </Col>
+              <Col md={9} sm={24}></Col>      
+            </Row>
 
         </Card>
       </div>
@@ -225,8 +220,60 @@ export default class quotedPriceOver extends Component {
   onChangePurchaseNum = () => {
     console.log(1111)
   }
+  //提交
+  handleSubmission = () => {
+    //const { this.props:{listQuotedQrice:{listQuotedQrice:{item,list, pagination}}} } = this.props;
+    const {match,dispatch}=this.props;
+    const getData = JSON.parse(match.params.biography)
+    //console.log('qqqqq',getData)
+    this.props.dispatch({
+      type: 'rolePurchaserBulkPurchases/getOffer',
+      //payload: params,
+      payload: {
+        purchasesn:getData.purchasesn,
+        //status:getData.status
+      },
+    });
+    
+  }
+   //取消
+   handleCancel = () => {
+    //const { this.props:{listQuotedQrice:{listQuotedQrice:{item,list, pagination}}} } = this.props;
+    const {match,dispatch}=this.props;
+    const getData = JSON.parse(match.params.biography)
+    //console.log('qqqqq',getData)
+    this.props.dispatch({
+      type: 'rolePurchaserBulkPurchases/getCancel',
+      //payload: params,
+      payload: {
+        purchasesn:getData.purchasesn,
+        //status:getData.status
+      },
+    });
+    
+  }
 
 
+   //删除
+   handleDel = (e, record)=>{
+    // console.log(record.order)
+     // const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
+     // const _this = this;
+     // console.log('fs',list)
+     // const dataSource = [...list];
+     // console.log('aafs',list[index].keyId)
+     // this.setState({ dataSource: dataSource.filter(item => item.keyId != list[index].keyId) });
+
+
+     this.props.dispatch({
+       type: 'rolePurchaserBulkPurchases/getQuotedPriceDel',
+       payload: {
+         purchasesn:record.purchasesn,
+         barcode:record.barcode,
+         //index:index
+       },
+     });
+   }
 
 
 

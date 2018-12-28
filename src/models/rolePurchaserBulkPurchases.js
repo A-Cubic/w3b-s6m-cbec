@@ -3,7 +3,8 @@ import {
   // -------- 发起询价 --------------
   getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,deleteList,getquotedPriceOver,
   // -------- 询价列表 --------------
-  getInquiryListData,getSeeData, getquotedPrice,getAllListdetails,getPlaceAnOrder,completedDetails,
+  getInquiryListData,getSeeData, getquotedPrice,getAllListdetails,getPlaceAnOrder,completedDetails,getQuotedPriceDel,getOffer,
+  getCancel,
   //询价列表 -询价中
   getlistInquiry,
   // -------- 采购列表 分页 --------------
@@ -129,8 +130,24 @@ export default {
         pagination:{},
       },
     },
+    
+    // 询价列表-已报价 - 提交
+    offerList:{
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
 
-
+    // 询价列表-已报价 - 提交
+    cancelList:{
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
   },
   effects:{
     // -------- 发起询价 --------------
@@ -344,6 +361,62 @@ export default {
   },
 
 
+    //已报价 - 删除
+    *getQuotedPriceDel({payload, callback},{call,put}){
+      const response = yield call(getQuotedPriceDel,payload);
+     console.log('~qqxxxxx删除',response)
+     console.log('~qqxxxxxpayload',payload)
+     //console.log('~xxxxx删除',response.item.type)
+      if (response !== undefined) {
+        if (response.type==1) {
+          message.success('删除成功');
+          yield put({
+            type:'getQuotedPriceDelR',
+            payload: payload
+          })
+          
+          // callback(response);
+         // console.log('xxxx',response)
+        }else{
+          message.error('失败');
+        }
+      }
+    },
+
+    // 询价列表-已报价 - 提交
+    *getOffer({ payload,callback },{ call,put}){
+      const response = yield call(getOffer, payload);
+     //  console.log('~查看',response)
+      if (response !== undefined) {
+        if (response.type==1) {
+          yield put({
+            type: 'getOfferR',
+            payload: response,
+          })
+          // console.log(111)
+          // this.props.dispatch(routerRedux.push('/bulkPurchases/inquiryList'   ));
+          
+        } else {
+
+        }
+      }
+    },
+
+    // 询价列表-已报价 - 取消
+    *getCancel({ payload,callback },{ call,put}){
+      const response = yield call(getCancel, payload);
+     //  console.log('~查看',response)
+      if (response !== undefined) {
+        if (response.type==1) {
+          yield put({
+            type: 'getCancelR',
+            payload: response,
+          })
+        } else {
+
+        }
+      }
+    },
 
 
     // -------- 采购列表 --------------
@@ -665,6 +738,63 @@ export default {
         }
       }
      },
+
+     //已报价 - 删除
+     getQuotedPriceDelR(state,action){
+
+      //console.log('sssss',action.payload.payload.barcode)
+      //console.log('ssssssssdsdsdss',state.initiateInquiry.tableData.list)
+      //console.log('barcode',barcode)   
+      //console.log('inList',inList)
+      //const barcode = action.payload.payload.barcode
+      console.log('555',state)
+
+      const inList = state.listQuotedQriceOver.tableData.list
+      console.log('inList',inList)
+      console.log('action',action.payload.purchasesn)
+      const bb = action.payload.purchasesn
+      //const index = action.payload.payload.index
+      const dataSource = [...inList]
+      // const newData=dataSource.filter(item => item.barcode != inList[index].barcode)purchasesn
+      const newData=dataSource.filter(item => item.purchasesn != bb)
+      console.log('newData',newData)
+      return {
+        ...state,
+        listQuotedQriceOver:{
+          ...state.listQuotedQriceOver,
+          tableData:{
+            ...state.listQuotedQriceOver.tableData,
+            list:newData
+          }
+        }
+      }
+    },    
+    // 询价列表-已报价 - 提交
+    getOfferR(state, action){
+      //console.log('action',action.payload)
+      //console.log('state',state.initiateInquiry.information)
+       return {
+         ...state,
+         offerList:{
+           ...state.offerList,
+           tableData:action.payload
+         },
+       }
+      }, 
+
+    // 询价列表-已报价 - 取消
+    getCancelR(state, action){
+      //console.log('action',action.payload)
+      //console.log('state',state.initiateInquiry.information)
+      return {
+        ...state,
+        cancelList:{
+          ...state.cancelList,
+          tableData:action.payload
+        },
+      }
+      }, 
+
 
 
      getPlaceAnOrderR(state, action){

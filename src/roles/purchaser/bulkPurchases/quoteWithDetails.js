@@ -123,22 +123,17 @@ export default class quotedPrice extends Component {
         title: '操作',
         dataIndex: 'elseMoney',
         key: 'elseMoney',
-        render: (val,record) =>{
-          if(record.supplierNumType == 2){
-            return (
-              <div>
-                <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情</a><br/>
-              </div>
-            )
-          }
-        }
+        // render: (val,record) =>{
+        //   if(record.supplierNumType == 2){
+        //     return (
+        //       <div>
+        //         <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情 </a><br/>
+        //       </div>
+        //     )
+        //   }
+        // }
             
         
-          // <div>
-          //   <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>
-          //   {/* render:supplierNumType=>`${supplierNumType==1?'':'详情'}` */}
-          //   </a><br/>
-          // </div>
       }
     ];
     

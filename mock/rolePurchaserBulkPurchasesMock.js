@@ -31,8 +31,8 @@ export default function rolePurchaserBulkPurchasesMock(url) {
    'POST /llback/Purchase/Goodspagination': 'http://192.168.191.1:54195/',
 
     // -------- 询价列表 --------------
-   'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
-    //'POST /llback/Purchase/InquiryList': 'http://192.168.191.1:54195/',
+   //'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
+    'POST /llback/Purchase/InquiryList': 'http://192.168.191.1:54195/',
 
 
     //  询价列表- 删除
@@ -63,13 +63,24 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     //询价列表 - 已报价
-    'POST /llback/Warehouse/getquotedPriceOver': see,
-    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+    //'POST /llback/Warehouse/getquotedPriceOver': see,
+    'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
    //询价列表 - 已报价 - 点击详情
-   'POST /llback/Warehouse/completedDetails': see,
-   //'POST /llback/Purchase/GoodsDetails': 'http://192.168.191.1:54195/',
+   //'POST /llback/Warehouse/completedDetails': see,
+   'POST /llback/Purchase/GoodsDetails': 'http://192.168.191.1:54195/',
 
+    //  已报价- 删除
+    'POST /llback/Warehouse/getQuotedPriceDel': del,
+    //'POST /llback/Purchase/InquiryListDelete': 'http://192.168.191.1:54195/',
+
+    // 询价列表-已报价 - 提交
+    'POST /llback/Warehouse/getOffer': see,
+    //'POST /llback/Purchase/InquiryListDelete': 'http://192.168.191.1:54195/',
+
+    // 询价列表-已报价 - 提交
+    'POST /llback/Warehouse/getCancel': see,
+    //'POST /llback/Purchase/InquiryListDelete': 'http://192.168.191.1:54195/',
 
     // -------- 采购列表 --------------
     //'POST /llback/Warehouse/getPurchaseListData': listOfEnquiries,//getPurchaseListData
@@ -263,6 +274,8 @@ export function listOfEnquiries(req, res) {
 // 查看接口
 export function see(req, res) {
   res.send({
+    msg: null,
+    type: "1",
     item: {
       msg: null,
       type: "2",
@@ -281,7 +294,7 @@ export function see(req, res) {
     list: [
         {
           keyId: "1",
-          purchasesn: "2018121313045638",
+          purchasesn: "2018121313045637",
           goodsName: "兰芝精华液",
           barcode: "11111",
           brand: "",
@@ -319,10 +332,8 @@ export function see(req, res) {
 
 export function del(req, res) {
   res.send({
-    item: {
-      msg: null,
-      type: "1"
-    },
+    msg: null,
+    type: "1",
     list: [
         {
           keyId: "1",

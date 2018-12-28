@@ -329,11 +329,12 @@ export default class initiateInquiry extends Component {
           <Col md={7} sm={24}></Col> 
           <Col md={10} sm={24}>
             {/* <FormItem label="采购截止日期："> */}
-            <FormItem label='采购截止日期：'>
+            <FormItem label='截止日期：'>
               {getFieldDecorator('deliveryTime', {
                 // initialValue: information.deliveryTime,
+                //defaultValue={moment('2015-01-01', 'YYYY-MM-DD')}
                  initialValue: information.deliveryTime,
-                 rules: [{ required: true, message: '1xxx请输入采购截止日期' }],
+                 rules: [{ required: true, message: '请输入截止日期'}],
                  
               })(
                 <DatePicker  style={{ width: '100%' }} onChange={this.onTest}/>

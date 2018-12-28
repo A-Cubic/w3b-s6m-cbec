@@ -54,8 +54,8 @@ export async function deleteInterface(params) {
 
 // -------- 询价列表 --------------
 export async function getInquiryListData(params) {
-  return request(`/llback/Warehouse/getInquiryListData`,{
- //return request(`/llback/Purchase/InquiryList`,{
+  //return request(`/llback/Warehouse/getInquiryListData`,{
+ return request(`/llback/Purchase/InquiryList`,{
     method: 'POST',
     body: params,
   })
@@ -111,15 +111,42 @@ export async function getPlaceAnOrder(params) {
  }
 //  // 询价列表-已报价
 export async function getquotedPriceOver(params) {
-  return request(`/llback/Warehouse/getquotedPriceOver`, {
-   //return request(`/llback/Purchase/InquiryListDetailed`, {
+ // return request(`/llback/Warehouse/getquotedPriceOver`, {
+   return request(`/llback/Purchase/InquiryListDetailed`, {
      method: 'POST',
      body: params,
    });
  }
 //  询价列表 - 已报价-点击详情 
 export async function completedDetails(params) {
-  return request(`/llback/Warehouse/completedDetails`, {
+  //return request(`/llback/Warehouse/completedDetails`, {
+   return request(`/llback/Purchase/GoodsDetails`, {
+     method: 'POST',
+     body: params,
+   });
+ }
+
+
+ //  询价列表 - 已报价-删除
+export async function getQuotedPriceDel(params) {
+  return request(`/llback/Warehouse/getQuotedPriceDel`, {
+   //return request(`/llback/Purchase/GoodsDetails`, {
+     method: 'POST',
+     body: params,
+   });
+ }
+// 询价列表-已报价 - 提交
+ export async function getOffer(params) {
+  return request(`/llback/Warehouse/getOffer`, {
+   //return request(`/llback/Purchase/GoodsDetails`, {
+     method: 'POST',
+     body: params,
+   });
+ }
+
+// 询价列表-已报价 - 取消
+export async function getCancel(params) {
+  return request(`/llback/Warehouse/getCancel`, {
    //return request(`/llback/Purchase/GoodsDetails`, {
      method: 'POST',
      body: params,
