@@ -31,22 +31,22 @@ export default function rolePurchaserBulkPurchasesMock(url) {
    'POST /llback/Purchase/Goodspagination': 'http://192.168.191.1:54195/',
 
     // -------- 询价列表 --------------
-   //'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
-    'POST /llback/Purchase/InquiryList': 'http://192.168.191.1:54195/',
+   'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
+    //'POST /llback/Purchase/InquiryList': 'http://192.168.191.1:54195/',
 
 
     //  询价列表- 删除
-    'POST /llback/Warehouse/deleteList': del,
-    //'POST /llback/Purchase/InquiryListDelete': 'http://192.168.191.1:54195/',
+    //'POST /llback/Warehouse/deleteList': del,
+    'POST /llback/Purchase/InquiryListDelete': 'http://192.168.191.1:54195/',
 
 
 
     //询价列表 - 查看
-    //'POST /llback/Warehouse/getSeeData': see,  
-    'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+    'POST /llback/Warehouse/getSeeData': see,  
+    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
     //询价列表 - 询价中
-   // 'POST /llback/Warehouse/getlistInquiry': see,
+   //'POST /llback/Warehouse/getlistInquiry': see,
     'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
     //询价列表 - 报价中
@@ -63,8 +63,8 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     //询价列表 - 已报价
-    //'POST /llback/Warehouse/getquotedPriceOver': see,
-    'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+    'POST /llback/Warehouse/getquotedPriceOver': see,
+    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
    //询价列表 - 已报价 - 点击详情
    //'POST /llback/Warehouse/completedDetails': see,
@@ -72,15 +72,20 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
     //  已报价- 删除
     'POST /llback/Warehouse/getQuotedPriceDel': del,
-    //'POST /llback/Purchase/InquiryListDelete': 'http://192.168.191.1:54195/',
+    //'POST /llback/Purchase/InquiryGoodsDelete': 'http://192.168.191.1:54195/',
 
     // 询价列表-已报价 - 提交
-    'POST /llback/Warehouse/getOffer': see,
-    //'POST /llback/Purchase/InquiryListDelete': 'http://192.168.191.1:54195/',
+    //'POST /llback/Warehouse/getOffer': see,
+    'POST /llback/Purchase/OfferSub': 'http://192.168.191.1:54195/',
 
-    // 询价列表-已报价 - 提交
-    'POST /llback/Warehouse/getCancel': see,
-    //'POST /llback/Purchase/InquiryListDelete': 'http://192.168.191.1:54195/',
+    // 询价列表-已报价 - 取消
+    //'POST /llback/Warehouse/getCancel': see,
+    'POST /llback/Purchase/OfferCancel': 'http://192.168.191.1:54195/',
+
+     // 询价列表-已报价 - 改变采购数量
+    'POST /llback/Warehouse/getChangeNum': see,
+   // 'POST /llback/Purchase/GoodsDetailsDetermine': 'http://192.168.191.1:54195/',
+
 
     // -------- 采购列表 --------------
     //'POST /llback/Warehouse/getPurchaseListData': listOfEnquiries,//getPurchaseListData
@@ -110,6 +115,7 @@ export function getPurchaseListData(req, res) {
   res.send({
     item: {
       sendType: "日本提货",
+      typeName:'韩国提货',
       status:"1",
       contacts: "张",
       sex: "1",
@@ -125,7 +131,7 @@ export function getPurchaseListData(req, res) {
           keyId: "2",
           purchasesn: "2018121313045636",
           goodsName: "兰芝精华液",
-          barcode: "11111",
+          barcode: "11111c",
           brand: "",
           total: "10",
           maxAvailableNum: "140",
@@ -276,8 +282,15 @@ export function see(req, res) {
   res.send({
     msg: null,
     type: "1",
+    purchasesn: "2018121313045638",
+    barcode: "bb",
+    supplyPrice: "157.33",
+    purchaseNum: "60",
+    totalPrice: "991111119440",
+    allPrice: "9991111119440",
     item: {
       msg: null,
+      typeName:'韩国提货',
       type: "2",
       sendType: "日本提货",
       status:"1",
@@ -296,7 +309,7 @@ export function see(req, res) {
           keyId: "1",
           purchasesn: "2018121313045637",
           goodsName: "兰芝精华液",
-          barcode: "11111",
+          barcode: "aa",
           brand: "",
           total: "10",
           maxAvailableNum: "980",
@@ -311,7 +324,7 @@ export function see(req, res) {
           keyId: "2",
           purchasesn: "2018121313045638",
           goodsName: "兰芝精华液",
-          barcode: "11111",
+          barcode: "bb",
           brand: "",
           total: "10",
           maxAvailableNum: "980",
@@ -330,6 +343,7 @@ export function see(req, res) {
   })
 }
 
+
 export function del(req, res) {
   res.send({
     msg: null,
@@ -339,7 +353,7 @@ export function del(req, res) {
           keyId: "1",
           purchasesn: "20181213130456387",
           goodsName: "兰芝精华液",
-          barcode: "11111",
+          barcode: "11111a",
           brand: "",
           total: "100"
         },
@@ -347,7 +361,7 @@ export function del(req, res) {
           keyId: "2",
           purchasesn: "2018121313045638",
           goodsName: "2兰芝精华液",
-          barcode: "211111",
+          barcode: "211111b",
           brand: "2",
           total: "200"
         }
@@ -359,7 +373,72 @@ export function del(req, res) {
     }
   })
 }
+// 改变数量
+export function num(req, res) {
+  res.send({
+    msg: null,
+    type: "1",
+    purchasesn: "2018121313045638",
+    barcode: "11111b",
+    supplyPrice: "157.33",
+    purchaseNum: "60",
+    totalPrice: "9440",
+    allPrice: "9440",
 
+    item: {
+      msg: null,
+      typeName:'国内提货',
+      type: "2",
+      sendType: "日本提货",
+      status:"1",
+      contacts: "张",
+      sex: "2",
+      tel: "13681313111",
+      deliveryTime: "2018.10.11",
+      remark: "asda大",
+      tax: "10.00",
+      waybillfee: "20.00",
+      purchasePrice: "1130.00",
+
+    },
+    list: [
+        {
+          keyId: "1",
+          purchasesn: "2018121313045637",
+          goodsName: "兰芝精华液",
+          barcode: "aa",
+          brand: "",
+          total: "10",
+          maxAvailableNum: "980",
+          minAvailableNum: "70",
+          supplyPrice: "2.67",
+          purchaseNum: "80",
+          totalPrice: "2000",
+          supplierNumType: "2"
+          
+        },
+        {
+          keyId: "2",
+          purchasesn: "2018121313045638",
+          goodsName: "兰芝精华液",
+          barcode: "bb",
+          brand: "",
+          total: "10",
+          maxAvailableNum: "980",
+          minAvailableNum: "70",
+          supplyPrice: "16.67",
+          purchaseNum: "60",
+          totalPrice: "4000",
+          supplierNumType: "1"
+        }
+    ],
+    pagination: {
+        current: 1,
+        total: 1,
+        pageSize: 10
+    }
+  })
+}
 
 // 表单 分页 item
 export function getPayment(req, res) {
@@ -415,7 +494,7 @@ export function goodsSales(req, res) {
         keyId: "1",
         purchasesn: "2018121313045638",
         goodsName: "兰芝精华液",
-        barcode: "11111",
+        barcode: "11111b",
         brand: "",
         total: "100"
       },

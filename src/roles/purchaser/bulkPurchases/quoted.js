@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs  } from 'antd';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs,InputNumber   } from 'antd';
 import styles from './listDetails.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
@@ -95,8 +95,17 @@ export default class quotedPriceOver extends Component {
         key: 'total',
       }, {
         title: '可供数量',
-        dataIndex: 'maxAvailableNum',
-        key: 'maxAvailableNum',
+        dataIndex: 'maxOfferNum',
+        key: 'maxOfferNum',
+        render: (val,record) =>{
+        
+          return (
+            <div>
+              {record.minAvailableNum}-{record.maxAvailableNum}
+            </div>
+          )
+        
+      }
       },{
         title: '供货单价',
         dataIndex: 'supplyPrice',
@@ -109,15 +118,16 @@ export default class quotedPriceOver extends Component {
        
         render: (val,record) =>{
           return (
-           <div>
-             <Input 
-             placeholder="请输入姓名" 
-            //  defaultValue= '1'
-               value={record.purchaseNum} 
-             onChange={this.onChangePurchaseNum}
+          <InputNumber 
+            // onChange={this.onChange(record)} 
+             onChange={(e)=> this.onChange(record)}
 
-             />
-           </div>
+             //  onClick={(e) => this.handleDelCheck(e, record, index)}>
+              min={parseInt(record.minAvailableNum)} 
+              max={parseInt(record.maxAvailableNum)} 
+              defaultValue={record.purchaseNum}
+            />
+
           )
         }
 
@@ -217,9 +227,34 @@ export default class quotedPriceOver extends Component {
     );
   }
   // inputgaibian
-  onChangePurchaseNum = () => {
-    console.log(1111)
+  // onChangePurchaseNum = () => {
+  //   console.log(1111)
+  // }
+  // function onChange(value) {
+  //   console.log('changed', value);
+  // }
+  onChange = (record) =>{
+    console.log('record',record.barcode)
+    const {match,dispatch}=this.props;
+    const getData = JSON.parse(match.params.biography)
+    console.log('getData',this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list)
+    console.log('qqqqq',getData)
+    this.props.dispatch({
+      type: 'rolePurchaserBulkPurchases/getChangeNum',
+      //payload: params,
+      payload: {
+        purchasesn:getData.purchasesn,
+        list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
+        barcode:record.barcode
+      },
+    });   
+
+
+
   }
+
+
+
   //提交
   handleSubmission = () => {
     //const { this.props:{listQuotedQrice:{listQuotedQrice:{item,list, pagination}}} } = this.props;
@@ -279,7 +314,7 @@ export default class quotedPriceOver extends Component {
 
 
   handleDetailsCheck = (record) => {
-    console.log('详情',record)
+    //console.log('详情',record)
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/completedDetails',
       payload: {

@@ -1,10 +1,11 @@
 import { message} from 'antd';
+import {routerRedux} from "dva/router";
 import {
   // -------- 发起询价 --------------
   getPreservationData,getUploadOrderbillDX, deleteInterface,getPagingData,getSubmissionData,deleteList,getquotedPriceOver,
   // -------- 询价列表 --------------
   getInquiryListData,getSeeData, getquotedPrice,getAllListdetails,getPlaceAnOrder,completedDetails,getQuotedPriceDel,getOffer,
-  getCancel,
+  getCancel,getChangeNum,
   //询价列表 -询价中
   getlistInquiry,
   // -------- 采购列表 分页 --------------
@@ -298,7 +299,7 @@ export default {
     // 询价列表 - 报价中
     *getquotedPrice({ payload },{ call,put }){
       const response = yield call(getquotedPrice, payload);
-      console.log('~xxxx报价中',response)
+      //console.log('~xxxx报价中',response)
       if(response!==undefined){
         yield put({
           type: 'getquotedPriceR',
@@ -339,7 +340,7 @@ export default {
     // 询价列表 - 已报价
     *getquotedPriceOver({ payload },{ call,put }){
       const response = yield call(getquotedPriceOver, payload);
-      console.log('~xxxx报价中',response)
+     // console.log('~xxxx已报价',response)
       if(response!==undefined){
         yield put({
           type: 'getquotedPriceOverR',
@@ -364,8 +365,7 @@ export default {
     //已报价 - 删除
     *getQuotedPriceDel({payload, callback},{call,put}){
       const response = yield call(getQuotedPriceDel,payload);
-     console.log('~qqxxxxx删除',response)
-     console.log('~qqxxxxxpayload',payload)
+
      //console.log('~xxxxx删除',response.item.type)
       if (response !== undefined) {
         if (response.type==1) {
@@ -383,6 +383,19 @@ export default {
       }
     },
 
+    // 询价列表-已报价 - 改变采购数量
+    *getChangeNum({ payload },{ call,put }){
+      const response = yield call(getChangeNum, payload);
+     // console.log('~xxxx已报价',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getChangeNumR',
+          payload: response,
+        })
+      }
+    },
+    
+
     // 询价列表-已报价 - 提交
     *getOffer({ payload,callback },{ call,put}){
       const response = yield call(getOffer, payload);
@@ -395,7 +408,7 @@ export default {
           })
           // console.log(111)
           // this.props.dispatch(routerRedux.push('/bulkPurchases/inquiryList'   ));
-          
+          //yield put(routerRedux.push('/bulkPurchases/inquiryList/'));
         } else {
 
         }
@@ -412,11 +425,18 @@ export default {
             type: 'getCancelR',
             payload: response,
           })
+          console.log(111)
+          //this.props.dispatch(routerRedux.push('/bulkPurchases/inquiryList'   ));
+          yield put(routerRedux.push('/bulkPurchases/inquiryList'));
+
         } else {
 
         }
       }
     },
+
+    
+
 
 
     // -------- 采购列表 --------------
@@ -550,6 +570,8 @@ export default {
         initiateInquiry:{
           ...state.initiateInquiry,
           tableData:action.payload
+          // ...state.initiateInquiry.tableData,
+          //   list:delList
         }
       }
     },
@@ -747,17 +769,15 @@ export default {
       //console.log('barcode',barcode)   
       //console.log('inList',inList)
       //const barcode = action.payload.payload.barcode
-      console.log('555',state)
-
       const inList = state.listQuotedQriceOver.tableData.list
-      console.log('inList',inList)
-      console.log('action',action.payload.purchasesn)
-      const bb = action.payload.purchasesn
+      const bb = action.payload.barcode
       //const index = action.payload.payload.index
       const dataSource = [...inList]
       // const newData=dataSource.filter(item => item.barcode != inList[index].barcode)purchasesn
-      const newData=dataSource.filter(item => item.purchasesn != bb)
-      console.log('newData',newData)
+      const newData=state.listQuotedQriceOver.tableData.list.filter(item => item.barcode != bb)
+      // console.log('555',state.listQuotedQriceOver.tableData.list)
+      // console.log('newData',newData)
+       console.log('删除bb',bb)
       return {
         ...state,
         listQuotedQriceOver:{
@@ -769,6 +789,64 @@ export default {
         }
       }
     },    
+
+    // 询价列表-已报价 - 改变采购数量
+    getChangeNumR(state,action){
+    
+      const inList = state.listQuotedQriceOver.tableData.list
+      const bb = action.payload.barcode
+      const dataSource = [...inList]
+      //const newData=state.listQuotedQriceOver.tableData.list.filter(item => item.barcode == bb)
+  
+
+    //   const b =state.goodsChannel.tableData.list.findIndex(item=>
+    //     item.id===action.payload.id
+    //   )
+    //  state.goodsChannel.tableData.list[b] = {...state.goodsChannel.tableData.list[b], ...action.payload};
+    //  return{
+    //    ...state
+    //  }
+     // _.find(state.goodsAboutData.childCheckO.goodsSelectSupplierList,function(item){ return item.id === action.payload.id}).ifSel = '1';
+
+
+
+     console.log('p11111',action.payload)
+
+
+     
+      const b =state.listQuotedQriceOver.tableData.list.find(item=>
+        item.barcode===action.payload.barcode
+      )
+      b.totalPrice = 1111111
+      console.log('pbbbb',b)
+        
+
+
+     
+     // state.goodsChannel.tableData.list[b] = {...state.goodsChannel.tableData.list[b], ...action.payload};
+    
+    //  console.log('b',b)
+    //  console.log('数量bb',bb)
+    //  console.log('inList',inList)
+    //  console.log('state',state)
+
+
+
+
+      return {
+        ...state,
+        listQuotedQriceOver:{
+          ...state.listQuotedQriceOver,
+          tableData:action.payload
+          // tableData:{
+          //   ...state.listQuotedQriceOver.tableData,
+          //   list:newData
+          // }
+        },
+      }
+      }, 
+
+
     // 询价列表-已报价 - 提交
     getOfferR(state, action){
       //console.log('action',action.payload)
@@ -794,7 +872,8 @@ export default {
         },
       }
       }, 
-
+    
+     
 
 
      getPlaceAnOrderR(state, action){
