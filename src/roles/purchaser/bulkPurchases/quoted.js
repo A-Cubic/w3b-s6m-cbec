@@ -7,6 +7,7 @@ import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
 import {getToken} from "../../../utils/Global";
 import { isRegExp } from 'util';
+import { func } from 'prop-types';
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -20,14 +21,14 @@ const FormItem = Form.Item;
 export default class quotedPriceOver extends Component {
   state={
     formValues:{},
-    value:''
+    value:'',
   }
   
   componentDidMount() {
     //this.init();
-
+console.log('okokoko')
     const {match,dispatch}=this.props;
-    //console.log('match',match)
+    console.log('match',match)
     const getData = JSON.parse(match.params.biography)
 
     if(getData.status == 2 ){
@@ -54,7 +55,7 @@ export default class quotedPriceOver extends Component {
    // console.log('22222',this.props.rolePurchaserBulkPurchases.listDetails.tableData.item.stage)
     this.props.dispatch({
       // type: 'rolePurchaserBulkPurchases/getpurchasepaging',
-      type: 'rolePurchaserBulkPurchases/getquotedPriceOver',
+      type: 'rolePurchaserBulkPurchases/getQuotationPaging',
      // payload: params,
       payload: {
         ...params,
@@ -64,7 +65,31 @@ export default class quotedPriceOver extends Component {
     });
   }
 
+  // handleChange = (e) => {
+  //   const { value } = e.target;
+  //   this.setState({ value });
+  // }
 
+
+   onChange=(v)=>{
+    console.log('v',v)
+    this.setState({
+      value: v
+    },()=>{
+      console.log('bbbbbb',this.state.value)
+    });
+
+    
+
+
+
+
+    //this.
+    // this.state.value=v
+   
+    }
+
+    
   render() {
     const { rolePurchaserBulkPurchases:{listQuotedQriceOver:{tableData:{item,list, pagination}}} } = this.props;
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
@@ -73,8 +98,6 @@ export default class quotedPriceOver extends Component {
       showQuickJumper: true,
       ...pagination,
     };
-
-    //console.log('qqqqqfs',this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.item.status)
     const columns = [
       {
         title: '序号',
@@ -120,8 +143,8 @@ export default class quotedPriceOver extends Component {
           return (
           <InputNumber 
             // onChange={this.onChange(record)} 
-             onChange={(e)=> this.onChange(record)}
-
+             onChange={this.onChange}
+             onBlur={()=>this.inputOnBlur(record) }
              //  onClick={(e) => this.handleDelCheck(e, record, index)}>
               min={parseInt(record.minAvailableNum)} 
               max={parseInt(record.maxAvailableNum)} 
@@ -137,11 +160,11 @@ export default class quotedPriceOver extends Component {
         title: '总金额',
         dataIndex: 'totalPrice',
         key: 'totalPrice',
-        render: (val,record) =>{
-          return(
-            record.purchaseNum * record.supplyPrice
-          )
-        }
+        // render: (val,record) =>{
+        //   return(
+        //     record.purchaseNum * record.supplyPrice
+        //   )
+        // }
 
       },{
         title: '操作',
@@ -163,7 +186,9 @@ export default class quotedPriceOver extends Component {
           </div>    
           
       }
-    ];
+    ]
+    //console.log('qqqqqfs',this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.item.status)
+ 
     
     return (
       <div >
@@ -226,6 +251,9 @@ export default class quotedPriceOver extends Component {
       </div>
     );
   }
+  // inputOnBlur=()=>{
+  //   console.log('wo shi blur')
+  // }
   // inputgaibian
   // onChangePurchaseNum = () => {
   //   console.log(1111)
@@ -233,23 +261,88 @@ export default class quotedPriceOver extends Component {
   // function onChange(value) {
   //   console.log('changed', value);
   // }
-  onChange = (record) =>{
-    console.log('record',record.barcode)
+
+//改变数量
+  //onChange
+  inputOnBlur = (record,val) =>{
+   // console.log('record',record.barcode)
+
+    //console.log('onchange_valuce', this.state.value)
+
     const {match,dispatch}=this.props;
     const getData = JSON.parse(match.params.biography)
-    console.log('getData',this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list)
-    console.log('qqqqq',getData)
+    //console.log('getData',this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list)
+    //console.log('qqqqq',getData)
+    // const b =list.find(item=>
+    //   item.barcode===action.payload.barcode
+    // )
+    //const list=[{purchaseNum: "10",supplyPrice: "1500"},{purchaseNum: "70",supplyPrice: "3000"}],
+    // const list = [{purchaseNum:'1',supplyPrice:'2',c:'a',d:'b'},{purchaseNum:'3',supplyPrice:'4',c:'a',d:'b'}]
+    console.log('record',this.state.value)
+    // console.log('val',this.state.value)
+    // console.log('qaqa',this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list)
+    const b = this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list.map((item) => {
+    // const demand
+    // const price
+     //return  [item.demand = item.purchaseNum,item.price = item.supplyPrice]
+     return {
+      // demand:this.state.value,
+      // price:item.supplyPrice,
+      purchaseNum:this.state.value,
+      supplyPrice:item.supplyPrice,
+      barcode:item.barcode,
+     }
+    })
+
+    
+    const c =b.find(item=>
+      item.barcode===record.barcode
+    )
+
+    const d = [c].map((item) => {
+      // const demand
+      // const price
+       //return  [item.demand = item.purchaseNum,item.price = item.supplyPrice]
+       return {
+        // demand:this.state.value,
+        // price:item.supplyPrice,
+        demand:this.state.value,
+        price:item.supplyPrice,
+       }
+      })  
+
+
+
+
+
+    
+    console.log('item返回值b',b)
+    console.log('item返回值c',[c])
+    console.log('item返回值d',d)
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/getChangeNum',
+     
       //payload: params,
       payload: {
         purchasesn:getData.purchasesn,
-        list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
+        // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
+        list:d,
         barcode:record.barcode
       },
-    });   
+    }); 
 
-
+    //详情
+    // this.props.dispatch({
+    //   // type: 'rolePurchaserBulkPurchases/getChangeNum',
+    //   type: 'rolePurchaserBulkPurchases/CommodityDetails',
+    //   //payload: params,
+    //   payload: {
+    //     purchasesn:getData.purchasesn,
+    //     // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
+    //     list:b,
+    //     barcode:record.barcode
+    //   },
+    // });   
 
   }
 
@@ -274,6 +367,7 @@ export default class quotedPriceOver extends Component {
    //取消
    handleCancel = () => {
     //const { this.props:{listQuotedQrice:{listQuotedQrice:{item,list, pagination}}} } = this.props;
+    console.log('over')
     const {match,dispatch}=this.props;
     const getData = JSON.parse(match.params.biography)
     //console.log('qqqqq',getData)
@@ -348,19 +442,54 @@ export default class quotedPriceOver extends Component {
 }))
 class PurchaseOrder extends Component {
   
+
+
+
   handleCancel = () => {
-   // console.log('del')
+   console.log('del')
     this.props.dispatch({
       type:'rolePurchaserBulkPurchases/gethideR',
       payload:false
     })
   }
+  handleOk = () => {
+    const {rolePurchaserBulkPurchases:{inquiryDetailsListDetails:{show,tableData}}} = this.props
+    console.log(this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData)
+
+
+    
+
+
+
+
+
+
+
+
+   
+    this.props.dispatch({
+      // type: 'rolePurchaserBulkPurchases/getChangeNum',
+      type: 'rolePurchaserBulkPurchases/CommodityDetails',
+      //payload: params,
+      payload: {
+        purchasesn:1,
+        // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
+        //list:b,
+        //barcode:record.barcode
+      },
+    });   
+
+  }
+
+
 
   render(){
    // const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
    const {rolePurchaserBulkPurchases:{inquiryDetailsListDetails:{show,tableData}}} = this.props
-    console.log('22ok',this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData)
-
+    //console.log('22ok',this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData)
+function teste(v){
+console.log('v',v)
+}
     const columns = [
       {
         title: '序号',
@@ -393,11 +522,29 @@ class PurchaseOrder extends Component {
         title: '采购数量',
         dataIndex: 'demand',
         key: 'demand',
+        render: (val,record) =>{
+          return(
+            <InputNumber 
+            // onChange={this.onChange(record)} 
+            // onChange={onChange}
+             
+             //  onClick={(e) => this.handleDelCheck(e, record, index)}>
+              min={parseInt(record.minOfferNum)} 
+              max={parseInt(record.maxOfferNum)} 
+              defaultValue={record.purchaseNum}
+            />
+          )
+
+        }
       }, {
         title: '采购金额',
         dataIndex: 'purchaseAmount',
         key: 'purchaseAmount',
-      
+        render: (val,record) =>{
+          return(
+            record.demand * record.offerPrice
+          )
+        }
       }
     ];
 
@@ -407,6 +554,7 @@ class PurchaseOrder extends Component {
           visible= {show}
           onCancel={this.handleCancel}
           width={1000}
+          onOk={this.handleOk}
         >
           <Card>
 

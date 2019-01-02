@@ -14,7 +14,7 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     //  发起询价- 导入订单
-     //'POST /llback/Warehouse/getUploadOrderbillDX': goodsSales,
+    // 'POST /llback/Warehouse/getUploadOrderbillDX': goodsSales,
      'POST /llback/Purchase/OnLoadGoodsList': 'http://192.168.191.1:54195/',
 
 
@@ -27,12 +27,19 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     //  发起询价- 分页
-   // 'POST /llback/Warehouse/getPagingData': getPayment,
+    //'POST /llback/Warehouse/getPagingData': getPayment,
    'POST /llback/Purchase/Goodspagination': 'http://192.168.191.1:54195/',
 
+
+     //  发起询价- 分页 - 改
+     //'POST /llback/Warehouse/getPaging': getPayment,
+     'POST /llback/Purchase/Goodspagination': 'http://192.168.191.1:54195/',
+
+
+
     // -------- 询价列表 --------------
-   'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
-    //'POST /llback/Purchase/InquiryList': 'http://192.168.191.1:54195/',
+  // 'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
+   'POST /llback/Purchase/InquiryList': 'http://192.168.191.1:54195/',
 
 
     //  询价列表- 删除
@@ -42,8 +49,8 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     //询价列表 - 查看
-    'POST /llback/Warehouse/getSeeData': see,  
-    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+   // 'POST /llback/Warehouse/getSeeData': see,  
+    'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
     //询价列表 - 询价中
    //'POST /llback/Warehouse/getlistInquiry': see,
@@ -63,16 +70,19 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     //询价列表 - 已报价
-    'POST /llback/Warehouse/getquotedPriceOver': see,
-    //'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
+   // 'POST /llback/Warehouse/getquotedPriceOver': see,
+    'POST /llback/Purchase/InquiryListDetailed': 'http://192.168.191.1:54195/',
 
    //询价列表 - 已报价 - 点击详情
    //'POST /llback/Warehouse/completedDetails': see,
    'POST /llback/Purchase/GoodsDetails': 'http://192.168.191.1:54195/',
+   
+
+
 
     //  已报价- 删除
-    'POST /llback/Warehouse/getQuotedPriceDel': del,
-    //'POST /llback/Purchase/InquiryGoodsDelete': 'http://192.168.191.1:54195/',
+    //'POST /llback/Warehouse/getQuotedPriceDel': del,
+    'POST /llback/Purchase/InquiryGoodsDelete': 'http://192.168.191.1:54195/',
 
     // 询价列表-已报价 - 提交
     //'POST /llback/Warehouse/getOffer': see,
@@ -82,9 +92,24 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     //'POST /llback/Warehouse/getCancel': see,
     'POST /llback/Purchase/OfferCancel': 'http://192.168.191.1:54195/',
 
+
+
+
      // 询价列表-已报价 - 改变采购数量
-    'POST /llback/Warehouse/getChangeNum': see,
-   // 'POST /llback/Purchase/GoodsDetailsDetermine': 'http://192.168.191.1:54195/',
+    //'POST /llback/Warehouse/getChangeNum': onNum,
+  'POST /llback/Purchase/GoodsDetermine': 'http://192.168.191.1:54195/',
+
+
+
+
+    // 询价列表-已报价 - 详情改变采购数量
+   // 'POST /llback/Warehouse/CommodityDetails': onNum,
+    'POST /llback/Purchase/GoodsDetailsDetermine': 'http://192.168.191.1:54195/',
+
+
+     // 询价列表-已报价 - 分页
+   // 'POST /llback/Warehouse/getQuotationPaging': getPayment,
+   'POST /llback/Purchase/OtherInquiryPagesn': 'http://192.168.191.1:54195/',
 
 
     // -------- 采购列表 --------------
@@ -177,6 +202,8 @@ export function getPurchaseListData(req, res) {
     }
   })
 }
+
+
 //   -------- 询价列表 --------------
 export function listOfEnquiries(req, res) {
   res.send({
@@ -277,6 +304,21 @@ export function listOfEnquiries(req, res) {
     }
   })
 }
+
+//改变数量
+
+export function onNum(req, res) {
+  res.send({
+    purchasesn: "2018121313045638",
+    barcode: "bb",
+    supplyPrice: "157.33",
+    purchaseNum: "60",
+    totalPrice: "70",
+    allPrice: "1700 ",
+  })
+}
+
+
 // 查看接口
 export function see(req, res) {
   res.send({
@@ -286,8 +328,8 @@ export function see(req, res) {
     barcode: "bb",
     supplyPrice: "157.33",
     purchaseNum: "60",
-    totalPrice: "991111119440",
-    allPrice: "9991111119440",
+    totalPrice: "70",
+    allPrice: "170",
     item: {
       msg: null,
       typeName:'韩国提货',
@@ -315,7 +357,7 @@ export function see(req, res) {
           maxAvailableNum: "980",
           minAvailableNum: "70",
           supplyPrice: "16.67",
-          purchaseNum: "60",
+          purchaseNum: "0",
           totalPrice: "1000",
           supplierNumType: "2"
           
@@ -327,11 +369,11 @@ export function see(req, res) {
           barcode: "bb",
           brand: "",
           total: "10",
-          maxAvailableNum: "980",
-          minAvailableNum: "70",
+          maxAvailableNum: "200",
+          minAvailableNum: "20",
           supplyPrice: "16.67",
-          purchaseNum: "60",
-          totalPrice: "1000",
+          purchaseNum: "0",
+          totalPrice: "2000",
           supplierNumType: "1"
         }
     ],

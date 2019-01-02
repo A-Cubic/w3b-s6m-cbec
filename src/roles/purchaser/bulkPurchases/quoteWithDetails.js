@@ -40,7 +40,7 @@ export default class quotedPrice extends Component {
     //console.log('match',match)
     const getData = JSON.parse(match.params.biography)
 
-    if(getData.status == 3 || getData.status == 4 || getData.status == 4){
+    if(getData.status == 3 || getData.status == 4 || getData.status == 5){
       this.props.dispatch({
         type:'rolePurchaserBulkPurchases/getquotedPrice',
         payload:{
@@ -84,7 +84,7 @@ export default class quotedPrice extends Component {
       ...pagination,
     };
 
-    console.log('qqqqqfs',this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status)
+    //console.log('qqqqqfs',this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status)
     const columns = [
       {
         title: '序号',
@@ -203,7 +203,7 @@ export default class quotedPrice extends Component {
     );
   }
   handleDetailsCheck = (record) => {
-    console.log('详情',record)
+   // console.log('详情',record)
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/getAllListdetails',
       payload: {
@@ -250,7 +250,7 @@ class PurchaseOrder extends Component {
     
    // const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
    const {rolePurchaserBulkPurchases:{inquiryDetailsList:{show,tableData}}} = this.props
-    console.log('22ok',this.props.rolePurchaserBulkPurchases.inquiryDetailsList.tableData)
+  //  console.log('22ok',this.props.rolePurchaserBulkPurchases.inquiryDetailsList.tableData)
 
     const columns = [
       {

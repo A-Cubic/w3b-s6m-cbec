@@ -77,7 +77,7 @@ export default class inquiryList extends Component {
       ...pagination,
       ...this.state.formValues,
     };
-    console.log('params',params)
+    //console.log('params',params)
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/getInquiryListData',
       //payload: params,
@@ -87,7 +87,7 @@ export default class inquiryList extends Component {
     });
   }
   renderForm(){
-    console.log(this.props.rolePurchaserBulkPurchases.inquiryList.tableData)
+  //  console.log(this.props.rolePurchaserBulkPurchases.inquiryList.tableData)
     const { rolePurchaserBulkPurchases:{inquiryList:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
 
@@ -248,7 +248,7 @@ export default class inquiryList extends Component {
    }
 
   handleViewState(record){
-    console.log('xxxrecord',record)
+   // console.log('xxxrecord',record)
   //  this.props.dispatch({
   //     type: 'rolePurchaserBulkPurchases/getSeeData',
   //     //payload: params,
