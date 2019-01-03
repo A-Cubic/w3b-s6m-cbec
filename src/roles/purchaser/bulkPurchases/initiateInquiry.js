@@ -72,6 +72,7 @@ export default class initiateInquiry extends Component {
       type: 'rolePurchaserBulkPurchases/getPreservationData',
         payload: {
           ...values,
+          purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur==''?this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list[0].purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur
         },
         callback:this.onPreservationCallback
       });
@@ -143,8 +144,8 @@ export default class initiateInquiry extends Component {
   //提交
   handleOnSubmission = (e)=>{
     const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
-    console.log('ffffff',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list=='')
-    console.log(this.props)
+  //  console.log('ffffff',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list=='')
+   // console.log(this.props)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -160,7 +161,10 @@ export default class initiateInquiry extends Component {
         formValues: values,
       });
 
-      if (this.props.rolePurchaserBulkPurchases.initiateInquiry.pur!=='') {
+     // console.log('pur',this.props.rolePurchaserBulkPurchases.initiateInquiry.pur)
+     // || this.props.rolePurchaserBulkPurchases.initiateInquiry
+
+      if (this.props.rolePurchaserBulkPurchases.initiateInquiry.pur!==''  ) {
         message.success('提交成功');
         this.props.dispatch({
           // type: 'rolePurchaserBulkPurchases/getInquiryListData',
@@ -172,22 +176,11 @@ export default class initiateInquiry extends Component {
            callback: this.onSubmissionCallback
          });
         
-      
       }else{
         message.error('请导入询价商品');
-      
+    
       }
 
-
-      // this.props.dispatch({
-      //  // type: 'rolePurchaserBulkPurchases/getInquiryListData',
-      // type: 'rolePurchaserBulkPurchases/getSubmissionData',
-      //   payload: {
-      //     ...values,
-      //    purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur==''?this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list[0].purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur
-      //   },
-      //   callback: this.onSubmissionCallback
-      // });
     });
   }
   onSubmissionCallback = (params) => {
@@ -233,7 +226,7 @@ export default class initiateInquiry extends Component {
     const RadioGroup = Radio.Group;
     const { getFieldDecorator } = this.props.form;
     const {rolePurchaserBulkPurchases:{initiateInquiry:{information,pur,tableData:{item,list, pagination}}} } = this.props;
-    console.log('helloprops', this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData)
+  //  console.log('helloprops', this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -291,10 +284,10 @@ export default class initiateInquiry extends Component {
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
            <FormItem label="提货地点：">
-
-              {getFieldDecorator('sendType',{
+                {getFieldDecorator('sendType',{
                   //initialValue:'1'
-                  initialValue:item.sendType==''?'1':item.sendType
+                  initialValue:item.sendType==''?'1':item.sendType,
+                  rules: [{ required: true, message: '请输入提供地点' }],
                 })(
                   <Select
                       placeholder="日本提货"
@@ -305,6 +298,7 @@ export default class initiateInquiry extends Component {
                     <Option value="6">国内提货</Option>
                     </Select>
                 )}   
+
             </FormItem>
           </Col>
           <Col md={7} sm={24}></Col>

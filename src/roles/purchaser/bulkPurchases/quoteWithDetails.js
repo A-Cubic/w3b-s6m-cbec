@@ -21,25 +21,13 @@ export default class quotedPrice extends Component {
   state={
     formValues:{}
   }
-  // init(){
-  //   const {match,dispatch}=this.props;
-  //  // console.log('match',match)
-  //   const getData = JSON.parse(match.params.biography)
-  //   this.props.dispatch({
-  //     type:'rolePurchaserBulkPurchases/getpurchaseOrder',
-  //     payload:{
-  //       purchasesn:getData.purchasesn,
-  //       stage:getData.stage
-  //     }
-  //   })
-  // }
+
   componentDidMount() {
     //this.init();
-
+    //console.log('fs', this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item)
     const {match,dispatch}=this.props;
     //console.log('match',match)
     const getData = JSON.parse(match.params.biography)
-
     if(getData.status == 3 || getData.status == 4 || getData.status == 5){
       this.props.dispatch({
         type:'rolePurchaserBulkPurchases/getquotedPrice',
@@ -49,9 +37,6 @@ export default class quotedPrice extends Component {
         }
       })
     } 
-    
-
-
   }
 
   //分页 
@@ -123,15 +108,15 @@ export default class quotedPrice extends Component {
         title: '操作',
         dataIndex: 'elseMoney',
         key: 'elseMoney',
-        // render: (val,record) =>{
-        //   if(record.supplierNumType == 2){
-        //     return (
-        //       <div>
-        //         <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情 </a><br/>
-        //       </div>
-        //     )
-        //   }
-        // }
+        render: (val,record) =>{
+          if(record.supplierNumType == 2){
+            return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情 </a><br/>
+              </div>
+            )
+          }
+        }
             
         
       }
@@ -184,7 +169,9 @@ export default class quotedPrice extends Component {
           商品金额：<span>{item.purchasePrice}</span>　运费：<span>￥{item.waybillfee}</span>　税费：<span>￥{item.tax}</span>
           </div>
           <PurchaseOrder />
+          
            {
+             
               this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status==4?
                 // <div onClick={()=>this.demo()}>777</div>:
                 <Row style={{marginTop:'30px', marginBottom:'35px'}}>
@@ -216,6 +203,7 @@ export default class quotedPrice extends Component {
     //const { this.props:{listQuotedQrice:{listQuotedQrice:{item,list, pagination}}} } = this.props;
     const {match,dispatch}=this.props;
     const getData = JSON.parse(match.params.biography)
+   // console.log('getData.status',getData.status)
     //console.log('qqqqq',getData)
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/getPlaceAnOrder',

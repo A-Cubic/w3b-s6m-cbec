@@ -22,13 +22,13 @@ export default class quotedPriceOver extends Component {
   state={
     formValues:{},
     value:'',
+    //valueDetails:'',
+    getDataPurchasesn:''
   }
-  
   componentDidMount() {
     //this.init();
-console.log('okokoko')
     const {match,dispatch}=this.props;
-    console.log('match',match)
+   // console.log('match',match)
     const getData = JSON.parse(match.params.biography)
 
     if(getData.status == 2 ){
@@ -40,11 +40,7 @@ console.log('okokoko')
         }
       })
     } 
-    
-
-
   }
-
   //分页 
   handleTableChange=(pagination, filters, sorter)=>{
     const params = {
@@ -65,31 +61,15 @@ console.log('okokoko')
     });
   }
 
-  // handleChange = (e) => {
-  //   const { value } = e.target;
-  //   this.setState({ value });
-  // }
-
-
    onChange=(v)=>{
-    console.log('v',v)
+    //console.log('v',v)
     this.setState({
       value: v
     },()=>{
-      console.log('bbbbbb',this.state.value)
+      //console.log('bbbbbb',this.state.value)
     });
-
-    
-
-
-
-
-    //this.
-    // this.state.value=v
    
     }
-
-    
   render() {
     const { rolePurchaserBulkPurchases:{listQuotedQriceOver:{tableData:{item,list, pagination}}} } = this.props;
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
@@ -139,8 +119,11 @@ console.log('okokoko')
         dataIndex: 'purchaseNum',
         key: 'purchaseNum',
        
-        render: (val,record) =>{
+        render: (val,record,e) =>{
+         // console.log(2,record)
+          // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
           return (
+            record.supplierNumType ==2?<span >--</span>:
           <InputNumber 
             // onChange={this.onChange(record)} 
              onChange={this.onChange}
@@ -153,8 +136,6 @@ console.log('okokoko')
 
           )
         }
-
-
       }
       ,{
         title: '总金额',
@@ -170,26 +151,14 @@ console.log('okokoko')
         title: '操作',
         dataIndex: 'elseMoney',
         key: 'elseMoney',
-        // render: (val,record) =>{
-        //   if(record.supplierNumType == 2){
-        //     return (
-        //       <div>
-        //         <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>详情</a><br/>
-        //       </div>
-        //     )
-        //   }
-        // }
         render: (val,record) =>
+        
           <div>
               {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
               {record.status !=3?<a onClick={(e) => this.handleDel(e, record)}>删除</a>:<div></div>}
           </div>    
-          
       }
     ]
-    //console.log('qqqqqfs',this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.item.status)
- 
-    
     return (
       <div >
         <Card bordered={false} >
@@ -226,7 +195,6 @@ console.log('okokoko')
                  columns={columns}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
-
           />
           <div className={styles.line}></div>
           <div className={styles.takeGoods}>
@@ -251,40 +219,16 @@ console.log('okokoko')
       </div>
     );
   }
-  // inputOnBlur=()=>{
-  //   console.log('wo shi blur')
-  // }
-  // inputgaibian
-  // onChangePurchaseNum = () => {
-  //   console.log(1111)
-  // }
-  // function onChange(value) {
-  //   console.log('changed', value);
-  // }
+
 
 //改变数量
   //onChange
   inputOnBlur = (record,val) =>{
    // console.log('record',record.barcode)
-
     //console.log('onchange_valuce', this.state.value)
-
     const {match,dispatch}=this.props;
     const getData = JSON.parse(match.params.biography)
-    //console.log('getData',this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list)
-    //console.log('qqqqq',getData)
-    // const b =list.find(item=>
-    //   item.barcode===action.payload.barcode
-    // )
-    //const list=[{purchaseNum: "10",supplyPrice: "1500"},{purchaseNum: "70",supplyPrice: "3000"}],
-    // const list = [{purchaseNum:'1',supplyPrice:'2',c:'a',d:'b'},{purchaseNum:'3',supplyPrice:'4',c:'a',d:'b'}]
-    console.log('record',this.state.value)
-    // console.log('val',this.state.value)
-    // console.log('qaqa',this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list)
     const b = this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list.map((item) => {
-    // const demand
-    // const price
-     //return  [item.demand = item.purchaseNum,item.price = item.supplyPrice]
      return {
       // demand:this.state.value,
       // price:item.supplyPrice,
@@ -294,11 +238,9 @@ console.log('okokoko')
      }
     })
 
-    
     const c =b.find(item=>
       item.barcode===record.barcode
     )
-
     const d = [c].map((item) => {
       // const demand
       // const price
@@ -310,43 +252,27 @@ console.log('okokoko')
         price:item.supplyPrice,
        }
       })  
-
-
-
-
-
-    
-    console.log('item返回值b',b)
-    console.log('item返回值c',[c])
-    console.log('item返回值d',d)
-    this.props.dispatch({
-      type: 'rolePurchaserBulkPurchases/getChangeNum',
-     
-      //payload: params,
-      payload: {
-        purchasesn:getData.purchasesn,
-        // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
-        list:d,
-        barcode:record.barcode
-      },
-    }); 
-
-    //详情
-    // this.props.dispatch({
-    //   // type: 'rolePurchaserBulkPurchases/getChangeNum',
-    //   type: 'rolePurchaserBulkPurchases/CommodityDetails',
-    //   //payload: params,
-    //   payload: {
-    //     purchasesn:getData.purchasesn,
-    //     // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
-    //     list:b,
-    //     barcode:record.barcode
-    //   },
-    // });   
-
+    // console.log('item返回值b',b)
+    // console.log('item返回值c',[c])
+    // console.log('item返回值d',d)
+    // console.log('purchaseNum',record.purchaseNum)  
+    // console.log('this.state.value',this.state.value =='') 
+    if(this.state.value != ''){
+      if(record.purchaseNum != this.state.value){
+        //console.log('传数')
+        this.props.dispatch({
+          type: 'rolePurchaserBulkPurchases/getChangeNum',
+          //payload: params,
+          payload: {
+            purchasesn:getData.purchasesn,
+            // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
+            list:d,
+            barcode:record.barcode
+          },
+        }); 
+      }  
+    }  
   }
-
-
 
   //提交
   handleSubmission = () => {
@@ -367,7 +293,7 @@ console.log('okokoko')
    //取消
    handleCancel = () => {
     //const { this.props:{listQuotedQrice:{listQuotedQrice:{item,list, pagination}}} } = this.props;
-    console.log('over')
+   // console.log('over')
     const {match,dispatch}=this.props;
     const getData = JSON.parse(match.params.biography)
     //console.log('qqqqq',getData)
@@ -379,21 +305,10 @@ console.log('okokoko')
         //status:getData.status
       },
     });
-    
   }
-
 
    //删除
    handleDel = (e, record)=>{
-    // console.log(record.order)
-     // const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
-     // const _this = this;
-     // console.log('fs',list)
-     // const dataSource = [...list];
-     // console.log('aafs',list[index].keyId)
-     // this.setState({ dataSource: dataSource.filter(item => item.keyId != list[index].keyId) });
-
-
      this.props.dispatch({
        type: 'rolePurchaserBulkPurchases/getQuotedPriceDel',
        payload: {
@@ -403,9 +318,6 @@ console.log('okokoko')
        },
      });
    }
-
-
-
 
   handleDetailsCheck = (record) => {
     //console.log('详情',record)
@@ -441,55 +353,71 @@ console.log('okokoko')
   rolePurchaserBulkPurchases
 }))
 class PurchaseOrder extends Component {
+  state={
+    valueDetails:'',
   
-
-
-
-  handleCancel = () => {
-   console.log('del')
-    this.props.dispatch({
-      type:'rolePurchaserBulkPurchases/gethideR',
-      payload:false
-    })
   }
+  onChangeDetails=(v)=>{
+    //console.log('v',v)
+    this.setState({
+      valueDetails: v
+    }
+    // ,()=>{
+    //   console.log('bbbbbb',this.state.valueDetails)
+    // }
+    );
+  }
+  inputOnBlurDetails = (record,val) =>{
+    
+    //  console.log(this.state.valueDetails)
+    const a = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData;
+    a.map((item) => {
+      if(item.keyId == record.keyId){
+        item.demand=this.state.valueDetails
+        
+      }
+       // console.log('item',item)
+    })
+
+
+   }
+
+
   handleOk = () => {
     const {rolePurchaserBulkPurchases:{inquiryDetailsListDetails:{show,tableData}}} = this.props
-    console.log(this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData)
-
-
-    
-
-
-
-
-
-
-
-
-   
     this.props.dispatch({
       // type: 'rolePurchaserBulkPurchases/getChangeNum',
       type: 'rolePurchaserBulkPurchases/CommodityDetails',
       //payload: params,
       payload: {
-        purchasesn:1,
+        purchasesn:this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.obj.purchasesn,
+        barcode:this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.obj.barcode,
+        list:this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData
         // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
         //list:b,
         //barcode:record.barcode
       },
-    });   
+    });  
+    this.props.dispatch({
+      type:'rolePurchaserBulkPurchases/gethideR',
+      payload:false
+    }) 
 
   }
-
+  handleCancel = () => {
+    //console.log('del')
+     this.props.dispatch({
+       type:'rolePurchaserBulkPurchases/gethideR',
+       payload:false
+     })
+   }
 
 
   render(){
    // const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
    const {rolePurchaserBulkPurchases:{inquiryDetailsListDetails:{show,tableData}}} = this.props
     //console.log('22ok',this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData)
-function teste(v){
-console.log('v',v)
-}
+
     const columns = [
       {
         title: '序号',
@@ -501,23 +429,21 @@ console.log('v',v)
         key: 'id',
       }, {
         title: '供货单价',
-        dataIndex: 'offerPrice',
-        key: 'offerPrice',
+        dataIndex: 'price',
+        key: 'price',
         
       },  {
         title: '可供数量',
         dataIndex: 'maxOfferNum',
         key: 'maxOfferNum',
-        render: (val,record) =>{
-         
+        render: (val,record,e) =>{
+        // console.log('e',e)
             return (
               <div>
                 {record.minOfferNum}-{record.maxOfferNum}
               </div>
             )
-          
         }
-        
       }, {
         title: '采购数量',
         dataIndex: 'demand',
@@ -531,7 +457,9 @@ console.log('v',v)
              //  onClick={(e) => this.handleDelCheck(e, record, index)}>
               min={parseInt(record.minOfferNum)} 
               max={parseInt(record.maxOfferNum)} 
-              defaultValue={record.purchaseNum}
+              defaultValue={record.demand}
+              onChange={this.onChangeDetails}
+              onBlur={()=>this.inputOnBlurDetails(record) }
             />
           )
 
@@ -541,10 +469,41 @@ console.log('v',v)
         dataIndex: 'purchaseAmount',
         key: 'purchaseAmount',
         render: (val,record) =>{
+
+        //   const a = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData;
+        //   a.map((item) => {
+        //   //  console.log('keyId',record.keyId)
+        //     if(item.keyId == record.keyId){
+        //       item.demand=this.state.valueDetails
+              
+        //     }
+        //       console.log('item',item)
+        //   })
+        // // console.log('a',a)
+          
+
+        //  const c = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData.find(item=>
+        //   item.keyId===record.keyId
+        //   )
+       
+
+
+      
+        
+
+
+
+
+
+          //console.log('c ',c)
+
+
           return(
-            record.demand * record.offerPrice
+            //this.state.valueDetails * record.price
+            record.demand * record.price
           )
         }
+      
       }
     ];
 
@@ -557,7 +516,6 @@ console.log('v',v)
           onOk={this.handleOk}
         >
           <Card>
-
               {/* <div>11111</div> */}
               <Table dataSource={tableData}
                 // scroll={{ x: 1500}}
@@ -568,8 +526,6 @@ console.log('v',v)
               />
 
           </Card>
-
-
         </Modal>
       </div>
     )

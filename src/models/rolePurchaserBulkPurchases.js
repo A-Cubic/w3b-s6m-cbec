@@ -122,7 +122,8 @@ export default {
      //询价列表 - 已报价 - 点击详情
      inquiryDetailsListDetails:{
       show: false,
-      tableData:[]
+      tableData:[],
+      obj:''
     },
 
     // -------- 采购列表 --------------
@@ -378,7 +379,8 @@ export default {
           yield put({
             type: 'getPlaceAnOrderR',
             payload: response,
-          })
+          }),
+          yield put(routerRedux.push('/bulkPurchases/inquiryList'));
         } else {
 
         }
@@ -406,6 +408,10 @@ export default {
       yield put({
         type: 'completedDetailsR',
         payload: {response,show: true}
+      }),
+      yield put({
+        type: 'detailsArePassedR',
+        payload: payload
       })
     }
   },
@@ -468,6 +474,7 @@ export default {
             type: 'getOfferR',
             payload: response,
           })
+          yield put(routerRedux.push('/bulkPurchases/inquiryList'));
           // console.log(111)
           // this.props.dispatch(routerRedux.push('/bulkPurchases/inquiryList'   ));
           //yield put(routerRedux.push('/bulkPurchases/inquiryList/'));
@@ -669,7 +676,7 @@ export default {
     uploadOrderbillR(state, action){
       return {
         ...state,
-        initiateInquiryQa:{
+        initiateInquiry:{
           ...state.initiateInquiry,
           pur:action.payload.list[0].purchasesn,
           tableData:action.payload
@@ -839,6 +846,22 @@ export default {
     },
 
 
+    // 询价列表 - 已报价-详情 传值
+    detailsArePassedR(state, action) {
+      console.log(action)
+      return {
+        ...state,
+        inquiryDetailsListDetails  : {
+          ...state.inquiryDetailsListDetails  ,
+          obj:action.payload
+          // obj: action.payload.response,
+          // //childTestModelVisible:action.payload.childTestModelVisible
+          // show: action.payload.show
+        },
+      };
+    },
+
+
 
     // 询价列表-已报价-点击详情-隐藏 
     gethideR(state, action) {
@@ -929,6 +952,10 @@ export default {
 
        // 询价列表-已报价 - 详情改变采购数量
       CommodityDetailsR(state,action){
+
+      console.log('action',action)  
+
+
       const inList = state.listQuotedQriceOver.tableData.list
       const bb = action.payload.barcode
       const dataSource = [...inList]
@@ -936,15 +963,20 @@ export default {
         item.barcode===action.payload.barcode
       )
       b.totalPrice = action.payload.totalPrice
+      b.purchaseNum = action.payload.purchaseNum
+
+      console.log('b.purchaseNum',b.purchaseNum)
+      //b.purchaseNum = action.payload.purchaseNum
       state.listQuotedQriceOver.tableData.item.purchasePrice = action.payload.allPrice
+      
       return {
         ...state,
         listQuotedQriceOver:{
           ...state.listQuotedQriceOver,
           //tableData:action.payload
-
           'item.purchasePrice':action.payload.allPrice,
-          'b.totalPric':action.payload.totalPrice
+          'b.totalPric':action.payload.totalPrice,
+          'b.purchaseNum':action.payload.purchaseNum,
           // tableData:{
           //   ...state.listQuotedQriceOver.tableData,
           //   list:newData
@@ -965,6 +997,21 @@ export default {
          },
        }
       }, 
+
+     // 询价列表-已报价 - 详情传值
+     detailsArePassed(state, action){
+      //console.log('action',action.payload)
+      //console.log('state',state.initiateInquiry.information)
+       return {
+         ...state,
+         offerList:{
+           ...state.offerList,
+           tableData:action.payload
+         },
+       }
+      },   
+
+
 
     // 询价列表-已报价 - 取消
     getCancelR(state, action){

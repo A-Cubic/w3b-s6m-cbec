@@ -19,14 +19,6 @@ const FormItem = Form.Item;
 export default class inquiryList extends Component {
   state={
     formValues:{}
-    // fileList:[],
-    // visibleChildCheck:false,
-    // visibleChildDelivery:false,
-    // orderId:'',
-    // visible: false,
-    // formValues:{},
-    // warehouseId:'',
-    // hidd:false,
   }
   init(){
     this.props.dispatch({
@@ -202,7 +194,6 @@ export default class inquiryList extends Component {
       }
     ];
 
-    
     return (
       <div className={styles.qa}>
         <Card bordered={false}>
@@ -235,7 +226,6 @@ export default class inquiryList extends Component {
      // const dataSource = [...list];
      // console.log('aafs',list[index].keyId)
      // this.setState({ dataSource: dataSource.filter(item => item.keyId != list[index].keyId) });
-
 
      this.props.dispatch({
        type: 'rolePurchaserBulkPurchases/deleteList',
