@@ -1,7 +1,17 @@
+
 export default function(dynamicWrapper,app){
   return {
+    // 采购商
+    ...procurement(dynamicWrapper,app),
+    // 运营
+    ...operation(dynamicWrapper,app)
+  }
 
-    //-------------代销业务-------------
+};
+//-------------------------------------采购商-------------------------------------
+export function procurement (dynamicWrapper,app){
+  return{
+  //-------------代销业务-------------
 
     //代销-商品-商品库存-20181115
     '/consignment/consignmentStock': {
@@ -66,11 +76,81 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/quoted')),
     },
 
+  }
+}
+//-------------------------------------运营-------------------------------------
+export function operation (dynamicWrapper,app){
+  return {
+    //--------------------铺货--------------------
+    //-----------------------------库存-----------------------------
+    //库存 - 平台库存
+    '/stock/platformStock': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    },
+    //库存 - 门店库存
+    '/stock/storesStock': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    },
+    //-----------------------------发货-----------------------------
+    // //发货单表单
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    // //选择发货商品
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    // //选择商品返回发货单（带参）
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    // //发货列表
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    // //发货列表- 查看发货单
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    // //-----------------------------销售-----------------------------
+    // //门店销售//（查看弹窗）
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    //
+    //
+    // //-----------------------------合同-----------------------------
+    // //合同列表
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    // //创建合同
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    // //查看合同
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    // //-----------------------------财务-----------------------------
+    // //采购结算
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+    // //手动调账（查看）
+    // '/stock/storesStock': {
+    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+    // },
+
+
+
+
 
     //测试demo
     '/goods/test': {
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/test')),
     },
 
-  };
-};
+
+  }
+}
