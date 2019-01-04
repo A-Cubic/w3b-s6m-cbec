@@ -28,6 +28,8 @@ export default class initiateInquiry extends Component {
   }
 
   componentDidMount() {
+    //console.log('ffffff',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list)
+    //console.log('qqqq',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list==[111])
     //this.init();
     const {match,dispatch}=this.props;
     //console.log('fs',JSON.parse(match.params.biography))
@@ -70,6 +72,7 @@ export default class initiateInquiry extends Component {
       type: 'rolePurchaserBulkPurchases/getPreservationData',
         payload: {
           ...values,
+          purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur==''?this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list[0].purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur
         },
         callback:this.onPreservationCallback
       });
@@ -110,7 +113,7 @@ export default class initiateInquiry extends Component {
     this.props.dispatch({
       //type: 'rolePurchaserBulkPurchases/getInquiryListData',
       //type: 'rolePurchaserBulkPurchases/getPagingData',
-      type: 'rolePurchaserBulkPurchases/getPagingData',
+      type: 'rolePurchaserBulkPurchases/getPaging',
       //payload: params,
        payload: {
          ...params,
@@ -140,6 +143,9 @@ export default class initiateInquiry extends Component {
 
   //提交
   handleOnSubmission = (e)=>{
+    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
+  //  console.log('ffffff',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list=='')
+   // console.log(this.props)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -154,14 +160,27 @@ export default class initiateInquiry extends Component {
       this.setState({
         formValues: values,
       });
-      this.props.dispatch({
-       // type: 'rolePurchaserBulkPurchases/getInquiryListData',
-      type: 'rolePurchaserBulkPurchases/getSubmissionData',
-        payload: {
-          ...values,
-        },
-        callback: this.onSubmissionCallback
-      });
+
+     // console.log('pur',this.props.rolePurchaserBulkPurchases.initiateInquiry.pur)
+     // || this.props.rolePurchaserBulkPurchases.initiateInquiry
+
+      if (this.props.rolePurchaserBulkPurchases.initiateInquiry.pur!==''  ) {
+        message.success('提交成功');
+        this.props.dispatch({
+          // type: 'rolePurchaserBulkPurchases/getInquiryListData',
+         type: 'rolePurchaserBulkPurchases/getSubmissionData',
+           payload: {
+             ...values,
+            purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur==''?this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list[0].purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur
+           },
+           callback: this.onSubmissionCallback
+         });
+        
+      }else{
+        message.error('请导入询价商品');
+    
+      }
+
     });
   }
   onSubmissionCallback = (params) => {
@@ -207,7 +226,7 @@ export default class initiateInquiry extends Component {
     const RadioGroup = Radio.Group;
     const { getFieldDecorator } = this.props.form;
     const {rolePurchaserBulkPurchases:{initiateInquiry:{information,pur,tableData:{item,list, pagination}}} } = this.props;
-    console.log('helloprops', this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData)
+  //  console.log('helloprops', this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -253,6 +272,7 @@ export default class initiateInquiry extends Component {
       multiple: false,
       // customRequest:this.upload,
     };
+    //console.log('sex',parseInt(item.sex ))
     return (
       <Form onSubmit={this.onPreservation} layout="inline">
         <div className={styles.titleName}>询价单</div>
@@ -264,10 +284,10 @@ export default class initiateInquiry extends Component {
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
            <FormItem label="提货地点：">
-
-              {getFieldDecorator('sendType',{
+                {getFieldDecorator('sendType',{
                   //initialValue:'1'
-                  initialValue:item.type
+                  initialValue:item.sendType==''?'1':item.sendType,
+                  rules: [{ required: true, message: '请输入提供地点' }],
                 })(
                   <Select
                       placeholder="日本提货"
@@ -278,6 +298,7 @@ export default class initiateInquiry extends Component {
                     <Option value="6">国内提货</Option>
                     </Select>
                 )}   
+
             </FormItem>
           </Col>
           <Col md={7} sm={24}></Col>
@@ -300,9 +321,10 @@ export default class initiateInquiry extends Component {
             </FormItem>            
           </Col>   
           <Col md={7} sm={24}>
-      
+               
             {getFieldDecorator('sex',{
-                initialValue:parseInt(item.sex )
+                // initialValue:parseInt(item.sex )
+                initialValue:item.sex==undefined?0:parseInt(item.sex )
               })(
                 <RadioGroup  onChange={this.onChange}   className={styles.sex} >
                   <Radio  value={0}>男士</Radio>
