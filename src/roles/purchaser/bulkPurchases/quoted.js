@@ -358,7 +358,8 @@ class PurchaseOrder extends Component {
   
   }
   onChangeDetails=(v, r)=>{
-    //console.log('v',v)
+    // console.log('v',v)
+    // console.log('r',r)
     const sss = r.keyId;
     this.setState({
       valueDetails: {...this.state.valueDetails, [sss]: v}
