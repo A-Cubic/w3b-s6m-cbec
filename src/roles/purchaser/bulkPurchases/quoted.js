@@ -354,13 +354,14 @@ export default class quotedPriceOver extends Component {
 }))
 class PurchaseOrder extends Component {
   state={
-    valueDetails:'',
+    valueDetails:{},
   
   }
-  onChangeDetails=(v)=>{
+  onChangeDetails=(v, r)=>{
     //console.log('v',v)
+    const sss = r.keyId;
     this.setState({
-      valueDetails: v
+      valueDetails: {...this.state.valueDetails, [sss]: v}
     }
     // ,()=>{
     //   console.log('bbbbbb',this.state.valueDetails)
@@ -372,13 +373,12 @@ class PurchaseOrder extends Component {
     //  console.log(this.state.valueDetails)
     const a = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData;
     a.map((item) => {
-      if(item.keyId == record.keyId){
-        item.demand=this.state.valueDetails
+      if(item.keyId == record.keyId && this.state.valueDetails[item.keyId] != undefined){
+        item.demand=this.state.valueDetails[item.keyId]
         
       }
        // console.log('item',item)
     })
-
 
    }
 
@@ -404,6 +404,8 @@ class PurchaseOrder extends Component {
     }) 
 
   }
+
+
   handleCancel = () => {
     //console.log('del')
      this.props.dispatch({
@@ -449,6 +451,7 @@ class PurchaseOrder extends Component {
         dataIndex: 'demand',
         key: 'demand',
         render: (val,record) =>{
+
           return(
             <InputNumber 
             // onChange={this.onChange(record)} 
@@ -457,8 +460,9 @@ class PurchaseOrder extends Component {
              //  onClick={(e) => this.handleDelCheck(e, record, index)}>
               min={parseInt(record.minOfferNum)} 
               max={parseInt(record.maxOfferNum)} 
-              defaultValue={record.demand}
-              onChange={this.onChangeDetails}
+              defaultValue={ this.state.valueDetails[record.keyId] == undefined ? record.demand : this.state.valueDetails[record.keyId]}
+              //defaultValue={record.demand}
+              onChange={(e)=>{this.onChangeDetails(e, record)}}
               onBlur={()=>this.inputOnBlurDetails(record) }
             />
           )
@@ -477,30 +481,23 @@ class PurchaseOrder extends Component {
         //       item.demand=this.state.valueDetails
               
         //     }
-        //       console.log('item',item)
+        //      // console.log('item',item)
         //   })
-        // // console.log('a',a)
+        // console.log('a',a)
           
 
-        //  const c = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData.find(item=>
-        //   item.keyId===record.keyId
-        //   )
+         const c = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData.find(item=>
+          item.keyId===record.keyId
+          )
        
 
 
-      
-        
-
-
-
-
-
-          //console.log('c ',c)
+         // console.log('c ',this.state.valueDetails)
 
 
           return(
             //this.state.valueDetails * record.price
-            record.demand * record.price
+            this.state.valueDetails[record.keyId] == undefined ? record.demand * record.price : this.state.valueDetails[record.keyId] * record.price
           )
         }
       

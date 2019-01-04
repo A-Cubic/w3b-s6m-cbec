@@ -848,7 +848,7 @@ export default {
 
     // 询价列表 - 已报价-详情 传值
     detailsArePassedR(state, action) {
-      console.log(action)
+      //console.log(action)
       return {
         ...state,
         inquiryDetailsListDetails  : {
@@ -876,7 +876,6 @@ export default {
 
      //已报价 - 删除
      getQuotedPriceDelR(state,action){
-
       //console.log('sssss',action.payload.payload.barcode)
       //console.log('ssssssssdsdsdss',state.initiateInquiry.tableData.list)
       //console.log('barcode',barcode)   
@@ -927,9 +926,9 @@ export default {
       b.totalPrice = action.payload.totalPrice
       state.listQuotedQriceOver.tableData.item.purchasePrice = action.payload.allPrice
 
-      console.log('b',action.payload)
-       console.log('totalPrice',action.payload.totalPrice)
-       console.log('purchasePrice',state.listQuotedQriceOver.tableData.item.purchasePrice)     
+      // console.log('b',action.payload)
+      //  console.log('totalPrice',action.payload.totalPrice)
+      //  console.log('purchasePrice',state.listQuotedQriceOver.tableData.item.purchasePrice)     
 
       return {
         ...state,
@@ -952,10 +951,6 @@ export default {
 
        // 询价列表-已报价 - 详情改变采购数量
       CommodityDetailsR(state,action){
-
-      console.log('action',action)  
-
-
       const inList = state.listQuotedQriceOver.tableData.list
       const bb = action.payload.barcode
       const dataSource = [...inList]
@@ -964,11 +959,9 @@ export default {
       )
       b.totalPrice = action.payload.totalPrice
       b.purchaseNum = action.payload.purchaseNum
-
-      console.log('b.purchaseNum',b.purchaseNum)
+      //console.log('b.purchaseNum',b.purchaseNum)
       //b.purchaseNum = action.payload.purchaseNum
       state.listQuotedQriceOver.tableData.item.purchasePrice = action.payload.allPrice
-      
       return {
         ...state,
         listQuotedQriceOver:{
