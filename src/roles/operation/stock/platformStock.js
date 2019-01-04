@@ -51,7 +51,7 @@ export default class platformStock extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'rolePurchaserConsignment/platformStock',
+        type: 'roleOperationDistribution/platformStock',
         payload: {
           ...values,
         },
@@ -89,6 +89,7 @@ export default class platformStock extends Component {
   }
   // 上传销售数据
   handleUploadChange=(info)=>{
+    console.log('userId',userId)
     if(info.file.status === 'done') {
       this.props.dispatch({
         type: 'roleOperationDistribution/uploadOrderbill',

@@ -99,7 +99,7 @@ export default class inquiryList extends Component {
           <Col md={12} sm={24}>
             <FormItem label="">
               {getFieldDecorator('select')(
-                <Input placeholder="请输入询价单号及询价单描述进行搜索" />
+                <Input placeholder="请输入询价单号" />
               )}
             </FormItem>
           </Col>

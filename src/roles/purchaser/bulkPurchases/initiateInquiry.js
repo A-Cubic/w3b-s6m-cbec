@@ -105,7 +105,7 @@ export default class initiateInquiry extends Component {
 
   //下载运单模板
   downloadTemplate=()=>{
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/Waybill.xlsx'
+    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/InquiryGoods.xlsx'
   }
   handleFormReset =()=>{
     this.props.form.resetFields();
@@ -210,13 +210,14 @@ export default class initiateInquiry extends Component {
 
   // 上传销售数据
   handleUploadChange=(info)=>{
+   // console.log('fileTemp',info.file.response)
     if(info.file.status === 'done') {
       this.props.dispatch({
         type: 'rolePurchaserBulkPurchases/uploadOrderbill',
         payload: {
           purchasesn:'',
-          // fileTemp: info.file.responseresponse.fileName[0]
-          fileTemp:info.file.name
+           fileTemp: info.file.response.fileName[0]
+          //fileTemp:info.file.name
         },
         callback: this.onUploadCallback
       });
