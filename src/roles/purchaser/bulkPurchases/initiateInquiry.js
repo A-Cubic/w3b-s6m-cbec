@@ -31,10 +31,23 @@ export default class initiateInquiry extends Component {
     //console.log('ffffff',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list)
     //console.log('qqqq',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list==[111])
     //this.init();
+
+    // console.log('aaa',this.props)
+
+
+    if(!this.props.match.params){
+        this.init()
+    }else{
+
+    }
+
+
+  }
+  init(){
     const {match,dispatch}=this.props;
     //console.log('fs',JSON.parse(match.params.biography))
     //const b=JSON.parse(match.params.biography)}
-    
+
     const getData = JSON.parse(match.params.biography)
     //console.log('getData',getData)
     if(getData.status == 7) {
@@ -47,8 +60,6 @@ export default class initiateInquiry extends Component {
         },
       });
     }
-    
-
   }
   //保存
   onPreservation=(e)=>{
@@ -121,7 +132,7 @@ export default class initiateInquiry extends Component {
        },
     });
   }
-  
+
   //删除
   handleDelCheck = (e, record, index)=>{
    // console.log(record.order)
@@ -175,10 +186,10 @@ export default class initiateInquiry extends Component {
            },
            callback: this.onSubmissionCallback
          });
-        
+
       }else{
         message.error('请导入询价商品');
-    
+
       }
 
     });
@@ -192,7 +203,7 @@ export default class initiateInquiry extends Component {
       this.setState({
         formValues: {},
       });
-      
+
      }else{
      }
   }
@@ -214,7 +225,7 @@ export default class initiateInquiry extends Component {
   onUploadCallback = (params) => {
     const msg = params.msg;
     if(params.item.type==="0"){
-      
+
      message.error(params.item.msg);
     }else{
       message.success("上传成功",5);
@@ -297,7 +308,7 @@ export default class initiateInquiry extends Component {
                     <Option value="3">香港提货</Option>
                     <Option value="6">国内提货</Option>
                     </Select>
-                )}   
+                )}
 
             </FormItem>
           </Col>
@@ -309,7 +320,7 @@ export default class initiateInquiry extends Component {
           采购商信息
         </div>
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={7} sm={24}></Col> 
+          <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
             <FormItem label="姓名：  ">
               {getFieldDecorator('contacts', {
@@ -318,10 +329,10 @@ export default class initiateInquiry extends Component {
               })(
                 <Input placeholder="请输入姓名"/>
               )}
-            </FormItem>            
-          </Col>   
+            </FormItem>
+          </Col>
           <Col md={7} sm={24}>
-               
+
             {getFieldDecorator('sex',{
                 // initialValue:parseInt(item.sex )
                 initialValue:item.sex==undefined?0:parseInt(item.sex )
@@ -330,11 +341,11 @@ export default class initiateInquiry extends Component {
                   <Radio  value={0}>男士</Radio>
                   <Radio value={1}>女士</Radio>
                 </RadioGroup>
-              )}     
-          </Col>                
+              )}
+          </Col>
         </Row>
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={7} sm={24}></Col> 
+          <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
             <FormItem label="联系电话:">
               {getFieldDecorator('tel', {
@@ -343,12 +354,12 @@ export default class initiateInquiry extends Component {
               })(
                 <Input placeholder="请输入联系电话"/>
               )}
-            </FormItem>         
-          </Col>   
-          <Col md={7} sm={24}></Col>                
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}></Col>
         </Row>
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={7} sm={24}></Col> 
+          <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
             {/* <FormItem label="采购截止日期："> */}
             <FormItem label='截止日期：'>
@@ -357,14 +368,14 @@ export default class initiateInquiry extends Component {
                 //defaultValue={moment('2015-01-01', 'YYYY-MM-DD')}
                  initialValue: information.deliveryTime,
                  rules: [{ required: true, message: '请输入截止日期'}],
-                 
+
               })(
                 <DatePicker  style={{ width: '100%' }} onChange={this.onTest}/>
                 //<DatePicker style={{ width: '100%' }}  placeholder="" />
               )}
-            </FormItem>      
-          </Col>   
-          <Col md={7} sm={24}></Col>                
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}></Col>
         </Row>
         <div className={styles.line} style={{marginBottom:25}}></div>
         <div className={styles.takeGoods}>
@@ -372,7 +383,7 @@ export default class initiateInquiry extends Component {
           采购商信息
         </div>
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={7} sm={24}></Col> 
+          <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
             <FormItem label="询价单描述：:">
               {getFieldDecorator('remark', {
@@ -381,10 +392,10 @@ export default class initiateInquiry extends Component {
               })(
                 <Input placeholder="请输入询价单描述"/>
               )}
-            </FormItem>         
-          </Col>   
-          <Col md={7} sm={24}></Col>                
-        </Row>    
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}></Col>
+        </Row>
         <div style={{marginBottom:'20px'}}>
           <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
             <Icon type="download" />下载询价模板
@@ -393,8 +404,8 @@ export default class initiateInquiry extends Component {
             <Button style={{ marginLeft: 8 }}>
               <Icon type="cloud-upload-o" /> 导入询价商品
             </Button>
-          </Upload>          
-        </div>       
+          </Upload>
+        </div>
         <Table dataSource={list}
                 // showHeader={false}
                  // scroll={{ x: 1500}}
@@ -405,17 +416,17 @@ export default class initiateInquiry extends Component {
                  // loading={submitting}
           />
         <Row style={{marginTop:'15px', marginBottom:'5px'}}>
-          <Col md={9} sm={24}></Col>      
+          <Col md={9} sm={24}></Col>
           <Col md={6} sm={24}>
             <Button style={{ marginLeft: 48 }} htmlType="submit">保存</Button>
             <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnSubmission} >提交</Button>
           </Col>
-          <Col md={9} sm={24}></Col>      
-        </Row>  
+          <Col md={9} sm={24}></Col>
+        </Row>
       </Form>
     );
   }
- 
+
   render() {
     return (
       <div className={styles.qa}>

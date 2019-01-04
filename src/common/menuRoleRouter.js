@@ -39,12 +39,15 @@ export function procurement (dynamicWrapper,app){
     },
 
     //-------------批量采购-------------
-
     //批量采购-发起询价-
-    ///trade/order-s/info/:id'
+    '/bulkPurchases/initiateInquiry': {
+      component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
+    },
+    //批量采购-发起询价-（带参）
     '/bulkPurchases/initiateInquiry/:biography': {
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
     },
+
     //批量采购-询价列表-
     '/bulkPurchases/inquiryList': {
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/inquiryList')),
@@ -53,10 +56,13 @@ export function procurement (dynamicWrapper,app){
     '/bulkPurchases/purchaseList': {
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/purchaseList')),
     },
+
     //批量采购 - 询价列表/采购列表 - 查看列表详情
     '/bulkPurchases/listDetails/:biography': {
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/listDetails')),
     },
+
+
     // //批量采购 - 发起询价/询价列表 - 询价单
     // '/bulkPurchases/inquiryForm': {
     //   component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/inquiryForm')),
