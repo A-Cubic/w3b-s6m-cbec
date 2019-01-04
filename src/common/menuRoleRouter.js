@@ -98,55 +98,57 @@ export function operation (dynamicWrapper,app){
       component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
     },
     //-----------------------------发货-----------------------------
-    // //发货单表单
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    // //选择发货商品
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    // //选择商品返回发货单（带参）
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    // //发货列表
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    // //发货列表- 查看发货单
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    // //-----------------------------销售-----------------------------
-    // //门店销售//（查看弹窗）
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    //
-    //
-    // //-----------------------------合同-----------------------------
-    // //合同列表
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    // //创建合同
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    // //查看合同
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    // //-----------------------------财务-----------------------------
-    // //采购结算
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
-    // //手动调账（查看）
-    // '/stock/storesStock': {
-    //   component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
-    // },
+    //发货单表单
+    '/delivery/deliveryForm': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+    },
+    //选择发货商品
+    '/delivery/selectProduct': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+    },
+    //选择商品返回发货单（带参）
+    '/delivery/returnDeliveryForm/:id': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+    },
+    //发货列表
+    '/delivery/deliveryList': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+    },
+    //发货列表- 查看发货单
+    '/delivery/checkDelivery': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+    },
+
+    //-----------------------------销售-----------------------------
+    //门店销售//（查看弹窗）
+    '/sales/storesSales': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/sales/platformStock')),
+    },
+
+
+    //-----------------------------合同-----------------------------
+    //合同列表
+    '/agreement/agreementList': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/platformStock')),
+    },
+    //创建合同
+    '/agreement/createAgreement': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/platformStock')),
+    },
+    //查看合同
+    '/agreement/checkAgreement': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/platformStock')),
+    },
+
+    //-----------------------------财务-----------------------------
+    //采购结算
+    '/finance/purchaseSettlement': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/finance/platformStock')),
+    },
+    //手动调账（查看）
+    '/finance/manualTransfer': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/finance/platformStock')),
+    },
 
 
 
