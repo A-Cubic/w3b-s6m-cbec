@@ -43,10 +43,7 @@ export default class listDetails extends Component {
       ...pagination,
       ...this.state.formValues,
     };
-   // console.log('11111',this.props.rolePurchaserBulkPurchases.listDetails.tableData.list[0].purchasesn)
-   // console.log('22222',this.props.rolePurchaserBulkPurchases.listDetails.tableData.item.stage)
     this.props.dispatch({
-      // type: 'rolePurchaserBulkPurchases/getpurchasepaging',
       type: 'rolePurchaserBulkPurchases/getpurchaseOrder',
      // payload: params,
       payload: {
@@ -103,13 +100,6 @@ export default class listDetails extends Component {
             )
           }
         }
-            
-          
-          // <div>
-          //   <a href="javascript:;" onClick={()=>this.handleDetailsCheck(record)}>
-          //   {/* render:supplierNumType=>`${supplierNumType==1?'':'详情'}` */}
-          //   </a><br/>
-          // </div>
       }
     ];
     return (
@@ -163,24 +153,6 @@ export default class listDetails extends Component {
       </div>
     );
   }
-  // //删除
-  // handleDel = (e, record, index)=>{
-  //   // console.log(record.order)
-  //    // const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
-  //    // const _this = this;
-  //    // console.log('fs',list)
-  //    // const dataSource = [...list];
-  //    // console.log('aafs',list[index].keyId)
-  //    // this.setState({ dataSource: dataSource.filter(item => item.keyId != list[index].keyId) });
-  //    this.props.dispatch({
-  //      type: 'rolePurchaserBulkPurchases/deleteList',
-  //      payload: {
-  //        purchasesn:record.purchasesn,
-  //        //barcode:record.barcode,
-  //        //index:index
-  //      },
-  //    });
-  //  }
   handleDetailsCheck = (record) => {
    // console.log('详情',record)
     this.props.dispatch({

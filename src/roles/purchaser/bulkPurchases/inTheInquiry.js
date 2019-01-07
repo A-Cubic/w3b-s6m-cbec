@@ -16,7 +16,7 @@ const FormItem = Form.Item;
 
 @Form.create()
 // 采购商 - 询价列表 - 询价中
-export default class listInquiry extends Component {
+export default class inTheInquiry extends Component {
   state={
     formValues:{}
   }
@@ -37,7 +37,7 @@ export default class listInquiry extends Component {
   }
 
   handleTableChange=(pagination, filters, sorter)=>{
-    console.log('xxx',this.props)
+
     const params = {
       ...pagination,
       ...this.state.formValues,
@@ -62,7 +62,7 @@ export default class listInquiry extends Component {
       ...pagination,
     };
 
-    console.log('xxxxxxxxxxxfs',this.props.rolePurchaserBulkPurchases.listInquiry.tableData)
+    //console.log('xxxxxxxxxxxfs',this.props.rolePurchaserBulkPurchases.listInquiry.tableData)
     const columns = [
       {
         title: '序号',

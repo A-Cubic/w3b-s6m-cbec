@@ -152,8 +152,6 @@ export default class inquiryList extends Component {
       showQuickJumper: true,
       ...pagination,
     };
-
-
     const columns = [
       {
         title: '序号',
@@ -186,14 +184,11 @@ export default class inquiryList extends Component {
         key: 'sendTime',
         render: (val,record) =>
           <div>
-           
               {record.status !=6?<a onClick={()=>this.handleViewState(record)}>查看<br/></a>:<div></div>}
               {record.status ==7?<a onClick={(e) => this.handleDel(e, record)}>删除</a>:<div></div>}
-            
           </div>
       }
     ];
-
     return (
       <div className={styles.qa}>
         <Card bordered={false}>
@@ -202,7 +197,6 @@ export default class inquiryList extends Component {
               {this.renderForm()}
             </div>
           </div>
-        
           <Table dataSource={list}
                  // scroll={{ x: 1500}}
                  rowKey={record => record.keyId}
@@ -219,14 +213,6 @@ export default class inquiryList extends Component {
   }
   //删除
   handleDel = (e, record)=>{
-    // console.log(record.order)
-     // const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
-     // const _this = this;
-     // console.log('fs',list)
-     // const dataSource = [...list];
-     // console.log('aafs',list[index].keyId)
-     // this.setState({ dataSource: dataSource.filter(item => item.keyId != list[index].keyId) });
-
      this.props.dispatch({
        type: 'rolePurchaserBulkPurchases/deleteList',
        payload: {
@@ -238,15 +224,6 @@ export default class inquiryList extends Component {
    }
 
   handleViewState(record){
-   // console.log('xxxrecord',record)
-  //  this.props.dispatch({
-  //     type: 'rolePurchaserBulkPurchases/getSeeData',
-  //     //payload: params,
-  //     payload: {
-  //       purchasesn:record.purchasesn,
-  //       status:record.status
-  //     },
-  //   });
   //dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
   //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
     const getdata = {purchasesn:record.purchasesn,status:record.status}

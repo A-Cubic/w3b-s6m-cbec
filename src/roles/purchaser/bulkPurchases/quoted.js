@@ -18,7 +18,7 @@ const FormItem = Form.Item;
 
 @Form.create()
 // 采购商 - 采购列表-已报价 - 20181211
-export default class quotedPriceOver extends Component {
+export default class quoted extends Component {
   state={
     formValues:{},
     value:'',
@@ -141,18 +141,11 @@ export default class quotedPriceOver extends Component {
         title: '总金额',
         dataIndex: 'totalPrice',
         key: 'totalPrice',
-        // render: (val,record) =>{
-        //   return(
-        //     record.purchaseNum * record.supplyPrice
-        //   )
-        // }
-
       },{
         title: '操作',
         dataIndex: 'elseMoney',
         key: 'elseMoney',
         render: (val,record) =>
-        
           <div>
               {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
               {record.status !=3?<a onClick={(e) => this.handleDel(e, record)}>删除</a>:<div></div>}
@@ -205,7 +198,6 @@ export default class quotedPriceOver extends Component {
           商品金额：<span>{item.purchasePrice}</span>　运费：<span>￥{item.waybillfee}</span>　税费：<span>￥{item.tax}</span>
           </div>
           <PurchaseOrder />
-          
             <Row style={{marginTop:'30px', marginBottom:'35px'}}>
               <Col md={9} sm={24}></Col>      
               <Col md={6} sm={24}>
@@ -214,7 +206,6 @@ export default class quotedPriceOver extends Component {
               </Col>
               <Col md={9} sm={24}></Col>      
             </Row>
-
         </Card>
       </div>
     );
@@ -474,28 +465,9 @@ class PurchaseOrder extends Component {
         dataIndex: 'purchaseAmount',
         key: 'purchaseAmount',
         render: (val,record) =>{
-
-        //   const a = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData;
-        //   a.map((item) => {
-        //   //  console.log('keyId',record.keyId)
-        //     if(item.keyId == record.keyId){
-        //       item.demand=this.state.valueDetails
-              
-        //     }
-        //      // console.log('item',item)
-        //   })
-        // console.log('a',a)
-          
-
-         const c = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData.find(item=>
-          item.keyId===record.keyId
-          )
-       
-
-
-         // console.log('c ',this.state.valueDetails)
-
-
+        const c = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData.find(item=>
+        item.keyId===record.keyId
+        )
           return(
             //this.state.valueDetails * record.price
             this.state.valueDetails[record.keyId] == undefined ? record.demand * record.price : this.state.valueDetails[record.keyId] * record.price

@@ -4,38 +4,29 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     // -------- 发起询价 --------------
 
     // 发起询价 - 保存
-    // 'POST /llback/Warehouse/getPreservationData': getPayment,
     'POST /llback/Purchase/InquiryPreservation': url,
 
     // 发起询价 - 提交
-    // 'POST /llback/Warehouse/getSubmissionData': getPayment,
     'POST /llback/Purchase/InquirySubmission': url,
 
 
     //  发起询价- 导入订单
-    // 'POST /llback/Warehouse/getUploadOrderbillDX': goodsSales,
     'POST /llback/Purchase/OnLoadGoodsList': url,
 
 
-    // 'POST /llback/Warehouse/getUploadOrderbillDX': goodsSales,
-
     //  发起询价- 删除
-    // 'POST /llback/Warehouse/deleteInterface': del,
     'POST /llback/Purchase/GoodsDelete': url,
 
 
     //  发起询价- 分页 - 改
-    // 'POST /llback/Warehouse/getPaging': getPayment,
     'POST /llback/Purchase/Goodspagination': url,
 
 
     // -------- 询价列表 --------------
-    // 'POST /llback/Warehouse/getInquiryListData': listOfEnquiries,
     'POST /llback/Purchase/InquiryList': url,
 
 
     //  询价列表- 删除
-    // 'POST /llback/Warehouse/deleteList': del,
     'POST /llback/Purchase/InquiryListDelete': url,
 
 
@@ -43,58 +34,47 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     // 询价列表 - 询价中
     // 询价列表 - 报价中
     // 询价列表 - 已报价
-    // 'POST /llback/Warehouse/getSeeData': see,
     'POST /llback/Purchase/InquiryListDetailed': url,
 
 
     // 询价列表 -报价中-详情
     // 询价列表/采购列表-点击详情
-    // 'POST /llback/Warehouse/getAllListdetails': see,
     'POST /llback/Purchase/OtherGoodsDetails': url,
 
 
     // 询价列表 - 已报价 - 点击详情
-    // 'POST /llback/Warehouse/completedDetails': see,
     'POST /llback/Purchase/GoodsDetails': url,
 
 
     //  已报价- 删除
-    // 'POST /llback/Warehouse/getQuotedPriceDel': del,
     'POST /llback/Purchase/InquiryGoodsDelete': url,
 
     // 询价列表-已报价 - 提交
-     // 询价列表-已报价(二次) - 立即下单
-    // 'POST /llback/Warehouse/getOffer': see,
+    // 询价列表-已报价(二次) - 立即下单
     'POST /llback/Purchase/OfferSub': url,
 
     // 询价列表-已报价 - 取消
-    // 'POST /llback/Warehouse/getCancel': see,
     'POST /llback/Purchase/OfferCancel': url,
 
 
     // 询价列表-已报价 - 改变采购数量
-    // 'POST /llback/Warehouse/getChangeNum': onNum,
     'POST /llback/Purchase/GoodsDetermine': url,
 
 
     // 询价列表-已报价 - 详情改变采购数量
-    // 'POST /llback/Warehouse/CommodityDetails': onNum,
     'POST /llback/Purchase/GoodsDetailsDetermine': url,
 
 
     // 询价列表-已报价 - 分页
     //  采购列表 - 分页
-    // 'POST /llback/Warehouse/getQuotationPaging': getPayment,
     'POST /llback/Purchase/OtherInquiryPagesn': url,
 
 
     // -------- 采购列表 --------------
-    // 'POST /llback/Warehouse/getPurchaseListData': listOfEnquiries,//getPurchaseListData
     'POST /llback/Purchase/PurchaseList': url,
 
 
     // 采购列表 - 查看  询价列表
-    // 'POST /llback/Purchase/PurchaseDetails': see,
     'POST /llback/Purchase/PurchaseDetails': url,
 
 

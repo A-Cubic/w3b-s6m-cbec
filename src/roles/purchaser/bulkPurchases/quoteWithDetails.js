@@ -17,7 +17,7 @@ const FormItem = Form.Item;
 
 @Form.create()
 // 采购商 - 采购列表-报价中 - 20181211
-export default class quotedPrice extends Component {
+export default class quoteWithDetails extends Component {
   state={
     formValues:{}
   }
@@ -48,9 +48,7 @@ export default class quotedPrice extends Component {
    // console.log('11111',this.props.rolePurchaserBulkPurchases.listDetails.tableData.list[0].purchasesn)
    // console.log('22222',this.props.rolePurchaserBulkPurchases.listDetails.tableData.item.stage)
     this.props.dispatch({
-      // type: 'rolePurchaserBulkPurchases/getpurchasepaging',
       type: 'rolePurchaserBulkPurchases/getquotedPrice',
-     // payload: params,
       payload: {
         ...params,
         purchasesn:this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.list[0].purchasesn,
@@ -58,8 +56,6 @@ export default class quotedPrice extends Component {
       },
     });
   }
-
-
   render() {
     const { rolePurchaserBulkPurchases:{listQuotedQrice:{tableData:{item,list, pagination}}} } = this.props;
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
@@ -288,22 +284,16 @@ class PurchaseOrder extends Component {
           width={1000}
         >
           <Card>
-
-              {/* <div>11111</div> */}
-              <Table dataSource={tableData}
-                // scroll={{ x: 1500}}
-                columns={columns}
-                //onChange={this.handleTableChange}
-                // loading={submitting}
-                rowKey={record => record.keyId}
-              />
-
+            <Table dataSource={tableData}
+              // scroll={{ x: 1500}}
+              columns={columns}
+              //onChange={this.handleTableChange}
+              // loading={submitting}
+              rowKey={record => record.keyId}
+            />
           </Card>
-         
-
         </Modal>
       </div>
     )
   }
-
 }

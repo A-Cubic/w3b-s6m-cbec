@@ -28,26 +28,16 @@ export default class initiateInquiry extends Component {
   }
 
   componentDidMount() {
-    //console.log('ffffff',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list)
-    //console.log('qqqq',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list==[111])
-    //this.init();
-
-    // console.log('aaa',this.props)
-
-
     if(!this.props.match.params){
         this.init()
     }else{
 
     }
-
-
   }
   init(){
     const {match,dispatch}=this.props;
     //console.log('fs',JSON.parse(match.params.biography))
     //const b=JSON.parse(match.params.biography)}
-
     const getData = JSON.parse(match.params.biography)
     //console.log('getData',getData)
     if(getData.status == 7) {
@@ -135,13 +125,6 @@ export default class initiateInquiry extends Component {
 
   //删除
   handleDelCheck = (e, record, index)=>{
-   // console.log(record.order)
-    // const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
-    // const _this = this;
-    // console.log('fs',list)
-    // const dataSource = [...list];
-    // console.log('aafs',list[index].keyId)
-    // this.setState({ dataSource: dataSource.filter(item => item.keyId != list[index].keyId) });
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/deleteInterface',
       payload: {
@@ -171,10 +154,8 @@ export default class initiateInquiry extends Component {
       this.setState({
         formValues: values,
       });
-
      // console.log('pur',this.props.rolePurchaserBulkPurchases.initiateInquiry.pur)
      // || this.props.rolePurchaserBulkPurchases.initiateInquiry
-
       if (this.props.rolePurchaserBulkPurchases.initiateInquiry.pur!==''  ) {
         message.success('提交成功');
         this.props.dispatch({

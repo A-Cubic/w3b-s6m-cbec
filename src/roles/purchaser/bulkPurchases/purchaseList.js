@@ -16,7 +16,7 @@ const FormItem = Form.Item;
 
 @Form.create()
 // 采购商 - 采购列表 - 20181224
-export default class inquiryForm extends Component {
+export default class purchaseList extends Component {
   state={
     formValues:{}
   }
@@ -219,23 +219,12 @@ export default class inquiryForm extends Component {
   }
 
   handleViewState(record){
-   // console.log(record)
-  //  this.props.dispatch({
-  //     type: 'rolePurchaserBulkPurchases/getSeeData',
-  //     //payload: params,
-  //     payload: {
-  //       purchasesn:record.purchasesn,
-  //       status:record.status
-  //     },
-  //   });
   //dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
   //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
     const data = {purchasesn:record.purchasesn,stage:record.stage}
     this.props.dispatch(routerRedux.push('/bulkPurchases/listDetails/' + JSON.stringify(data)  ));
     //console.log(record) 
-    
     //JSON.parse JSON.stringify
-
     let type;
     switch (record.stage){
     
