@@ -271,7 +271,6 @@ export default {
     *deleteInterface({payload, callback},{call,put}){
       const response = yield call(deleteInterface,payload);
     //  console.log('~qqxxxxx删除',response)
-     //  console.log('~xxxxx删除',response.item.type)
       if (response !== undefined) {
         if (response.item.type==1) {
           message.success('删除成功');
@@ -279,7 +278,6 @@ export default {
             type:'deleteInterfaceR',
             payload: {payload}
           })
-          
           // callback(response);
          // console.log('xxxx',response)
         }else{
@@ -306,7 +304,6 @@ export default {
       const response = yield call(deleteList,payload);
     // console.log('~qqxxxxx删除',response)
     // console.log('~qqxxxxxpayload',payload)
-     //console.log('~xxxxx删除',response.item.type)
       if (response !== undefined) {
         if (response.type==1) {
           message.success('删除成功');
@@ -314,9 +311,6 @@ export default {
             type:'deleteListR',
             payload: payload
           })
-          
-          // callback(response);
-         // console.log('xxxx',response)
         }else{
           message.error('失败');
         }
@@ -420,7 +414,6 @@ export default {
     //已报价 - 删除
     *getQuotedPriceDel({payload, callback},{call,put}){
       const response = yield call(getQuotedPriceDel,payload);
-
      //console.log('~xxxxx删除',response.item.type)
       if (response !== undefined) {
         if (response.type==1) {
@@ -429,7 +422,6 @@ export default {
             type:'getQuotedPriceDelR',
             payload: payload
           })
-          
           // callback(response);
          // console.log('xxxx',response)
         }else{
@@ -516,8 +508,6 @@ export default {
       }
     },
 
-
-
     // -------- 采购列表 --------------
     //
     *getPurchaseListData({ payload },{ call,put }){
@@ -573,21 +563,6 @@ export default {
 
   },
   
-  // // 采购列表-采购单-点击详情
-  // *getdetailsCheck({ payload }, { call, put }) {
-  //   console.log()
-  //   const response = yield call(getdetailsCheck, payload)
-  //   console.log('查看事件',response)
-  //   if (response !== '') {
-  //     yield put({
-  //       type: 'getdetailsCheckR',
-  //       payload: { response, show: true }
-  //     })
-  //   }
-  // },
-
-
-
   reducers:{
     // -------- 发起询价 --------------
     getInitiateInquiryDataR(state, action){
@@ -649,15 +624,12 @@ export default {
         initiateInquiry:{
           ...state.initiateInquiry,
           tableData:action.payload
-          // ...state.initiateInquiry.tableData,
-          //   list:delList
         }
       }
     },
 
     //  发起询价- 分页 -改 
     getPagingR(state, action){
-      // console.log('-改 ','action',action.payload.list)
        return {
          ...state,
          initiateInquiry:{
@@ -724,18 +696,14 @@ export default {
     },
 
    
-
-
     // //询价列表 - 删除
     deleteListR(state,action){
-
       //console.log('sssss',action.payload.payload.barcode)
       //console.log('ssssssssdsdsdss',state.initiateInquiry.tableData.list)
       //console.log('barcode',barcode)   
       //console.log('inList',inList)
       //const barcode = action.payload.payload.barcode
       //console.log('555',state)
-
       const inList = state.inquiryList.tableData.list
       //console.log('inList',inList)
       //console.log('action',action.payload.purchasesn)
@@ -760,8 +728,6 @@ export default {
 
      // 询价列表 - 查看 getSeeData
      getSeeDataR(state, action){
-      //console.log('action',action.payload)
-      //console.log('state',state.initiateInquiry.information)
        return {
          ...state,
          initiateInquiry:{
@@ -876,11 +842,6 @@ export default {
 
      //已报价 - 删除
      getQuotedPriceDelR(state,action){
-      //console.log('sssss',action.payload.payload.barcode)
-      //console.log('ssssssssdsdsdss',state.initiateInquiry.tableData.list)
-      //console.log('barcode',barcode)   
-      //console.log('inList',inList)
-      //const barcode = action.payload.payload.barcode
       const inList = state.listQuotedQriceOver.tableData.list
       const bb = action.payload.barcode
       //const index = action.payload.payload.index
@@ -935,13 +896,8 @@ export default {
         listQuotedQriceOver:{
           ...state.listQuotedQriceOver,
           //tableData:action.payload
-
           'item.purchasePrice':action.payload.allPrice,
           'b.totalPric':action.payload.totalPrice
-          // tableData:{
-          //   ...state.listQuotedQriceOver.tableData,
-          //   list:newData
-          // }
         },
       }
       }, 
@@ -980,8 +936,6 @@ export default {
 
     // 询价列表-已报价 - 提交
     getOfferR(state, action){
-      //console.log('action',action.payload)
-      //console.log('state',state.initiateInquiry.information)
        return {
          ...state,
          offerList:{
@@ -993,8 +947,6 @@ export default {
 
      // 询价列表-已报价 - 详情传值
      detailsArePassed(state, action){
-      //console.log('action',action.payload)
-      //console.log('state',state.initiateInquiry.information)
        return {
          ...state,
          offerList:{
@@ -1008,8 +960,6 @@ export default {
 
     // 询价列表-已报价 - 取消
     getCancelR(state, action){
-      //console.log('action',action.payload)
-      //console.log('state',state.initiateInquiry.information)
       return {
         ...state,
         cancelList:{
@@ -1034,11 +984,7 @@ export default {
       }
     },
 
-
-
      getPlaceAnOrderR(state, action){
-      //console.log('action',action.payload)
-      //console.log('state',state.initiateInquiry.information)
        return {
          ...state,
          placeAnOrder:{

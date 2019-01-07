@@ -24,11 +24,6 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     'POST /llback/Purchase/GoodsDelete': url,
 
 
-    //  发起询价- 分页
-    // 'POST /llback/Warehouse/getPagingData': getPayment,
-    // 'POST /llback/Purchase/Goodspagination': url,
-
-
     //  发起询价- 分页 - 改
     // 'POST /llback/Warehouse/getPaging': getPayment,
     'POST /llback/Purchase/Goodspagination': url,
@@ -45,29 +40,18 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     // 询价列表 - 查看
+    // 询价列表 - 询价中
+    // 询价列表 - 报价中
+    // 询价列表 - 已报价
     // 'POST /llback/Warehouse/getSeeData': see,
     'POST /llback/Purchase/InquiryListDetailed': url,
 
-    // 询价列表 - 询价中
-    // 'POST /llback/Warehouse/getlistInquiry': see,
-    // 'POST /llback/Purchase/InquiryListDetailed': url,
-
-    // 询价列表 - 报价中
-    // 'POST /llback/Warehouse/getquotedPrice': see,
-    // 'POST /llback/Purchase/InquiryListDetailed': url,
 
     // 询价列表 -报价中-详情
+    // 询价列表/采购列表-点击详情
     // 'POST /llback/Warehouse/getAllListdetails': see,
     'POST /llback/Purchase/OtherGoodsDetails': url,
 
-    // 询价列表-已报价(二次) - 立即下单
-    // 'POST /llback/Warehouse/getPlaceAnOrder': see,
-    // 'POST /llback/Purchase/OfferSub': url,
-
-
-    // 询价列表 - 已报价
-    // 'POST /llback/Warehouse/getquotedPriceOver': see,
-    // 'POST /llback/Purchase/InquiryListDetailed': url,
 
     // 询价列表 - 已报价 - 点击详情
     // 'POST /llback/Warehouse/completedDetails': see,
@@ -79,6 +63,7 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     'POST /llback/Purchase/InquiryGoodsDelete': url,
 
     // 询价列表-已报价 - 提交
+     // 询价列表-已报价(二次) - 立即下单
     // 'POST /llback/Warehouse/getOffer': see,
     'POST /llback/Purchase/OfferSub': url,
 
@@ -98,6 +83,7 @@ export default function rolePurchaserBulkPurchasesMock(url) {
 
 
     // 询价列表-已报价 - 分页
+    //  采购列表 - 分页
     // 'POST /llback/Warehouse/getQuotationPaging': getPayment,
     'POST /llback/Purchase/OtherInquiryPagesn': url,
 
@@ -111,15 +97,6 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     // 'POST /llback/Purchase/PurchaseDetails': see,
     'POST /llback/Purchase/PurchaseDetails': url,
 
-
-    //  采购列表 - 分页
-    // 'POST /llback/Purchase/getpurchasepaging': getPurchaseOrder,
-    // 'POST /llback/Purchase/OtherInquiryPagesn': url,
-
-
-    // 询价列表/采购列表-点击详情
-    // 'POST /llback/Warehouse/getClickDetails': getPurchaseOrder,
-    // 'POST /llback/Purchase/OtherGoodsDetails': url,
 
   };
 }
