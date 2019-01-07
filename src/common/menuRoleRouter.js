@@ -100,7 +100,7 @@ export function operation (dynamicWrapper,app){
     //-----------------------------发货-----------------------------
     //发货单表单
     '/delivery/deliveryForm': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/deliveryForm')), 
     },
     //选择发货商品
     '/delivery/selectProduct': {

@@ -15,8 +15,8 @@ const FormItem = Form.Item;
 @connect(({roleOperationDistribution }) => ({
   roleOperationDistribution,
 }))
-// -------- 商品销售 --------------
-    // 商品销售-列表查询
+// --------  --------------
+    // 库存 - 平台库存
 @Form.create()
 export default class platformStock extends Component {
   state={
@@ -113,6 +113,8 @@ export default class platformStock extends Component {
   renderForm(){
     const { roleOperationDistribution:{platformStock:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
+    
+    console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -139,11 +141,6 @@ export default class platformStock extends Component {
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
             <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
-            <span>商品总数：{tableData.item?tableData.item.totalnum:0}， </span>
-            <span>订单金额：¥{tableData.item?tableData.item.totalOrderMoney:0}， </span>
-            <span>优惠金额：¥{tableData.item?tableData.item.totalDiscountMoney:0}， </span>
-            <span>应收金额：¥{tableData.item?tableData.item.totalReceivable:0}， </span>
-            <span>供货金额：¥{tableData.item?tableData.item.totalSupplyMoney:0}</span>
           </div>
         </div>
       </Form>
@@ -163,46 +160,59 @@ export default class platformStock extends Component {
       dataIndex: 'keyId',
       key: 'keyId',
     }, {
-      title: '订单号',
-      dataIndex: 'orderId',
-      key: 'orderId',
+      title: '供货商',
+      dataIndex: 'purchasesn',
+      key: 'purchasesn',
     }, {
-      title: '商品数量',
-      dataIndex: 'num',
-      key: 'num',
+      title: '仓库',
+      dataIndex: 'date',
+      key: 'date',
     }, {
-      title: '订单金额',
-      dataIndex: 'orderMoney',
-      key: 'orderMoney',
+      title: '商品名称',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
         render:val=>`¥${val}`
     },{
-      title: '结账时间',
-      dataIndex: 'payTime',
-      key: 'payTime',
+      title: '商品条码',
+      dataIndex: 'barcode',
+      key: 'barcode',
 
     },{
-      title: '应收金额',
+      title: '规格',
       dataIndex: 'receivable',
       key: 'receivable',
       render:val=>`¥${val}`
     },{
-        title: '支付方式',
+        title: '原产地',
         dataIndex: 'payType',
         key: 'payType',
       },{
-        title: '支付金额',
+        title: '生产商',
         dataIndex: 'paymoney',
         key: 'paymoney',
         render:val=>`¥${val}`
       },{
-        title: '优惠名称',
+        title: '库存数量',
         dataIndex: 'discountName',
         key: 'discountName',
       },{
-        title: '优惠金额',
+        title: '零售价',
+        dataIndex: 'a',
+        key: 'a',
+        render:val=>`¥${val}`
+      },{
+        title: '平台采购价',
         dataIndex: 'discountMoney',
         key: 'discountMoney',
         render:val=>`¥${val}`
+      },{
+        title: '操作',
+        dataIndex: 'b',
+        key: 'b',
+        render: (val,record) =>
+        <div>
+            {<a onClick={(e) => this.handleDel(e, record)}>删除</a>}
+        </div>
       }
     ];
 
@@ -246,6 +256,18 @@ export default class platformStock extends Component {
         </Card>
       </div>
     );
+  }
+   //删除
+   handleDel = (e, record)=>{
+    // console.log('record',record)
+    this.props.dispatch({
+      type: 'roleOperationDistribution/deleteList',
+      payload: {
+       purchasesn:record.barcode,
+        //barcode:record.barcode,
+        //index:index
+      },
+    });
   }
 }
 

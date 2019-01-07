@@ -12,11 +12,19 @@ export async function platformStock(params) {
 }
 //平台库存 - 上传销售数据
 export async function getUploadOrderbillDX(params) {
-  return request(`/llback/Order/UploadOrderDXttt`, {
+  return request(`/llback/delivery/UploadOrderDXttt`, {
     method: 'POST',
     body: params,
   });
 }
+//平台库存 - 删除
+export async function deleteList(params) {
+  return request(`/llback/Sales/deleteList`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 //-----------------库存 - 门店库存 页-----------
 
 //---------------------------------------------发货管理部分-----------------------------------------

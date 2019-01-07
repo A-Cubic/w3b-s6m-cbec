@@ -6,7 +6,10 @@ export default function roleOperationDistributionMock() {
     // 平台库存 - 列表查询
     'POST /llback/Sales/platformStock': getPayment,
     // 平台库存 - 上传销售数据
-    'POST /llback/Order/UploadOrderDXttt': UpdateDistributor,
+    'POST /llback/delivery/UploadOrderDXttt': UpdateDistributor,
+
+    // 平台库存 - 删除
+    'POST /llback/Sales/deleteList': getPayment,
     // -----------------库存 - 门店库存 页---------------
 
     // ---------------------------------------------发货管理部分-----------------------------------------
@@ -41,36 +44,33 @@ export default function roleOperationDistributionMock() {
 }
 export function getPayment(req, res) {
   res.send({
+    msg: "已删除",
+    type: "1",
     list: [{
       keyId: '1',
-      date: '20180101~20180131',
+      date: '20190101~20190103',
       order: '215451245',
       goMoney: '2000.00',
       tuiMoney: '1000.00',
       elseMoney: '500.00',
       doMoney: '500.00',
       status: 0,
-      detailsList: [{
-        keyId: '1',
-        a: '20171201~20171231',
-        b: '215451244',
-        c: '1231',
-      }],
+      purchasesn: "2018121313045638",
+      goodsName: "兰芝精华液",
+      barcode: "11111",
+     
     }, {
       keyId: '2',
-      date: '20171201~20171231',
+      date: '20190104~20190105',
       order: '215451244',
       goMoney: '2000.00',
       tuiMoney: '1000.00',
       elseMoney: '500.00',
       doMoney: '500.00',
       status: 1,
-      detailsList: [{
-        keyId: '2',
-        a: '20171201~20171231',
-        b: '215451244',
-        c: '32546',
-      }],
+      purchasesn: "2018121313045639",
+      goodsName: "康师傅",
+      barcode: "2",
     }],
     pagination: {
       current: 1,
@@ -83,6 +83,25 @@ export function getPayment(req, res) {
     },
   });
 }
+// export function delList(req, res) {
+//   res.send({
+//     list: [{
+//       keyId: '1',
+//       date: '20190101~20190103',
+//       order: '215451245',
+//       goMoney: '2000.00',
+//       tuiMoney: '1000.00',
+//       elseMoney: '500.00',
+//       doMoney: '500.00',
+//       status: 0,
+//       purchasesn: "2018121313045638",
+//       goodsName: "兰芝精华液",
+//       barcode: "11111",
+     
+//     }]
+//   });
+// }
+
 export function contractInformation(req, res) {
   res.send({
     item: {
@@ -319,6 +338,9 @@ export function UpdateDistributor(req, res) {
   res.send({
     type: 1,
     mes: '修改成功',
+    list:[
+      
+    ]
   });
 }
 export function getorder(req, res) {
