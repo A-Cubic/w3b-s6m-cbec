@@ -30,8 +30,50 @@ export async function deleteList(params) {
 //---------------------------------------------发货管理部分-----------------------------------------
 //-----------------发货单表单 页---------------
 
+//-----------------我要发货---------------
+ //我要发货- 导入询价商品 
+export async function deliverGoodsuploadOrderbill(params) {
+  return request(`/llback/delivery/deliverGoodsuploadOrderbill`, {
+    method: 'POST',
+    body: params,
+  });
+} 
+ //我要发货- 删除 
+export async function deleteGoodsList(params) {
+  return request(`/llback/delivery/deleteGoodsList`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
-//-----------------选择发货商品 页--------------
+ //我要发货- 提交 
+ export async function getDeliverGoods(params) {
+  return request(`/llback/delivery/getDeliverGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
+ //我要发货- 保存 
+ export async function getDeliverGoodsSave(params) {
+  return request(`/llback/delivery/getDeliverGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+
+
+//-----------------发货管理-选择发货商品 --------------
+//发货管理-选择发货商品 - 获取数据
+export async function getChooseShipmentData(params) {
+  return request(`/llback/delivery/getChooseShipmentData`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+
+
 
 //-----------------选择商品返回发货单（带参） 页--
 

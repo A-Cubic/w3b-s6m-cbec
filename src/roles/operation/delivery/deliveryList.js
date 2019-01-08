@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
-import styles from './platformStock.less';
+import styles from './selectProduct.less';
 import moment from 'moment';
 import {getCurrentUrl, getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
@@ -16,19 +16,18 @@ const FormItem = Form.Item;
   roleOperationDistribution,
 }))
 // --------  --------------
-    // 库存 - 平台库存
+    // 发货管理 - 平台库存
 @Form.create()
-export default class platformStock extends Component {
+export default class selectProduct extends Component {
   state={
     formValues:{},
-    visible: false,
-    visibleChildCheck:false,
+    
   }
 
   //****/
   init(){
     this.props.dispatch({
-      type:'roleOperationDistribution/platformStock',
+      type:'roleOperationDistribution/getChooseShipmentData',
       payload:{}
     })
   }
@@ -51,7 +50,7 @@ export default class platformStock extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'roleOperationDistribution/platformStock',
+        type: 'roleOperationDistribution/getChooseShipmentData',
         payload: {
           ...values,
         },
@@ -82,36 +81,9 @@ export default class platformStock extends Component {
       visibleChildCheck:!!flag,
     });
   }
-  // 下载销售模板
-  downloadTemplate=()=>{
-    // window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/order.xlsx'
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/dealershipOrder.xlsx'
-  }
-  // 上传销售数据
-  handleUploadChange=(info)=>{
-   // console.log('userId',userId)
-    if(info.file.status === 'done') {
-      this.props.dispatch({
-        type: 'roleOperationDistribution/uploadOrderbill',
-        payload: {
-          userId:userId,
-          fileTemp: info.file.response.fileName[0]
-        },
-        callback: this.onUploadCallback,
-      });
-    }
-  }
-  onUploadCallback = (params) => {
-    const msg = params.msg;
-    if(params.type==="0"){
-      message.error(msg,8);
-    }else{
-      message.success("上传成功",5);
-    }
-    this.init();
-  }
+
   renderForm(){
-    const { roleOperationDistribution:{platformStock:{tableData}} } = this.props;
+    const { roleOperationDistribution:{chooseShipment:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     
     //console.log('xxx',this.props)
@@ -148,7 +120,7 @@ export default class platformStock extends Component {
   }
 
   render() {
-    const { roleOperationDistribution:{platformStock:{tableData:{list, pagination}}} } = this.props;
+    const { roleOperationDistribution:{chooseShipment:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -171,7 +143,7 @@ export default class platformStock extends Component {
       title: '商品名称',
       dataIndex: 'goodsName',
       key: 'goodsName',
-        render:val=>`¥${val}`
+       
     },{
       title: '商品条码',
       dataIndex: 'barcode',
@@ -181,7 +153,7 @@ export default class platformStock extends Component {
       title: '规格',
       dataIndex: 'receivable',
       key: 'receivable',
-      render:val=>`¥${val}`
+     
     },{
         title: '原产地',
         dataIndex: 'payType',
@@ -190,7 +162,7 @@ export default class platformStock extends Component {
         title: '生产商',
         dataIndex: 'paymoney',
         key: 'paymoney',
-        render:val=>`¥${val}`
+       
       },{
         title: '库存数量',
         dataIndex: 'discountName',
@@ -199,20 +171,15 @@ export default class platformStock extends Component {
         title: '零售价',
         dataIndex: 'a',
         key: 'a',
-        render:val=>`¥${val}`
       },{
         title: '平台采购价',
         dataIndex: 'discountMoney',
         key: 'discountMoney',
-        render:val=>`¥${val}`
       },{
-        title: '操作',
+        title: '库存同步时间',
         dataIndex: 'b',
         key: 'b',
-        render: (val,record) =>
-        <div>
-            {<a onClick={(e) => this.handleDel(e, record)}>删除</a>}
-        </div>
+        
       }
     ];
 
@@ -229,17 +196,6 @@ export default class platformStock extends Component {
     return (
       <div>
         <Card bordered={false}>
-          <div style={{display: 'inline-flex',marginBottom:20,}} className={styles.hot}>
-            <Button  type="primary" onClick={this.downloadTemplate} style={{ marginLeft: 8 }}>
-              <Icon type="download" />下载销售模板
-            </Button>
-            <Upload {...props}>
-              <Button style={{ marginLeft: 8 }}>
-                <Icon type="upload" /> 上传销售数据
-              </Button>
-            </Upload>
-          </div>
-
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               {this.renderForm()}
@@ -257,18 +213,7 @@ export default class platformStock extends Component {
       </div>
     );
   }
-   //删除
-   handleDel = (e, record)=>{
-    // console.log('record',record)
-    this.props.dispatch({
-      type: 'roleOperationDistribution/deleteList',
-      payload: {
-       purchasesn:record.barcode,
-        //barcode:record.barcode,
-        //index:index
-      },
-    });
-  }
+
 }
 
 

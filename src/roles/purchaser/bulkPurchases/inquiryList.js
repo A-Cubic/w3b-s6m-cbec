@@ -107,7 +107,7 @@ export default class inquiryList extends Component {
         </Row>
         <Row>
           <Col md={12} sm={24}>
-            <FormItem label="结算状态">
+            <FormItem label="状态">
               {getFieldDecorator('status',{
               })(
                 <Select

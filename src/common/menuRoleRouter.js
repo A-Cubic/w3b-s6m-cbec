@@ -104,7 +104,7 @@ export function operation (dynamicWrapper,app){
     },
     //选择发货商品
     '/delivery/selectProduct': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/selectProduct')),
     },
     //选择商品返回发货单（带参）
     '/delivery/returnDeliveryForm/:id': {
@@ -112,7 +112,7 @@ export function operation (dynamicWrapper,app){
     },
     //发货列表
     '/delivery/deliveryList': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/deliveryList')),
     },
     //发货列表- 查看发货单
     '/delivery/checkDelivery': {

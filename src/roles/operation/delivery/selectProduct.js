@@ -1,8 +1,8 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
-import styles from './platformStock.less';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Checkbox  } from 'antd';
+import styles from './selectProduct.less';
 import moment from 'moment';
 import {getCurrentUrl, getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
@@ -16,19 +16,20 @@ const FormItem = Form.Item;
   roleOperationDistribution,
 }))
 // --------  --------------
-    // 库存 - 平台库存
+    // 发货管理 - 平台库存
 @Form.create()
-export default class platformStock extends Component {
+export default class selectProduct extends Component {
   state={
     formValues:{},
-    visible: false,
-    visibleChildCheck:false,
+    selectedRowKeys: [], // Check here to configure the default column
+    loading: false,
+    
   }
 
   //****/
   init(){
     this.props.dispatch({
-      type:'roleOperationDistribution/platformStock',
+      type:'roleOperationDistribution/getChooseShipmentData',
       payload:{}
     })
   }
@@ -51,7 +52,7 @@ export default class platformStock extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'roleOperationDistribution/platformStock',
+        type: 'roleOperationDistribution/getChooseShipmentData',
         payload: {
           ...values,
         },
@@ -67,12 +68,13 @@ export default class platformStock extends Component {
     this.init();
   }
   handleTableChange=(pagination, filters, sorter)=>{
+    console.log(11111)
     const params = {
       ...pagination,
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'roleOperationDistribution/platformStock',
+      type: 'roleOperationDistribution/getChooseShipmentData',
       payload: params,
     });
   }
@@ -82,59 +84,80 @@ export default class platformStock extends Component {
       visibleChildCheck:!!flag,
     });
   }
-  // 下载销售模板
-  downloadTemplate=()=>{
-    // window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/order.xlsx'
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/dealershipOrder.xlsx'
-  }
-  // 上传销售数据
-  handleUploadChange=(info)=>{
-   // console.log('userId',userId)
-    if(info.file.status === 'done') {
-      this.props.dispatch({
-        type: 'roleOperationDistribution/uploadOrderbill',
-        payload: {
-          userId:userId,
-          fileTemp: info.file.response.fileName[0]
-        },
-        callback: this.onUploadCallback,
-      });
+
+
+  //点击勾 选中
+  selectRow = record => {
+   
+    const selectedRowKeys = [...this.state.selectedRowKeys];
+    if (selectedRowKeys.indexOf(record.key) >= 0) {
+      selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
+    } else {
+      selectedRowKeys.push(record.key);
     }
+    this.setState({ selectedRowKeys });
+  };
+  onSelectedRowKeysChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+    console.log('xxx!record',selectedRowKeys)
+  };
+
+  //勾选
+  Checklist = (e, record, index)=>{
+    console.log(e, record, index)
+    console.log('record.keyId',record.keyId),
+    console.log('eeee',`checked = ${e.target.checked}`)
   }
-  onUploadCallback = (params) => {
-    const msg = params.msg;
-    if(params.type==="0"){
-      message.error(msg,8);
-    }else{
-      message.success("上传成功",5);
-    }
-    this.init();
-  }
+
+
+
   renderForm(){
-    const { roleOperationDistribution:{platformStock:{tableData}} } = this.props;
+    const { roleOperationDistribution:{chooseShipment:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     
     //console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
-            <FormItem >
-              {getFieldDecorator('date')(
-                <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
+          <Col md={2} sm={24}>
+            
+          </Col>
+          <Col md={5} sm={24}>
+          
+            <FormItem label="仓库：">
+              {getFieldDecorator('sendType',{
+                })(
+                  <Select
+                    placeholder="请选择"
+                    optionFilterProp="label"
+                    // onChange={this.onSelectChange}
+                  >
+                    <Option value="">全部</Option>
+                    <Option value="1">21库</Option>
+                    <Option value="2">32库</Option>
+                  </Select>
+                )}
+            </FormItem>
+          </Col>
+          <Col md={5} sm={24}>
+            <FormItem label="商品：">
+              {getFieldDecorator('select')(
+                <Input style={{ width: '100%' }} placeholder="可输入供货商名称进行查询" />
               )}
             </FormItem>
           </Col>
-          <Col md={9} sm={24}>
+          <Col md={5} sm={24}>
             <FormItem label="">
               {getFieldDecorator('select')(
                 <Input style={{ width: '100%' }} placeholder="可输入商品条码，商品名称，商品品牌进行查询" />
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={5} sm={24}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+          </Col>
+          <Col md={2} sm={24}>
           </Col>
         </Row>
         <Divider dashed />
@@ -148,13 +171,34 @@ export default class platformStock extends Component {
   }
 
   render() {
-    const { roleOperationDistribution:{platformStock:{tableData:{list, pagination}}} } = this.props;
+    const { roleOperationDistribution:{chooseShipment:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
       ...pagination,
     };
+
+    
+    const { selectedRowKeys } = this.state;
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectedRowKeysChange
+    };
+
     const columns = [
+      {
+        title: '选择',
+        dataIndex: 'qq',
+        key: 'qq',
+        render: (text, record, index) => {
+          return (
+            <Fragment>
+              {/* <a href="javascript:;" onClick={(e) => this.handleDelCheck(e, record, index)}>删除</a><br/> */}
+              <Checkbox  onChange={(e) => this.Checklist(e, record, index)}></Checkbox>
+            </Fragment>
+          )
+        }
+      },
     {
       title: '序号',
       dataIndex: 'keyId',
@@ -171,7 +215,7 @@ export default class platformStock extends Component {
       title: '商品名称',
       dataIndex: 'goodsName',
       key: 'goodsName',
-        render:val=>`¥${val}`
+       
     },{
       title: '商品条码',
       dataIndex: 'barcode',
@@ -181,7 +225,7 @@ export default class platformStock extends Component {
       title: '规格',
       dataIndex: 'receivable',
       key: 'receivable',
-      render:val=>`¥${val}`
+     
     },{
         title: '原产地',
         dataIndex: 'payType',
@@ -190,7 +234,7 @@ export default class platformStock extends Component {
         title: '生产商',
         dataIndex: 'paymoney',
         key: 'paymoney',
-        render:val=>`¥${val}`
+       
       },{
         title: '库存数量',
         dataIndex: 'discountName',
@@ -199,20 +243,15 @@ export default class platformStock extends Component {
         title: '零售价',
         dataIndex: 'a',
         key: 'a',
-        render:val=>`¥${val}`
       },{
         title: '平台采购价',
         dataIndex: 'discountMoney',
         key: 'discountMoney',
-        render:val=>`¥${val}`
       },{
-        title: '操作',
+        title: '库存同步时间',
         dataIndex: 'b',
         key: 'b',
-        render: (val,record) =>
-        <div>
-            {<a onClick={(e) => this.handleDel(e, record)}>删除</a>}
-        </div>
+        
       }
     ];
 
@@ -226,20 +265,10 @@ export default class platformStock extends Component {
       multiple: false,
       // customRequest:this.upload,
     };
+    
     return (
       <div>
         <Card bordered={false}>
-          <div style={{display: 'inline-flex',marginBottom:20,}} className={styles.hot}>
-            <Button  type="primary" onClick={this.downloadTemplate} style={{ marginLeft: 8 }}>
-              <Icon type="download" />下载销售模板
-            </Button>
-            <Upload {...props}>
-              <Button style={{ marginLeft: 8 }}>
-                <Icon type="upload" /> 上传销售数据
-              </Button>
-            </Upload>
-          </div>
-
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               {this.renderForm()}
@@ -252,23 +281,19 @@ export default class platformStock extends Component {
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
                  // loading={submitting}
+                // rowSelection={rowSelection} 
+                // rowSelection={rowSelection}
+                // onRow={record => ({
+                //   onClick: () => {
+                //     this.selectRow(record);
+                //   }
+                // })}
           />
         </Card>
       </div>
     );
   }
-   //删除
-   handleDel = (e, record)=>{
-    // console.log('record',record)
-    this.props.dispatch({
-      type: 'roleOperationDistribution/deleteList',
-      payload: {
-       purchasesn:record.barcode,
-        //barcode:record.barcode,
-        //index:index
-      },
-    });
-  }
+
 }
 
 

@@ -51,6 +51,9 @@ export default class deliveryForm extends Component {
   //     });
   //   }
   // }
+
+
+
   //保存
   onPreservation=(e)=>{
     e.preventDefault();
@@ -69,8 +72,8 @@ export default class deliveryForm extends Component {
         formValues: values,
       });
       this.props.dispatch({
-       // type: 'rolePurchaserBulkPurchases/getInquiryListData',
-      type: 'rolePurchaserBulkPurchases/getPreservationData',
+     
+      type: 'roleOperationDistribution/getDeliverGoodsSave',
         payload: {
           ...values,
          
@@ -114,7 +117,7 @@ export default class deliveryForm extends Component {
     this.props.dispatch({
       //type: 'rolePurchaserBulkPurchases/getInquiryListData',
       //type: 'rolePurchaserBulkPurchases/getPagingData',
-      type: 'rolePurchaserBulkPurchases/getPaging',
+      type: 'roleOperationDistribution/getPaging',
       //payload: params,
        payload: {
          ...params,
@@ -126,7 +129,7 @@ export default class deliveryForm extends Component {
   //删除
   handleDelCheck = (e, record, index)=>{
     this.props.dispatch({
-      type: 'rolePurchaserBulkPurchases/deleteInterface',
+      type: 'roleOperationDistribution/deleteGoodsList',
       payload: {
         purchasesn:record.purchasesn,
         barcode:record.barcode,
@@ -137,7 +140,7 @@ export default class deliveryForm extends Component {
 
   //提交
   handleOnSubmission = (e)=>{
-    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
+    const {roleOperationDistribution:{shippingList:{tableData:{item,list, pagination}}} } = this.props;
  
    // console.log(this.props)
     e.preventDefault();
@@ -155,8 +158,7 @@ export default class deliveryForm extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        // type: 'rolePurchaserBulkPurchases/getInquiryListData',
-       type: 'rolePurchaserBulkPurchases/getSubmissionData',
+      type: 'roleOperationDistribution/getDeliverGoods',
          payload: {
            ...values,
         
@@ -171,7 +173,7 @@ export default class deliveryForm extends Component {
     if(params.type==="1"){
       this.handleFormReset()
       this.props.form.resetFields();
-      this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list.remove
+      this.props.roleOperationDistribution.shippingList.tableData.list.remove
       this.setState({
         formValues: {},
       });
@@ -185,7 +187,7 @@ export default class deliveryForm extends Component {
    // console.log('fileTemp',info.file.response)
     if(info.file.status === 'done') {
       this.props.dispatch({
-        type: 'roleOperationDistribution/uploadOrderbill',
+        type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
         payload: {
           purchasesn:'',
            fileTemp: info.file.response.fileName[0]
@@ -207,15 +209,6 @@ export default class deliveryForm extends Component {
   }
 
   renderForm(){
-  //   const RadioGroup = Radio.Group;
-  //   const { getFieldDecorator } = this.props.form;
-  //   const {rolePurchaserBulkPurchases:{initiateInquiry:{information,pur,tableData:{item,list, pagination}}} } = this.props;
-  // //  console.log('helloprops', this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData)
-  //   const paginationProps = {
-  //     showSizeChanger: true,
-  //     showQuickJumper: true,
-  //     ...pagination,
-  //   };
   const { roleOperationDistribution:{shippingList:{tableData:{list, pagination,item}}} } = this.props;
   const { getFieldDecorator } = this.props.form;
   const paginationProps = {
@@ -231,18 +224,42 @@ export default class deliveryForm extends Component {
         dataIndex: 'keyId',
         key: 'keyId',
       }, {
-        title: '询价商品名称',
+        title: '商品名称',
         dataIndex: 'goodsName',
         key: 'goodsName',
       }, {
-        title: '询价商品条码',
+        title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
       }, {
-        title: '询价数量',
+        title: '原产地',
         dataIndex: 'total',
         key: 'total',
       }, {
+        title: '生产商',
+        dataIndex: 'totala',
+        key: 'totala',
+      }, {
+        title: '零售价',
+        dataIndex: 'totalb',
+        key: 'totalb',
+      }, {
+        title: '供货价',
+        dataIndex: 'totalc',
+        key: 'totalc',
+      }, {
+        title: '当前库存数',
+        dataIndex: 'totald',
+        key: 'totald',
+      }, {
+        title: '发货数量',
+        dataIndex: 'totale',
+        key: 'totale',
+      }, {
+        title: '安全库存数',
+        dataIndex: 'totalf',
+        key: 'totalf',
+      },{
         title: '操作',
         dataIndex: 'goMoney',
         key: 'goMoney',
@@ -289,7 +306,7 @@ export default class deliveryForm extends Component {
           <Col md={8} sm={24}>
             <FormItem label="发货人电话：  ">
               {getFieldDecorator('contacts', {
-                initialValue: item.contacts,
+                initialValue: item.b,
                 rules: [{ required: true, message: '请输入电话' }],
               })(
                 <Input placeholder="请输入电话"/>
@@ -308,7 +325,7 @@ export default class deliveryForm extends Component {
           <Col md={8} sm={24}>
             <FormItem label="快递公司：  ">
               {getFieldDecorator('contacts', {
-                initialValue: item.contacts,
+                initialValue: item.c,
                 rules: [{ required: true, message: '请输入快递公司' }],
               })(
                 <Input placeholder="请输入快递公司"/>
@@ -316,12 +333,12 @@ export default class deliveryForm extends Component {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="发货人电话：  ">
+            <FormItem label="运单号：">
               {getFieldDecorator('contacts', {
-                initialValue: item.contacts,
-                rules: [{ required: true, message: '请输入电话' }],
+                initialValue: item.d,
+                rules: [{ required: true, message: '请输入运单号' }],
               })(
-                <Input placeholder="请输入电话"/>
+                <Input placeholder="请输入运单号"/>
               )}
             </FormItem>      
           </Col>
@@ -344,28 +361,28 @@ export default class deliveryForm extends Component {
           <Col md={3} sm={24}></Col>
           <Col md={6} sm={24}>
             <FormItem label="采购商：">
-              {getFieldDecorator('sendType',{
-                //initialValue:'1'
-                initialValue:1,
-                rules: [{ required: true, message: '请输入采购商' }],
-              })(
-                <Select
-                    placeholder="日本提货"
-                  >
-                  <Option value="1">日本提货</Option>
-                  <Option value="2">韩国提货</Option>
-                  <Option value="3">香港提货</Option>
-                  <Option value="6">国内提货</Option>
-                  <Option value="1">日本提货</Option>
-               
-                </Select>
-              )}
+                {getFieldDecorator('sendType',{
+                  //initialValue:'1'
+                  // initialValue:item.sendType==''?'1':item.sendType,
+                  initialValue:1,
+                  rules: [{ required: true, message: '请输入提供地点' }],
+                })(
+                  <Select
+                      placeholder="日本提货"
+                    >
+                    <Option value="1">日本提货</Option>
+                    <Option value="2">韩国提货</Option>
+                    <Option value="3">香港提货</Option>
+                    <Option value="6">国内提货</Option>
+                    </Select>
+                )}
+
             </FormItem>      
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="联系人：">
               {getFieldDecorator('contacts', {
-                initialValue: item.contacts,
+                initialValue: item.e,
                 rules: [{ required: true, message: '请输入联系人' }],
               })(
                 <Input placeholder="请输入联系人"/>
@@ -375,7 +392,7 @@ export default class deliveryForm extends Component {
           <Col md={6} sm={24}>
             <FormItem label="联系人电话：">
               {getFieldDecorator('contacts', {
-                initialValue: item.contacts,
+                initialValue: item.g,
                 rules: [{ required: true, message: '请输入联系人电话' }],
               })(
                 <Input placeholder="请输入联系人电话"/>

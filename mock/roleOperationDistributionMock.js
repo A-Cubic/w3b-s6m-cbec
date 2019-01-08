@@ -14,9 +14,23 @@ export default function roleOperationDistributionMock() {
 
     // ---------------------------------------------发货管理部分-----------------------------------------
     // -----------------发货单表单 页-------------------
+    // 发货单表单 - 上传销售数据
+    'POST /llback/delivery/deliverGoodsuploadOrderbill': UpdateDistributor,
+
+    // 发货单表单 - 删除
+    'POST /llback/delivery/deleteGoodsList': getPayment,
+
+    // 发货单表单 - 提交
+    'POST /llback/delivery/getDeliverGoods': getPayment,
+
+    // 发货单表单 - 保存
+    'POST /llback/delivery/getDeliverGoodsSave': getPayment,
 
 
-    // -----------------选择发货商品 页------------------
+    // -----------------发货管理-选择发货商品 -----------------
+    // 发货管理-选择发货商品 - 获取数据
+    'POST /llback/delivery/getChooseShipmentData': getPayment,
+
 
     // -----------------选择商品返回发货单（带参） 页------
 
@@ -334,13 +348,37 @@ export function getChannelList(req, res) {
     },
   });
 }
+
+//发货 导入表格
 export function UpdateDistributor(req, res) {
   res.send({
-    type: 1,
-    mes: '修改成功',
-    list:[
-      
-    ]
+    item:{
+        msg: "成功",
+        type: "1"
+    },
+    list: [
+        {
+            keyId: "1",
+            purchasesn: "2018121313045638",
+            goodsName: "兰芝精华液",
+            barcode: "11111",
+            brand: "",
+            total: "100"
+        },
+        {
+            keyId: "2",
+            purchasesn: "2018121313045638",
+            oodsName: "宝芝林",
+            barcode: "22222",
+            brand: "",
+            total: "100"
+        }
+    ],
+    pagination: {
+        current: 1,
+        total: 2,
+        pageSize: 10
+    }
   });
 }
 export function getorder(req, res) {
