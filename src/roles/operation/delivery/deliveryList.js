@@ -16,9 +16,9 @@ const FormItem = Form.Item;
   roleOperationDistribution,
 }))
 // --------  --------------
-    // 发货管理 - 平台库存
+    // 发货管理 - 发货列表
 @Form.create()
-export default class selectProduct extends Component {
+export default class deliveryList extends Component {
   state={
     formValues:{},
     
@@ -27,14 +27,17 @@ export default class selectProduct extends Component {
   //****/
   init(){
     this.props.dispatch({
-      type:'roleOperationDistribution/getChooseShipmentData',
-      payload:{}
+      type:'roleOperationDistribution/getDeliveryListData',
+      payload:{
+
+      }
     })
   }
   componentDidMount() {
     this.init();
   }
   onSearch=(e)=>{
+    console.log('this.props',this.props.roleOperationDistribution.shippingListBig)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -50,7 +53,7 @@ export default class selectProduct extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'roleOperationDistribution/getChooseShipmentData',
+        type: 'roleOperationDistribution/getDeliveryListData',
         payload: {
           ...values,
         },
@@ -66,12 +69,13 @@ export default class selectProduct extends Component {
     this.init();
   }
   handleTableChange=(pagination, filters, sorter)=>{
+    console.log('翻页')
     const params = {
       ...pagination,
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'roleOperationDistribution/platformStock',
+      type: 'roleOperationDistribution/getDeliveryListData',
       payload: params,
     });
   }
@@ -82,11 +86,25 @@ export default class selectProduct extends Component {
     });
   }
 
+  //删除
+  handleDelCheck = (e, record, index)=>{
+    this.props.dispatch({
+      type: 'roleOperationDistribution/getdeleteDeliveryList',
+      payload: {
+        purchasesn:record.purchasesn,
+        barcode:record.id,
+       // index:index
+      },
+    });
+  }
+
+
   renderForm(){
     const { roleOperationDistribution:{chooseShipment:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     
-    //console.log('xxx',this.props)
+
+    console.log('xxx',this.props.roleOperationDistribution.shippingListBig)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -120,7 +138,7 @@ export default class selectProduct extends Component {
   }
 
   render() {
-    const { roleOperationDistribution:{chooseShipment:{tableData:{list, pagination}}} } = this.props;
+    const { roleOperationDistribution:{shippingListBig:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -132,54 +150,48 @@ export default class selectProduct extends Component {
       dataIndex: 'keyId',
       key: 'keyId',
     }, {
-      title: '供货商',
-      dataIndex: 'purchasesn',
-      key: 'purchasesn',
+      title: '发货单编号',
+      dataIndex: 'id',
+      key: 'id',
     }, {
-      title: '仓库',
-      dataIndex: 'date',
-      key: 'date',
+      title: '采购商',
+      dataIndex: 'purchasersName',
+      key: 'purchasersName',
     }, {
-      title: '商品名称',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
+      title: '发货数量',
+      dataIndex: 'goodsTotal',
+      key: 'goodsTotal',
        
     },{
-      title: '商品条码',
-      dataIndex: 'barcode',
-      key: 'barcode',
+      title: '发货日期',
+      dataIndex: 'sendTime',
+      key: 'sendTime',
 
     },{
-      title: '规格',
-      dataIndex: 'receivable',
-      key: 'receivable',
+      title: '发货人',
+      dataIndex: 'sendName',
+      key: 'sendName',
      
     },{
-        title: '原产地',
-        dataIndex: 'payType',
-        key: 'payType',
+        title: '发货人联系电话',
+        dataIndex: 'sendTel',
+        key: 'sendTel',
       },{
-        title: '生产商',
-        dataIndex: 'paymoney',
-        key: 'paymoney',
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
        
       },{
-        title: '库存数量',
+        title: '操作',
         dataIndex: 'discountName',
         key: 'discountName',
-      },{
-        title: '零售价',
-        dataIndex: 'a',
-        key: 'a',
-      },{
-        title: '平台采购价',
-        dataIndex: 'discountMoney',
-        key: 'discountMoney',
-      },{
-        title: '库存同步时间',
-        dataIndex: 'b',
-        key: 'b',
-        
+        render: (text, record, index) => {
+          return (
+            <Fragment>
+              <a href="javascript:;" onClick={(e) => this.handleDelCheck(e, record, index)}>删除</a><br/>
+            </Fragment>
+          )
+        }
       }
     ];
 

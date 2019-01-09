@@ -9,7 +9,8 @@ import {
   deleteList,deliverGoodsuploadOrderbill,deleteGoodsList,getDeliverGoods,getDeliverGoodsSave,
   //选择发货商品
   getChooseShipmentData,
-
+  //发货列表
+  getDeliveryListData,getdeleteDeliveryList,
 
 
 } from "../services/roleOperationDistribution_S";
@@ -53,8 +54,15 @@ export default {
         list: [],
         pagination:{},
       },
+    },
+    //发货管理 - 发货列表
+    shippingListBig: {
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
     }
-
 
     //-----------------选择发货商品 页--------------
 
@@ -205,6 +213,35 @@ export default {
       }
     },
 
+    // 发货列表-获取data列表 翻页，查询等
+    *getDeliveryListData({ payload },{ call,put }){
+      const response = yield call(getDeliveryListData, payload);
+      //console.log('~ 翻页，查询等',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getDeliveryListDataR',
+          payload: response,
+        })
+      }
+    },
+    // 发货列表 - 删除
+    *getdeleteDeliveryList({payload, callback},{call,put}){
+      const response = yield call(getdeleteDeliveryList,payload);
+     // console.log('~qqxxxxx删除',response)
+      //console.log('~qqxxxxxpayload',payload)
+        if (response !== undefined) {
+          if (response.type==1) {
+            message.success('删除成功');
+            yield put({
+              type:'getdeleteDeliveryListR',
+              payload: payload
+            })
+          }else{
+            message.error('失败');
+          }
+        }
+      },
+
 
 
 
@@ -265,7 +302,7 @@ export default {
         }
       }
     },    
-
+      //导入列表
     uploadOrderbillR(state, action){
      // console.log('xxx',action)
      return {
@@ -352,7 +389,7 @@ export default {
     },
 
 
-    //-----------------选择发货商品 页--------------
+    //-----------------发货管理-选择发货商品 --------------
     //发货管理-选择发货商品-获取数据
     getChooseShipmentDataR(state, action){
       console.log('fs',action)
@@ -365,6 +402,42 @@ export default {
       }
     },
 
+
+
+     //-----------------发货管理-发货列表 --------------
+
+     // 发货列表-获取data列表 翻页，查询等
+      
+     getDeliveryListDataR(state, action){
+       // console.log('fs',action)
+        return {
+          ...state,
+          shippingListBig:{
+            ...state.shippingListBig,
+            tableData:action.payload
+          }
+        }
+      },
+
+      // 发货列表 - 删除
+    getdeleteDeliveryListR(state,action){
+      
+      const inList = state.shippingListBig.tableData.list
+      const bb = action.payload.barcode
+      console.log('bb',bb)
+      const newData=inList.filter(item => item.id != bb)
+      console.log('newData',newData)
+      return {
+        ...state,
+        shippingListBig:{
+          ...state.shippingListBig,
+          tableData:{
+            ...state.shippingListBig.tableData,
+            list:newData
+          }
+        }
+      }
+    },    
 
 
 

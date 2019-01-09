@@ -31,6 +31,13 @@ export default function roleOperationDistributionMock() {
     // 发货管理-选择发货商品 - 获取数据
     'POST /llback/delivery/getChooseShipmentData': getPayment,
 
+     // -----------------发货管理-发货列表 ----------------- 
+     // 发货列表-获取data列表 翻页，查询等
+     'POST /llback/delivery/getDeliveryListData': shippingList,
+
+     // 发货列表 - 删除
+     'POST /llback/delivery/getdeleteDeliveryList': getPayment,
+
 
     // -----------------选择商品返回发货单（带参） 页------
 
@@ -94,6 +101,53 @@ export function getPayment(req, res) {
     item: {
       msg: '成功',
       type: 1,
+    },
+  });
+}
+
+//发货列表
+export function shippingList(req, res) {
+  res.send({
+    item: {
+      
+    },
+    list: [
+      {
+        keyId: "1",
+        id: "1",
+        purchasersCode: "cgs",
+        purchasersName: "1采购商测试",
+        goodsTotal: "500",
+        sendTime: "2018/10/30 0:00:00",
+        sendName: "1乓球",
+        sendTel: "13565458746",
+        status: "1"
+      },{
+        keyId: "2",
+        id: "2",
+        purchasersCode: "cgs",
+        purchasersName: "2采购商测试",
+        goodsTotal: "500",
+        sendTime: "2018/10/30 0:00:00",
+        sendName: "2乓球",
+        sendTel: "213565458746",
+        status: "0"
+      },{
+        keyId: "3",
+        id: "3",
+        purchasersCode: "cgs",
+        purchasersName: "3采购商测试",
+        goodsTotal: "500",
+        sendTime: "2018/10/30 0:00:00",
+        sendName: "3乓球",
+        sendTel: "313565458746",
+        status: "3"
+      }
+    ],
+    pagination: {
+      current: 1,
+      total: 3,
+      pageSize: 10,
     },
   });
 }

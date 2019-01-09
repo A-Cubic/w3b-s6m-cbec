@@ -1,7 +1,9 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs,Radio   } from 'antd';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs,Radio ,InputNumber,AutoComplete,Cascader
+
+} from 'antd';
 import styles from './deliveryForm.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
@@ -15,6 +17,16 @@ const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
+
+
+const confirm = Modal.confirm;
+
+function destroyAll() {
+  Modal.destroyAll();
+}
+
+
+
 @connect(({roleOperationDistribution }) => ({
   roleOperationDistribution
 }))
@@ -24,7 +36,11 @@ const FormItem = Form.Item;
 export default class deliveryForm extends Component {
   state={
     formValues:{},
-    delList:[]
+   // delList:[],
+  // dataSource: [],
+    data: [],
+    value: undefined,
+    value:'',
   }
 
   componentDidMount() {
@@ -185,16 +201,33 @@ export default class deliveryForm extends Component {
   // 上传销售数据
   handleUploadChange=(info)=>{
    // console.log('fileTemp',info.file.response)
-    if(info.file.status === 'done') {
-      this.props.dispatch({
-        type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
-        payload: {
-          purchasesn:'',
-           fileTemp: info.file.response.fileName[0]
-          //fileTemp:info.file.name
-        },
-        callback: this.onUploadCallback
-      });
+   //console.log('上传销售数据',this.props.roleOperationDistribution.shippingList.tableData.list != '' || true)
+   
+      if(info.file.status === 'done') {
+        const that =  this
+        if(this.props.roleOperationDistribution.shippingList.tableData.list !=''){
+         // console.log(1)
+        } else {
+          confirm({
+            title: '提示',
+            content: '确定覆盖现有发货商品？',
+            onOk() {
+              that.props.dispatch({
+                type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
+                payload: {
+                  purchasesn:'',
+                  fileTemp: info.file.response.fileName[0]
+                  //fileTemp:info.file.name
+                },
+                callback: that.onUploadCallback
+              });
+            },
+            onCancel() {
+              //console.log('Cancel');
+            },
+          });
+
+        }
     }
   }
   onUploadCallback = (params) => {
@@ -208,6 +241,107 @@ export default class deliveryForm extends Component {
     //this.init();
   }
 
+
+  handleSearch = (value) => {
+    fetch(value, data => this.setState({ data }));
+  }
+
+  handleChange = (value) => {
+    this.setState({ value });
+  }
+ 
+
+
+  //弹出确定
+  showConfirm=() =>{
+    confirm({
+      title: 'Do you Want to delete these items?',
+      content: 'Some descriptions',
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+    
+  }
+
+  onChangeNum=(v)=>{
+    console.log('v',v)
+    this.setState({
+      value: v
+    },()=>{
+      //console.log('bbbbbb',this.state.value)
+    });
+   
+    }
+
+  
+//改变数量
+  //onChange
+  inputOnBlur = (record,val) =>{
+    // console.log('record',record.barcode)
+     //console.log('onchange_valuce', this.state.value)
+     const {match,dispatch}=this.props;
+     const getData = JSON.parse(match.params.biography)
+     const b = roleOperationDistribution.shippingList.tableData.list.map((item) => {
+      return {
+       // demand:this.state.value,
+       // price:item.supplyPrice,
+       purchaseNum:this.state.value,
+       supplyPrice:item.supplyPrice,
+       barcode:item.barcode,
+      }
+     })
+ 
+     const c =b.find(item=>
+       item.barcode===record.barcode
+     )
+     const d = [c].map((item) => {
+       // const demand
+       // const price
+        //return  [item.demand = item.purchaseNum,item.price = item.supplyPrice]
+        return {
+         // demand:this.state.value,
+         // price:item.supplyPrice,
+         demand:this.state.value,
+         price:item.supplyPrice,
+        }
+       })  
+     // console.log('item返回值b',b)
+     // console.log('item返回值c',[c])
+     // console.log('item返回值d',d)
+     // console.log('purchaseNum',record.purchaseNum)  
+     // console.log('this.state.value',this.state.value =='') 
+
+
+
+    // if(this.state.value != ''){
+    //   if(record.purchaseNum != this.state.value){
+    //     //console.log('传数')
+    //     this.props.dispatch({
+    //       type: 'rolePurchaserBulkPurchases/getChangeNum',
+    //       //payload: params,
+    //       payload: {
+    //         purchasesn:getData.purchasesn,
+    //         // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
+    //         list:d,
+    //         barcode:record.barcode
+    //       },
+    //     }); 
+    //   }  
+    // }  
+
+
+
+
+
+   }  
+
+
+
+
   renderForm(){
   const { roleOperationDistribution:{shippingList:{tableData:{list, pagination,item}}} } = this.props;
   const { getFieldDecorator } = this.props.form;
@@ -216,8 +350,8 @@ export default class deliveryForm extends Component {
     showQuickJumper: true,
     ...pagination,
   };
-
-
+  //下拉数据
+  const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>)
     const columns = [
       {
         title: '序号',
@@ -255,6 +389,25 @@ export default class deliveryForm extends Component {
         title: '发货数量',
         dataIndex: 'totale',
         key: 'totale',
+        render: (val,record,e) =>{
+          // console.log(2,record)
+           // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
+           return (
+            
+           <InputNumber 
+             // onChange={this.onChange(record)} 
+              onChange={this.onChangeNum}
+              onBlur={()=>this.inputOnBlur(record) }
+              //  onClick={(e) => this.handleDelCheck(e, record, index)}>
+              //  min={parseInt(record.minAvailableNum)} 
+              //  max={parseInt(record.maxAvailableNum)} 
+               defaultValue={record.purchaseNum}
+             />
+ 
+           )
+         }
+
+
       }, {
         title: '安全库存数',
         dataIndex: 'totalf',
@@ -324,7 +477,7 @@ export default class deliveryForm extends Component {
         <Col md={4} sm={24}></Col>
           <Col md={8} sm={24}>
             <FormItem label="快递公司：  ">
-              {getFieldDecorator('contacts', {
+              {getFieldDecorator('contactsa', {
                 initialValue: item.c,
                 rules: [{ required: true, message: '请输入快递公司' }],
               })(
@@ -377,6 +530,35 @@ export default class deliveryForm extends Component {
                     </Select>
                 )}
 
+
+                {/* {getFieldDecorator('sendType',{
+                  //initialValue:'1'
+                
+                  rules: [{ required: true, message: '请输入提供地点' }],
+                })(
+                  
+                  <Select
+                    showSearch
+                    value={this.state.value}
+                    placeholder={this.props.placeholder}
+                    style={this.props.style}
+                    defaultActiveFirstOption={false}
+                    showArrow={false}
+                    filterOption={false}
+                    onSearch={this.handleSearch}
+                    onChange={this.handleChange}
+                    notFoundContent={null}
+                  >
+                    {options}
+                  </Select>
+
+
+
+                )} */}
+          
+         
+
+
             </FormItem>      
           </Col>
           <Col md={6} sm={24}>
@@ -418,6 +600,7 @@ export default class deliveryForm extends Component {
             <Button style={{ marginLeft: 8 }}>
               <Icon type="cloud-upload-o" /> 导入询价商品
             </Button>
+
           </Upload>
         </div>
         <Table dataSource={list}
@@ -429,6 +612,9 @@ export default class deliveryForm extends Component {
                  onChange={this.handleTableChange}
                  // loading={submitting}
           />
+          <p onClick={this.showConfirm}>
+            {/* Confirm 777*/}
+          </p>
         <Row style={{marginTop:'15px', marginBottom:'5px'}}>
           <Col md={9} sm={24}></Col>
           <Col md={6} sm={24}>

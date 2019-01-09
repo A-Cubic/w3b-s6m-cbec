@@ -72,8 +72,23 @@ export async function getChooseShipmentData(params) {
   });
 }
 
+//-----------------发货管理- 发货列表 --------------
 
+ // 发货列表-获取data列表 翻页，查询等
+export async function getDeliveryListData(params) {
+  return request(`/llback/delivery/getDeliveryListData`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
+ //发货列表 - 删除 
+ export async function getdeleteDeliveryList(params) {
+  return request(`/llback/delivery/getdeleteDeliveryList`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 //-----------------选择商品返回发货单（带参） 页--
 

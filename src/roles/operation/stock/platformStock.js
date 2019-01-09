@@ -89,7 +89,8 @@ export default class platformStock extends Component {
   }
   // 上传销售数据
   handleUploadChange=(info)=>{
-   // console.log('userId',userId)
+
+    console.log('userId',)
     if(info.file.status === 'done') {
       this.props.dispatch({
         type: 'roleOperationDistribution/uploadOrderbill',
