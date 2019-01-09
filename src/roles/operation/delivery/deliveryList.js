@@ -97,35 +97,105 @@ export default class deliveryList extends Component {
       },
     });
   }
+  //判断状态
+  handleViewState(record){
+    //dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
+    //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
+      const getdata = {purchasesn:record.purchasesn,status:record.status}
+      if(record.status === '3'){
+        this.props.dispatch(routerRedux.push('/delivery/returnDeliveryForm/' + JSON.stringify(getdata)  ));
+      } else if(record.status === '1'){
+        this.props.dispatch(routerRedux.push('/delivery/checkDelivery/' + JSON.stringify(getdata)  ));
+      } else {
+       
+      }
+      
+      //JSON.parse JSON.stringify
+  
+      //let type;
+      switch (record.status){
+        
+        case '0':
+           // type=1; //确认
+           
+            break;
+          case '1':
+           // type=2; //完成
+            
+            break;
+          case '3':
+          //  type=3; //待提交
+            
+            break;
+          default:
+            //console.log(1)
+            break;
+      }
+      //console.log(record)
+      
+     
+    }
+    handleWithdraw(record) {
 
+    }
 
   renderForm(){
     const { roleOperationDistribution:{chooseShipment:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     
 
-    console.log('xxx',this.props.roleOperationDistribution.shippingListBig)
+  //  console.log('xxx',this.props.roleOperationDistribution.shippingListBig)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
-            <FormItem >
+        
+          <Col md={11} sm={24}>
+            <FormItem label="单据日期：">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
           </Col>
-          <Col md={9} sm={24}>
-            <FormItem label="">
+          <Col md={11} sm={24}>
+            <FormItem label="采购商：">
               {getFieldDecorator('select')(
-                <Input style={{ width: '100%' }} placeholder="可输入商品条码，商品名称，商品品牌进行查询" />
+                <Input style={{ width: '100%' }} placeholder="请输入采购商名称进行搜索" />
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+        </Row>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+         
+          <Col md={8} sm={24}>
+          <FormItem label="状态">
+              {getFieldDecorator('status',{
+              })(
+                <Select
+                  placeholder="请选择"
+                  optionFilterProp="label"
+                  // onChange={this.onSelectChange}
+                >
+                  {/* <Option value="">全部</Option> */}
+                  <Option value="0">确认中</Option>
+                  <Option value="1">已完成</Option>
+                  <Option value="3">待提交</Option>
+                  
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="单据编号：">
+              {getFieldDecorator('select')(
+                <Input style={{ width: '100%' }} placeholder="请输入单据编号进行搜索" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </Col>
+         
         </Row>
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
@@ -180,7 +250,11 @@ export default class deliveryList extends Component {
         title: '状态',
         dataIndex: 'status',
         key: 'status',
-       
+        render: (val) => {
+          return(<div>
+            {['确认中','已完成','','待提交'][`${val}`]}
+          </div>)
+        }
       },{
         title: '操作',
         dataIndex: 'discountName',
@@ -188,7 +262,12 @@ export default class deliveryList extends Component {
         render: (text, record, index) => {
           return (
             <Fragment>
-              <a href="javascript:;" onClick={(e) => this.handleDelCheck(e, record, index)}>删除</a><br/>
+              {/* <a href="javascript:;" onClick={(e) => this.handleDelCheck(e, record, index)}>删除</a><br/> */}
+              {record.status ==0 ?<a onClick={()=>this.handleViewState(record)}>查看<br/></a>:<div></div>}
+              {record.status ==0 ?<a onClick={()=>this.handleWithdraw(record)}>撤回<br/></a>:<div></div>}
+              {record.status ==3 ?<a onClick={()=>this.handleViewState(record)}>提交<br/></a>:<div></div>}
+              {record.status ==3?<a onClick={(e) => this.handleDelCheck(e, record)}>删除</a>:<div></div>}
+              {record.status ==1 ?<a onClick={()=>this.handleViewState(record)}>查看<br/></a>:<div></div>}
             </Fragment>
           )
         }
