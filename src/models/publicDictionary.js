@@ -29,6 +29,8 @@ export default {
     wareHouseArr:[],
     // 获取快递
     expressArr:[],
+    // 获取采购商
+    
 
   },
   effects:{

@@ -100,11 +100,11 @@ export function operation (dynamicWrapper,app){
     //-----------------------------发货-----------------------------
     //发货单表单
     '/delivery/deliveryForm': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/deliveryForm')), 
+      component: dynamicWrapper(app, ['roleOperationDistribution','publicDictionary'], () => import('../roles/operation/delivery/deliveryForm')), 
     },
     //选择发货商品
     '/delivery/selectProduct': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/selectProduct')),
+      component: dynamicWrapper(app, ['roleOperationDistribution','publicDictionary'], () => import('../roles/operation/delivery/selectProduct')),
     },
     //选择商品返回发货单（带参）
     '/delivery/returnDeliveryForm/:id': {
@@ -116,7 +116,7 @@ export function operation (dynamicWrapper,app){
     },
     //发货列表- 查看发货单
     '/delivery/checkDelivery': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/checkDelivery')),
     },
 
     //-----------------------------销售-----------------------------

@@ -1,4 +1,5 @@
-// const h = 'http://172.16.10.51:54195/'
+const h = 'http://192.168.0.128:54195/'
+
 export default function roleOperationDistributionMock() {
   return {
     // ---------------------------------------------库存管理部分-----------------------------------------
@@ -13,19 +14,30 @@ export default function roleOperationDistributionMock() {
     // -----------------库存 - 门店库存 页---------------
 
     // ---------------------------------------------发货管理部分-----------------------------------------
-    // -----------------发货单表单 页-------------------
-    // 发货单表单 - 上传销售数据
-    'POST /llback/delivery/deliverGoodsuploadOrderbill': UpdateDistributor,
+    // -----------------我要发货-------------------
+    // 我要发货 - 上传销售数据
+   // 'POST /llback/delivery/deliverGoodsuploadOrderbill': UpdateDistributor,
+    'POST /llback/Warehouse/OperationDeliveryImport': h,
+    
 
-    // 发货单表单 - 删除
+
+    // 我要发货 - 删除
     'POST /llback/delivery/deleteGoodsList': getPayment,
+    'POST /llback/Warehouse/DeliverGoodsDelete': h,
 
-    // 发货单表单 - 提交
+    // 我要发货 - 分页
+    'POST /llback/delivery/getPaging': getPayment,
+    'POST /llback/Warehouse/DeliverGoodsList': h,
+
+    // 我要发货 - 提交
     'POST /llback/delivery/getDeliverGoods': getPayment,
 
-    // 发货单表单 - 保存
+    // 我要发货 - 保存
     'POST /llback/delivery/getDeliverGoodsSave': getPayment,
 
+    //我要发货 - 改变数量
+    'POST /llback/delivery/getChangeNum': changingQuantity,//改变数量字段
+    'POST /llback/Warehouse/DeliverGoodsNum': h,
 
     // -----------------发货管理-选择发货商品 -----------------
     // 发货管理-选择发货商品 - 获取数据
@@ -102,6 +114,16 @@ export function getPayment(req, res) {
       msg: '成功',
       type: 1,
     },
+  });
+}
+//返回改变数量
+export function changingQuantity(req, res) {
+  res.send({
+    
+    barcode: "8809420800197",
+    pNum: 17,
+    type: "1"
+
   });
 }
 
@@ -412,20 +434,32 @@ export function UpdateDistributor(req, res) {
     },
     list: [
         {
-            keyId: "1",
-            purchasesn: "2018121313045638",
-            goodsName: "兰芝精华液",
-            barcode: "11111",
-            brand: "",
-            total: "100"
+          keyId: "1",
+          id: "Send2019010914564524",
+          goodsName: "韩国MIGABEE蜂蜜提取美白祛皱成分超保湿精华液蜂蜜80安瓶 120ml",
+          barcode: "8809420800197",
+          model: "150ml",
+          country: "韩国",
+          brand: "Bkcell",
+          rprice: "198",
+          pprice: "138.62",
+          pNum: "1",
+          goodsNum: "0",
+          safeNum: "1"
         },
         {
-            keyId: "2",
-            purchasesn: "2018121313045638",
-            oodsName: "宝芝林",
-            barcode: "22222",
-            brand: "",
-            total: "100"
+          keyId: "2",
+          id: "Send2019010914564525",
+          goodsName: "2韩国MIGABEE蜂蜜提取美白祛皱成分超保湿精华液蜂蜜80安瓶 120ml",
+          barcode: "8809420800198",
+          model: "250ml",
+          country: "中国",
+          brand: "Bkcell",
+          rprice: "2198",
+          pprice: "2138.62",
+          pNum: "2",
+          goodsNum: "2",
+          safeNum: "2"
         }
     ],
     pagination: {

@@ -6,12 +6,11 @@ import {
   platformStock,getUploadOrderbillDX,
   
   //我要发货
-  deleteList,deliverGoodsuploadOrderbill,deleteGoodsList,getDeliverGoods,getDeliverGoodsSave,
+  deleteList,deliverGoodsuploadOrderbill,deleteGoodsList,getDeliverGoods,getDeliverGoodsSave,getChangeNum,getPaging,
   //选择发货商品
   getChooseShipmentData,
   //发货列表
   getDeliveryListData,getdeleteDeliveryList,
-
 
 } from "../services/roleOperationDistribution_S";
 export default {
@@ -168,6 +167,19 @@ export default {
         }
       },
 
+      //  我要发货-分页
+    *getPaging({ payload,callback },{ call,put }){
+      const response = yield call(getPaging, payload);
+     //console.log('~分页 改',response)
+      if(response!==undefined){
+      //  callback(response)
+        yield put({
+          type: 'getPagingR',
+          payload: response,
+        })
+      }
+    },
+
 
       // 我要发货-提交接口 
      *getDeliverGoods({ payload,callback  },{ call,put }){
@@ -242,7 +254,17 @@ export default {
         }
       },
 
-
+    // 发货列表-改变采购数量
+    *getChangeNum({ payload },{ call,put }){
+      const response = yield call(getChangeNum, payload);
+     // console.log('~xxxx已报价',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getChangeNumR',
+          payload: response,
+        })
+      }
+    },
 
 
     //-----------------选择商品返回发货单（带参） 页--
@@ -302,14 +324,17 @@ export default {
         }
       }
     },    
-      //导入列表
+
+    
+
+      //平台库存 - 导入列表
     uploadOrderbillR(state, action){
      // console.log('xxx',action)
      return {
        ...state,
        importList:{
          ...state.importList,
-         pur:action.payload.list[0].purchasesn,
+       //  pur:action.payload.list[0].purchasesn,
          tableData:action.payload
          //list:action.payload
        }
@@ -321,14 +346,14 @@ export default {
 
     //---------------------------------------------发货管理部分-----------------------------------------
     //-----------------发货单表单 页---------------
-     // 发货单表单- 导入询价商品 
+     // 我要发货- 导入询价商品 
      deliverGoodsuploadOrderbillR(state, action){
       // console.log('xxx',action.payload.list)
       return {
         ...state,
         shippingList:{
           ...state.shippingList,
-          pur:action.payload.list[0].purchasesn,
+          //pur:action.payload.list[0].purchasesn,
           tableData:{
             ...state.shippingList.tableData,
             list:action.payload.list,
@@ -337,7 +362,7 @@ export default {
         }
       }
     },
-    // 发货单表单- 删除
+    // 我要发货- 删除
     deleteGoodsListR(state,action){
       const inList = state.shippingList.tableData.list
       const bb = action.payload.barcode
@@ -356,7 +381,22 @@ export default {
       }
     },    
 
-     // 发货单表单-提交接口 
+     
+//  我要发货- 分页 -
+    getPagingR(state, action){
+      return {
+        ...state,
+        shippingList:{
+          ...state.shippingList,
+  
+            list:action.payload.list,
+            pagination:action.payload.pagination,
+        }
+      }
+    },
+
+
+     // 我要发货-提交接口 
     getDeliverGoodsR(state, action){
     // console.log('state',state.shippingList.tableData.list )
       const onempty =state.shippingList.tableData.list
@@ -373,7 +413,7 @@ export default {
       }
     },
 
-    // 发货单表单-保存接口  
+    // 我要发货-保存接口  
     getDeliverGoodsSaveR(state, action){
       const delList = []
       return {
@@ -387,6 +427,50 @@ export default {
         }
       }
     },
+
+    
+// 发货列表-改变采购数量
+getChangeNumR(state,action){
+  // console.log('okokokokokok')
+ 
+   const inList = state.shippingList.tableData.list
+   const bb = action.payload.barcode
+   const dataSource = [...inList]
+   //const newData=state.shippingList.tableData.list.filter(item => item.barcode == bb)
+ //   const b =state.goodsChannel.tableData.list.findIndex(item=>
+ //     item.id===action.payload.id
+ //   )
+ //  state.goodsChannel.tableData.list[b] = {...state.goodsChannel.tableData.list[b], ...action.payload};
+ //  return{
+ //    ...state
+ //  }
+  // _.find(state.goodsAboutData.childCheckO.goodsSelectSupplierList,function(item){ return item.id === action.payload.id}).ifSel = '1';
+  //console.log('p11111',action.payload)
+
+   const b =state.shippingList.tableData.list.find(item=>
+     item.barcode===action.payload.barcode
+   )
+
+   console.log('action.payload.pNum',action.payload.pNum == null?b.pNum:action.payload.pNum )
+   //b.pNum = action.payload.pNum
+   state.shippingList.tableData.item.purchasePrice = action.payload.allPrice
+   b.pNum =  action.payload.pNum == null?b.pNum:action.payload.pNum
+   const num = action.payload.pNum == null?b.pNum:action.payload.pNum
+   // console.log('b',action.payload)
+   //  console.log('totalPrice',action.payload.totalPrice)
+   //  console.log('purchasePrice',state.shippingList.tableData.item.purchasePrice)     
+
+   return {
+     ...state,
+     shippingList:{
+       ...state.shippingList,
+       //tableData:action.payload
+      // 'item.purchasePrice':action.payload.allPrice,
+       'b.pNum': num ,
+     },
+   }
+   }, 
+
 
 
     //-----------------发货管理-选择发货商品 --------------

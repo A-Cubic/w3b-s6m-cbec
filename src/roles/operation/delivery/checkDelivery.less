@@ -1,11 +1,5 @@
 @import "~antd/lib/style/themes/default.less";
 @import "../../../utils/utils.less";
-.aaa {
-  //& > span {
-  //  border: 1px solid lightseagreen;
-  //  display: inline-block;
-  //}
-}
 .tableList {
   .tableListOperator {
     margin-bottom: 16px;
@@ -14,19 +8,8 @@
     }
   }
 }
-
-.upload {
-  display: inline-block;
-  //.ant-upload-list {
-  //  border: 1px solid sandybrown;
-  //  .ant-upload-list-item {
-  //    border: 1px solid red;
-  //    transform: scale(0.1);
-  //  }
-  //  transform: scale(0.1);
-  //}
-}
 .tableListForm {
+  font-size: 16px;
   :global {
     .ant-form-item {
       margin-bottom: 24px;
@@ -50,19 +33,41 @@
     margin-bottom: 24px;
   }
 }
-.recordNum {
-  position: relative;
-    .recordNum_w{
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 200px;
-      height: 50px;
-    }
+
+.titleName {
+  font-size: 30px;
+  text-align: center;
 }
-
-
-
+.takeGoods {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  margin-top: 20px;
+  span {
+    display: block;
+    float: left;
+    width: 5px;
+    height: 20px;
+    background: #1890FF;
+    margin-top: 4px;
+    margin-right: 10px;
+  }
+}
+.stars {
+  display: block;
+  float: left;
+  color: orange;
+  font-size: 16px;
+}
+.sex {
+  padding-top: 5px;
+}
+.line {
+  width: 100%;
+  height: .5px;
+  border-bottom: 1px dashed #e8e8e8;
+  
+}
 
 @media screen and (max-width: @screen-lg) {
   .tableListForm :global(.ant-form-item) {
@@ -75,3 +80,4 @@
     margin-right: 8px;
   }
 }
+

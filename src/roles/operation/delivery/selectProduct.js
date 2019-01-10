@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Checkbox  } from 'antd';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Checkbox,Badge } from 'antd';
 import styles from './selectProduct.less';
 import moment from 'moment';
 import {getCurrentUrl, getUploadUrl} from '../../../services/api'
@@ -161,7 +161,11 @@ export default class selectProduct extends Component {
           </Col>
         </Row>
         <Divider dashed />
-        <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+        <div className={styles.recordNum} style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+          <div className={styles.recordNum_w}  style={{ float: 'float' }}>
+            <div className={styles.recordNum_num}>1</div>   
+            <Button type="primary" icon="form">发货单</Button>
+          </div>      
           <div style={{ float: 'right' }}>
             <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
           </div>

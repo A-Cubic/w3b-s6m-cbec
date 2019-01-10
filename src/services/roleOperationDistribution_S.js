@@ -33,18 +33,30 @@ export async function deleteList(params) {
 //-----------------我要发货---------------
  //我要发货- 导入询价商品 
 export async function deliverGoodsuploadOrderbill(params) {
-  return request(`/llback/delivery/deliverGoodsuploadOrderbill`, {
+  // return request(`/llback/delivery/deliverGoodsuploadOrderbill`, {
+  return request(`/llback/Warehouse/OperationDeliveryImport`, {
     method: 'POST',
     body: params,
   });
 } 
  //我要发货- 删除 
 export async function deleteGoodsList(params) {
-  return request(`/llback/delivery/deleteGoodsList`, {
+  // return request(`/llback/delivery/deleteGoodsList`, {
+  return request(`/llback/Warehouse/DeliverGoodsDelete`, {
     method: 'POST',
     body: params,
   });
 }
+
+ //我要发货- 分页 
+ export async function getPaging(params) {
+   //return request(`/llback/delivery/getPaging`, {
+   return request(`/llback/Warehouse/DeliverGoodsList`, {
+    method: 'POST',
+    body: params,
+  });
+}  
+
 
  //我要发货- 提交 
  export async function getDeliverGoods(params) {
@@ -56,6 +68,14 @@ export async function deleteGoodsList(params) {
  //我要发货- 保存 
  export async function getDeliverGoodsSave(params) {
   return request(`/llback/delivery/getDeliverGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
+ //我要发货- 改变数量
+ export async function getChangeNum(params) {
+  // return request(`/llback/delivery/getChangeNum`, {
+  return request(`/llback/Warehouse/DeliverGoodsNum`, {
     method: 'POST',
     body: params,
   });
