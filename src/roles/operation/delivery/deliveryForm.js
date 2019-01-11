@@ -225,13 +225,10 @@ export default class deliveryForm extends Component {
   }
   //选择发货
   deliverGoods = (e) => {
+    const that = this
     if(this.props.roleOperationDistribution.shippingList.tableData.list ==''){
-      e.preventDefault();
-        this.props.form.validateFields((err, fieldsValue) => {
-          console.log('values',fieldsValue)
-      
-        });
-      
+    
+      console.log('7',this.props.roleOperationDistribution.shippingList.tableData.list)
 
 
     }else {
@@ -373,8 +370,6 @@ export default class deliveryForm extends Component {
     }  
    }  
 
-
-
    //记录改变SafeNum
    onChangeSafeNum=(v)=>{
     console.log('valueGoodsNum',v)
@@ -386,12 +381,6 @@ export default class deliveryForm extends Component {
    
     }
 
-
-    
-
-
-
-  
 //改变数量 SafeNum
   //onChange
   inputOnBlurSafeNum = (record,val) =>{
@@ -431,8 +420,6 @@ export default class deliveryForm extends Component {
    }  
 
 
-   
-
     fetch = (value, callback) => {
       let timeout;
       let currentValue;
@@ -448,7 +435,7 @@ export default class deliveryForm extends Component {
       //   q: value,
       // });
       //jsonp(`https://suggest.taobao.com/sug?${str}`)
-      console.log('qa',this.props.purchaserArr)
+      //console.log('qa',this.props.purchaserArr)
       jsonp(`this.props.purchaserArr`)
         .then(response => response.json())
         .then((d) => {
@@ -470,10 +457,6 @@ export default class deliveryForm extends Component {
   }
    
 
-
-
-
-
    //获取采购商
 
   handleSearch = (value) => {
@@ -487,16 +470,11 @@ export default class deliveryForm extends Component {
   }
 
 
-  
-
-
-
   renderForm(){
   const { roleOperationDistribution:{shippingList:{tableData:{list, pagination,item}}} } = this.props;
 
   const { publicDictionary:{purchaserArr} } = this.props;
-  console.log('purchaserArr',this.props.purchaserArr) 
-
+  //console.log('purchaserArr',this.props.purchaserArr) 
 
   const { getFieldDecorator } = this.props.form;
   const paginationProps = {
@@ -504,7 +482,7 @@ export default class deliveryForm extends Component {
     showQuickJumper: true,
     ...pagination,
   };
-  //下拉数据
+  //下拉数据 
   //const options = this.props.purchaserArr.map(val => <Option key={val.platformId}>{val.platformType}</Option>)
   //const options = this.props.purchaserArr.map(d => <Option key={d.platformId}>{d.platformType}</Option>)
     const columns = [
@@ -712,6 +690,7 @@ export default class deliveryForm extends Component {
                     onSearch={this.handleSearch}
                     onChange={this.handleChange}
                     notFoundContent={null}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
                     {/* <Option value="1">日本提货</Option> */}
                     {purchaserArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}

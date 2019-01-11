@@ -110,6 +110,26 @@ export async function getDeliveryListData(params) {
   });
 }
 
+
+  //-----------------发货管理-发货列表 - 查看页面 --------------
+  //发货管理-发货列表 - 查看页面 - 获取数据
+  export async function getShipmentListViewData(params) {
+    return request(`/llback/delivery/getShipmentListViewData`, {
+      method: 'POST',
+      body: params,
+    });
+  }
+
+  //发货管理-发货列表 - 查看页面 - 分页
+  export async function getPagingShipmentListView(params) {
+    return request(`/llback/delivery/getPagingShipmentListView`, {
+      method: 'POST',
+      body: params,
+    });
+  }
+
+
+
 //-----------------选择商品返回发货单（带参） 页--
 
 //-----------------发货列表 页----------------

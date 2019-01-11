@@ -19,7 +19,8 @@ export default function roleOperationDistributionMock() {
    // 'POST /llback/delivery/deliverGoodsuploadOrderbill': UpdateDistributor,
     'POST /llback/Warehouse/OperationDeliveryImport': h,
     
-
+     // 我要发货 - 保存
+     'POST /llback/delivery/getShipmentListViewData': getPayment, 
 
     // 我要发货 - 删除
     'POST /llback/delivery/deleteGoodsList': getPayment,
@@ -43,12 +44,20 @@ export default function roleOperationDistributionMock() {
     // 发货管理-选择发货商品 - 获取数据
     'POST /llback/delivery/getChooseShipmentData': getPayment,
 
+    // 发货管理-选择发货商品 - 分页
+    'POST /llback/delivery/getPagingShipmentListView': getPayment,
+
+
      // -----------------发货管理-发货列表 ----------------- 
      // 发货列表-获取data列表 翻页，查询等
      'POST /llback/delivery/getDeliveryListData': shippingList,
 
      // 发货列表 - 删除
      'POST /llback/delivery/getdeleteDeliveryList': getPayment,
+
+     
+
+
 
 
     // -----------------选择商品返回发货单（带参） 页------
@@ -91,7 +100,8 @@ export function getPayment(req, res) {
       purchasesn: "2018121313045638",
       goodsName: "兰芝精华液",
       barcode: "11111",
-      ischoose:true
+      ischoose:true,
+      id:1
      
     }, {
       keyId: '2',
@@ -105,7 +115,8 @@ export function getPayment(req, res) {
       purchasesn: "2018121313045639",
       goodsName: "康师傅",
       barcode: "2",
-      ischoose:false
+      ischoose:false,
+      id:1
     }],
     pagination: {
       current: 1,
@@ -115,9 +126,9 @@ export function getPayment(req, res) {
     item: {
       msg: '',
       type: '',
-      sendName:"",
-      sendTel:"",
-      express:"",
+      sendName:"1",
+      sendTel:"2",
+      express:"3",
       waybillNo:"",
       getName:"",
       getcode:"",

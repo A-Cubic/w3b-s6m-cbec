@@ -11,6 +11,8 @@ import {
   getChooseShipmentData,
   //发货列表
   getDeliveryListData,getdeleteDeliveryList,
+   //发货列表 -查看页面
+   getShipmentListViewData,getPagingShipmentListView,
 
 } from "../services/roleOperationDistribution_S";
 export default {
@@ -62,7 +64,18 @@ export default {
         list: [],
         pagination:{},
       },
-    }
+    },
+
+    //-----------------发货列表 -查看----------------
+    //发货列表 -查看 获取数据
+    shipmentListView: {
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
+
 
     //-----------------选择发货商品 页--------------
 
@@ -266,6 +279,35 @@ export default {
         })
       }
     },
+    
+    //-----------------发货管理-发货列表 - 查看页面 --------------
+    //发货管理-发货列表 - 查看页面 - 获取数据
+    *getShipmentListViewData({ payload },{ call,put }){
+      const response = yield call(getShipmentListViewData, payload);
+      console.log('~ 查看页面 - 获取数据',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getShipmentListViewDataR',
+          payload: response,
+        })
+      }
+    },
+
+
+    
+    //  发货管理-发货列表 - 查看页面 - 分页
+    *getPagingShipmentListView({ payload,callback },{ call,put }){
+      const response = yield call(getPagingShipmentListView, payload);
+    //console.log('~分页 改',response)
+      if(response!==undefined){
+      //  callback(response)
+        yield put({
+          type: 'getPagingShipmentListViewR',
+          payload: response,
+        })
+      }
+    },
+
 
 
     //-----------------选择商品返回发货单（带参） 页--
@@ -524,6 +566,33 @@ getChangeNumR(state,action){
       }
     },    
 
+
+
+    //-----------------发货管理-发货列表 - 查看页面 --------------
+    //发货管理-发货列表 - 查看页面 - 获取数据
+    getShipmentListViewDataR(state, action){
+      // console.log('fs',action)
+       return {
+         ...state,
+         shipmentListView:{
+           ...state.shipmentListView,
+           tableData:action.payload
+         }
+       }
+     },
+     //发货管理-发货列表 - 查看页面 - 分页
+     //  我要发货- 分页 -
+     getPagingShipmentListViewR(state, action){
+      return {
+        ...state,
+        shipmentListView:{
+          ...state.shipmentListView,
+  
+            list:action.payload.list,
+            pagination:action.payload.pagination,
+        }
+      }
+    },
 
 
     //-----------------选择商品返回发货单（带参） 页--
