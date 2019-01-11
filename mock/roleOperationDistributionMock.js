@@ -91,6 +91,7 @@ export function getPayment(req, res) {
       purchasesn: "2018121313045638",
       goodsName: "兰芝精华液",
       barcode: "11111",
+      ischoose:true
      
     }, {
       keyId: '2',
@@ -104,6 +105,7 @@ export function getPayment(req, res) {
       purchasesn: "2018121313045639",
       goodsName: "康师傅",
       barcode: "2",
+      ischoose:false
     }],
     pagination: {
       current: 1,
@@ -111,8 +113,17 @@ export function getPayment(req, res) {
       pageSize: 10,
     },
     item: {
-      msg: '成功',
-      type: 1,
+      msg: '',
+      type: '',
+      sendName:"",
+      sendTel:"",
+      express:"",
+      waybillNo:"",
+      getName:"",
+      getcode:"",
+      getTel:"",
+      usercode:''
+ 
     },
   });
 }

@@ -12,18 +12,19 @@ import {message} from "antd/lib/index";
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
-@connect(({roleOperationDistribution }) => ({
-  roleOperationDistribution,
+@connect(({roleOperationDistribution,publicDictionary }) => ({
+  roleOperationDistribution,publicDictionary
 }))
 // --------  --------------
-    // 发货管理 - 平台库存
+    // 发货管理 - 选择发货
 @Form.create()
 export default class selectProduct extends Component {
   state={
     formValues:{},
-    selectedRowKeys: [], // Check here to configure the default column
-    loading: false,
-    
+    // selectedRowKeys: [], // Check here to configure the default column
+    // loading: false,
+    checked: true,
+    disabled: false,
   }
 
   //****/
@@ -32,6 +33,12 @@ export default class selectProduct extends Component {
       type:'roleOperationDistribution/getChooseShipmentData',
       payload:{}
     })
+    this.props.dispatch({
+      type: 'publicDictionary/getGoodsWareHouse',
+      payload: {
+        userId:userId,
+      },
+    });
   }
   componentDidMount() {
     this.init();
@@ -89,24 +96,27 @@ export default class selectProduct extends Component {
   //点击勾 选中
   selectRow = record => {
    
-    const selectedRowKeys = [...this.state.selectedRowKeys];
-    if (selectedRowKeys.indexOf(record.key) >= 0) {
-      selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
-    } else {
-      selectedRowKeys.push(record.key);
-    }
-    this.setState({ selectedRowKeys });
-  };
-  onSelectedRowKeysChange = selectedRowKeys => {
-    this.setState({ selectedRowKeys });
-    console.log('xxx!record',selectedRowKeys)
-  };
+  //   const selectedRowKeys = [...this.state.selectedRowKeys];
+  //   if (selectedRowKeys.indexOf(record.key) >= 0) {
+  //     selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
+  //   } else {
+  //     selectedRowKeys.push(record.key);
+  //   }
+  //   this.setState({ selectedRowKeys });
+  // };
+  // onSelectedRowKeysChange = selectedRowKeys => {
+  //   this.setState({ selectedRowKeys });
+  //   console.log('xxx!record',selectedRowKeys)
+   };
 
   //勾选
   Checklist = (e, record, index)=>{
     console.log(e, record, index)
-    console.log('record.keyId',record.keyId),
+    //console.log('record.keyId',record.keyId),
     console.log('eeee',`checked = ${e.target.checked}`)
+    // this.setState({
+    //   checked: e.target.checked,
+    // });
   }
 
 
@@ -114,7 +124,9 @@ export default class selectProduct extends Component {
   renderForm(){
     const { roleOperationDistribution:{chooseShipment:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    
+    const { publicDictionary:{wareHouseGoodsArr} } = this.props;
+    //console.log('wareHouseGoodsArr',this.props.publicDictionary.wareHouseGoodsArr)
+
     //console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -132,12 +144,20 @@ export default class selectProduct extends Component {
                     optionFilterProp="label"
                     // onChange={this.onSelectChange}
                   >
-                    <Option value="">全部</Option>
+                    {/* <Option value="">全部</Option>
                     <Option value="1">21库</Option>
-                    <Option value="2">32库</Option>
+                    <Option value="2">32库</Option> */}
+
+                    {wareHouseGoodsArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}
                   </Select>
                 )}
             </FormItem>
+
+          
+           
+           
+
+
           </Col>
           <Col md={5} sm={24}>
             <FormItem label="商品：">
@@ -198,7 +218,16 @@ export default class selectProduct extends Component {
           return (
             <Fragment>
               {/* <a href="javascript:;" onClick={(e) => this.handleDelCheck(e, record, index)}>删除</a><br/> */}
-              <Checkbox  onChange={(e) => this.Checklist(e, record, index)}></Checkbox>
+              <Checkbox  
+                onChange={(e) => this.Checklist(e, record, index)}
+                defaultChecked = {record.ischoose}
+
+              // checked={this.state.checked}
+              // disabled={this.state.disabled}
+              // onChange={this.Checklist}
+
+              >
+              </Checkbox>
             </Fragment>
           )
         }

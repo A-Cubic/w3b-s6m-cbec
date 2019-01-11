@@ -17,6 +17,11 @@ export default function publicDictionaryMock(url) {
     'POST /llback/Goods/GetWarehouse': url,
     // 获取快递
     'POST /llback/Order/GetExpress': url,
+    // 发货管理-选择商品-获取仓库
+    'POST /llback/Goods/getGoodsWareHouse': getPlatform,
+
+    // 发货管理-选择商品-获取仓库
+    'POST /llback/Goods/getPurchaserArr': getPlatform,
   };
 }
 export function getPlatform(req, res) {
@@ -28,6 +33,10 @@ export function getPlatform(req, res) {
     {
       platformId: '1',
       platformType: '合作方二',
+    },
+    {
+      platformId: '2',
+      platformType: 'cgs',
     },
   ]);
 }

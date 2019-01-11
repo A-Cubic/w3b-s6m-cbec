@@ -36,13 +36,14 @@ export default {
         list: [],
         pagination:{},
         item:{
-          purchasesn: "",
-          sendType:"",
-          contacts:"",
-          sex:0,
-          tel:"",
-          deliveryTime:null,
-          remark:""
+          sendName:"",
+          sendTel:"",
+          express:"",
+          waybillNo:"",
+          getName:"",
+          getcode:"",
+          getTel:"",
+          
         },
       },
     },

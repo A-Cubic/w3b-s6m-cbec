@@ -7,7 +7,9 @@ import {
   getDistributorsData,
   getBrandData,
   getWareHouseData,
-  getExpressData
+  getExpressData,
+  getGoodsWareHouse,
+  getPurchaserArr
 } from "../services/publicDictionary_S";
 
 export default {
@@ -30,8 +32,9 @@ export default {
     // 获取快递
     expressArr:[],
     // 获取采购商
-    
-
+    purchaserArr:[],
+    // 发货管理-选择商品-获取仓库
+    wareHouseGoodsArr:[],
   },
   effects:{
     // 获取平台渠道类型
@@ -108,6 +111,33 @@ export default {
         });
       }
     },
+
+    // 获取采购商
+    *getPurchaserArr({ payload },{ call,put}){
+      const response = yield call(getPurchaserArr, payload);
+      // console.log('XXXgetPurchaserArr',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getPurchaserArrR',
+          payload: response,
+        });
+      }
+    },
+
+
+    // 发货管理-选择商品-获取仓库
+    *getGoodsWareHouse({ payload },{ call,put}){
+      const response = yield call(getGoodsWareHouse, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'getGoodsWareHouseR',
+          payload: response,
+        });
+      }
+    },
+
+
+
     // 获取快递
     *getExpress({ payload },{ call,put}){
       const response = yield call(getExpressData, payload);
@@ -164,10 +194,24 @@ export default {
         wareHouseArr:action.payload,
       };
     },
+    getGoodsWareHouseR(state, action) {
+      return {
+        ...state,
+        wareHouseGoodsArr:action.payload,
+      };
+    },
+
     getExpressR(state, action) {
       return {
         ...state,
         expressArr:action.payload,
+      };
+    },
+    getPurchaserArrR(state, action) {
+      console.log('XXXgetPurchaserArr',action.payload)
+      return {
+        ...state,
+        purchaserArr:action.payload,
       };
     },
   }

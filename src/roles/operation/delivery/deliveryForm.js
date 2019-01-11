@@ -11,6 +11,11 @@ import { getCurrentUrl } from '../../../services/api'
 import {message} from "antd/lib/index";
 import {getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
+
+//import jsonp from 'fetch-jsonp';
+import querystring from 'querystring';
+import { init } from 'rollbar';
+
 const userId = getToken().userId;
 
 const TabPane = Tabs.TabPane;
@@ -24,6 +29,8 @@ const confirm = Modal.confirm;
 function destroyAll() {
   Modal.destroyAll();
 }
+
+
 
 
 
@@ -45,11 +52,16 @@ export default class deliveryForm extends Component {
   }
 
   componentDidMount() {
-    if(!this.props.match.params){
-        this.init()
-    }else{
+    this.init()
+    // if(!this.props.match.params){
+    //     this.init()
+    // }else{
 
-    }
+    
+
+
+
+    //}
   }
   // init(){
   //   const {match,dispatch}=this.props;
@@ -69,6 +81,19 @@ export default class deliveryForm extends Component {
   //   }
   // }
 
+  
+
+
+  init(){
+    this.props.dispatch({
+            type: 'publicDictionary/getPurchaserArr',
+            //payload: params,
+            payload: {
+              purchasesn:1,
+              
+            },
+          });
+  }
 
 
   //保存
@@ -175,13 +200,13 @@ export default class deliveryForm extends Component {
         formValues: values,
       });
       this.props.dispatch({
-      type: 'roleOperationDistribution/getDeliverGoods',
-         payload: {
-           ...values,
-        
-         },
-         callback: this.onSubmissionCallback
-       });
+        type: 'roleOperationDistribution/getDeliverGoods',
+          payload: {
+            ...values,
+          
+          },
+          callback: this.onSubmissionCallback
+        });
 
     });
   }
@@ -198,6 +223,25 @@ export default class deliveryForm extends Component {
      }else{
      }
   }
+  //选择发货
+  deliverGoods = (e) => {
+    if(this.props.roleOperationDistribution.shippingList.tableData.list ==''){
+      e.preventDefault();
+        this.props.form.validateFields((err, fieldsValue) => {
+          console.log('values',fieldsValue)
+      
+        });
+      
+
+
+    }else {
+
+
+    }
+  }
+
+
+
 
   // 上传销售数据
   handleUploadChange=(info)=>{
@@ -342,6 +386,11 @@ export default class deliveryForm extends Component {
    
     }
 
+
+    
+
+
+
   
 //改变数量 SafeNum
   //onChange
@@ -382,13 +431,73 @@ export default class deliveryForm extends Component {
    }  
 
 
+   
+
+    fetch = (value, callback) => {
+      let timeout;
+      let currentValue;
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    currentValue = value;
+  
+    function fake() {
+      // const str = querystring.encode({
+      //   code: 'utf-8',
+      //   q: value,
+      // });
+      //jsonp(`https://suggest.taobao.com/sug?${str}`)
+      console.log('qa',this.props.purchaserArr)
+      jsonp(`this.props.purchaserArr`)
+        .then(response => response.json())
+        .then((d) => {
+          if (currentValue === value) {
+            const result = d.result;
+            const data = [];
+            result.forEach((r) => {
+              data.push({
+                value: r[0],
+                text: r[0],
+              });
+            });
+            callback(data);
+          }
+        });
+    }
+  
+    timeout = setTimeout(fake, 300);
+  }
+   
 
 
+
+
+
+   //获取采购商
+
+  handleSearch = (value) => {
+    console.log('handleSearch_value',value)
+    fetch(value, data => this.setState({ data }));
+  }
+
+  handleChange = (value) => {
+    console.log('handleChange_value',value)
+    this.setState({ value });
+  }
+
+
+  
 
 
 
   renderForm(){
   const { roleOperationDistribution:{shippingList:{tableData:{list, pagination,item}}} } = this.props;
+
+  const { publicDictionary:{purchaserArr} } = this.props;
+  console.log('purchaserArr',this.props.purchaserArr) 
+
+
   const { getFieldDecorator } = this.props.form;
   const paginationProps = {
     showSizeChanger: true,
@@ -396,7 +505,8 @@ export default class deliveryForm extends Component {
     ...pagination,
   };
   //下拉数据
-  const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>)
+  //const options = this.props.purchaserArr.map(val => <Option key={val.platformId}>{val.platformType}</Option>)
+  //const options = this.props.purchaserArr.map(d => <Option key={d.platformId}>{d.platformType}</Option>)
     const columns = [
       {
         title: '序号',
@@ -448,11 +558,8 @@ export default class deliveryForm extends Component {
                max={parseInt(record.pNum)+1} 
                defaultValue={record.goodsNum}
              />
- 
            )
          }
-
-
       }, {
         title: '安全库存数',
         dataIndex: 'safeNum',
@@ -461,7 +568,6 @@ export default class deliveryForm extends Component {
           // console.log(2,record)
            // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
            return (
-            
            <InputNumber 
              // onChange={this.onChange(record)} 
               onChange={this.onChangeSafeNum}
@@ -507,8 +613,8 @@ export default class deliveryForm extends Component {
           <Col md={8} sm={24}>
 
             <FormItem label="发货人：  ">
-              {getFieldDecorator('contacts', {
-                initialValue: item.contacts,
+              {getFieldDecorator('sendName', {
+                initialValue: item.sendName,
                 rules: [{ required: true, message: '请输入姓名' }],
               })(
                 <Input placeholder="请输入姓名"/>
@@ -517,8 +623,8 @@ export default class deliveryForm extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="发货人电话：  ">
-              {getFieldDecorator('contacts', {
-                initialValue: item.b,
+              {getFieldDecorator('sendTel', {
+                initialValue: item.sendTel,
                 rules: [{ required: true, message: '请输入电话' }],
               })(
                 <Input placeholder="请输入电话"/>
@@ -536,8 +642,8 @@ export default class deliveryForm extends Component {
         <Col md={4} sm={24}></Col>
           <Col md={8} sm={24}>
             <FormItem label="快递公司：  ">
-              {getFieldDecorator('contactsa', {
-                initialValue: item.c,
+              {getFieldDecorator('express', {
+                initialValue: item.express,
                 rules: [{ required: true, message: '请输入快递公司' }],
               })(
                 <Input placeholder="请输入快递公司"/>
@@ -546,8 +652,8 @@ export default class deliveryForm extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="运单号：">
-              {getFieldDecorator('contacts', {
-                initialValue: item.d,
+              {getFieldDecorator('waybillNo', {
+                initialValue: item.waybillNo,
                 rules: [{ required: true, message: '请输入运单号' }],
               })(
                 <Input placeholder="请输入运单号"/>
@@ -573,7 +679,7 @@ export default class deliveryForm extends Component {
           <Col md={3} sm={24}></Col>
           <Col md={6} sm={24}>
             <FormItem label="采购商：">
-                {getFieldDecorator('sendType',{
+                {/* {getFieldDecorator('sendType',{
                   //initialValue:'1'
                   // initialValue:item.sendType==''?'1':item.sendType,
                   initialValue:1,
@@ -587,20 +693,19 @@ export default class deliveryForm extends Component {
                     <Option value="3">香港提货</Option>
                     <Option value="6">国内提货</Option>
                     </Select>
-                )}
+                )} */}
 
 
-                {/* {getFieldDecorator('sendType',{
+                {getFieldDecorator('getName',{
                   //initialValue:'1'
-                
+                  // initialValue:item.sendType==''?'1':item.sendType,
+                  initialValue:'',
                   rules: [{ required: true, message: '请输入提供地点' }],
                 })(
-                  
                   <Select
                     showSearch
-                    value={this.state.value}
-                    placeholder={this.props.placeholder}
-                    style={this.props.style}
+                   // value={this.state.value}
+                  
                     defaultActiveFirstOption={false}
                     showArrow={false}
                     filterOption={false}
@@ -608,13 +713,11 @@ export default class deliveryForm extends Component {
                     onChange={this.handleChange}
                     notFoundContent={null}
                   >
-                    {options}
+                    {/* <Option value="1">日本提货</Option> */}
+                    {purchaserArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}
                   </Select>
-
-
-
-                )} */}
-          
+                )}
+              
          
 
 
@@ -649,7 +752,7 @@ export default class deliveryForm extends Component {
           <div style={{marginBottom:'35px'}}></div>
         </div>
         <div style={{marginBottom:'20px'}}>
-          <Button style={{ marginLeft: 8 }} type="" onClick={this.downloadTemplate}>
+          <Button style={{ marginLeft: 8 }} type="" onClick={this.deliverGoods}>
             <Icon type="snippets" />选择发货商品
           </Button>        
           <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
