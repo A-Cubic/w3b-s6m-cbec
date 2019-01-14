@@ -30,7 +30,7 @@ export default class inquiryList extends Component {
     this.init();
   }
   onSearch=(e)=>{
-    
+
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values111',fieldsValue)
@@ -95,7 +95,7 @@ export default class inquiryList extends Component {
               )}
             </FormItem>
           </Col>
-          
+
           <Col md={12} sm={24}>
             <FormItem label="">
               {getFieldDecorator('select')(
@@ -123,7 +123,7 @@ export default class inquiryList extends Component {
                   <Option value="5">已完成</Option>
                   <Option value="6">已关闭</Option>
                   <Option value="7">待提交</Option>
-                  
+
                 </Select>
               )}
             </FormItem>
@@ -145,7 +145,7 @@ export default class inquiryList extends Component {
 
   render() {
 
-    const { rolePurchaserBulkPurchases:{inquiryList:{tableData:{list, pagination}}} } = this.props;   
+    const { rolePurchaserBulkPurchases:{inquiryList:{tableData:{list, pagination}}} } = this.props;
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
@@ -207,7 +207,7 @@ export default class inquiryList extends Component {
                  // loading={submitting}
           />
           {/* <PurchaseOrder /> */}
-        </Card>  
+        </Card>
       </div>
     );
   }
@@ -228,7 +228,7 @@ export default class inquiryList extends Component {
   //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
     const getdata = {purchasesn:record.purchasesn,status:record.status}
     if(record.status === '7'){
-      this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(getdata)  ));
+      this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiryCan/' + JSON.stringify(getdata)  ));
     } else if(record.status === '1'){
       this.props.dispatch(routerRedux.push('/bulkPurchases/inTheInquiry/' + JSON.stringify(getdata)  ));
     } else if(record.status === '3' ){
@@ -238,47 +238,47 @@ export default class inquiryList extends Component {
     }else {
       this.props.dispatch(routerRedux.push('/bulkPurchases/quoteWithDetails/' + JSON.stringify(getdata)  ));
     }
-    
+
     //JSON.parse JSON.stringify
 
     //let type;
     switch (record.status){
-      
+
       case '1':
          // type=1; //询价中
-         
+
           break;
         case '2':
          // type=2; //已报价
-          
+
           break;
         case '3':
         //  type=3; //报价中
-          
+
           break;
         case '4':
         //  type=4; //已报价(二次)
-          
+
           break;
         case '5':
        //   type=5; //已完成
-         
+
           break;
         case '6':
         //  type=6; //已关闭
-         
+
           break;
         case '7':
         //  type=7; //待提交
-        
+
           break;
         default:
           //console.log(1)
           break;
     }
     //console.log(record)
-    
-   
+
+
   }
 
 

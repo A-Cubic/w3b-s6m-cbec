@@ -10,11 +10,11 @@ import {message} from "antd/lib/index";
 import {getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
 const userId = getToken().userId;
-
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
+const dateFormat = 'YYYY.MM.DD';
 @connect(({rolePurchaserBulkPurchases }) => ({
   rolePurchaserBulkPurchases
 }))
@@ -28,15 +28,18 @@ export default class initiateInquiry extends Component {
   }
 
   componentDidMount() {
-    if(!this.props.match.params){
+
+
+    if(Object.keys(this.props.match.params).length!=0){
         this.init()
     }else{
 
+        console.log('这是menu 的 发货单 此处填写清空modal数据')
     }
   }
   init(){
     const {match,dispatch}=this.props;
-    //console.log('fs',JSON.parse(match.params.biography))
+    console.log('fs',JSON.parse(match.params.biography))
     //const b=JSON.parse(match.params.biography)}
     const getData = JSON.parse(match.params.biography)
     //console.log('getData',getData)
@@ -53,6 +56,7 @@ export default class initiateInquiry extends Component {
   }
   //保存
   onPreservation=(e)=>{
+    console.log('ttttt',this.props.rolePurchaserBulkPurchases)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -67,13 +71,14 @@ export default class initiateInquiry extends Component {
       };
       this.setState({
         formValues: values,
+
       });
       this.props.dispatch({
        // type: 'rolePurchaserBulkPurchases/getInquiryListData',
       type: 'rolePurchaserBulkPurchases/getPreservationData',
         payload: {
           ...values,
-          purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur==''?this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list[0].purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur
+          purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur!=''?this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list[0].purchasesn:''
         },
         callback:this.onPreservationCallback
       });
@@ -185,7 +190,6 @@ export default class initiateInquiry extends Component {
         formValues: {},
       });
 
-     }else{
      }
   }
 
@@ -219,7 +223,7 @@ export default class initiateInquiry extends Component {
     const RadioGroup = Radio.Group;
     const { getFieldDecorator } = this.props.form;
     const {rolePurchaserBulkPurchases:{initiateInquiry:{information,pur,tableData:{item,list, pagination}}} } = this.props;
-  //  console.log('helloprops', this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData)
+   console.log('111111', item)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -347,12 +351,13 @@ export default class initiateInquiry extends Component {
             <FormItem label='截止日期：'>
               {getFieldDecorator('deliveryTime', {
                 // initialValue: information.deliveryTime,
-                //defaultValue={moment('2015-01-01', 'YYYY-MM-DD')}
-                 initialValue: information.deliveryTime,
+                // defaultValue:moment('2015-01-01', 'YYYY-MM-DD'),
+                //  initialValue: information.deliveryTime,
+                 initialValue: moment(item.deliveryTime, 'YYYY.MM.DD'),
                  rules: [{ required: true, message: '请输入截止日期'}],
 
               })(
-                <DatePicker  style={{ width: '100%' }} onChange={this.onTest}/>
+                <DatePicker  style={{ width: '100%' }}  onChange={this.onTest} format={dateFormat}/>
                 //<DatePicker style={{ width: '100%' }}  placeholder="" />
               )}
             </FormItem>

@@ -44,7 +44,7 @@ export function procurement (dynamicWrapper,app){
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
     },
     //批量采购-发起询价-（带参）
-    '/bulkPurchases/initiateInquiry/:biography': {
+    '/bulkPurchases/initiateInquiryCan/:biography': {
       component: dynamicWrapper(app, ['rolePurchaserBulkPurchases'], () => import('../roles/purchaser/bulkPurchases/initiateInquiry')),
     },
 
