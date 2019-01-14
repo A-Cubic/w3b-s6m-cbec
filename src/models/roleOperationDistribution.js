@@ -15,10 +15,11 @@ import {
    getShipmentListViewData,getPagingShipmentListView,
   //---------------------------------------------财务管理部分-----------------------------------------
   //------------------采购结算 页---------
-  getChildModelPrintData,      // 采购结算 - 打印
-  getPaymentSettlementData,    // 采购结算 - 列表
-  getSettlementDetailsData,    // 采购结算 - 查看结算明细 - 货款
-  getSettlementDetailsElseData // 采购结算 - 查看结算明细 - 其他
+  getChildModelPrintData,            // 采购结算 - 打印
+  getPaymentSettlementData,          // 采购结算 - 列表
+  getSettlementDetailsData,          // 采购结算 - 查看结算明细 - 货款
+  getSettlementDetailsElseData,      // 采购结算 - 查看结算明细 - 其他
+  changeStatusCompleteReconciliation // 采购结算 - 完成对账
 } from "../services/roleOperationDistribution_S";
 
 export default {
@@ -418,6 +419,26 @@ export default {
           window.print()
         },1000)
 
+      }
+    },
+    // 采购结算 - 完成对账
+    *completeReconciliation({ payload },{ call,put }){
+      const response = yield call(changeStatusCompleteReconciliation, payload);
+      const responseList = yield call(getPaymentSettlementData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+      //  判断成功 刷新主列表页面
+      //  ...
+        if (response.type==1) {
+          if(responseList!==undefined){
+            yield put({
+              type:'getPaymentSettlementDataR',
+              payload: responseList
+            })
+          }
+        }else{
+          message.error('对账失败，请重新确认');
+        }
       }
     },
 

@@ -194,7 +194,8 @@ export default class purchaseSettlement extends Component {
                         <div style={{ float:"right" }}>
                           <Button  style={{ marginRight:7 }} type="primary" ghost onClick={()=>this.handleChildDetailsModel(record)}>结算明细</Button>
                           {record.status==0?
-                            <span style={{ marginRight:7 }} className={styles.settled}>对账中…</span>:
+                            <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleCompleteReconciliation(record)}>完成对账</Button>
+                            :
                             <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleChildPrintModel(record)}>预览打印</Button>
                           }
                         </div>
@@ -236,6 +237,13 @@ export default class purchaseSettlement extends Component {
     // console.log(record)
     this.props.dispatch({
       type: 'roleOperationDistribution/getSettlementDetailsData',
+      payload: {accountCode:record.accountCode},
+    });
+  }
+  //完成对账
+  handleCompleteReconciliation=(record)=>{
+    this.props.dispatch({
+      type: 'roleOperationDistribution/completeReconciliation',
       payload: {accountCode:record.accountCode},
     });
   }

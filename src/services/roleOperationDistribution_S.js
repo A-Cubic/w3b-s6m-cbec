@@ -177,6 +177,13 @@ export async function getChildModelPrintData(params) {
     body: params,
   })
 }
+// 采购结算 - 完成对账
+export async function changeStatusCompleteReconciliation(params) {
+  return request(`/llback/Balance/EE`,{
+    method: 'POST',
+    body: params,
+  })
+}
 
 
 //------------------手动调账（查看） 页---

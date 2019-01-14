@@ -83,6 +83,8 @@ export default function roleOperationDistributionMock() {
     'POST /llback/Balance/CC': GetOrderList,
     // 采购结算 - 打印
     'POST /llback/Balance/DD': GetOrderList,
+    // 采购结算 - 完成对账
+    'POST /llback/Balance/EE': confirmDelivery,
 
     // ------------------手动调账（查看） 页-------
 
@@ -213,7 +215,6 @@ export function shippingList(req, res) {
 //       purchasesn: "2018121313045638",
 //       goodsName: "兰芝精华液",
 //       barcode: "11111",
-
 //     }]
 //   });
 // }
