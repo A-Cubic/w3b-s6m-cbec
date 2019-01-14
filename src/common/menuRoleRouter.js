@@ -100,7 +100,7 @@ export function operation (dynamicWrapper,app){
     //-----------------------------发货-----------------------------
     //发货单表单
     '/delivery/deliveryForm': {
-      component: dynamicWrapper(app, ['roleOperationDistribution','publicDictionary'], () => import('../roles/operation/delivery/deliveryForm')), 
+      component: dynamicWrapper(app, ['roleOperationDistribution','publicDictionary'], () => import('../roles/operation/delivery/deliveryForm')),
     },
     //选择发货商品
     '/delivery/selectProduct': {
@@ -143,11 +143,11 @@ export function operation (dynamicWrapper,app){
     //-----------------------------财务-----------------------------
     //采购结算
     '/finance/purchaseSettlement': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/finance/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/finance/purchaseSettlement')),
     },
     //手动调账（查看）
     '/finance/manualTransfer': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/finance/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/finance/purchaseSettlement')),
     },
 
 

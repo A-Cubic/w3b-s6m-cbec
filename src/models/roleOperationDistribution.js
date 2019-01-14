@@ -4,7 +4,7 @@ import {
   //----------------发货管理-------------------
   //库存
   platformStock,getUploadOrderbillDX,
-  
+
   //我要发货
   deleteList,deliverGoodsuploadOrderbill,deleteGoodsList,getDeliverGoods,getDeliverGoodsSave,getChangeNum,getPaging,
   //选择发货商品
@@ -13,8 +13,14 @@ import {
   getDeliveryListData,getdeleteDeliveryList,
    //发货列表 -查看页面
    getShipmentListViewData,getPagingShipmentListView,
-
+  //---------------------------------------------财务管理部分-----------------------------------------
+  //------------------采购结算 页---------
+  getChildModelPrintData,      // 采购结算 - 打印
+  getPaymentSettlementData,    // 采购结算 - 列表
+  getSettlementDetailsData,    // 采购结算 - 查看结算明细 - 货款
+  getSettlementDetailsElseData // 采购结算 - 查看结算明细 - 其他
 } from "../services/roleOperationDistribution_S";
+
 export default {
   namespace: 'roleOperationDistribution',
   state:{
@@ -45,7 +51,7 @@ export default {
           getName:"",
           getcode:"",
           getTel:"",
-          
+
         },
       },
     },
@@ -98,6 +104,30 @@ export default {
 
     //---------------------------------------------财务管理部分-----------------------------------------
     //------------------采购结算 页---------
+    purchaseSettlement:{
+      tableData:{
+        list: [],
+        pagination:{},
+      },
+      childDetailsModelVisible:false,
+      childDetailsModelHelpId: '',
+      childModelDetailsTableTab1Data:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+      childModelDetailsTableTab2Data:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+      childPrintModelVisible:false,
+      childModelPrint:{
+        item:{},
+        list:[],
+        pagination:{}
+      }
+    }
 
     //------------------手动调账（查看） 页---
 
@@ -142,7 +172,7 @@ export default {
           }
         }
       },
-   
+
 
 
     //-----------------库存 - 门店库存 页-----------
@@ -195,7 +225,7 @@ export default {
     },
 
 
-      // 我要发货-提交接口 
+      // 我要发货-提交接口
      *getDeliverGoods({ payload,callback  },{ call,put }){
       const response = yield call(getDeliverGoods, payload);
     // console.log('~resxxxx提交接口',response)
@@ -209,7 +239,7 @@ export default {
       }
     },
 
-     //  我要发货-保存接口 
+     //  我要发货-保存接口
      *getDeliverGoodsSave({ payload,callback  },{ call,put }){
       const response = yield call(getDeliverGoodsSave, payload);
     // console.log('~res111保存接口',response)
@@ -279,7 +309,7 @@ export default {
         })
       }
     },
-    
+
     //-----------------发货管理-发货列表 - 查看页面 --------------
     //发货管理-发货列表 - 查看页面 - 获取数据
     *getShipmentListViewData({ payload },{ call,put }){
@@ -294,7 +324,7 @@ export default {
     },
 
 
-    
+
     //  发货管理-发货列表 - 查看页面 - 分页
     *getPagingShipmentListView({ payload,callback },{ call,put }){
       const response = yield call(getPagingShipmentListView, payload);
@@ -329,6 +359,67 @@ export default {
 
     //---------------------------------------------财务管理部分-----------------------------------------
     //------------------采购结算 页---------
+    // 采购结算 - 列表
+    *getPaymentSettlementData({ payload },{ call,put }){
+      const response = yield call(getPaymentSettlementData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getPaymentSettlementDataR',
+          payload: response,
+        })
+      }
+    },
+    // 采购结算 - 查看结算明细
+    *getSettlementDetailsData({ payload },{ call,put }){
+      const responseTab1 = yield call(getSettlementDetailsData, payload);
+      const responseTab2 = yield call(getSettlementDetailsElseData, payload);
+      // console.log('~res',response)
+      if(responseTab1!==undefined){
+        yield put({
+          type: 'getSettlementDetailsDataR',
+          payload: {responseTab1,responseTab2,childDetailsModelVisible:true,childDetailsModelHelpId:payload.accountCode},
+        })
+      }
+    },
+    // 采购结算 - 查看结算明细 - 货款分页
+    *childModelDetailsTableTab1Data({ payload },{ call,put }){
+      const response = yield call(getSettlementDetailsData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'childModelDetailsTableTabDataR',
+          payload: {data:response,tab:'childModelDetailsTableTab1Data'},
+        })
+      }
+    },
+    // 采购结算 - 查看结算明细 - 其他分页
+    *childModelDetailsTableTab2Data({ payload },{ call,put }){
+      const response = yield call(getSettlementDetailsElseData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'childModelDetailsTableTabDataR',
+          payload: {data:response,tab:'childModelDetailsTableTab2Data'},
+        })
+      }
+    },
+    // 采购结算 - 打印
+    *childModelPrintData({ payload,callback },{ call,put }){
+      const response = yield call(getChildModelPrintData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'childModelPrintDataR',
+          payload: {response,childPrintModelVisible:true},
+        })
+        yield
+        setTimeout(function () {
+          window.print()
+        },1000)
+
+      }
+    },
 
     //------------------手动调账（查看） 页---
 
@@ -366,9 +457,9 @@ export default {
           }
         }
       }
-    },    
+    },
 
-    
+
 
       //平台库存 - 导入列表
     uploadOrderbillR(state, action){
@@ -389,7 +480,7 @@ export default {
 
     //---------------------------------------------发货管理部分-----------------------------------------
     //-----------------发货单表单 页---------------
-     // 我要发货- 导入询价商品 
+     // 我要发货- 导入询价商品
      deliverGoodsuploadOrderbillR(state, action){
       // console.log('xxx',action.payload.list)
       return {
@@ -422,16 +513,16 @@ export default {
           }
         }
       }
-    },    
+    },
 
-     
+
 //  我要发货- 分页 -
     getPagingR(state, action){
       return {
         ...state,
         shippingList:{
           ...state.shippingList,
-  
+
             list:action.payload.list,
             pagination:action.payload.pagination,
         }
@@ -439,7 +530,7 @@ export default {
     },
 
 
-     // 我要发货-提交接口 
+     // 我要发货-提交接口
     getDeliverGoodsR(state, action){
     // console.log('state',state.shippingList.tableData.list )
       const onempty =state.shippingList.tableData.list
@@ -456,7 +547,7 @@ export default {
       }
     },
 
-    // 我要发货-保存接口  
+    // 我要发货-保存接口
     getDeliverGoodsSaveR(state, action){
       const delList = []
       return {
@@ -471,11 +562,11 @@ export default {
       }
     },
 
-    
+
 // 发货列表-改变采购数量
 getChangeNumR(state,action){
   // console.log('okokokokokok')
- 
+
    const inList = state.shippingList.tableData.list
    const bb = action.payload.barcode
    const dataSource = [...inList]
@@ -501,7 +592,7 @@ getChangeNumR(state,action){
    const num = action.payload.pNum == null?b.pNum:action.payload.pNum
    // console.log('b',action.payload)
    //  console.log('totalPrice',action.payload.totalPrice)
-   //  console.log('purchasePrice',state.shippingList.tableData.item.purchasePrice)     
+   //  console.log('purchasePrice',state.shippingList.tableData.item.purchasePrice)
 
    return {
      ...state,
@@ -512,7 +603,7 @@ getChangeNumR(state,action){
        'b.pNum': num ,
      },
    }
-   }, 
+   },
 
 
 
@@ -534,7 +625,7 @@ getChangeNumR(state,action){
      //-----------------发货管理-发货列表 --------------
 
      // 发货列表-获取data列表 翻页，查询等
-      
+
      getDeliveryListDataR(state, action){
        // console.log('fs',action)
         return {
@@ -548,7 +639,7 @@ getChangeNumR(state,action){
 
       // 发货列表 - 删除
     getdeleteDeliveryListR(state,action){
-      
+
       const inList = state.shippingListBig.tableData.list
       const bb = action.payload.barcode
       console.log('bb',bb)
@@ -564,7 +655,7 @@ getChangeNumR(state,action){
           }
         }
       }
-    },    
+    },
 
 
 
@@ -587,7 +678,7 @@ getChangeNumR(state,action){
         ...state,
         shipmentListView:{
           ...state.shipmentListView,
-  
+
             list:action.payload.list,
             pagination:action.payload.pagination,
         }
@@ -614,6 +705,66 @@ getChangeNumR(state,action){
 
     //---------------------------------------------财务管理部分-----------------------------------------
     //------------------采购结算 页---------
+    getPaymentSettlementDataR(state, action){
+      return {
+        ...state,
+        purchaseSettlement:{
+          ...state.purchaseSettlement,
+          tableData:action.payload
+        }
+      }
+    },
+    getSettlementDetailsDataR(state, action){
+      // console.log(action.payload)
+      return {
+        ...state,
+        purchaseSettlement:{
+          ...state.purchaseSettlement,
+          childModelDetailsTableTab1Data:action.payload.responseTab1,
+          childModelDetailsTableTab2Data:action.payload.responseTab2,
+          childDetailsModelVisible:action.payload.childDetailsModelVisible,
+          childDetailsModelHelpId:action.payload.childDetailsModelHelpId
+        }
+      }
+    },
+    childModelDetailsTableTabDataR(state, action){
+      return {
+        ...state,
+        purchaseSettlement:{
+          ...state.purchaseSettlement,
+          [action.payload.tab]:action.payload.data,
+        }
+      }
+    },
+    childDetailsModelVisibleR(state, action){
+      return {
+        ...state,
+        purchaseSettlement:{
+          ...state.purchaseSettlement,
+          childDetailsModelVisible:action.payload
+        }
+      }
+    },
+    childPrintModelVisibleR(state, action){
+      return {
+        ...state,
+        purchaseSettlement:{
+          ...state.purchaseSettlement,
+          childPrintModelVisible:action.payload
+        }
+      }
+    },
+
+    childModelPrintDataR(state, action){
+      return {
+        ...state,
+        purchaseSettlement:{
+          ...state.purchaseSettlement,
+          childModelPrint:action.payload.response,
+          childPrintModelVisible:action.payload.childPrintModelVisible
+        }
+      }
+    }
 
     //------------------手动调账（查看） 页---
 

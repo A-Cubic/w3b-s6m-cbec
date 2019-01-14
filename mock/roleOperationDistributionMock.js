@@ -1,4 +1,4 @@
-const h = 'http://192.168.0.128:54195/'
+const h = 'http://192.168.0.128:54195/';
 
 export default function roleOperationDistributionMock() {
   return {
@@ -16,11 +16,11 @@ export default function roleOperationDistributionMock() {
     // ---------------------------------------------发货管理部分-----------------------------------------
     // -----------------我要发货-------------------
     // 我要发货 - 上传销售数据
-   // 'POST /llback/delivery/deliverGoodsuploadOrderbill': UpdateDistributor,
+    // 'POST /llback/delivery/deliverGoodsuploadOrderbill': UpdateDistributor,
     'POST /llback/Warehouse/OperationDeliveryImport': h,
-    
-     // 我要发货 - 保存
-     'POST /llback/delivery/getShipmentListViewData': getPayment, 
+
+    // 我要发货 - 保存
+    'POST /llback/delivery/getShipmentListViewData': getPayment,
 
     // 我要发货 - 删除
     'POST /llback/delivery/deleteGoodsList': getPayment,
@@ -36,8 +36,8 @@ export default function roleOperationDistributionMock() {
     // 我要发货 - 保存
     'POST /llback/delivery/getDeliverGoodsSave': getPayment,
 
-    //我要发货 - 改变数量
-    'POST /llback/delivery/getChangeNum': changingQuantity,//改变数量字段
+    // 我要发货 - 改变数量
+    'POST /llback/delivery/getChangeNum': changingQuantity, // 改变数量字段
     'POST /llback/Warehouse/DeliverGoodsNum': h,
 
     // -----------------发货管理-选择发货商品 -----------------
@@ -48,16 +48,12 @@ export default function roleOperationDistributionMock() {
     'POST /llback/delivery/getPagingShipmentListView': getPayment,
 
 
-     // -----------------发货管理-发货列表 ----------------- 
-     // 发货列表-获取data列表 翻页，查询等
-     'POST /llback/delivery/getDeliveryListData': shippingList,
+    // -----------------发货管理-发货列表 -----------------
+    // 发货列表-获取data列表 翻页，查询等
+    'POST /llback/delivery/getDeliveryListData': shippingList,
 
-     // 发货列表 - 删除
-     'POST /llback/delivery/getdeleteDeliveryList': getPayment,
-
-     
-
-
+    // 发货列表 - 删除
+    'POST /llback/delivery/getdeleteDeliveryList': getPayment,
 
 
     // -----------------选择商品返回发货单（带参） 页------
@@ -79,6 +75,14 @@ export default function roleOperationDistributionMock() {
 
     // ---------------------------------------------财务管理部分-----------------------------------------
     // ------------------采购结算 页-------------
+    // 采购结算 - 列表
+    'POST /llback/Balance/AA': GetOrderList,
+    // 采购结算 - 查看结算明细 - 货款
+    'POST /llback/Balance/BB': GetOrderList,
+    // 采购结算 - 查看结算明细 - 其他
+    'POST /llback/Balance/CC': GetOrderList,
+    // 采购结算 - 打印
+    'POST /llback/Balance/DD': GetOrderList,
 
     // ------------------手动调账（查看） 页-------
 
@@ -86,8 +90,8 @@ export default function roleOperationDistributionMock() {
 }
 export function getPayment(req, res) {
   res.send({
-    msg: "已删除",
-    type: "1",
+    msg: '已删除',
+    type: '1',
     list: [{
       keyId: '1',
       date: '20190101~20190103',
@@ -97,12 +101,12 @@ export function getPayment(req, res) {
       elseMoney: '500.00',
       doMoney: '500.00',
       status: 0,
-      purchasesn: "2018121313045638",
-      goodsName: "兰芝精华液",
-      barcode: "11111",
-      ischoose:true,
-      id:1
-     
+      purchasesn: '2018121313045638',
+      goodsName: '兰芝精华液',
+      barcode: '11111',
+      ischoose: true,
+      id: 1,
+
     }, {
       keyId: '2',
       date: '20190104~20190105',
@@ -112,11 +116,11 @@ export function getPayment(req, res) {
       elseMoney: '500.00',
       doMoney: '500.00',
       status: 1,
-      purchasesn: "2018121313045639",
-      goodsName: "康师傅",
-      barcode: "2",
-      ischoose:false,
-      id:1
+      purchasesn: '2018121313045639',
+      goodsName: '康师傅',
+      barcode: '2',
+      ischoose: false,
+      id: 1,
     }],
     pagination: {
       current: 1,
@@ -126,67 +130,67 @@ export function getPayment(req, res) {
     item: {
       msg: '',
       type: '',
-      sendName:"1",
-      sendTel:"2",
-      express:"3",
-      waybillNo:"",
-      getName:"",
-      getcode:"",
-      getTel:"",
-      usercode:''
- 
+      sendName: '1',
+      sendTel: '2',
+      express: '3',
+      waybillNo: '',
+      getName: '',
+      getcode: '',
+      getTel: '',
+      usercode: '',
+
     },
   });
 }
-//返回改变数量
+// 返回改变数量
 export function changingQuantity(req, res) {
   res.send({
-    
-    barcode: "8809420800197",
+
+    barcode: '8809420800197',
     pNum: 17,
-    type: "1"
+    type: '1',
 
   });
 }
 
-//发货列表
+// 发货列表
 export function shippingList(req, res) {
   res.send({
     item: {
-      
+
     },
     list: [
       {
-        keyId: "1",
-        id: "1",
-        purchasersCode: "cgs",
-        purchasersName: "1采购商测试",
-        goodsTotal: "500",
-        sendTime: "2018/10/30 0:00:00",
-        sendName: "1乓球",
-        sendTel: "13565458746",
-        status: "1"
-      },{
-        keyId: "2",
-        id: "2",
-        purchasersCode: "cgs",
-        purchasersName: "2采购商测试",
-        goodsTotal: "500",
-        sendTime: "2018/10/30 0:00:00",
-        sendName: "2乓球",
-        sendTel: "213565458746",
-        status: "0"
-      },{
-        keyId: "3",
-        id: "3",
-        purchasersCode: "cgs",
-        purchasersName: "3采购商测试",
-        goodsTotal: "500",
-        sendTime: "2018/10/30 0:00:00",
-        sendName: "3乓球",
-        sendTel: "313565458746",
-        status: "3"
-      }
+        keyId: '1',
+        id: '1',
+        purchasersCode: 'cgs',
+        purchasersName: '1采购商测试',
+        goodsTotal: '500',
+        sendTime: '2018/10/30 0:00:00',
+        sendName: '1乓球',
+        sendTel: '13565458746',
+        status: '1',
+      }, {
+        keyId: '2',
+        id: '2',
+        purchasersCode: 'cgs',
+        purchasersName: '2采购商测试',
+        goodsTotal: '500',
+        sendTime: '2018/10/30 0:00:00',
+        sendName: '2乓球',
+        sendTel: '213565458746',
+        status: '0',
+      }, {
+        keyId: '3',
+        id: '3',
+        purchasersCode: 'cgs',
+        purchasersName: '3采购商测试',
+        goodsTotal: '500',
+        sendTime: '2018/10/30 0:00:00',
+        sendName: '3乓球',
+        sendTel: '313565458746',
+        status: '3',
+      },
     ],
     pagination: {
       current: 1,
@@ -209,7 +213,7 @@ export function shippingList(req, res) {
 //       purchasesn: "2018121313045638",
 //       goodsName: "兰芝精华液",
 //       barcode: "11111",
-     
+
 //     }]
 //   });
 // }
@@ -447,48 +451,48 @@ export function getChannelList(req, res) {
   });
 }
 
-//发货 导入表格
+// 发货 导入表格
 export function UpdateDistributor(req, res) {
   res.send({
-    item:{
-        msg: "成功",
-        type: "1"
+    item: {
+      msg: '成功',
+      type: '1',
     },
     list: [
-        {
-          keyId: "1",
-          id: "Send2019010914564524",
-          goodsName: "韩国MIGABEE蜂蜜提取美白祛皱成分超保湿精华液蜂蜜80安瓶 120ml",
-          barcode: "8809420800197",
-          model: "150ml",
-          country: "韩国",
-          brand: "Bkcell",
-          rprice: "198",
-          pprice: "138.62",
-          pNum: "1",
-          goodsNum: "0",
-          safeNum: "1"
-        },
-        {
-          keyId: "2",
-          id: "Send2019010914564525",
-          goodsName: "2韩国MIGABEE蜂蜜提取美白祛皱成分超保湿精华液蜂蜜80安瓶 120ml",
-          barcode: "8809420800198",
-          model: "250ml",
-          country: "中国",
-          brand: "Bkcell",
-          rprice: "2198",
-          pprice: "2138.62",
-          pNum: "2",
-          goodsNum: "2",
-          safeNum: "2"
-        }
+      {
+        keyId: '1',
+        id: 'Send2019010914564524',
+        goodsName: '韩国MIGABEE蜂蜜提取美白祛皱成分超保湿精华液蜂蜜80安瓶 120ml',
+        barcode: '8809420800197',
+        model: '150ml',
+        country: '韩国',
+        brand: 'Bkcell',
+        rprice: '198',
+        pprice: '138.62',
+        pNum: '1',
+        goodsNum: '0',
+        safeNum: '1',
+      },
+      {
+        keyId: '2',
+        id: 'Send2019010914564525',
+        goodsName: '2韩国MIGABEE蜂蜜提取美白祛皱成分超保湿精华液蜂蜜80安瓶 120ml',
+        barcode: '8809420800198',
+        model: '250ml',
+        country: '中国',
+        brand: 'Bkcell',
+        rprice: '2198',
+        pprice: '2138.62',
+        pNum: '2',
+        goodsNum: '2',
+        safeNum: '2',
+      },
     ],
     pagination: {
-        current: 1,
-        total: 2,
-        pageSize: 10
-    }
+      current: 1,
+      total: 2,
+      pageSize: 10,
+    },
   });
 }
 export function getorder(req, res) {

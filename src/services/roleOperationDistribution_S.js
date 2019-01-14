@@ -31,15 +31,15 @@ export async function deleteList(params) {
 //-----------------发货单表单 页---------------
 
 //-----------------我要发货---------------
- //我要发货- 导入询价商品 
+ //我要发货- 导入询价商品
 export async function deliverGoodsuploadOrderbill(params) {
   // return request(`/llback/delivery/deliverGoodsuploadOrderbill`, {
   return request(`/llback/Warehouse/OperationDeliveryImport`, {
     method: 'POST',
     body: params,
   });
-} 
- //我要发货- 删除 
+}
+ //我要发货- 删除
 export async function deleteGoodsList(params) {
   // return request(`/llback/delivery/deleteGoodsList`, {
   return request(`/llback/Warehouse/DeliverGoodsDelete`, {
@@ -48,24 +48,24 @@ export async function deleteGoodsList(params) {
   });
 }
 
- //我要发货- 分页 
+ //我要发货- 分页
  export async function getPaging(params) {
    //return request(`/llback/delivery/getPaging`, {
    return request(`/llback/Warehouse/DeliverGoodsList`, {
     method: 'POST',
     body: params,
   });
-}  
+}
 
 
- //我要发货- 提交 
+ //我要发货- 提交
  export async function getDeliverGoods(params) {
   return request(`/llback/delivery/getDeliverGoods`, {
     method: 'POST',
     body: params,
   });
 }
- //我要发货- 保存 
+ //我要发货- 保存
  export async function getDeliverGoodsSave(params) {
   return request(`/llback/delivery/getDeliverGoods`, {
     method: 'POST',
@@ -102,7 +102,7 @@ export async function getDeliveryListData(params) {
   });
 }
 
- //发货列表 - 删除 
+ //发货列表 - 删除
  export async function getdeleteDeliveryList(params) {
   return request(`/llback/delivery/getdeleteDeliveryList`, {
     method: 'POST',
@@ -149,6 +149,35 @@ export async function getDeliveryListData(params) {
 
 //---------------------------------------------财务管理部分-----------------------------------------
 //------------------采购结算 页---------
+// 采购结算 - 列表
+export async function getPaymentSettlementData(params) {
+  return request(`/llback/Balance/AA`,{
+    method: 'POST',
+    body: params,
+  })
+}
+// 采购结算 - 查看结算明细 - 货款
+export async function getSettlementDetailsData(params) {
+  return request(`/llback/Balance/BB`,{
+    method: 'POST',
+    body: params,
+  })
+}
+// 采购结算 - 查看结算明细 - 其他
+export async function getSettlementDetailsElseData(params) {
+  return request(`/llback/Balance/CC`,{
+    method: 'POST',
+    body: params,
+  })
+}
+// 采购结算 - 打印
+export async function getChildModelPrintData(params) {
+  return request(`/llback/Balance/DD`,{
+    method: 'POST',
+    body: params,
+  })
+}
+
 
 //------------------手动调账（查看） 页---
 
