@@ -1,3 +1,4 @@
+const Role = 'acbc-role';
 const AuthorityKey = 'acbc-authority';
 const AuthorityDefault = 'guest';
 const TokenKey = 'acbc-token';
@@ -26,4 +27,14 @@ export function setToken(token) {
 
 export function getHeader() {
   return { token: getToken().token, userid: getToken().userId  }
+}
+
+
+export function getRole() {
+  const roleArr = localStorage.getItem(Role);
+  return JSON.parse(roleArr);
+}
+
+export function setRole(role) {
+  return localStorage.setItem(Role, JSON.stringify(role));
 }

@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { realAccountLogin } from '../services/api';
-import { setAuthority, setToken } from '../utils/Global';
+import { setAuthority, setToken, setRole,getRole} from '../utils/Global';
 import { reloadAuthorized } from '../utils/Authorized';
 import { getAuthority } from '../utils/Global';
 
@@ -15,6 +15,33 @@ export default {
     *login({ payload }, { call, put }) {
       // console.log('111',payload)
       const response = yield call(realAccountLogin, payload);
+      // let changeResponse = [
+      //   {
+      //     roleKey:0,
+      //     roleDisplay:'采购商',
+      //     roleValue:{
+      //       currentAuthority: "admin",
+      //       status: true,
+      //       token: {userId: "tlf", token: "bfc832386f49a1cc035b8a96430740fa"}
+      //
+      //     }
+      //   },{
+      //     roleKey:1,
+      //     roleDisplay:'供应商',
+      //     roleValue:{
+      //       currentAuthority: "admin",
+      //       status: true,
+      //       token: {userId: "tlf", token: "bfc832386f49a1cc035b8a96430740fa"}
+      //
+      //     }
+      //   }
+      // ]
+      //
+      //
+      //
+      // setRole(changeResponse);
+
+      // console.log(getRole())
       if (response == null) {
         yield put({
           type: 'changeLoginStatus',
