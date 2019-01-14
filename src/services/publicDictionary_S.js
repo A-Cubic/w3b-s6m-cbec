@@ -58,7 +58,8 @@ export async function getGoodsWareHouse(params) {
 
 // 获取采购商
 export async function getPurchaserArr(params) {
-  return request(`/llback/Goods/getPurchaserArr`, {
+  //return request(`/llback/Goods/getPurchaserArr`, {
+  return request(`/llback/Warehouse/DeliveryPurchasersList`, {
     method: 'POST',
     body: params,
   });

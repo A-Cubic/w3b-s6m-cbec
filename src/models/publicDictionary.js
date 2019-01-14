@@ -115,7 +115,7 @@ export default {
     // 获取采购商
     *getPurchaserArr({ payload },{ call,put}){
       const response = yield call(getPurchaserArr, payload);
-      // console.log('XXXgetPurchaserArr',response)
+     //  console.log('XXXgetPurchaserArr',response)
       if (response !== undefined) {
         yield put({
           type: 'getPurchaserArrR',
@@ -208,7 +208,7 @@ export default {
       };
     },
     getPurchaserArrR(state, action) {
-      console.log('XXXgetPurchaserArr',action.payload)
+     // console.log('XXXgetPurchaserArr',action.payload)
       return {
         ...state,
         purchaserArr:action.payload,

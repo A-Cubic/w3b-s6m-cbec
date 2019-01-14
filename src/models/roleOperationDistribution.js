@@ -1,5 +1,5 @@
 import { message} from 'antd';
-
+import {routerRedux} from "dva/router";
 import {
   //----------------发货管理-------------------
   //库存
@@ -8,9 +8,9 @@ import {
   //我要发货
   deleteList,deliverGoodsuploadOrderbill,deleteGoodsList,getDeliverGoods,getDeliverGoodsSave,getChangeNum,getPaging,
   //选择发货商品
-  getChooseShipmentData,
+  getChooseShipmentData,getchooseShipment,getChecklist,
   //发货列表
-  getDeliveryListData,getdeleteDeliveryList,
+  getDeliveryListData,getdeleteDeliveryList,getSubmission,
    //发货列表 -查看页面
    getShipmentListViewData,getPagingShipmentListView,
 
@@ -36,7 +36,11 @@ export default {
     shippingList:{
       tableData:{
         list: [],
+        purchase:[],
         pagination:{},
+        // id:'',
+        // usercode:'',
+        // isDelete:'',
         item:{
           sendName:"",
           sendTel:"",
@@ -45,17 +49,24 @@ export default {
           getName:"",
           getcode:"",
           getTel:"",
-          
+         
         },
       },
     },
     //发货管理-选择发货商品
     chooseShipment: {
       tableData:{
-        item:{},
+        item:{
+          num:''
+        },
         list: [],
         pagination:{},
+        id:'',
+        usercode:'',
+        isDelete:'',
+        msg:'0'
       },
+      
     },
     //发货管理 - 发货列表
     shippingListBig: {
@@ -184,7 +195,7 @@ export default {
       //  我要发货-分页
     *getPaging({ payload,callback },{ call,put }){
       const response = yield call(getPaging, payload);
-     //console.log('~分页 改',response)
+    //  console.log('~分页 改',response)
       if(response!==undefined){
       //  callback(response)
         yield put({
@@ -198,14 +209,16 @@ export default {
       // 我要发货-提交接口 
      *getDeliverGoods({ payload,callback  },{ call,put }){
       const response = yield call(getDeliverGoods, payload);
-    // console.log('~resxxxx提交接口',response)
+     //console.log('~resxxxx提交接口',response)
       if(response!==undefined){
-        callback(response)
-        yield put({
-          type: 'getDeliverGoodsR',
-          payload: response,
-        })
-       // yield put(routerRedux.push('/bulkPurchases/inquiryList'));
+        if(response.type == 1){
+          callback(response)
+          yield put({
+            type: 'getDeliverGoodsR',
+            payload: response,
+          })
+          yield put(routerRedux.push('/delivery/deliveryList'));
+        }
       }
     },
 
@@ -214,23 +227,35 @@ export default {
       const response = yield call(getDeliverGoodsSave, payload);
     // console.log('~res111保存接口',response)
       if(response!==undefined){
-        callback(response)
-        yield put({
-          type: 'getDeliverGoodsSaveR',
-          payload: response,
-        })
-        //yield put(routerRedux.push('/bulkPurchases/inquiryList'));
+        if(response.type == 1){
+          callback(response)
+          yield put({
+            type: 'getDeliverGoodsSaveR',
+            payload: response,
+          })
+          yield put(routerRedux.push('/delivery/deliveryList'));
+        }
       }
     },
 
+   // 我要发货-改变采购数量
+   *getChangeNum({ payload },{ call,put }){
+    const response = yield call(getChangeNum, payload);
+   // console.log('~xxxx已报价',response)
+    if(response!==undefined){
+      yield put({
+        type: 'getChangeNumR',
+        payload: response,
+      })
+    }
+  },
+  
 
-
-
-    //-----------------选择发货商品 页--------------
+    //-----------------发货管理-选择发货商品 --------------
     //选择发货商品 - 获取数据
     *getChooseShipmentData({ payload },{ call,put }){
       const response = yield call(getChooseShipmentData, payload);
-      console.log('~选择发货商品',response)
+      //console.log('~选择发货商品',response)
       if(response!==undefined){
         yield put({
           type: 'getChooseShipmentDataR',
@@ -239,17 +264,57 @@ export default {
       }
     },
 
-    // 发货列表-获取data列表 翻页，查询等
-    *getDeliveryListData({ payload },{ call,put }){
-      const response = yield call(getDeliveryListData, payload);
-      //console.log('~ 翻页，查询等',response)
+     //选择发货商品 跳页接口
+     *getchooseShipment({ payload,callback },{ call,put }){
+      const response = yield call(getchooseShipment, payload);
+    //  console.log('~我要发货- 选择发货商品 跳页接口',response)
+    //  console.log('~payload',payload)
+      if(response!==undefined){
+      //  callback(response)
+        yield put({
+          type: 'getchooseShipmentR',
+          payload: {...response,id:payload.id,usercode:payload.usercode,isDelete:payload.isDelete,},
+        }),
+        yield put(routerRedux.push('/delivery/selectProduct'));
+      }
+    },
+
+    //选择发货商品 - 勾选
+    *getChecklist({ payload },{ call,put }){
+      const response = yield call(getChecklist, payload);
+      //console.log('~选择发货商品',response)
       if(response!==undefined){
         yield put({
-          type: 'getDeliveryListDataR',
+          type: 'getChecklistR',
+          payload: {...response,message:response},
+        })
+      }
+    },
+
+
+
+
+
+
+
+   
+    
+
+    
+    
+    //-----------------发货管理-发货列表 - 查看页面 --------------
+    //发货管理-发货列表 - 查看页面 - 获取数据
+    *getShipmentListViewData({ payload },{ call,put }){
+      const response = yield call(getShipmentListViewData, payload);
+     //console.log('~ 查看页面 - 获取数据',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getShipmentListViewDataR',
           payload: response,
         })
       }
     },
+
     // 发货列表 - 删除
     *getdeleteDeliveryList({payload, callback},{call,put}){
       const response = yield call(getdeleteDeliveryList,payload);
@@ -268,31 +333,17 @@ export default {
         }
       },
 
-    // 发货列表-改变采购数量
-    *getChangeNum({ payload },{ call,put }){
-      const response = yield call(getChangeNum, payload);
-     // console.log('~xxxx已报价',response)
+     // 发货列表-获取data列表 翻页，查询等
+     *getDeliveryListData({ payload },{ call,put }){
+      const response = yield call(getDeliveryListData, payload);
+      //console.log('~ 翻页，查询等',response)
       if(response!==undefined){
         yield put({
-          type: 'getChangeNumR',
+          type: 'getDeliveryListDataR',
           payload: response,
         })
       }
     },
-    
-    //-----------------发货管理-发货列表 - 查看页面 --------------
-    //发货管理-发货列表 - 查看页面 - 获取数据
-    *getShipmentListViewData({ payload },{ call,put }){
-      const response = yield call(getShipmentListViewData, payload);
-      console.log('~ 查看页面 - 获取数据',response)
-      if(response!==undefined){
-        yield put({
-          type: 'getShipmentListViewDataR',
-          payload: response,
-        })
-      }
-    },
-
 
     
     //  发货管理-发货列表 - 查看页面 - 分页
@@ -305,6 +356,20 @@ export default {
           type: 'getPagingShipmentListViewR',
           payload: response,
         })
+      }
+    },
+
+     //  发货管理-发货列表 - 提交
+     *getSubmission({ payload,callback },{ call,put }){
+      const response = yield call(getSubmission, payload);
+    //console.log('~分页 改',response)
+      if(response!==undefined){
+      //  callback(response)
+        yield put({
+          type: 'getSubmissionR',
+          payload: response,
+        })
+        yield put(routerRedux.push('/delivery/deliveryForm'));
       }
     },
 
@@ -339,7 +404,7 @@ export default {
     //-----------------库存 - 平台库存 页-----------
     //获取列表
     platformStockR(state, action){
-      console.log('fs',action.payload)
+    //  console.log('fs',action.payload)
       return {
         ...state,
         platformStock:{
@@ -352,10 +417,10 @@ export default {
     deleteListR(state,action){
       const inList = state.platformStock.tableData.list
       const bb = action.payload.purchasesn
-      console.log('bbb',action.payload.purchasesn)
+     // console.log('bbb',action.payload.purchasesn)
       const dataSource = [...inList]
       const newData=dataSource.filter(item => item.barcode != bb)
-      console.log('newData',newData)
+    //  console.log('newData',newData)
       return {
         ...state,
         platformStock:{
@@ -388,7 +453,7 @@ export default {
     //-----------------库存 - 门店库存 页-----------
 
     //---------------------------------------------发货管理部分-----------------------------------------
-    //-----------------发货单表单 页---------------
+    //-----------------发货单表单 ---------------
      // 我要发货- 导入询价商品 
      deliverGoodsuploadOrderbillR(state, action){
       // console.log('xxx',action.payload.list)
@@ -427,13 +492,23 @@ export default {
      
 //  我要发货- 分页 -
     getPagingR(state, action){
+      // console.log('分页',action.payload.list)
       return {
         ...state,
+        // shippingList:{
+        //   ...state.shippingList,
+  
+        //     list:action.payload.list,
+        //     pagination:action.payload.pagination,
+        // }
         shippingList:{
           ...state.shippingList,
-  
+          //pur:action.payload.list[0].purchasesn,
+          tableData:{
+            ...state.shippingList.tableData,
             list:action.payload.list,
             pagination:action.payload.pagination,
+          }
         }
       }
     },
@@ -494,7 +569,7 @@ getChangeNumR(state,action){
      item.barcode===action.payload.barcode
    )
 
-   console.log('action.payload.pNum',action.payload.pNum == null?b.pNum:action.payload.pNum )
+   //console.log('action.payload.pNum',action.payload.pNum == null?b.pNum:action.payload.pNum )
    //b.pNum = action.payload.pNum
    state.shippingList.tableData.item.purchasePrice = action.payload.allPrice
    b.pNum =  action.payload.pNum == null?b.pNum:action.payload.pNum
@@ -514,12 +589,30 @@ getChangeNumR(state,action){
    }
    }, 
 
+   
+
 
 
     //-----------------发货管理-选择发货商品 --------------
+
+    //选择发货商品 跳页接口
+      getchooseShipmentR(state, action){
+        console.log('action',action)
+      return {
+        ...state,
+        chooseShipment:{
+          ...state.chooseShipment,
+          tableData:action.payload,
+          id:action.payload.id,
+          isDelete:action.payload.isDelete,
+          usercode:action.payload.usercode,
+        }
+      }
+    },
+
     //发货管理-选择发货商品-获取数据
     getChooseShipmentDataR(state, action){
-      console.log('fs',action)
+    //  console.log('fs',action)
       return {
         ...state,
         chooseShipment:{
@@ -529,6 +622,19 @@ getChangeNumR(state,action){
       }
     },
 
+
+     //发货管理-选择发货商品-勾选
+     getChecklistR(state, action){
+      //  console.log('fs',action)
+        return {
+          ...state,
+          chooseShipment:{
+            ...state.chooseShipment,
+            ...state.chooseShipment.tableData,
+            msg:action.payload.msg
+          }
+        }
+      },
 
 
      //-----------------发货管理-发货列表 --------------
@@ -551,9 +657,9 @@ getChangeNumR(state,action){
       
       const inList = state.shippingListBig.tableData.list
       const bb = action.payload.barcode
-      console.log('bb',bb)
+     // console.log('bb',bb)
       const newData=inList.filter(item => item.id != bb)
-      console.log('newData',newData)
+    //  console.log('newData',newData)
       return {
         ...state,
         shippingListBig:{
@@ -590,6 +696,18 @@ getChangeNumR(state,action){
   
             list:action.payload.list,
             pagination:action.payload.pagination,
+        }
+      }
+    },
+    //发货管理-发货列表 - 提交
+    getSubmissionR(state, action){
+      return {
+        ...state,
+        shippingList:{
+          ...state.shippingList,
+            list:action.payload.list,
+            pagination:action.payload.pagination,
+            item:action.payload.item
         }
       }
     },
