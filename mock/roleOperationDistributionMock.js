@@ -1,4 +1,7 @@
-const h = 'http://192.168.0.128:54195/';
+
+// const h = 'http://192.168.191.1:54195/';
+const a = 'http://192.168.0.127:54195/';
+
 
 export default function roleOperationDistributionMock() {
   return {
@@ -17,32 +20,46 @@ export default function roleOperationDistributionMock() {
     // -----------------我要发货-------------------
     // 我要发货 - 上传销售数据
     // 'POST /llback/delivery/deliverGoodsuploadOrderbill': UpdateDistributor,
-    'POST /llback/Warehouse/OperationDeliveryImport': h,
-
     // 我要发货 - 保存
-    'POST /llback/delivery/getShipmentListViewData': getPayment,
+
+    'POST /llback/Warehouse/OperationDeliveryImport': a,
+
 
     // 我要发货 - 删除
-    'POST /llback/delivery/deleteGoodsList': getPayment,
-    'POST /llback/Warehouse/DeliverGoodsDelete': h,
+    // 'POST /llback/delivery/deleteGoodsList': getPayment,
+    'POST /llback/Warehouse/DeliverGoodsDelete': a,
 
     // 我要发货 - 分页
-    'POST /llback/delivery/getPaging': getPayment,
-    'POST /llback/Warehouse/DeliverGoodsList': h,
+    // 'POST /llback/delivery/getPaging': getPayment,
+    'POST /llback/Warehouse/DeliverGoodsList': a,
 
     // 我要发货 - 提交
-    'POST /llback/delivery/getDeliverGoods': getPayment,
+    // 'POST /llback/delivery/getDeliverGoods': getPayment,
+    'POST /llback/Warehouse/DeliverOrderSubmission': a,
 
     // 我要发货 - 保存
-    'POST /llback/delivery/getDeliverGoodsSave': getPayment,
+    // 'POST /llback/delivery/getDeliverGoodsSave': getPayment,
+    'POST /llback/Warehouse/DeliverOrderConserve': a,
+
 
     // 我要发货 - 改变数量
-    'POST /llback/delivery/getChangeNum': changingQuantity, // 改变数量字段
-    'POST /llback/Warehouse/DeliverGoodsNum': h,
+    // 'POST /llback/delivery/getChangeNum': changingQuantity,//改变数量字段
+    'POST /llback/Warehouse/DeliverGoodsNum': a,
+
+    // 我要发货- 选择发货商品 跳页接口
+    // 发货管理-选择发货商品 - 获取数据
+    // 'POST /llback/delivery/getchooseShipment': getPayment,
+    'POST /llback/Warehouse/ChooseDeliverGoods': a,
+
+    // 我要发货- 选择发货商品 勾选  Warehouse/ChooseGoods
+    // 'POST /llback/delivery/getChecklist': getPayment,
+    'POST /llback/Warehouse/ChooseGoods': a,
+
 
     // -----------------发货管理-选择发货商品 -----------------
-    // 发货管理-选择发货商品 - 获取数据
-    'POST /llback/delivery/getChooseShipmentData': getPayment,
+    // 发货管理-选择发货商品 - 获取数据   Warehouse/ChooseDeliverGoods
+    // 'POST /llback/delivery/getChooseShipmentData': getPayment,
+    // 'POST /llback/Warehouse/ChooseDeliverGoods': a,
 
     // 发货管理-选择发货商品 - 分页
     'POST /llback/delivery/getPagingShipmentListView': getPayment,
@@ -50,11 +67,25 @@ export default function roleOperationDistributionMock() {
 
     // -----------------发货管理-发货列表 -----------------
     // 发货列表-获取data列表 翻页，查询等
-    'POST /llback/delivery/getDeliveryListData': shippingList,
+    //  'POST /llback/delivery/getDeliveryListData': shippingList,
+    'POST /llback/Warehouse/DeliverOrderList': a,
+
+    // 发货列表-提交
+    'POST /llback/delivery/getSubmission': UpdateDistributor,
 
     // 发货列表 - 删除
     'POST /llback/delivery/getdeleteDeliveryList': getPayment,
 
+
+    'POST /llback/delivery/getShipmentListViewData': getPayment,
+
+    // 发货列表- 点击查看
+    'POST /llback/delivery/getSeeData': getPayment,
+
+
+    // 发货列表- 撤回
+    // 'POST /llback/delivery/getWithdraw': getPayment,
+    'POST /llback/Warehouse/DeliverOrderListWithdraw': a,
 
     // -----------------选择商品返回发货单（带参） 页------
 
@@ -192,6 +223,70 @@ export function shippingList(req, res) {
         sendName: '3乓球',
         sendTel: '313565458746',
         status: '3',
+      },
+    ],
+    pagination: {
+      current: 1,
+      total: 3,
+      pageSize: 10,
+    },
+  });
+}
+
+// 跳页-我要发货
+export function pageshipment(req, res) {
+  res.send({
+    item: {
+      sendName: '小胖',
+      sendTel: '15969698698',
+      express: '2',
+      waybillNo: '3',
+      getName: '4',
+      contact: '12',
+      getTel: '',
+      id: '1',
+      ifupload: '1',
+    },
+    list: [
+      {
+        keyId: '10',
+        id: '1',
+        goodsName: '10韩国D+29深层洁净美白保湿滋润肌肤修复矿物质洁面皂白色 100g',
+        barcode: '8809420800199',
+        model: '250ml',
+        country: '韩国',
+        brand: 'D+29',
+        rprice: '',
+        pprice: '',
+        pNum: '3',
+        goodsNum: '900',
+        safeNum: '',
+      }, {
+        keyId: '10',
+        id: '1',
+        goodsName: '韩国D+29深层洁净美白保湿滋润肌肤修复矿物质洁面皂白色 100g',
+        barcode: '8809420800199',
+        model: '250ml',
+        country: '韩国',
+        brand: 'D+29',
+        rprice: '',
+        pprice: '',
+        pNum: '3',
+        goodsNum: '900',
+        safeNum: '',
+      }, {
+        keyId: '10',
+        id: '1',
+        goodsName: '韩国D+29深层洁净美白保湿滋润肌肤修复矿物质洁面皂白色 100g',
+        barcode: '8809420800199',
+        model: '250ml',
+        country: '韩国',
+        brand: 'D+29',
+        rprice: '',
+        pprice: '',
+        pNum: '3',
+        goodsNum: '900',
+        safeNum: '',
       },
     ],
     pagination: {
@@ -455,9 +550,20 @@ export function getChannelList(req, res) {
 // 发货 导入表格
 export function UpdateDistributor(req, res) {
   res.send({
+
     item: {
       msg: '成功',
       type: '1',
+      sendName: '小胖',
+      sendTel: '15969698698',
+      express: '2',
+      waybillNo: '3',
+      usercode: '4',
+      contact: '12',
+      getTel: '11111111',
+      id: '1',
+      ifupload: '1',
+
     },
     list: [
       {

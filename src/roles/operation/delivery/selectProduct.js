@@ -29,10 +29,25 @@ export default class selectProduct extends Component {
 
   //****/
   init(){
-    this.props.dispatch({
-      type:'roleOperationDistribution/getChooseShipmentData',
-      payload:{}
-    })
+    //e.log('www',this.props.roleOperationDistribution)
+    if(this.props.roleOperationDistribution.chooseShipment.tableData.list == ''){
+      this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
+    }else {
+      this.props.dispatch({
+        type:'roleOperationDistribution/getChooseShipmentData',
+        payload:{
+          usercode:this.props.roleOperationDistribution.chooseShipment.usercode,
+          id:this.props.roleOperationDistribution.chooseShipment.id,
+          isDelete:this.props.roleOperationDistribution.chooseShipment.isDelete
+  
+        }
+      })
+    }
+    
+
+// this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(getdata)  ));
+
+    //this.props.roleOperationDistribution.chooseShipment.usercode
     this.props.dispatch({
       type: 'publicDictionary/getGoodsWareHouse',
       payload: {
@@ -62,6 +77,9 @@ export default class selectProduct extends Component {
         type: 'roleOperationDistribution/getChooseShipmentData',
         payload: {
           ...values,
+          usercode:this.props.roleOperationDistribution.chooseShipment.usercode,
+          id:this.props.roleOperationDistribution.chooseShipment.tableData.item.id,
+          isDelete:'0',
         },
       });
     });
@@ -75,15 +93,24 @@ export default class selectProduct extends Component {
     this.init();
   }
   handleTableChange=(pagination, filters, sorter)=>{
-    console.log(11111)
+   // console.log(11111,this.props.roleOperationDistribution.chooseShipment.tableData.item.id)
     const params = {
       ...pagination,
       ...this.state.formValues,
     };
     this.props.dispatch({
       type: 'roleOperationDistribution/getChooseShipmentData',
-      payload: params,
+      //payload: params,
+      payload: {
+        // ...values,
+        current:params.current,
+        pageSize:params.pageSize,
+        usercode:this.props.roleOperationDistribution.chooseShipment.usercode,
+        id:this.props.roleOperationDistribution.chooseShipment.tableData.item.id,
+        isDelete:'0',
+      },
     });
+
   }
 
   handleVisible = (flag,who) => {
@@ -111,23 +138,51 @@ export default class selectProduct extends Component {
 
   //勾选
   Checklist = (e, record, index)=>{
-    console.log(e, record, index)
+   // console.log(e, record, index)
     //console.log('record.keyId',record.keyId),
-    console.log('eeee',`checked = ${e.target.checked}`)
+  //  console.log('eeee',`checked = ${e.target.checked}`)
     // this.setState({
     //   checked: e.target.checked,
     // });
+  //  console.log(this.props.roleOperationDistribution.chooseShipment)
+    this.props.dispatch({
+      type: 'roleOperationDistribution/getChecklist',
+      payload: {
+        id: this.props.roleOperationDistribution.chooseShipment.tableData.item.id,
+        usercode:this.props.roleOperationDistribution.chooseShipment.usercode,
+        ischoose:e.target.checked,
+        barcode:record.barcode
+
+      },
+    });
+
+
+  }
+  //点击发货单
+  handleInvoice = () => {
+  // console.log('okllllllllllllllllll',this.props.roleOperationDistribution.chooseShipment.tableData.item.id)
+    this.props.dispatch({
+      type: 'roleOperationDistribution/getPaging',
+      payload: {
+        id: this.props.roleOperationDistribution.chooseShipment.tableData.item.id,
+      },
+    });
+     this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
   }
 
 
-
   renderForm(){
-    const { roleOperationDistribution:{chooseShipment:{tableData}} } = this.props;
+    const { roleOperationDistribution:{chooseShipment:{tableData:{item,list,msg}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { publicDictionary:{wareHouseGoodsArr} } = this.props;
-    //console.log('wareHouseGoodsArr',this.props.publicDictionary.wareHouseGoodsArr)
+   
 
-    //console.log('xxx',this.props)
+
+    console.log('msg',this.props.roleOperationDistribution.chooseShipment.msg)
+
+    // console.log('chooseShipment',this.props.roleOperationDistribution)
+    //console.log('qqqq',this.props.roleOperationDistribution.chooseShipment)
+  console.log('www',this.props.roleOperationDistribution)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -137,7 +192,7 @@ export default class selectProduct extends Component {
           <Col md={5} sm={24}>
           
             <FormItem label="仓库：">
-              {getFieldDecorator('sendType',{
+              {getFieldDecorator('warehouse',{
                 })(
                   <Select
                     placeholder="请选择"
@@ -148,7 +203,7 @@ export default class selectProduct extends Component {
                     <Option value="1">21库</Option>
                     <Option value="2">32库</Option> */}
 
-                    {wareHouseGoodsArr.map(val => <Option key={val.platformId} value={val.platformId} label={val.platformType}>{val.platformType}</Option>)}
+                    {wareHouseGoodsArr.map(val => <Option key={val} value={val} label={val}>{val}</Option>)}
                   </Select>
                 )}
             </FormItem>
@@ -160,14 +215,14 @@ export default class selectProduct extends Component {
 
           </Col>
           <Col md={5} sm={24}>
-            <FormItem label="商品：">
-              {getFieldDecorator('select')(
+            <FormItem label="供货商：">
+              {getFieldDecorator('supplierName')(
                 <Input style={{ width: '100%' }} placeholder="可输入供货商名称进行查询" />
               )}
             </FormItem>
           </Col>
           <Col md={5} sm={24}>
-            <FormItem label="">
+            <FormItem label="商品：">
               {getFieldDecorator('select')(
                 <Input style={{ width: '100%' }} placeholder="可输入商品条码，商品名称，商品品牌进行查询" />
               )}
@@ -181,13 +236,16 @@ export default class selectProduct extends Component {
           </Col>
         </Row>
         <Divider dashed />
-        <div className={styles.recordNum} style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+        <div className={styles.recordNum} style={{ marginBottom:10,fontSize:16 }}>
           <div className={styles.recordNum_w}  style={{ float: 'float' }}>
-            <div className={styles.recordNum_num}>1</div>   
-            <Button type="primary" icon="form">发货单</Button>
+            {/* <div className={styles.recordNum_num}>{ item.num?item.num:0}</div>  */}
+            
+            <div className={styles.recordNum_num}>{ this.props.roleOperationDistribution.chooseShipment.msg ==undefined?item.num:this.props.roleOperationDistribution.chooseShipment.msg}</div>
+            <div></div>
+            <Button onClick={this.handleInvoice} type="primary" icon="form">发货单</Button>
           </div>      
           <div style={{ float: 'right' }}>
-            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
+            {/* <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span> */}
           </div>
         </div>
       </Form>
@@ -238,12 +296,12 @@ export default class selectProduct extends Component {
       key: 'keyId',
     }, {
       title: '供货商',
-      dataIndex: 'purchasesn',
-      key: 'purchasesn',
+      dataIndex: 'supplierName',
+      key: 'supplierName',
     }, {
       title: '仓库',
-      dataIndex: 'date',
-      key: 'date',
+      dataIndex: 'warehouse',
+      key: 'warehouse',
     }, {
       title: '商品名称',
       dataIndex: 'goodsName',
@@ -256,34 +314,34 @@ export default class selectProduct extends Component {
 
     },{
       title: '规格',
-      dataIndex: 'receivable',
-      key: 'receivable',
+      dataIndex: 'model',
+      key: 'model',
      
     },{
         title: '原产地',
-        dataIndex: 'payType',
-        key: 'payType',
+        dataIndex: 'country',
+        key: 'country',
       },{
         title: '生产商',
-        dataIndex: 'paymoney',
-        key: 'paymoney',
+        dataIndex: 'brand',
+        key: 'brand',
        
       },{
         title: '库存数量',
-        dataIndex: 'discountName',
-        key: 'discountName',
+        dataIndex: 'pNum',
+        key: 'pNum',
       },{
         title: '零售价',
-        dataIndex: 'a',
-        key: 'a',
+        dataIndex: 'rprice',
+        key: 'rprice',
       },{
         title: '平台采购价',
-        dataIndex: 'discountMoney',
-        key: 'discountMoney',
+        dataIndex: 'inprice',
+        key: 'inprice',
       },{
         title: '库存同步时间',
-        dataIndex: 'b',
-        key: 'b',
+        dataIndex: 'time',
+        key: 'time',
         
       }
     ];

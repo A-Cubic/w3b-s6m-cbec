@@ -101,14 +101,32 @@ export default class deliveryList extends Component {
   handleViewState(record){
     //dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
     //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
-      const getdata = {purchasesn:record.purchasesn,status:record.status}
-      if(record.status === '3'){
-        this.props.dispatch(routerRedux.push('/delivery/returnDeliveryForm/' + JSON.stringify(getdata)  ));
-      } else if(record.status === '1'){
-        this.props.dispatch(routerRedux.push('/delivery/checkDelivery/' + JSON.stringify(getdata)  ));
-      } else {
+      // const getdata = {purchasesn:record.purchasesn,status:record.status}
+      // if(record.status === '3'){
+      //   this.props.dispatch(routerRedux.push('/delivery/returnDeliveryForm/' + JSON.stringify(getdata)  ));
+      // } else if(record.status === '1'){
+      //   this.props.dispatch(routerRedux.push('/delivery/checkDelivery/' + JSON.stringify(getdata)  ));
+      // } else {
        
-      }
+      // }
+      //const getdata = {purchasesn:record.purchasesn,status:record.status}
+      if(record.status === '0' || record.status === '1'  ){
+        
+        this.props.dispatch({
+          type: 'roleOperationDistribution/getSeeData',
+          payload: {
+           // purchasesn:record.purchasesn,
+            barcode:record.id,
+           // index:index
+          },
+        });
+        
+        
+        
+        
+        
+        this.props.dispatch(routerRedux.push('/delivery/checkDelivery/'  ));
+      } 
       
       //JSON.parse JSON.stringify
   
@@ -135,9 +153,35 @@ export default class deliveryList extends Component {
       
      
     }
+
+    //撤回
     handleWithdraw(record) {
+      this.props.dispatch({
+        type: 'roleOperationDistribution/getWithdraw',
+          payload: {
+            id:record.id,
+          },
+      });
+
+      this.init();
 
     }
+    
+    //提交
+    handleSubmission (record) {
+   
+    
+      this.props.dispatch({
+      type: 'roleOperationDistribution/getSubmission',
+        payload: {
+          id:record.id,
+          
+        },
+      });
+
+    }
+
+
 
   renderForm(){
     const { roleOperationDistribution:{chooseShipment:{tableData}} } = this.props;
@@ -265,7 +309,7 @@ export default class deliveryList extends Component {
               {/* <a href="javascript:;" onClick={(e) => this.handleDelCheck(e, record, index)}>删除</a><br/> */}
               {record.status ==0 ?<a onClick={()=>this.handleViewState(record)}>查看<br/></a>:<div></div>}
               {record.status ==0 ?<a onClick={()=>this.handleWithdraw(record)}>撤回<br/></a>:<div></div>}
-              {record.status ==3 ?<a onClick={()=>this.handleViewState(record)}>提交<br/></a>:<div></div>}
+              {record.status ==3 ?<a onClick={()=>this.handleSubmission(record)}>提交<br/></a>:<div></div>}
               {record.status ==3?<a onClick={(e) => this.handleDelCheck(e, record)}>删除</a>:<div></div>}
               {record.status ==1 ?<a onClick={()=>this.handleViewState(record)}>查看<br/></a>:<div></div>}
             </Fragment>

@@ -28,7 +28,6 @@ export default function rolePurchaserConsignmentMock(url) {
     // 代销-财务-合同信息-20181121
     'POST /llback/Agreement/ContractInformation': url,
 
-
     // -------- 货款结算 --------------
     // 货款结算 - 列表
     'POST /llback/Balance/GetPayment': url,
@@ -79,7 +78,7 @@ export function getPayment(req, res) {
       pageSize: 10,
     },
     item: {
-      msg: 成功,
+      msg: '成功',
       type: 1,
     },
   });

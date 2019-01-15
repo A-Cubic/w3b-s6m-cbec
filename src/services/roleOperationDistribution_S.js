@@ -33,7 +33,7 @@ export async function deleteList(params) {
 //-----------------我要发货---------------
  //我要发货- 导入询价商品
 export async function deliverGoodsuploadOrderbill(params) {
-  // return request(`/llback/delivery/deliverGoodsuploadOrderbill`, {
+ //  return request(`/llback/delivery/deliverGoodsuploadOrderbill`, {
   return request(`/llback/Warehouse/OperationDeliveryImport`, {
     method: 'POST',
     body: params,
@@ -60,14 +60,16 @@ export async function deleteGoodsList(params) {
 
  //我要发货- 提交
  export async function getDeliverGoods(params) {
-  return request(`/llback/delivery/getDeliverGoods`, {
+  // return request(`/llback/delivery/getDeliverGoods`, {
+  return request(`/llback/Warehouse/DeliverOrderSubmission`, {
     method: 'POST',
     body: params,
   });
 }
  //我要发货- 保存
  export async function getDeliverGoodsSave(params) {
-  return request(`/llback/delivery/getDeliverGoods`, {
+  // return request(`/llback/delivery/getDeliverGoodsSave`, {
+  return request(`/llback/Warehouse/DeliverOrderConserve`, {
     method: 'POST',
     body: params,
   });
@@ -81,12 +83,29 @@ export async function deleteGoodsList(params) {
   });
 }
 
+ ////我要发货- 选择发货商品 跳页接口
+ export async function getchooseShipment(params) {
+  //return request(`/llback/delivery/getchooseShipment`, {
+  return request(`/llback/Warehouse/ChooseDeliverGoods`, {
+   method: 'POST',
+   body: params,
+ });
+}
+ ////我要发货- 选择发货商品 勾选
+ export async function getChecklist(params) {
+ // return request(`/llback/delivery/getChecklist`, {
+  return request(`/llback/Warehouse/ChooseGoods`, {
+   method: 'POST',
+   body: params,
+ });
+}
 
 
 //-----------------发货管理-选择发货商品 --------------
 //发货管理-选择发货商品 - 获取数据
 export async function getChooseShipmentData(params) {
-  return request(`/llback/delivery/getChooseShipmentData`, {
+  // return request(`/llback/delivery/getChooseShipmentData`, {
+  return request(`/llback/Warehouse/ChooseDeliverGoods`, {
     method: 'POST',
     body: params,
   });
@@ -96,11 +115,22 @@ export async function getChooseShipmentData(params) {
 
  // 发货列表-获取data列表 翻页，查询等
 export async function getDeliveryListData(params) {
-  return request(`/llback/delivery/getDeliveryListData`, {
+ // return request(`/llback/delivery/getDeliveryListData`, {
+  return request(`/llback/Warehouse/DeliverOrderList`, {
     method: 'POST',
     body: params,
   });
 }
+
+
+ // 发货列表-提交
+ export async function getSubmission(params) {
+  return request(`/llback/delivery/getSubmission`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 
  //发货列表 - 删除
  export async function getdeleteDeliveryList(params) {
@@ -120,6 +150,14 @@ export async function getDeliveryListData(params) {
     });
   }
 
+  //发货管理-发货列表 - 点击查看
+  export async function getSeeData(params) {
+    return request(`/llback/delivery/getSeeData`, {
+      method: 'POST',
+      body: params,
+    });
+  }
+
   //发货管理-发货列表 - 查看页面 - 分页
   export async function getPagingShipmentListView(params) {
     return request(`/llback/delivery/getPagingShipmentListView`, {
@@ -129,6 +167,15 @@ export async function getDeliveryListData(params) {
   }
 
 
+
+   //发货管理-发货列表 - 撤回
+   export async function getWithdraw(params) {
+    // return request(`/llback/delivery/getWithdraw`, {
+    return request(`/llback/Warehouse/DeliverOrderListWithdraw`, {
+      method: 'POST',
+      body: params,
+    });
+  }
 
 //-----------------选择商品返回发货单（带参） 页--
 
