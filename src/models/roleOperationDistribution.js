@@ -250,6 +250,7 @@ export default {
             payload: response,
           })
           yield put(routerRedux.push('/delivery/deliveryList'));
+        
         }
       }
     },
@@ -265,7 +266,7 @@ export default {
             type: 'getDeliverGoodsSaveR',
             payload: response,
           })
-          yield put(routerRedux.push('/delivery/deliveryList'));
+      yield put(routerRedux.push('/delivery/deliveryList'));    
         }
       }
     },
@@ -295,6 +296,7 @@ export default {
         })
       }
     },
+   
 
      //选择发货商品 跳页接口
      *getchooseShipment({ payload,callback },{ call,put }){
@@ -412,10 +414,21 @@ export default {
       const response = yield call(getWithdraw, payload);
     //console.log('~撤回',response)
       if(response!==undefined){
-        yield put({
-          type: 'getWithdrawR',
-          payload: response,
-        })
+        if (response.type==1) {
+          yield put({
+            type: 'getWithdrawR',
+            payload: response,
+          })
+          const response = yield call(getDeliveryListData);
+          console.log('~ ',payload)
+          if(response!==undefined){
+            yield put({
+              type: 'getDeliveryListDataR',
+              payload: response,
+            })
+          }
+        }
+        
       }
     },
 
@@ -714,7 +727,6 @@ export default {
 
     //发货管理-选择发货商品-获取数据
     getChooseShipmentDataR(state, action){
-    //  console.log('fs',action)
       return {
         ...state,
         chooseShipment:{
@@ -723,6 +735,7 @@ export default {
         }
       }
     },
+ 
 
 
      //发货管理-选择发货商品-勾选

@@ -49,15 +49,7 @@ export default class deliveryForm extends Component {
   }
 
   init(){
-    // this.props.dispatch({
-    //   type:'roleOperationDistribution/getShipmentListViewData',
-    //   payload:{
-
-    //   }
-    // })
-    if(this.props.roleOperationDistribution.shipmentListView.tableData.list==''){
-      this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ));
-    }
+  
   }
 
 

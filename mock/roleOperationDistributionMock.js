@@ -1,9 +1,9 @@
 
 // const h = 'http://192.168.191.1:54195/';
-const a = 'http://192.168.0.127:54195/';
+//const a = 'http://192.168.0.127:54195/';
 
 
-export default function roleOperationDistributionMock() {
+export default function roleOperationDistributionMock(url) {
   return {
     // ---------------------------------------------库存管理部分-----------------------------------------
     // -----------------库存 - 平台库存 页---------------
@@ -21,71 +21,46 @@ export default function roleOperationDistributionMock() {
     // 我要发货 - 上传销售数据
     // 'POST /llback/delivery/deliverGoodsuploadOrderbill': UpdateDistributor,
     // 我要发货 - 保存
-
-    'POST /llback/Warehouse/OperationDeliveryImport': a,
-
+    'POST /llback/Warehouse/OperationDeliveryImport': url,
 
     // 我要发货 - 删除
-    // 'POST /llback/delivery/deleteGoodsList': getPayment,
-    'POST /llback/Warehouse/DeliverGoodsDelete': a,
+    'POST /llback/Warehouse/DeliverGoodsDelete': url,
 
     // 我要发货 - 分页
-    // 'POST /llback/delivery/getPaging': getPayment,
-    'POST /llback/Warehouse/DeliverGoodsList': a,
+    'POST /llback/Warehouse/DeliverGoodsList': url,
 
     // 我要发货 - 提交
-    // 'POST /llback/delivery/getDeliverGoods': getPayment,
-    'POST /llback/Warehouse/DeliverOrderSubmission': a,
+    'POST /llback/Warehouse/DeliverOrderSubmission': url,
 
     // 我要发货 - 保存
-    // 'POST /llback/delivery/getDeliverGoodsSave': getPayment,
-    'POST /llback/Warehouse/DeliverOrderConserve': a,
-
+    'POST /llback/Warehouse/DeliverOrderConserve': url,
 
     // 我要发货 - 改变数量
-    // 'POST /llback/delivery/getChangeNum': changingQuantity,//改变数量字段
-    'POST /llback/Warehouse/DeliverGoodsNum': a,
+    'POST /llback/Warehouse/DeliverGoodsNum': url,
 
     // 我要发货- 选择发货商品 跳页接口
     // 发货管理-选择发货商品 - 获取数据
-    // 'POST /llback/delivery/getchooseShipment': getPayment,
-    'POST /llback/Warehouse/ChooseDeliverGoods': a,
+    'POST /llback/Warehouse/ChooseDeliverGoods': url,
 
-    // 我要发货- 选择发货商品 勾选  Warehouse/ChooseGoods
-    // 'POST /llback/delivery/getChecklist': getPayment,
-    'POST /llback/Warehouse/ChooseGoods': a,
-
+    // 我要发货- 选择发货商品 勾选 
+    'POST /llback/Warehouse/ChooseGoods': url,
 
     // -----------------发货管理-选择发货商品 -----------------
-    // 发货管理-选择发货商品 - 获取数据   Warehouse/ChooseDeliverGoods
-    // 'POST /llback/delivery/getChooseShipmentData': getPayment,
-    // 'POST /llback/Warehouse/ChooseDeliverGoods': a,
 
-    // 发货管理-选择发货商品 - 分页
-    'POST /llback/delivery/getPagingShipmentListView': getPayment,
 
 
     // -----------------发货管理-发货列表 -----------------
     // 发货列表-获取data列表 翻页，查询等
-    //  'POST /llback/delivery/getDeliveryListData': shippingList,
-    'POST /llback/Warehouse/DeliverOrderList': a,
+    'POST /llback/Warehouse/DeliverOrderList': url,
 
-    // 发货列表-提交
-    'POST /llback/delivery/getSubmission': UpdateDistributor,
+    // 发货列表 - 删除 
+    'POST /llback/Warehouse/DeliverOrderListDelete': url,
 
-    // 发货列表 - 删除
-    'POST /llback/delivery/getdeleteDeliveryList': getPayment,
-
-
-    'POST /llback/delivery/getShipmentListViewData': getPayment,
-
-    // 发货列表- 点击查看
-    'POST /llback/delivery/getSeeData': getPayment,
-
+    // 发货列表- 点击查看 
+    'POST /llback/Warehouse/DeliverOrderDetails': url,
 
     // 发货列表- 撤回
-    // 'POST /llback/delivery/getWithdraw': getPayment,
-    'POST /llback/Warehouse/DeliverOrderListWithdraw': a,
+    'POST /llback/Warehouse/DeliverOrderListWithdraw': url,
 
     // -----------------选择商品返回发货单（带参） 页------
 

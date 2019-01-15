@@ -39,14 +39,11 @@ export default class selectProduct extends Component {
           usercode:this.props.roleOperationDistribution.chooseShipment.usercode,
           id:this.props.roleOperationDistribution.chooseShipment.id,
           isDelete:this.props.roleOperationDistribution.chooseShipment.isDelete
-  
         }
       })
     }
     
-
 // this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(getdata)  ));
-
     //this.props.roleOperationDistribution.chooseShipment.usercode
     this.props.dispatch({
       type: 'publicDictionary/getGoodsWareHouse',
@@ -99,7 +96,7 @@ export default class selectProduct extends Component {
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'roleOperationDistribution/getChooseShipmentData',
+      type: 'roleOperationDistribution/Warehouse/DeliverOrderList',
       //payload: params,
       payload: {
         // ...values,
@@ -110,7 +107,6 @@ export default class selectProduct extends Component {
         isDelete:'0',
       },
     });
-
   }
 
   handleVisible = (flag,who) => {
@@ -120,31 +116,17 @@ export default class selectProduct extends Component {
   }
 
 
-  //点击勾 选中
-  selectRow = record => {
-   
-  //   const selectedRowKeys = [...this.state.selectedRowKeys];
-  //   if (selectedRowKeys.indexOf(record.key) >= 0) {
-  //     selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
-  //   } else {
-  //     selectedRowKeys.push(record.key);
-  //   }
-  //   this.setState({ selectedRowKeys });
-  // };
-  // onSelectedRowKeysChange = selectedRowKeys => {
-  //   this.setState({ selectedRowKeys });
-  //   console.log('xxx!record',selectedRowKeys)
-   };
-
   //勾选
   Checklist = (e, record, index)=>{
-   // console.log(e, record, index)
-    //console.log('record.keyId',record.keyId),
-  //  console.log('eeee',`checked = ${e.target.checked}`)
-    // this.setState({
-    //   checked: e.target.checked,
-    // });
-  //  console.log(this.props.roleOperationDistribution.chooseShipment)
+   // console.log('xxx',this.props.roleOperationDistribution.chooseShipment.tableData.item.num)
+    if(e.target.checked == true){
+      this.props.roleOperationDistribution.chooseShipment.tableData.item.num ++
+    
+    }else if (e.target.checked == false) {
+      this.props.roleOperationDistribution.chooseShipment.tableData.item.num --
+     
+    }
+
     this.props.dispatch({
       type: 'roleOperationDistribution/getChecklist',
       payload: {
@@ -152,11 +134,8 @@ export default class selectProduct extends Component {
         usercode:this.props.roleOperationDistribution.chooseShipment.usercode,
         ischoose:e.target.checked,
         barcode:record.barcode
-
       },
     });
-
-
   }
   //点击发货单
   handleInvoice = () => {
@@ -175,14 +154,9 @@ export default class selectProduct extends Component {
     const { roleOperationDistribution:{chooseShipment:{tableData:{item,list,msg}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { publicDictionary:{wareHouseGoodsArr} } = this.props;
-   
-
-
-    console.log('msg',this.props.roleOperationDistribution.chooseShipment.msg)
-
     // console.log('chooseShipment',this.props.roleOperationDistribution)
     //console.log('qqqq',this.props.roleOperationDistribution.chooseShipment)
-  console.log('www',this.props.roleOperationDistribution)
+  //console.log('www',this.props.roleOperationDistribution)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -202,17 +176,10 @@ export default class selectProduct extends Component {
                     {/* <Option value="">全部</Option>
                     <Option value="1">21库</Option>
                     <Option value="2">32库</Option> */}
-
                     {wareHouseGoodsArr.map(val => <Option key={val} value={val} label={val}>{val}</Option>)}
                   </Select>
                 )}
             </FormItem>
-
-          
-           
-           
-
-
           </Col>
           <Col md={5} sm={24}>
             <FormItem label="供货商：">
@@ -238,9 +205,9 @@ export default class selectProduct extends Component {
         <Divider dashed />
         <div className={styles.recordNum} style={{ marginBottom:10,fontSize:16 }}>
           <div className={styles.recordNum_w}  style={{ float: 'float' }}>
-            {/* <div className={styles.recordNum_num}>{ item.num?item.num:0}</div>  */}
+            <div className={styles.recordNum_num}>{ item.num?item.num:0}</div> 
             
-            <div className={styles.recordNum_num}>{ this.props.roleOperationDistribution.chooseShipment.msg ==undefined?item.num:this.props.roleOperationDistribution.chooseShipment.msg}</div>
+            {/* <div className={styles.recordNum_num}>{ this.props.roleOperationDistribution.chooseShipment.msg ==undefined?item.num:this.props.roleOperationDistribution.chooseShipment.msg}</div> */}
             <div></div>
             <Button onClick={this.handleInvoice} type="primary" icon="form">发货单</Button>
           </div>      
@@ -345,7 +312,6 @@ export default class selectProduct extends Component {
         
       }
     ];
-
     const props = {
       action: getUploadUrl(),
       headers: getHeader(),
@@ -356,7 +322,6 @@ export default class selectProduct extends Component {
       multiple: false,
       // customRequest:this.upload,
     };
-    
     return (
       <div>
         <Card bordered={false}>

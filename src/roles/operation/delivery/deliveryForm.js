@@ -86,47 +86,80 @@ export default class deliveryForm extends Component {
 
   init(){
    // console.log()
-  // console.log('shippingList',this.props.roleOperationDistribution.shippingList.tableData)
+  //  console.log('shippingList',this.props.roleOperationDistribution.shippingList.tableData.item)
+  //  console.log('fs',this.props.roleOperationDistribution.shippingList.tableData.item.getName!='')
+
+   if(this.props.roleOperationDistribution.shippingList.tableData.item.getName !=''){
+    this.setState({
+        purchase:true,
+        usercode:this.props.roleOperationDistribution.shippingList.tableData.item.usercode
+    });  
+  }else {
+    this.setState({
+      purchase:false,
+      
+  });   
+  }
     this.props.dispatch({
       type: 'publicDictionary/getPurchaserArr',
       //payload: params,
       payload: {
         purchasesn:1,
-        
       },
     });
-
-    // 
-
-
-    // console.log('fff',this.props.roleOperationDistribution)
-    // if(this.props.roleOperationDistribution.shippingList.tableData.list != ''){
-    //   this.props.dispatch({
-    //     type: 'roleOperationDistribution/getPaging',
-    //     payload: {
-    //       id: this.props.roleOperationDistribution.chooseShipment.tableData.list[0].id,
-    //     },
-    //   });
-    // }
-
-    // this.props.dispatch({
-    //   type: 'roleOperationDistribution/getSubmission',
-    //   payload: {
-    //    // id:this.props.roleOperationDistribution.shippingList.tableData.list[0].id,
-    //     // index:index
-    //   },
-    // });
-   
-
   }
 
+  //提交
+  handleOnSubmission = (e)=>{
+    const {roleOperationDistribution:{shippingList:{tableData:{item,list, pagination}}} } = this.props;
+    e.preventDefault();
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('values',fieldsValue)
+      if (err) return;
+      const rangeValue = fieldsValue['date'];
+      const values = rangeValue==undefined ? {
+        ...fieldsValue,
+      }:{
+        ...fieldsValue,
+        //'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+      };
+      this.setState({
+        formValues: values,
+      });
+      if(this.props.roleOperationDistribution.shippingList.tableData.list != ''){
+        this.props.dispatch({
+          type: 'roleOperationDistribution/getDeliverGoods',
+            payload: {
+              ...values,
+              id:this.props.roleOperationDistribution.shippingList.tableData.list[0].id
+            },
+            callback: this.onSubmissionCallback
+        });
+       // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
+      } else {
+        message.error("请导入询价商品");
+      }
+
+    });
+  }
+  onSubmissionCallback = (params) => {
+    //console.log('params',params.type)
+    if(params.type==="1"){
+      this.handleFormReset()
+      this.props.form.resetFields();
+      this.props.roleOperationDistribution.shippingList.tableData.list.remove
+      this.setState({
+        formValues: {},
+      });
+     }else{
+     }
+  }
 
   //保存
   onPreservation=(e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
-
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
@@ -140,13 +173,14 @@ export default class deliveryForm extends Component {
       });
       this.props.dispatch({
      
-      type: 'roleOperationDistribution/getDeliverGoodsSave',
-        payload: {
-          ...values,
-          id:this.props.roleOperationDistribution.shippingList.tableData.list == ''?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id
-        },
-        callback:this.onPreservationCallback
+        type: 'roleOperationDistribution/getDeliverGoodsSave',
+          payload: {
+            ...values,
+            id:this.props.roleOperationDistribution.shippingList.tableData.list == ''?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id
+          },
+          callback:this.onPreservationCallback
       });
+     // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
     });
   }
   onPreservationCallback = (params) => {
@@ -205,54 +239,7 @@ export default class deliveryForm extends Component {
     });
   }
 
-  //提交
-  handleOnSubmission = (e)=>{
-    const {roleOperationDistribution:{shippingList:{tableData:{item,list, pagination}}} } = this.props;
- 
-   
-    e.preventDefault();
-    this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
-      if (err) return;
-      const rangeValue = fieldsValue['date'];
-      const values = rangeValue==undefined ? {
-        ...fieldsValue,
-      }:{
-        ...fieldsValue,
-        //'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
-      };
-      this.setState({
-        formValues: values,
-      });
-      if(this.props.roleOperationDistribution.shippingList.tableData.list != ''){
-        this.props.dispatch({
-          type: 'roleOperationDistribution/getDeliverGoods',
-            payload: {
-              ...values,
-              id:this.props.roleOperationDistribution.shippingList.tableData.list[0].id
-            },
-            callback: this.onSubmissionCallback
-          });
-      } else {
-        message.error("请导入询价商品");
-      }
-      
-
-    });
-  }
-  onSubmissionCallback = (params) => {
-    //console.log('params',params.type)
-    if(params.type==="1"){
-      this.handleFormReset()
-      this.props.form.resetFields();
-      this.props.roleOperationDistribution.shippingList.tableData.list.remove
-      this.setState({
-        formValues: {},
-      });
-
-     }else{
-     }
-  }
+  
   //选择发货
   deliverGoods = (e) => {
    
@@ -322,12 +309,11 @@ export default class deliveryForm extends Component {
             that.props.dispatch({
               type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
               payload: {
-              
-               // fileTemp: info.file.response.fileName[0],
+               fileTemp: info.file.response.fileName[0],
                 //usercode:"cgs",
                 usercode:that.state.usercode,
                 id:this.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id,
-                fileTemp:info.file.name
+                //fileTemp:info.file.name
               },
               callback: that.onUploadCallback
             });
@@ -344,12 +330,11 @@ export default class deliveryForm extends Component {
                 that.props.dispatch({
                   type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
                   payload: {
-              
-                   // fileTemp: info.file.response.fileName[0],
+                    fileTemp: info.file.response.fileName[0],
                     //usercode:"cgs",
                     usercode:that.state.usercode,
                     id:that.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.shippingList.tableData.list[0].id,
-                    fileTemp:info.file.name
+                   // fileTemp:info.file.name
                   },
                   callback: that.onUploadCallback
                 });
@@ -375,7 +360,6 @@ export default class deliveryForm extends Component {
     }
     //this.init();
   }
-
   onChangeNum=(v)=>{
   //  console.log('valueGoodsNum',v)
     this.setState({
@@ -383,10 +367,9 @@ export default class deliveryForm extends Component {
     },()=>{
       //console.log('bbbbbb',this.state.value)
     });
-   
     }
 
-  
+
 //改变数量 GoodsNum
   //onChange
   inputOnBlur = (record,val) =>{
@@ -475,8 +458,6 @@ export default class deliveryForm extends Component {
    }  
 
 
-   
-
    //获取采购商
 
   handleSearch = (value) => {
@@ -499,7 +480,7 @@ export default class deliveryForm extends Component {
   const { roleOperationDistribution:{shippingList:{tableData:{list, pagination,item}}} } = this.props;
 
   const { publicDictionary:{purchaserArr} } = this.props;
-  console.log('XXXX',this.props.roleOperationDistribution.shippingList) 
+  //console.log('XXXX',this.props.roleOperationDistribution.shippingList) 
 
   const { getFieldDecorator } = this.props.form;
   const paginationProps = {
@@ -703,13 +684,6 @@ export default class deliveryForm extends Component {
                     {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)}
                   </Select>
                 )}
-              
-              
-
-
-         
-
-
             </FormItem>      
           </Col>
           <Col md={6} sm={24}>

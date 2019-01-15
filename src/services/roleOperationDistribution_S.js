@@ -110,6 +110,13 @@ export async function getChooseShipmentData(params) {
     body: params,
   });
 }
+export async function getChooseShipmentQueryData(params) {
+  // return request(`/llback/delivery/getChooseShipmentData`, {
+  return request(`/llback/Warehouse/ChooseDeliverGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 //-----------------发货管理- 发货列表 --------------
 
@@ -125,7 +132,8 @@ export async function getDeliveryListData(params) {
 
  // 发货列表-提交
  export async function getSubmission(params) {
-  return request(`/llback/delivery/getSubmission`, {
+  // return request(`/llback/delivery/getSubmission`, {
+  return request(`/llback/Warehouse/DeliverOrderDetails`, {
     method: 'POST',
     body: params,
   });
@@ -134,7 +142,8 @@ export async function getDeliveryListData(params) {
 
  //发货列表 - 删除
  export async function getdeleteDeliveryList(params) {
-  return request(`/llback/delivery/getdeleteDeliveryList`, {
+  // return request(`/llback/delivery/getdeleteDeliveryList`, {
+  return request(`/llback/Warehouse/DeliverOrderListDelete`, {
     method: 'POST',
     body: params,
   });
@@ -152,7 +161,8 @@ export async function getDeliveryListData(params) {
 
   //发货管理-发货列表 - 点击查看
   export async function getSeeData(params) {
-    return request(`/llback/delivery/getSeeData`, {
+    // return request(`/llback/delivery/getSeeData`, {
+    return request(`/llback/Warehouse/DeliverOrderDetails`, {
       method: 'POST',
       body: params,
     });
@@ -160,7 +170,8 @@ export async function getDeliveryListData(params) {
 
   //发货管理-发货列表 - 查看页面 - 分页
   export async function getPagingShipmentListView(params) {
-    return request(`/llback/delivery/getPagingShipmentListView`, {
+    // return request(`/llback/delivery/getPagingShipmentListView`, {
+    return request(`/llback/Warehouse/DeliverOrderList`, {  
       method: 'POST',
       body: params,
     });

@@ -37,7 +37,7 @@ export default class deliveryList extends Component {
     this.init();
   }
   onSearch=(e)=>{
-    console.log('this.props',this.props.roleOperationDistribution.shippingListBig)
+    //console.log('this.props',this.props.roleOperationDistribution.shippingListBig)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -93,6 +93,7 @@ export default class deliveryList extends Component {
       payload: {
         purchasesn:record.purchasesn,
         barcode:record.id,
+        id:record.id,
        // index:index
       },
     });
@@ -117,6 +118,7 @@ export default class deliveryList extends Component {
           payload: {
            // purchasesn:record.purchasesn,
             barcode:record.id,
+            id:record.id,
            // index:index
           },
         });
@@ -163,31 +165,24 @@ export default class deliveryList extends Component {
           },
       });
 
-      this.init();
+      //this.init();this.init();
 
     }
     
     //提交
     handleSubmission (record) {
-   
-    
       this.props.dispatch({
       type: 'roleOperationDistribution/getSubmission',
         payload: {
           id:record.id,
-          
         },
       });
-
     }
-
-
 
   renderForm(){
     const { roleOperationDistribution:{chooseShipment:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     
-
   //  console.log('xxx',this.props.roleOperationDistribution.shippingListBig)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -202,7 +197,7 @@ export default class deliveryList extends Component {
           </Col>
           <Col md={11} sm={24}>
             <FormItem label="采购商：">
-              {getFieldDecorator('select')(
+              {getFieldDecorator('purchasersName')(
                 <Input style={{ width: '100%' }} placeholder="请输入采购商名称进行搜索" />
               )}
             </FormItem>
@@ -230,7 +225,7 @@ export default class deliveryList extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="单据编号：">
-              {getFieldDecorator('select')(
+              {getFieldDecorator('id')(
                 <Input style={{ width: '100%' }} placeholder="请输入单据编号进行搜索" />
               )}
             </FormItem>
@@ -244,7 +239,7 @@ export default class deliveryList extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
+            {/* <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span> */}
           </div>
         </div>
       </Form>
