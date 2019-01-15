@@ -33,7 +33,7 @@ export default {
           contacts:"",
           sex:0,
           tel:"",
-          deliveryTime:moment(new Date(), 'YYYY.MM.DD'),
+          deliveryTime:'',
           remark:""
         },
       list: [],
