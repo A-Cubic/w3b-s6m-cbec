@@ -70,17 +70,22 @@ export default function roleOperationDistributionMock() {
     'POST /llback/Warehouse/DeliverOrderList': a,
 
       // 发货列表-提交
-     'POST /llback/delivery/getSubmission': pageshipment,
+     'POST /llback/delivery/getSubmission': UpdateDistributor,
 
      // 发货列表 - 删除
      'POST /llback/delivery/getdeleteDeliveryList': getPayment,
 
      
 
-    // 发货列表读取数据 - 
     'POST /llback/delivery/getShipmentListViewData': getPayment, 
 
+    //发货列表- 点击查看
+    'POST /llback/delivery/getSeeData': getPayment, 
 
+
+    // 发货列表- 撤回  
+    //'POST /llback/delivery/getWithdraw': getPayment, 
+    'POST /llback/Warehouse/DeliverOrderListWithdraw': a, 
 
     // -----------------选择商品返回发货单（带参） 页------
 
@@ -538,7 +543,16 @@ export function UpdateDistributor(req, res) {
   res.send({
     item:{
         msg: "成功",
-        type: "1"
+        type: "1",
+        sendName: "小胖",
+        sendTel: "15969698698",
+        express: "2",
+        waybillNo: "3",
+        usercode: "4",
+        contact:"12",
+        getTel: "11111111",
+        id: "1",
+        ifupload:"1"
     },
     list: [
         {

@@ -12,7 +12,7 @@ import {
   //发货列表
   getDeliveryListData,getdeleteDeliveryList,getSubmission,
    //发货列表 -查看页面
-   getShipmentListViewData,getPagingShipmentListView,
+   getShipmentListViewData,getPagingShipmentListView,getWithdraw,getSeeData,
 
 } from "../services/roleOperationDistribution_S";
 export default {
@@ -66,7 +66,6 @@ export default {
         isDelete:'',
         msg:'0'
       },
-      
     },
     //发货管理 - 发货列表
     shippingListBig: {
@@ -74,6 +73,7 @@ export default {
         item:{},
         list: [],
         pagination:{},
+        
       },
     },
 
@@ -315,6 +315,20 @@ export default {
       }
     },
 
+    //发货管理-发货列表 - 点击查看
+    *getSeeData({ payload },{ call,put }){
+      const response = yield call(getSeeData, payload);
+     //console.log('~ 查看页面 - 获取数据',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getSeeDataR',
+          payload: response,
+        })
+      }
+    },
+
+
+
     // 发货列表 - 删除
     *getdeleteDeliveryList({payload, callback},{call,put}){
       const response = yield call(getdeleteDeliveryList,payload);
@@ -359,6 +373,9 @@ export default {
       }
     },
 
+
+ 
+
      //  发货管理-发货列表 - 提交
      *getSubmission({ payload,callback },{ call,put }){
       const response = yield call(getSubmission, payload);
@@ -370,6 +387,18 @@ export default {
           payload: response,
         })
         yield put(routerRedux.push('/delivery/deliveryForm'));
+      }
+    },
+
+     //  发货管理-发货列表 - 撤回
+     *getWithdraw({ payload,callback },{ call,put }){
+      const response = yield call(getWithdraw, payload);
+    //console.log('~撤回',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getWithdrawR',
+          payload: response,
+        })
       }
     },
 
@@ -686,6 +715,18 @@ getChangeNumR(state,action){
          }
        }
      },
+
+      //发货管理-发货列表 - 点击查看
+      getSeeDataR(state, action){
+      // console.log('fs',action)
+       return {
+         ...state,
+         shipmentListView:{
+           ...state.shipmentListView,
+           tableData:action.payload
+         }
+       }
+     },
      //发货管理-发货列表 - 查看页面 - 分页
      //  我要发货- 分页 -
      getPagingShipmentListViewR(state, action){
@@ -699,19 +740,44 @@ getChangeNumR(state,action){
         }
       }
     },
+
+ 
+
     //发货管理-发货列表 - 提交
     getSubmissionR(state, action){
       return {
         ...state,
+        // shipmentListView:{
+        //   ...state.shipmentListView,
+        //     list:action.payload.list,
+        //     pagination:action.payload.pagination,
+        //     item:action.payload.item
+        // }
         shippingList:{
           ...state.shippingList,
+          //pur:action.payload.list[0].purchasesn,
+          tableData:{
+            ...state.shippingList.tableData,
             list:action.payload.list,
             pagination:action.payload.pagination,
-            item:action.payload.item
+            item:action.payload.item,
+          }
         }
       }
     },
 
+    //发货管理-发货列表 - 撤回
+    getWithdrawR(state, action){
+      return {
+        ...state,
+        shipmentListView:{
+          ...state.shipmentListView,
+          ...state.shipmentListView.tableData,
+          item:action.payload
+            
+        }
+      }
+    },
 
     //-----------------选择商品返回发货单（带参） 页--
 

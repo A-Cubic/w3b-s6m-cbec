@@ -499,7 +499,7 @@ export default class deliveryForm extends Component {
   const { roleOperationDistribution:{shippingList:{tableData:{list, pagination,item}}} } = this.props;
 
   const { publicDictionary:{purchaserArr} } = this.props;
-  //console.log('XXXX',this.props.roleOperationDistribution.shippingList) 
+  console.log('XXXX',this.props.roleOperationDistribution.shippingList) 
 
   const { getFieldDecorator } = this.props.form;
   const paginationProps = {
@@ -684,7 +684,7 @@ export default class deliveryForm extends Component {
                 {getFieldDecorator('usercode',{
                   //initialValue:'1'
                   // initialValue:item.sendType==''?'1':item.sendType,
-                  initialValue:'',
+                  initialValue:item.usercode,
                  // placeholder:"请输入采购商",
                   rules: [{ required: true, message: '请输入采购商：' }],
                 })(

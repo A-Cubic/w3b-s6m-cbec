@@ -30,16 +30,16 @@ export default function publicDictionaryMock(url) {
 export function getPlatform(req, res) {
   res.send([
     {
-      platformId: '0',
-      platformType: '合作方一',
+      usercode: '0',
+      getName: '合作方一',
     },
     {
-      platformId: '1',
-      platformType: '合作方二',
+      usercode: '1',
+      getName: '合作方二',
     },
     {
-      platformId: '2',
-      platformType: 'cgs',
+      usercode: '2',
+      getName: 'cgs',
     },
   ]);
 }

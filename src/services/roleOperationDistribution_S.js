@@ -115,7 +115,7 @@ export async function getChooseShipmentData(params) {
 
  // 发货列表-获取data列表 翻页，查询等
 export async function getDeliveryListData(params) {
-  // return request(`/llback/delivery/getDeliveryListData`, {
+ // return request(`/llback/delivery/getDeliveryListData`, {
   return request(`/llback/Warehouse/DeliverOrderList`, {
     method: 'POST',
     body: params,
@@ -149,6 +149,14 @@ export async function getDeliveryListData(params) {
     });
   }
 
+  //发货管理-发货列表 - 点击查看
+  export async function getSeeData(params) {
+    return request(`/llback/delivery/getSeeData`, {
+      method: 'POST',
+      body: params,
+    });
+  }
+
   //发货管理-发货列表 - 查看页面 - 分页
   export async function getPagingShipmentListView(params) {
     return request(`/llback/delivery/getPagingShipmentListView`, {
@@ -157,7 +165,16 @@ export async function getDeliveryListData(params) {
     });
   }
 
+ 
 
+   //发货管理-发货列表 - 撤回
+   export async function getWithdraw(params) {
+    // return request(`/llback/delivery/getWithdraw`, {
+    return request(`/llback/Warehouse/DeliverOrderListWithdraw`, {
+      method: 'POST',
+      body: params,
+    });
+  }
 
 //-----------------选择商品返回发货单（带参） 页--
 
