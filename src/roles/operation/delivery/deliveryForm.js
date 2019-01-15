@@ -171,6 +171,7 @@ export default class deliveryForm extends Component {
       this.setState({
         formValues: values,
       });
+     // console.log('this.setState',{...values})
       this.props.dispatch({
      
         type: 'roleOperationDistribution/getDeliverGoodsSave',
@@ -199,7 +200,7 @@ export default class deliveryForm extends Component {
 
   //下载运单模板
   downloadTemplate=()=>{
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/InquiryGoods.xlsx'
+    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/downloadDeliveryTemplate.xlsx'
   }
   handleFormReset =()=>{
     this.props.form.resetFields();
@@ -243,6 +244,26 @@ export default class deliveryForm extends Component {
   //选择发货
   deliverGoods = (e) => {
    
+    e.preventDefault();
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('values',fieldsValue)
+      if (err) return;
+      const rangeValue = fieldsValue['date'];
+      const values = rangeValue==undefined ? {
+        ...fieldsValue,
+      }:{
+        ...fieldsValue,
+        'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+      };
+      this.setState({
+        formValues: values,
+      });
+      console.log('this.setState',{...values})
+  
+     // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
+    //});
+
+
       const that =  this
       if(this.props.roleOperationDistribution.shippingList.tableData.list ==''){
         if(that.state.purchase == true){
@@ -255,7 +276,7 @@ export default class deliveryForm extends Component {
               usercode:that.state.usercode,
               id:this.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id,
               isDelete:'0',
-
+              ...values
 
 
             },
@@ -277,6 +298,7 @@ export default class deliveryForm extends Component {
                   usercode:that.state.usercode,
                   id:that.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.shippingList.tableData.list[0].id,
                   isDelete:'1',
+                  ...values
                 },
               });
             },
@@ -290,7 +312,8 @@ export default class deliveryForm extends Component {
       }
   
     
-  }
+  
+    });  }
 
 
 
@@ -309,11 +332,11 @@ export default class deliveryForm extends Component {
             that.props.dispatch({
               type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
               payload: {
-               fileTemp: info.file.response.fileName[0],
+             //  fileTemp: info.file.response.fileName[0],
                 //usercode:"cgs",
                 usercode:that.state.usercode,
                 id:this.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id,
-                //fileTemp:info.file.name
+                fileTemp:info.file.name
               },
               callback: that.onUploadCallback
             });
@@ -330,11 +353,11 @@ export default class deliveryForm extends Component {
                 that.props.dispatch({
                   type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
                   payload: {
-                    fileTemp: info.file.response.fileName[0],
+                   // fileTemp: info.file.response.fileName[0],
                     //usercode:"cgs",
                     usercode:that.state.usercode,
                     id:that.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.shippingList.tableData.list[0].id,
-                   // fileTemp:info.file.name
+                   fileTemp:info.file.name
                   },
                   callback: that.onUploadCallback
                 });

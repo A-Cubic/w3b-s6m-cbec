@@ -1,9 +1,9 @@
 
 // const h = 'http://192.168.191.1:54195/';
-//const a = 'http://192.168.0.127:54195/';
+const a = 'http://192.168.0.127:54195/';
 
 
-export default function roleOperationDistributionMock(url) {
+export default function roleOperationDistributionMock() {
   return {
     // ---------------------------------------------库存管理部分-----------------------------------------
     // -----------------库存 - 平台库存 页---------------
@@ -18,32 +18,31 @@ export default function roleOperationDistributionMock(url) {
 
     // ---------------------------------------------发货管理部分-----------------------------------------
     // -----------------我要发货-------------------
-    // 我要发货 - 上传销售数据
-    // 'POST /llback/delivery/deliverGoodsuploadOrderbill': UpdateDistributor,
-    // 我要发货 - 保存
-    'POST /llback/Warehouse/OperationDeliveryImport': url,
+    
+    // 我要发货 - 选择发货
+    'POST /llback/Warehouse/OperationDeliveryImport': a,
 
     // 我要发货 - 删除
-    'POST /llback/Warehouse/DeliverGoodsDelete': url,
+    'POST /llback/Warehouse/DeliverGoodsDelete': a,
 
     // 我要发货 - 分页
-    'POST /llback/Warehouse/DeliverGoodsList': url,
+    'POST /llback/Warehouse/DeliverGoodsList': a,
 
     // 我要发货 - 提交
-    'POST /llback/Warehouse/DeliverOrderSubmission': url,
+    'POST /llback/Warehouse/DeliverOrderSubmission': a,
 
     // 我要发货 - 保存
-    'POST /llback/Warehouse/DeliverOrderConserve': url,
+    'POST /llback/Warehouse/DeliverOrderConserve': a,
 
     // 我要发货 - 改变数量
-    'POST /llback/Warehouse/DeliverGoodsNum': url,
+    'POST /llback/Warehouse/DeliverGoodsNum': a,
 
     // 我要发货- 选择发货商品 跳页接口
     // 发货管理-选择发货商品 - 获取数据
-    'POST /llback/Warehouse/ChooseDeliverGoods': url,
+    'POST /llback/Warehouse/ChooseDeliverGoods': a,
 
     // 我要发货- 选择发货商品 勾选 
-    'POST /llback/Warehouse/ChooseGoods': url,
+    'POST /llback/Warehouse/ChooseGoods': a,
 
     // -----------------发货管理-选择发货商品 -----------------
 
@@ -51,16 +50,16 @@ export default function roleOperationDistributionMock(url) {
 
     // -----------------发货管理-发货列表 -----------------
     // 发货列表-获取data列表 翻页，查询等
-    'POST /llback/Warehouse/DeliverOrderList': url,
+    'POST /llback/Warehouse/DeliverOrderList': a,
 
     // 发货列表 - 删除 
-    'POST /llback/Warehouse/DeliverOrderListDelete': url,
+    'POST /llback/Warehouse/DeliverOrderListDelete': a,
 
     // 发货列表- 点击查看 
-    'POST /llback/Warehouse/DeliverOrderDetails': url,
+    'POST /llback/Warehouse/DeliverOrderDetails': a,
 
     // 发货列表- 撤回
-    'POST /llback/Warehouse/DeliverOrderListWithdraw': url,
+    'POST /llback/Warehouse/DeliverOrderListWithdraw': a,
 
     // -----------------选择商品返回发货单（带参） 页------
 
