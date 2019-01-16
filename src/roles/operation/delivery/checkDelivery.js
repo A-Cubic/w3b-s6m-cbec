@@ -45,11 +45,11 @@ export default class deliveryForm extends Component {
   }
 
   componentDidMount() {
-    this.init() 
+    this.init()
   }
 
   init(){
-  
+
   }
 
 
@@ -67,7 +67,7 @@ export default class deliveryForm extends Component {
       //payload: params,
        payload: {
          ...params,
-         id:this.props.roleOperationDistribution.shipmentListView.tableData.list[0].id
+         id:this.props.roleOperationDistribution.checkDelivery.tableData.list[0].id
        },
     });
   }
@@ -75,9 +75,9 @@ export default class deliveryForm extends Component {
 
 
   renderForm(){
-  const { roleOperationDistribution:{shipmentListView:{tableData:{list, pagination,item}}} } = this.props;
-  
-  console.log('xxx',this.props.roleOperationDistribution.shipmentListView)
+  const { roleOperationDistribution:{checkDelivery:{tableData:{list, pagination,item}}} } = this.props;
+
+  console.log('xxx',this.props.roleOperationDistribution.checkDelivery)
 
   const { getFieldDecorator } = this.props.form;
   const paginationProps = {
@@ -162,7 +162,7 @@ export default class deliveryForm extends Component {
           <Col md={8} sm={24}>
             <FormItem label="发货人电话：  ">
               <span>{item.sendTel}</span>
-            </FormItem>      
+            </FormItem>
           </Col>
           <Col md={4} sm={24}></Col>
         </Row>
@@ -181,15 +181,15 @@ export default class deliveryForm extends Component {
           <Col md={8} sm={24}>
             <FormItem label="运单号：">
               <span>{item.waybillNo}</span>
-            </FormItem>      
+            </FormItem>
           </Col>
           <Col md={4} sm={24}></Col>
-            
+
         </Row>
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
-          
+
           </Col>
           <Col md={7} sm={24}></Col>
         </Row>
@@ -203,17 +203,17 @@ export default class deliveryForm extends Component {
           <Col md={6} sm={24}>
             <FormItem label="采购商：">
               <span>{item.getName}</span>
-            </FormItem>      
+            </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="联系人：">
              <span>{item.contact}</span>
-            </FormItem>         
+            </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="联系人电话：">
               <span>{item.getTel}</span>
-            </FormItem>  
+            </FormItem>
           </Col>
           <Col md={3} sm={24}></Col>
         </Row>
@@ -224,7 +224,7 @@ export default class deliveryForm extends Component {
           <div style={{marginBottom:'35px'}}></div>
         </div>
         <div style={{marginBottom:'20px'}}>
-     
+
         </div>
         <Table dataSource={list}
                 // showHeader={false}
@@ -241,7 +241,7 @@ export default class deliveryForm extends Component {
         <Row style={{marginTop:'15px', marginBottom:'5px'}}>
           <Col md={9} sm={24}></Col>
           <Col md={6} sm={24}>
-           
+
           </Col>
           <Col md={9} sm={24}></Col>
         </Row>

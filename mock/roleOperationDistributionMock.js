@@ -92,6 +92,9 @@ export default function roleOperationDistributionMock() {
 
     // ------------------手动调账（查看） 页-------
 
+    // 采购结算 - 完成对账
+    'POST /llback/Balance/getManualTransferData': GetOrderList,
+
   };
 }
 export function getPayment(req, res) {

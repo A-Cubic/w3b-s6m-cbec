@@ -24,14 +24,7 @@ const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-
 const confirm = Modal.confirm;
-
-function destroyAll() {
-  Modal.destroyAll();
-}
-
-
 
 
 
@@ -44,8 +37,6 @@ function destroyAll() {
 export default class deliveryForm extends Component {
   state={
     formValues:{},
-   // delList:[],
-  // dataSource: [],
     data: [],
     value: undefined,
     valueGoodsNum:'',
@@ -56,50 +47,19 @@ export default class deliveryForm extends Component {
 
   componentDidMount() {
     this.init()
-    // if(!this.props.match.params){
-    //     this.init()
-    // }else{
-
-
-    //}
   }
-  // init(){
-  //   const {match,dispatch}=this.props;
-  //   //console.log('fs',JSON.parse(match.params.biography))
-  //   //const b=JSON.parse(match.params.biography)}
-  //   const getData = JSON.parse(match.params.biography)
-  //   //console.log('getData',getData)
-  //   if(getData.status == 7) {
-  //     this.props.dispatch({
-  //       type: 'rolePurchaserBulkPurchases/getSeeData',
-  //       //payload: params,
-  //       payload: {
-  //         purchasesn:getData.purchasesn,
-  //         status:getData.status
-  //       },
-  //     });
-  //   }
-  // }
-
-  
-
 
   init(){
-   // console.log()
-  //  console.log('shippingList',this.props.roleOperationDistribution.shippingList.tableData.item)
-  //  console.log('fs',this.props.roleOperationDistribution.shippingList.tableData.item.getName!='')
-
-   if(this.props.roleOperationDistribution.shippingList.tableData.item.getName !=''){
-    this.setState({
-        purchase:true,
-        usercode:this.props.roleOperationDistribution.shippingList.tableData.item.usercode
-    });  
-  }else {
-    this.setState({
-      purchase:false,
-      
-  });   
-  }
+    if(this.props.roleOperationDistribution.deliveryForm.tableData.item.getName !=''){
+      this.setState({
+          purchase:true,
+          usercode:this.props.roleOperationDistribution.deliveryForm.tableData.item.usercode
+      });
+    }else {
+      this.setState({
+        purchase:false,
+      });
+    }
     this.props.dispatch({
       type: 'publicDictionary/getPurchaserArr',
       //payload: params,
@@ -111,7 +71,7 @@ export default class deliveryForm extends Component {
 
   //提交
   handleOnSubmission = (e)=>{
-    const {roleOperationDistribution:{shippingList:{tableData:{item,list, pagination}}} } = this.props;
+    const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -126,12 +86,12 @@ export default class deliveryForm extends Component {
       this.setState({
         formValues: values,
       });
-      if(this.props.roleOperationDistribution.shippingList.tableData.list != ''){
+      if(this.props.roleOperationDistribution.deliveryForm.tableData.list != ''){
         this.props.dispatch({
           type: 'roleOperationDistribution/getDeliverGoods',
             payload: {
               ...values,
-              id:this.props.roleOperationDistribution.shippingList.tableData.list[0].id
+              id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id
             },
             callback: this.onSubmissionCallback
         });
@@ -147,7 +107,7 @@ export default class deliveryForm extends Component {
     if(params.type==="1"){
       this.handleFormReset()
       this.props.form.resetFields();
-      this.props.roleOperationDistribution.shippingList.tableData.list.remove
+      this.props.roleOperationDistribution.deliveryForm.tableData.list.remove
       this.setState({
         formValues: {},
       });
@@ -173,11 +133,11 @@ export default class deliveryForm extends Component {
       });
      // console.log('this.setState',{...values})
       this.props.dispatch({
-     
+
         type: 'roleOperationDistribution/getDeliverGoodsSave',
           payload: {
             ...values,
-            id:this.props.roleOperationDistribution.shippingList.tableData.list == ''?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id
+            id:this.props.roleOperationDistribution.deliveryForm.tableData.list == ''?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id
           },
           callback:this.onPreservationCallback
       });
@@ -223,7 +183,7 @@ export default class deliveryForm extends Component {
       //payload: params,
        payload: {
          ...params,
-         id:this.props.roleOperationDistribution.shippingList.tableData.list[0].id
+         id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id
        },
     });
   }
@@ -240,10 +200,10 @@ export default class deliveryForm extends Component {
     });
   }
 
-  
-  //选择发货
+
+  //选择发货商品按钮
   deliverGoods = (e) => {
-   
+
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -259,33 +219,30 @@ export default class deliveryForm extends Component {
         formValues: values,
       });
       console.log('this.setState',{...values})
-  
+
      // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
     //});
 
 
       const that =  this
-      if(this.props.roleOperationDistribution.shippingList.tableData.list ==''){
+      if(this.props.roleOperationDistribution.deliveryForm.tableData.list ==''){
         if(that.state.purchase == true){
           that.props.dispatch({
             type: 'roleOperationDistribution/getchooseShipment',
             payload: {
-            
              // fileTemp: info.file.response.fileName[0],
               //usercode:"cgs",
               usercode:that.state.usercode,
-              id:this.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id,
+              id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
               isDelete:'0',
               ...values
-
-
             },
-            
+
           });
         } else {
           message.error('请填写采购商');
         }
-        
+
       } else {
         if(that.state.purchase == true){
           confirm({
@@ -296,7 +253,7 @@ export default class deliveryForm extends Component {
                 type: 'roleOperationDistribution/getchooseShipment',
                 payload: {
                   usercode:that.state.usercode,
-                  id:that.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.shippingList.tableData.list[0].id,
+                  id:that.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
                   isDelete:'1',
                   ...values
                 },
@@ -310,9 +267,9 @@ export default class deliveryForm extends Component {
           message.error('请填写采购商');
         }
       }
-  
-    
-  
+
+
+
     });  }
 
 
@@ -321,13 +278,13 @@ export default class deliveryForm extends Component {
   // 上传销售数据
   handleUploadChange=(info)=>{
    // console.log('fileTemp',info.file.response)
-   //console.log('上传销售数据',this.props.roleOperationDistribution.D.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id)
-   
-  //  console.log('xx',this.props.roleOperationDistribution.shippingList.tableData.item)
+   //console.log('上传销售数据',this.props.roleOperationDistribution.D.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id)
+
+  //  console.log('xx',this.props.roleOperationDistribution.deliveryForm.tableData.item)
   //  console.log('qq',this.state.usercode)
       if(info.file.status === 'done') {
         const that =  this
-        if(this.props.roleOperationDistribution.shippingList.tableData.list ==''){
+        if(this.props.roleOperationDistribution.deliveryForm.tableData.list ==''){
           if(that.state.purchase == true){
             that.props.dispatch({
               type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
@@ -335,7 +292,7 @@ export default class deliveryForm extends Component {
               fileTemp: info.file.response.fileName[0],
                 //usercode:"cgs",
                 usercode:that.state.usercode,
-                id:this.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id,
+                id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
                 //fileTemp:info.file.name
               },
               callback: that.onUploadCallback
@@ -343,7 +300,7 @@ export default class deliveryForm extends Component {
           } else {
             message.error('请填写采购商');
           }
-          
+
         } else {
           if(that.state.purchase == true){
             confirm({
@@ -356,7 +313,7 @@ export default class deliveryForm extends Component {
                   fileTemp: info.file.response.fileName[0],
                     //usercode:"cgs",
                     usercode:that.state.usercode,
-                    id:that.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.shippingList.tableData.list[0].id,
+                    id:that.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
                    //fileTemp:info.file.name
                   },
                   callback: that.onUploadCallback
@@ -396,10 +353,10 @@ export default class deliveryForm extends Component {
 //改变数量 GoodsNum
   //onChange
   inputOnBlur = (record,val) =>{
-   
+
     //.log('val',this.state.value)
    // console.log('record',record.id)
-     const b = this.props.roleOperationDistribution.shippingList.tableData.list.map((item) => {
+     const b = this.props.roleOperationDistribution.deliveryForm.tableData.list.map((item) => {
       return {
        // demand:this.state.value,
        // price:item.supplyPrice,
@@ -413,7 +370,7 @@ export default class deliveryForm extends Component {
      const c =b.find(item=>
        item.barcode===record.barcode
      )
-    // console.log('c',c) 
+    // console.log('c',c)
 
     if(this.state.valueGoodsNum != ''){
       //if(record.goodsNum != this.state.value){
@@ -426,10 +383,10 @@ export default class deliveryForm extends Component {
             goodsNum: c.goodsNum,
             id: c.id
           },
-        }); 
-      //}  
-    }  
-   }  
+        });
+      //}
+    }
+   }
 
    //记录改变SafeNum
    onChangeSafeNum=(v)=>{
@@ -439,16 +396,16 @@ export default class deliveryForm extends Component {
     },()=>{
       //console.log('bbbbbb',this.state.value)
     });
-   
+
     }
 
 //改变数量 SafeNum
   //onChange
   inputOnBlurSafeNum = (record,val) =>{
-   
+
   //  console.log('valxxx',this.state.valueSafeNum)
    // console.log('record',record.id)
-     const b = this.props.roleOperationDistribution.shippingList.tableData.list.map((item) => {
+     const b = this.props.roleOperationDistribution.deliveryForm.tableData.list.map((item) => {
       return {
        // demand:this.state.value,
        // price:item.supplyPrice,
@@ -462,7 +419,7 @@ export default class deliveryForm extends Component {
      const c =b.find(item=>
        item.barcode===record.barcode
      )
-   //  console.log('c',c) 
+   //  console.log('c',c)
 
     if(this.state.valueSafeNum != ''){
       //if(record.safeNum != this.state.value){
@@ -475,10 +432,10 @@ export default class deliveryForm extends Component {
             safeNum: c.safeNum,
             id: c.id
           },
-        }); 
-      //}  
-    }  
-   }  
+        });
+      //}
+    }
+   }
 
 
    //获取采购商
@@ -493,25 +450,200 @@ export default class deliveryForm extends Component {
     this.setState({
       purchase:true,
       usercode:value,
-    });    
+    });
 
 
   }
 
 
   renderForm(){
-  const { roleOperationDistribution:{shippingList:{tableData:{list, pagination,item}}} } = this.props;
+  const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
 
   const { publicDictionary:{purchaserArr} } = this.props;
-  //console.log('XXXX',this.props.roleOperationDistribution.shippingList) 
+  //console.log('XXXX',this.props.roleOperationDistribution.deliveryForm)
 
   const { getFieldDecorator } = this.props.form;
-  const paginationProps = {
-    showSizeChanger: true,
-    showQuickJumper: true,
-    ...pagination,
-  };
- 
+
+    const props = {
+      action: getUploadUrl(),
+      headers: getHeader(),
+      showUploadList: false,
+      // listType: 'picture',
+      // accept:'image/*',
+      onChange: this.handleUploadChange,
+      multiple: false,
+      // customRequest:this.upload,
+    };
+    //console.log('sex',parseInt(item.sex ))
+    return (
+      <Form onSubmit={this.onPreservation} layout="inline">
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <div className={styles.titleName}>发货单</div>
+          <div className={styles.takeGoods}>
+            <span></span>
+            发货人信息
+          </div>
+        </Row>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={4} sm={24}></Col>
+          <Col md={8} sm={24}>
+
+            <FormItem label="发货人：  ">
+              {getFieldDecorator('sendName', {
+                initialValue: item.sendName,
+                rules: [{ required: true, message: '请输入姓名' }],
+              })(
+                <Input placeholder="请输入姓名"/>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="发货人电话：  ">
+              {getFieldDecorator('sendTel', {
+                initialValue: item.sendTel,
+                rules: [{ required: true, message: '请输入电话' }],
+              })(
+                <Input placeholder="请输入电话"/>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={4} sm={24}></Col>
+        </Row>
+
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <div className={styles.line} style={{marginBottom:25}}></div>
+          <div className={styles.takeGoods}>
+            <span></span>
+            快递信息
+          </div>
+        </Row>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={4} sm={24}></Col>
+          <Col md={8} sm={24}>
+            <FormItem label="快递公司：  ">
+              {getFieldDecorator('express', {
+                initialValue: item.express,
+                rules: [{ required: true, message: '请输入快递公司' }],
+              })(
+                <Input placeholder="请输入快递公司"/>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="运单号：">
+              {getFieldDecorator('waybillNo', {
+                initialValue: item.waybillNo,
+                rules: [{ required: true, message: '请输入运单号' }],
+              })(
+                <Input placeholder="请输入运单号"/>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={4} sm={24}></Col>
+
+        </Row>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={7} sm={24}></Col>
+          <Col md={10} sm={24}>
+
+          </Col>
+          <Col md={7} sm={24}></Col>
+        </Row>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <div className={styles.line} style={{marginBottom:25}}></div>
+          <div className={styles.takeGoods}>
+            <span></span>
+            采购商信息
+          </div>
+        </Row>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={3} sm={24}></Col>
+          <Col md={6} sm={24}>
+            <FormItem label="采购商：">
+
+                {getFieldDecorator('usercode',{
+                  //initialValue:'1'
+                  // initialValue:item.sendType==''?'1':item.sendType,
+                  initialValue:item.usercode,
+                 // placeholder:"请输入采购商",
+                  rules: [{ required: true, message: '请输入采购商：' }],
+                })(
+                  <Select
+                    showSearch
+                   // value={this.state.value}
+                    placeholder="请输入采购商"
+                    defaultActiveFirstOption={false}
+                    showArrow={false}
+                    onSearch={this.handleSearch}
+                    onChange={this.handleChange}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                   // filterOption={false}
+                   // notFoundContent={null}
+                  >
+                    {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)}
+                  </Select>
+                )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="联系人：">
+              {getFieldDecorator('contact', {
+                initialValue: item.contact,
+                rules: [{ required: true, message: '请输入联系人' }],
+              })(
+                <Input placeholder="请输入联系人"/>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="联系人电话：">
+              {getFieldDecorator('getTel', {
+                initialValue: item.getTel,
+                rules: [{ required: true, message: '请输入联系人电话' }],
+              })(
+                <Input placeholder="请输入联系人电话"/>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={3} sm={24}></Col>
+        </Row>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+        <div className={styles.line} style={{marginBottom:25}}></div>
+        <div className={styles.takeGoods}>
+          <span></span>
+          发货商品
+          <div style={{marginBottom:'35px'}}></div>
+        </div>
+        <div style={{marginBottom:'20px'}}>
+          <Button style={{ marginLeft: 8 }} type="" onClick={this.deliverGoods}>
+            <Icon type="snippets" />选择发货商品
+          </Button>
+          <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
+            <Icon type="download" />下载询价模板
+          </Button>
+          <Upload  {...props}>
+            <Button style={{ marginLeft: 8 }}>
+              <Icon type="cloud-upload-o" /> 导入询价商品
+            </Button>
+
+          </Upload>
+        </div>
+        <div>
+        </div>
+        </Row>
+
+      </Form>
+    );
+  }
+
+  render() {
+    const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...pagination,
+    };
+
     const columns = [
       {
         title: '序号',
@@ -551,37 +683,37 @@ export default class deliveryForm extends Component {
         key: 'goodsNum',
         render: (val,record,e) =>{
           // console.log(2,record)
-           // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
-           return (
-            
-           <InputNumber 
-             // onChange={this.onChange(record)} 
+          // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
+          return (
+
+            <InputNumber
+              // onChange={this.onChange(record)}
               onChange={this.onChangeNum}
               onBlur={()=>this.inputOnBlur(record) }
               //  onClick={(e) => this.handleDelCheck(e, record, index)}>
-                min={parseInt(1)} 
-               max={parseInt(record.pNum)+1} 
-               defaultValue={record.goodsNum}
-             />
-           )
-         }
+              min={parseInt(1)}
+              max={parseInt(record.pNum)+1}
+              defaultValue={record.goodsNum}
+            />
+          )
+        }
       }, {
         title: '安全库存数',
         dataIndex: 'safeNum',
         key: 'safeNum',
         render: (val,record,e) =>{
           // console.log(2,record)
-           // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
-           return (
-           <InputNumber 
-             // onChange={this.onChange(record)} 
+          // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
+          return (
+            <InputNumber
+              // onChange={this.onChange(record)}
               onChange={this.onChangeSafeNum}
               onBlur={()=>this.inputOnBlurSafeNum(record) }
-              min={parseInt(0)} 
+              min={parseInt(0)}
               defaultValue={record.safeNum}
-             />
-           )
-         }
+            />
+          )
+        }
       },{
         title: '操作',
         dataIndex: 'goMoney',
@@ -595,187 +727,6 @@ export default class deliveryForm extends Component {
         }
       }
     ];
-    const props = {
-      action: getUploadUrl(),
-      headers: getHeader(),
-      showUploadList: false,
-      // listType: 'picture',
-      // accept:'image/*',
-      onChange: this.handleUploadChange,
-      multiple: false,
-      // customRequest:this.upload,
-    };
-    //console.log('sex',parseInt(item.sex ))
-    return (
-      <Form onSubmit={this.onPreservation} layout="inline">
-        <div className={styles.titleName}>发货单</div>
-        <div className={styles.takeGoods}>
-          <span></span>
-          发货人信息
-        </div>
-        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={4} sm={24}></Col>
-          <Col md={8} sm={24}>
-
-            <FormItem label="发货人：  ">
-              {getFieldDecorator('sendName', {
-                initialValue: item.sendName,
-                rules: [{ required: true, message: '请输入姓名' }],
-              })(
-                <Input placeholder="请输入姓名"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="发货人电话：  ">
-              {getFieldDecorator('sendTel', {
-                initialValue: item.sendTel,
-                rules: [{ required: true, message: '请输入电话' }],
-              })(
-                <Input placeholder="请输入电话"/>
-              )}
-            </FormItem>      
-          </Col>
-          <Col md={4} sm={24}></Col>
-        </Row>
-        <div className={styles.line} style={{marginBottom:25}}></div>
-        <div className={styles.takeGoods}>
-          <span></span>
-          快递信息
-        </div>
-        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-        <Col md={4} sm={24}></Col>
-          <Col md={8} sm={24}>
-            <FormItem label="快递公司：  ">
-              {getFieldDecorator('express', {
-                initialValue: item.express,
-                rules: [{ required: true, message: '请输入快递公司' }],
-              })(
-                <Input placeholder="请输入快递公司"/>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="运单号：">
-              {getFieldDecorator('waybillNo', {
-                initialValue: item.waybillNo,
-                rules: [{ required: true, message: '请输入运单号' }],
-              })(
-                <Input placeholder="请输入运单号"/>
-              )}
-            </FormItem>      
-          </Col>
-          <Col md={4} sm={24}></Col>
-            
-        </Row>
-        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={7} sm={24}></Col>
-          <Col md={10} sm={24}>
-          
-          </Col>
-          <Col md={7} sm={24}></Col>
-        </Row>
-        <div className={styles.line} style={{marginBottom:25}}></div>
-        <div className={styles.takeGoods}>
-          <span></span>
-          采购商信息
-        </div>
-        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={3} sm={24}></Col>
-          <Col md={6} sm={24}>
-            <FormItem label="采购商：">
-               
-                {getFieldDecorator('usercode',{
-                  //initialValue:'1'
-                  // initialValue:item.sendType==''?'1':item.sendType,
-                  initialValue:item.usercode,
-                 // placeholder:"请输入采购商",
-                  rules: [{ required: true, message: '请输入采购商：' }],
-                })(
-                  <Select
-                    showSearch
-                   // value={this.state.value}
-                    placeholder="请输入采购商"
-                    defaultActiveFirstOption={false}
-                    showArrow={false}
-                    onSearch={this.handleSearch}
-                    onChange={this.handleChange}
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                   // filterOption={false}
-                   // notFoundContent={null}
-                  >
-                    {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)}
-                  </Select>
-                )}
-            </FormItem>      
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="联系人：">
-              {getFieldDecorator('contact', {
-                initialValue: item.contact,
-                rules: [{ required: true, message: '请输入联系人' }],
-              })(
-                <Input placeholder="请输入联系人"/>
-              )}
-            </FormItem>         
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="联系人电话：">
-              {getFieldDecorator('getTel', {
-                initialValue: item.getTel,
-                rules: [{ required: true, message: '请输入联系人电话' }],
-              })(
-                <Input placeholder="请输入联系人电话"/>
-              )}
-            </FormItem>  
-          </Col>
-          <Col md={3} sm={24}></Col>
-        </Row>
-        <div className={styles.line} style={{marginBottom:25}}></div>
-        <div className={styles.takeGoods}>
-          <span></span>
-          发货商品
-          <div style={{marginBottom:'35px'}}></div>
-        </div>
-        <div style={{marginBottom:'20px'}}>
-          <Button style={{ marginLeft: 8 }} type="" onClick={this.deliverGoods}>
-            <Icon type="snippets" />选择发货商品
-          </Button>        
-          <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
-            <Icon type="download" />下载询价模板
-          </Button>
-          <Upload  {...props}>
-            <Button style={{ marginLeft: 8 }}>
-              <Icon type="cloud-upload-o" /> 导入询价商品
-            </Button>
-
-          </Upload>
-        </div>
-        <Table dataSource={list}
-                // showHeader={false}
-                 // scroll={{ x: 1500}}
-                 rowKey={record => record.keyId}
-                 columns={columns}
-                 pagination={paginationProps}
-                 onChange={this.handleTableChange}
-                 // loading={submitting}
-          />
-          <p onClick={this.showConfirm}>
-            {/* Confirm 777*/}
-          </p>
-        <Row style={{marginTop:'15px', marginBottom:'5px'}}>
-          <Col md={9} sm={24}></Col>
-          <Col md={6} sm={24}>
-            <Button style={{ marginLeft: 48 }} htmlType="submit">保存</Button>
-            <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnSubmission} >提交</Button>
-          </Col>
-          <Col md={9} sm={24}></Col>
-        </Row>
-      </Form>
-    );
-  }
-
-  render() {
     return (
       <div className={styles.qa}>
         <Card bordered={false}>
@@ -783,12 +734,25 @@ export default class deliveryForm extends Component {
             <div className={styles.tableListForm}>
               {this.renderForm()}
             </div>
+            <Table dataSource={list}
+              // showHeader={false}
+              // scroll={{ x: 1500}}
+                   rowKey={record => record.keyId}
+                   columns={columns}
+                   pagination={paginationProps}
+                   onChange={this.handleTableChange}
+              // loading={submitting}
+            />
+
+            <Row style={{marginTop:'15px', marginBottom:'5px',textAlign:'center'}}>
+              <Button style={{ marginLeft: 48 }} htmlType="submit" onClick={this.onPreservation}>保存</Button>
+              <Button style={{ marginLeft: 20}} type="primary" onClick={this.handleOnSubmission} >提交</Button>
+            </Row>
           </div>
         </Card>
       </div>
     );
   }
-
 }
 
 

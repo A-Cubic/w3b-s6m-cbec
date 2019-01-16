@@ -1,12 +1,15 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Modal,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
 import styles from './manualTransfer.less';
 import moment from 'moment';
-const RangePicker = DatePicker.RangePicker;
+import {getToken} from "../../../utils/Global";
+const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
+const userId = getToken().userId;
+const { TextArea } = Input;
 @connect(({roleOperationDistribution }) => ({
   roleOperationDistribution,
 }))
@@ -18,12 +21,12 @@ export default class manualTransfer extends Component {
     formValues:{}
   }
   init(){
-    // this.props.dispatch({
-    //   type: 'roleOperationDistribution/warehouseList',
-    //   payload: {
-    //     userId:userId
-    //   },
-    // });
+    this.props.dispatch({
+      type: 'roleOperationDistribution/getManualTransferData',
+      payload: {
+        userId:userId
+      },
+    });
   }
   onSearch=(e)=>{
 
@@ -41,7 +44,7 @@ export default class manualTransfer extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'roleOperationDistribution/getInquiryListData',
+        type: 'roleOperationDistribution/getManualTransferData',
         payload: {
           ...values,
         },
@@ -54,16 +57,22 @@ export default class manualTransfer extends Component {
       ...pagination,
     };
 
-    // this.props.dispatch({
-    //   type: 'roleOperationDistribution/warehouseList',
-    //   payload: params
-    // });
+    this.props.dispatch({
+      type: 'roleOperationDistribution/getManualTransferData',
+      payload: params
+    });
+  }
+  addAdjustmentOrder=()=>{
+    console.log(111)
+    this.props.dispatch({
+      type: 'roleOperationDistribution/changeVisibleR',
+      payload:true
+    })
   }
   componentDidMount() {
     this.init();
   }
   renderForm(){
-    //  console.log(this.props.rolePurchaserBulkPurchases.inquiryList.tableData)
     const {roleOperationDistribution:{manualTransfer:{tableData:{ list, pagination }}}}  = this.props;
     const { getFieldDecorator } = this.props.form;
 
@@ -94,7 +103,6 @@ export default class manualTransfer extends Component {
     );
   }
   render() {
-    // console.log('1',this.props)
     const {roleOperationDistribution:{manualTransfer:{tableData:{ list, pagination }}}}  = this.props;
     const paginationProps = {
       showSizeChanger: true,
@@ -157,6 +165,160 @@ export default class manualTransfer extends Component {
             // loading={submitting}
           />
         </Card>
+        <ChildModelCreatOrder />
+      </div>
+    );
+  }
+}
+
+
+// 创建手动调账单
+@connect(({roleOperationDistribution }) => ({
+  roleOperationDistribution,
+}))
+@Form.create()
+class ChildModelCreatOrder extends React.Component {
+  handleOk = (e) => {
+    const {channelManagement: {goodsChannel: {childEdit}, channelTypeArr}} = this.props
+    e.preventDefault();
+    const that = this;
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('fieldsValue',fieldsValue)
+      if (!err) {
+        this.props.dispatch({
+          type: 'roleOperationDistribution/save',
+          payload: {
+            ...fieldsValue,
+          },
+        })
+      }
+    })
+  }
+
+  handleCancel = (e) => {
+    this.props.dispatch({
+      type: 'roleOperationDistribution/changeVisibleR',
+      payload:false
+    })
+    this.props.form.resetFields();
+  }
+
+  render() {
+    // console.log(this.props)
+    const {getFieldDecorator} = this.props.form;
+    const {roleOperationDistribution: {manualTransfer: {childModelCreatOrder,childCreatOrderModelVisible}}} = this.props;
+    return (
+      <div>
+        <Modal
+          width={'100%'}
+          style={{maxWidth: 1000}}
+          title="手动调账"
+          visible={childCreatOrderModelVisible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="1" onClick={this.handleCancel}>关闭</Button>,
+            <Button key="3" type="primary" onClick={this.handleOk}>确定</Button>
+          ]}
+        >
+          <div className={styles.tableListForm}>
+            <Form onSubmit={this.handleOk} layout="inline">
+              <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+                <Col md={12} sm={24}>
+                  <FormItem label="调整日期：">
+                    {getFieldDecorator('date', {
+                      initialValue: childModelCreatOrder.a,
+                      rules:[{
+                        required:true,message:'请输入调整日期',
+                      }]
+                    })(
+                      <MonthPicker style={{ width: '100%' }}  placeholder="" />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col md={12} sm={24}>
+                  <FormItem label="调整金额" >
+                    {getFieldDecorator('profitAgent', {
+                      initialValue: childModelCreatOrder.a,
+                      rules:[{
+                        required:true,message:'请输入调整金额',
+                      }]
+                    })(
+                      <Input placeholder=""/>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+                <Col md={12} sm={24}>
+                  <FormItem label="调整事项" >
+                    {getFieldDecorator('profitAgent', {
+                      initialValue: childModelCreatOrder.a,
+                      rules:[{
+                        required:true,message:'请输入调整事项',
+                      }]
+                    })(
+                      <Input placeholder=""/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col md={12} sm={24}>
+                  <FormItem label="调整客商" >
+                    {getFieldDecorator('profitAgent', {
+                      initialValue: childModelCreatOrder.a,
+                      rules:[{
+                        required:true,message:'请输入调整客商',
+                      }]
+                    })(
+                      <Input placeholder=""/>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+                <Col md={12} sm={24}>
+                  <FormItem label="商客编码" >
+                    {getFieldDecorator('profitAgent', {
+                      initialValue: childModelCreatOrder.a,
+                      rules:[{
+                        required:true,message:'请输入商客编码',
+                      }]
+                    })(
+                      <Input placeholder=""/>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col md={12} sm={24}>
+                  <FormItem label="商客名称" >
+                    {getFieldDecorator('profitAgent', {
+                      initialValue: childModelCreatOrder.a,
+                      rules:[{
+                        required:true,message:'请输入商客名称',
+                      }]
+                    })(
+                      <Input placeholder=""/>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+                <Col md={24} sm={48}>
+                  <FormItem label="调整事由" >
+                    {getFieldDecorator('profitAgent', {
+                      initialValue: childModelCreatOrder.a,
+                      rules:[{
+                        required:true,message:'请输入调整事由',
+                      }]
+                    })(
+                      <TextArea rows={3} />
+                    )}
+                  </FormItem>
+                </Col>
+
+              </Row>
+            </Form>
+          </div>
+        </Modal>
       </div>
     );
   }

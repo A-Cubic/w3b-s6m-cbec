@@ -15,11 +15,13 @@ import {
   getShipmentListViewData,getPagingShipmentListView,getWithdraw,getSeeData,
   //---------------------------------------------财务管理部分-----------------------------------------
   //------------------采购结算 页---------
-  getChildModelPrintData,            // 采购结算 - 打印
-  getPaymentSettlementData,          // 采购结算 - 列表
-  getSettlementDetailsData,          // 采购结算 - 查看结算明细 - 货款
-  getSettlementDetailsElseData,      // 采购结算 - 查看结算明细 - 其他
-  changeStatusCompleteReconciliation // 采购结算 - 完成对账
+  getChildModelPrintData,             // 采购结算 - 打印
+  getPaymentSettlementData,           // 采购结算 - 列表
+  getSettlementDetailsData,           // 采购结算 - 查看结算明细 - 货款
+  getSettlementDetailsElseData,       // 采购结算 - 查看结算明细 - 其他
+  changeStatusCompleteReconciliation, // 采购结算 - 完成对账
+  //------------------手动调账 页---------
+  getManualTransferData               // 获取调账列表
 
 } from "../services/roleOperationDistribution_S";
 
@@ -41,14 +43,11 @@ export default {
     //---------------------------------------------发货管理部分-----------------------------------------
     //-----------------发货单表单 页---------------
     //发货管理-我要发货
-    shippingList:{
+    deliveryForm:{
       tableData:{
         list: [],
         purchase:[],
         pagination:{},
-        // id:'',
-        // usercode:'',
-        // isDelete:'',
         item:{
           sendName:"",
           sendTel:"",
@@ -57,12 +56,13 @@ export default {
           getName:"",
           getcode:"",
           getTel:"",
-
         },
       },
     },
+
+    //-----------------选择发货商品 页--------------
     //发货管理-选择发货商品
-    chooseShipment: {
+    selectProduct: {
       tableData:{
         item:{},
         list: [],
@@ -73,35 +73,28 @@ export default {
       },
       dotNum:'0',
     },
-    //发货管理 - 发货列表
-    shippingListBig: {
-      tableData:{
-        item:{},
-        list: [],
-        pagination:{},
-
-      },
-    },
-
-    //-----------------发货列表 -查看----------------
-    //发货列表 -查看 获取数据
-    shipmentListView: {
-      tableData:{
-        item:{},
-        list: [],
-        pagination:{},
-      },
-    },
-
-
-    //-----------------选择发货商品 页--------------
 
     //-----------------选择商品返回发货单（带参） 页--
 
     //-----------------发货列表 页----------------
+    //发货管理 - 发货列表
+    deliveryList: {
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
 
+      },
+    },
     //-----------------发货列表- 查看发货单 页------
-
+    //发货列表 -查看 获取数据
+    checkDelivery: {
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
     //---------------------------------------------销售管理部分-----------------------------------------
     //-----------------门店销售//（查看弹窗） 页-----
 
@@ -146,8 +139,9 @@ export default {
         list: [],
         pagination:{},
       },
-      childModelDetails:{
-
+      childCreatOrderModelVisible:true,
+      childModelCreatOrder:{
+        a:''
       }
     }
   },
@@ -198,7 +192,7 @@ export default {
 
     //---------------------------------------------发货管理部分-----------------------------------------
     //-----------------发货单表单 页---------------
-    //-----------------发货管理---------------
+
      //我要发货 - 导入询价商品
     *deliverGoodsuploadOrderbill({ payload,callback },{ call,put}){
       const response = yield call(deliverGoodsuploadOrderbill, payload);
@@ -243,7 +237,6 @@ export default {
       }
     },
 
-
       // 我要发货-提交接口
      *getDeliverGoods({ payload,callback  },{ call,put }){
       const response = yield call(getDeliverGoods, payload);
@@ -256,7 +249,6 @@ export default {
             payload: response,
           })
           yield put(routerRedux.push('/delivery/deliveryList'));
-
         } else {
           message.error('发货商品不能为0');
 
@@ -275,7 +267,7 @@ export default {
             type: 'getDeliverGoodsSaveR',
             payload: response,
           })
-      yield put(routerRedux.push('/delivery/deliveryList'));
+          yield put(routerRedux.push('/delivery/deliveryList'));
         }
       }
     },
@@ -317,7 +309,7 @@ export default {
           payload: {...response,id:payload.id,usercode:payload.usercode,isDelete:payload.isDelete},
         }),
         yield put({
-          type: 'getChooseShipmentSaveDataR',
+          type: 'getDeliveryFormSaveFormR',
           payload: {payload},
         }),
         yield put(routerRedux.push('/delivery/selectProduct'));
@@ -592,8 +584,6 @@ export default {
       }
     },
 
-
-
       //平台库存 - 导入列表
     uploadOrderbillR(state, action){
      // console.log('xxx',action)
@@ -620,67 +610,46 @@ export default {
       // console.log('xxx',action.payload.list)
       return {
         ...state,
-        shippingList:{
-          ...state.shippingList,
+        deliveryForm:{
+          ...state.deliveryForm,
           //pur:action.payload.list[0].purchasesn,
           tableData:{
-            ...state.shippingList.tableData,
+            ...state.deliveryForm.tableData,
             list:action.payload.list,
             pagination:action.payload.pagination,
           }
         }
       }
     },
+
     // 我要发货- 删除
     deleteGoodsListR(state,action){
-      const inList = state.shippingList.tableData.list
+      const inList = state.deliveryForm.tableData.list
       const bb = action.payload.barcode
       //console.log('bbb',action.payload.barcode)
       const newData=inList.filter(item => item.barcode != bb)
       //console.log('newData',newData)
       return {
         ...state,
-        shippingList:{
-          ...state.shippingList,
+        deliveryForm:{
+          ...state.deliveryForm,
           tableData:{
-            ...state.shippingList.tableData,
+            ...state.deliveryForm.tableData,
             list:newData
           }
         }
       }
     },
 
-    // shippingList:{
-    //   tableData:{
-    //     list: [],
-    //     purchase:[],
-    //     pagination:{},
-    //     // id:'',
-    //     // usercode:'',
-    //     // isDelete:'',
-    //     item:{
-    //       sendName:"",
-    //       sendTel:"",
-    //       express:"",
-    //       waybillNo:"",
-    //       getName:"",
-    //       getcode:"",
-    //       getTel:"",
-
-    //     },
-    //   },
-    // },
-
-
     // 我要发货- 分页 -
     getPagingR(state, action){
       console.log('heeessssssssssss2222',action.payload.list)
       return {
         ...state,
-        shippingList:{
-          ...state.shippingList,
+        deliveryForm:{
+          ...state.deliveryForm,
           tableData:{
-            ...state.shippingList.tableData,
+            ...state.deliveryForm.tableData,
             list:action.payload.list,
             pagination:action.payload.pagination,
           }
@@ -690,15 +659,15 @@ export default {
 
     // 我要发货-提交接口
     getDeliverGoodsR(state, action){
-    // console.log('state',state.shippingList.tableData.list )
-      const onempty =state.shippingList.tableData.list
+    // console.log('state',state.deliveryForm.tableData.list )
+      const onempty =state.deliveryForm.tableData.list
       const delList = []
       return {
         ...state,
-        shippingList:{
-          ...state.shippingList,
+        deliveryForm:{
+          ...state.deliveryForm,
           tableData:{
-            ...state.shippingList.tableData,
+            ...state.deliveryForm.tableData,
             list:delList
           }
         }
@@ -710,57 +679,66 @@ export default {
       const delList = []
       return {
         ...state,
-        shippingList:{
+        deliveryForm:{
           ...state.initiateInquiry,
           tableData:{
-            ...state.shippingList.tableData,
+            ...state.deliveryForm.tableData,
             list:delList
           }
         }
       }
     },
 
-
     // 发货列表-改变采购数量
     getChangeNumR(state,action){
 
-   const inList = state.shippingList.tableData.list
+   const inList = state.deliveryForm.tableData.list
    const bb = action.payload.barcode
    const dataSource = [...inList]
 
-   const b =state.shippingList.tableData.list.find(item=>
+   const b =state.deliveryForm.tableData.list.find(item=>
      item.barcode===action.payload.barcode
    )
 
 
-   state.shippingList.tableData.item.purchasePrice = action.payload.allPrice
+   state.deliveryForm.tableData.item.purchasePrice = action.payload.allPrice
    b.pNum =  action.payload.pNum == null?b.pNum:action.payload.pNum
    const num = action.payload.pNum == null?b.pNum:action.payload.pNum
 
    return {
      ...state,
-     shippingList:{
-       ...state.shippingList,
+     deliveryForm:{
+       ...state.deliveryForm,
        'b.pNum': num ,
      },
    }
    },
 
 
-
+    // 缓存发货单表单基本内容
+    getDeliveryFormSaveFormR(state, action){
+      return {
+        ...state,
+        deliveryForm:{
+          ...state.deliveryForm,
+          tableData:{
+            ...state.deliveryForm.tableData,
+            item:action.payload.payload
+          }
+        }
+      }
+    },
 
     //-----------------发货管理-选择发货商品 --------------
 
 
 
-
     //选择发货商品 跳页接口
     getchooseShipmentR(state, action){
-
       return {
         ...state,
-        chooseShipment:{
-          ...state.chooseShipment,
+        selectProduct:{
+          ...state.selectProduct,
           tableData:action.payload,
           id:action.payload.id,
           isDelete:action.payload.isDelete,
@@ -768,32 +746,6 @@ export default {
         },
       }
     },
-  //  选择发货商品 跳页接口 - 携带数据
-
-    getChooseShipmentSaveDataR(state, action){
-      // console.log('action',action.payload.payload)
-      // console.log('state',state)
-      return {
-        ...state,
-        shippingListBig:{
-          ...state.shippingListBig,
-          tableData:{
-            ...state.shippingListBig.tableData,
-            item:action.payload.payload
-          }
-        }
-      }
-    },
-
-
-    // ...state,
-    //     shippingListBig:{
-    //       ...state.shippingListBig,
-    //       tableData:{
-    //         ...state.shippingListBig.tableData,
-    //         list:newData
-    //       }
-    //     }
 
 
     //发货管理-选择发货商品-获取数据
@@ -801,8 +753,8 @@ export default {
       // console.log('获取数据',action.payload)
       return {
         ...state,
-        chooseShipment:{
-          ...state.chooseShipment,
+        selectProduct:{
+          ...state.selectProduct,
           tableData:action.payload,
           dotNum:action.payload.item.num
         }
@@ -810,16 +762,14 @@ export default {
     },
 
 
-
-
      //发货管理-选择发货商品-勾选
      getChecklistR(state, action){
       //  console.log('勾选',action.payload)
         return {
           ...state,
-          chooseShipment:{
-            ...state.chooseShipment,
-            ...state.chooseShipment.tableData,
+          selectProduct:{
+            ...state.selectProduct,
+            ...state.selectProduct.tableData,
             dotNum:action.payload.msg
           }
         }
@@ -834,8 +784,8 @@ export default {
        // console.log('fs',action)
         return {
           ...state,
-          shippingListBig:{
-            ...state.shippingListBig,
+          deliveryList:{
+            ...state.deliveryList,
             tableData:action.payload
           }
         }
@@ -844,17 +794,17 @@ export default {
       // 发货列表 - 删除
     getdeleteDeliveryListR(state,action){
 
-      const inList = state.shippingListBig.tableData.list
+      const inList = state.deliveryList.tableData.list
       const bb = action.payload.barcode
      // console.log('bb',bb)
       const newData=inList.filter(item => item.id != bb)
     //  console.log('newData',newData)
       return {
         ...state,
-        shippingListBig:{
-          ...state.shippingListBig,
+        deliveryList:{
+          ...state.deliveryList,
           tableData:{
-            ...state.shippingListBig.tableData,
+            ...state.deliveryList.tableData,
             list:newData
           }
         }
@@ -869,8 +819,8 @@ export default {
       // console.log('fs',action)
        return {
          ...state,
-         shipmentListView:{
-           ...state.shipmentListView,
+         checkDelivery:{
+           ...state.checkDelivery,
            tableData:action.payload
          }
        }
@@ -881,8 +831,8 @@ export default {
       // console.log('fs',action)
        return {
          ...state,
-         shipmentListView:{
-           ...state.shipmentListView,
+         checkDelivery:{
+           ...state.checkDelivery,
            tableData:action.payload
          }
        }
@@ -892,8 +842,8 @@ export default {
      getPagingShipmentListViewR(state, action){
       return {
         ...state,
-        shipmentListView:{
-          ...state.shipmentListView,
+        checkDelivery:{
+          ...state.checkDelivery,
 
             list:action.payload.list,
             pagination:action.payload.pagination,
@@ -907,17 +857,11 @@ export default {
     getSubmissionR(state, action){
       return {
         ...state,
-        // shipmentListView:{
-        //   ...state.shipmentListView,
-        //     list:action.payload.list,
-        //     pagination:action.payload.pagination,
-        //     item:action.payload.item
-        // }
-        shippingList:{
-          ...state.shippingList,
+        deliveryForm:{
+          ...state.deliveryForm,
           //pur:action.payload.list[0].purchasesn,
           tableData:{
-            ...state.shippingList.tableData,
+            ...state.deliveryForm.tableData,
             list:action.payload.list,
             pagination:action.payload.pagination,
             item:action.payload.item,
@@ -930,9 +874,9 @@ export default {
     getWithdrawR(state, action){
       return {
         ...state,
-        shipmentListView:{
-          ...state.shipmentListView,
-          ...state.shipmentListView.tableData,
+        checkDelivery:{
+          ...state.checkDelivery,
+          ...state.checkDelivery.tableData,
           item:action.payload
 
         }
@@ -1017,11 +961,30 @@ export default {
           childPrintModelVisible:action.payload.childPrintModelVisible
         }
       }
-    }
+    },
 
     //------------------手动调账（查看） 页---
-
-
+    //手动调账列表
+    getManualTransferDataR(state, action){
+      return {
+        ...state,
+        manualTransfer:{
+          ...state.manualTransfer,
+          tableData:action.payload
+        }
+      }
+    },
+    //改变弹窗状态
+    changeVisibleR(state, action){
+      console.log('R',action.payload)
+      return {
+        ...state,
+        manualTransfer:{
+          ...state.manualTransfer,
+          childCreatOrderModelVisible:action.payload
+        }
+      }
+    },
 
   }
 }

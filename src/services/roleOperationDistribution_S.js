@@ -171,7 +171,7 @@ export async function getDeliveryListData(params) {
   //发货管理-发货列表 - 查看页面 - 分页
   export async function getPagingShipmentListView(params) {
     // return request(`/llback/delivery/getPagingShipmentListView`, {
-    return request(`/llback/Warehouse/DeliverOrderList`, {  
+    return request(`/llback/Warehouse/DeliverOrderList`, {
       method: 'POST',
       body: params,
     });
@@ -246,5 +246,11 @@ export async function changeStatusCompleteReconciliation(params) {
 
 //------------------手动调账（查看） 页---
 
-
+// 手动调账 - 列表
+export async function getManualTransferData(params) {
+  return request(`/llback/Balance/getManualTransferData`,{
+    method: 'POST',
+    body: params,
+  })
+}
 
