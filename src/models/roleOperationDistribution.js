@@ -609,7 +609,6 @@ export default {
     //-----------------库存 - 平台库存 页-----------
     //获取列表
     platformStockR(state, action){
-    //  console.log('fs',action.payload)
       return {
         ...state,
         platformStock:{
@@ -622,10 +621,8 @@ export default {
     deleteListR(state,action){
       const inList = state.platformStock.tableData.list
       const bb = action.payload.purchasesn
-     // console.log('bbb',action.payload.purchasesn)
       const dataSource = [...inList]
       const newData=dataSource.filter(item => item.barcode != bb)
-    //  console.log('newData',newData)
       return {
         ...state,
         platformStock:{
@@ -640,14 +637,11 @@ export default {
 
       //平台库存 - 导入列表
     uploadOrderbillR(state, action){
-     // console.log('xxx',action)
      return {
        ...state,
        importList:{
          ...state.importList,
-       //  pur:action.payload.list[0].purchasesn,
          tableData:action.payload
-         //list:action.payload
        }
      }
    },
@@ -678,7 +672,6 @@ export default {
         ...state,
         deliveryForm:{
           ...state.deliveryForm,
-          //pur:action.payload.list[0].purchasesn,
           tableData:{
             ...state.deliveryForm.tableData,
             list:action.payload.list,
@@ -692,9 +685,7 @@ export default {
     deleteGoodsListR(state,action){
       const inList = state.deliveryForm.tableData.list
       const bb = action.payload.barcode
-      //console.log('bbb',action.payload.barcode)
       const newData=inList.filter(item => item.barcode != bb)
-      //console.log('newData',newData)
       return {
         ...state,
         deliveryForm:{
@@ -709,7 +700,6 @@ export default {
 
     // 我要发货- 分页 -
     getPagingR(state, action){
-      console.log('heeessssssssssss2222',action.payload.list)
       return {
         ...state,
         deliveryForm:{
@@ -847,7 +837,6 @@ export default {
      // 发货列表-获取data列表 翻页，查询等
 
      getDeliveryListDataR(state, action){
-       // console.log('fs',action)
         return {
           ...state,
           deliveryList:{

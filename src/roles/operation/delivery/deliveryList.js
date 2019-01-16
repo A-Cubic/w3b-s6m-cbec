@@ -21,7 +21,7 @@ const FormItem = Form.Item;
 export default class deliveryList extends Component {
   state={
     formValues:{},
-    
+
   }
 
   //****/
@@ -100,19 +100,7 @@ export default class deliveryList extends Component {
   }
   //判断状态
   handleViewState(record){
-    //dispatch(routerRedux.push('/goods/step-form/confirm/' + params.id));
-    //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
-      // const getdata = {purchasesn:record.purchasesn,status:record.status}
-      // if(record.status === '3'){
-      //   this.props.dispatch(routerRedux.push('/delivery/returnDeliveryForm/' + JSON.stringify(getdata)  ));
-      // } else if(record.status === '1'){
-      //   this.props.dispatch(routerRedux.push('/delivery/checkDelivery/' + JSON.stringify(getdata)  ));
-      // } else {
-       
-      // }
-      //const getdata = {purchasesn:record.purchasesn,status:record.status}
       if(record.status === '0' || record.status === '1'  ){
-        
         this.props.dispatch({
           type: 'roleOperationDistribution/getSeeData',
           payload: {
@@ -122,38 +110,9 @@ export default class deliveryList extends Component {
            // index:index
           },
         });
-        
-        
-        
-        
-        
+
         this.props.dispatch(routerRedux.push('/delivery/checkDelivery/'  ));
-      } 
-      
-      //JSON.parse JSON.stringify
-  
-      //let type;
-      switch (record.status){
-        
-        case '0':
-           // type=1; //确认
-           
-            break;
-          case '1':
-           // type=2; //完成
-            
-            break;
-          case '3':
-          //  type=3; //待提交
-            
-            break;
-          default:
-            //console.log(1)
-            break;
       }
-      //console.log(record)
-      
-     
     }
 
     //撤回
@@ -164,11 +123,8 @@ export default class deliveryList extends Component {
             id:record.id,
           },
       });
-
-      //this.init();this.init();
-
     }
-    
+
     //提交
     handleSubmission (record) {
       this.props.dispatch({
@@ -180,14 +136,13 @@ export default class deliveryList extends Component {
     }
 
   renderForm(){
-    const { roleOperationDistribution:{chooseShipment:{tableData}} } = this.props;
+    const { roleOperationDistribution:{deliveryList:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    
-  //  console.log('xxx',this.props.roleOperationDistribution.shippingListBig)
+
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-        
+
           <Col md={11} sm={24}>
             <FormItem label="单据日期：">
               {getFieldDecorator('date')(
@@ -204,7 +159,7 @@ export default class deliveryList extends Component {
           </Col>
         </Row>
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-         
+
           <Col md={8} sm={24}>
           <FormItem label="状态">
               {getFieldDecorator('status',{
@@ -218,7 +173,7 @@ export default class deliveryList extends Component {
                   <Option value="0">确认中</Option>
                   <Option value="1">已完成</Option>
                   <Option value="3">待提交</Option>
-                  
+
                 </Select>
               )}
             </FormItem>
@@ -234,7 +189,7 @@ export default class deliveryList extends Component {
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </Col>
-         
+
         </Row>
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
@@ -247,7 +202,7 @@ export default class deliveryList extends Component {
   }
 
   render() {
-    const { roleOperationDistribution:{shippingListBig:{tableData:{list, pagination}}} } = this.props;
+    const { roleOperationDistribution:{deliveryList:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -270,7 +225,7 @@ export default class deliveryList extends Component {
       title: '发货数量',
       dataIndex: 'goodsTotal',
       key: 'goodsTotal',
-       
+
     },{
       title: '发货日期',
       dataIndex: 'sendTime',
@@ -280,7 +235,7 @@ export default class deliveryList extends Component {
       title: '发货人',
       dataIndex: 'sendName',
       key: 'sendName',
-     
+
     },{
         title: '发货人联系电话',
         dataIndex: 'sendTel',
