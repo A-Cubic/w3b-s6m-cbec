@@ -64,16 +64,14 @@ export default {
     //发货管理-选择发货商品
     chooseShipment: {
       tableData:{
-        item:{
-          num:''
-        },
+        item:{},
         list: [],
         pagination:{},
         id:'',
         usercode:'',
         isDelete:'',
-        msg:'0'
       },
+      dotNum:'0',
     },
     //发货管理 - 发货列表
     shippingListBig: {
@@ -259,6 +257,9 @@ export default {
           })
           yield put(routerRedux.push('/delivery/deliveryList'));
 
+        } else {
+          message.error('发货商品不能为0');
+
         }
       }
     },
@@ -306,16 +307,18 @@ export default {
     },
 
 
-     //选择发货商品 跳页接口
+     //我要发货- 跳到选择发货商品页面
      *getchooseShipment({ payload,callback },{ call,put }){
       const response = yield call(getchooseShipment, payload);
-    //  console.log('~我要发货- 选择发货商品 跳页接口',response)
-    //  console.log('~payload',payload)
       if(response!==undefined){
       //  callback(response)
         yield put({
           type: 'getchooseShipmentR',
-          payload: {...response,id:payload.id,usercode:payload.usercode,isDelete:payload.isDelete,},
+          payload: {...response,id:payload.id,usercode:payload.usercode,isDelete:payload.isDelete},
+        }),
+        yield put({
+          type: 'getChooseShipmentSaveDataR',
+          payload: {payload},
         }),
         yield put(routerRedux.push('/delivery/selectProduct'));
       }
@@ -332,7 +335,6 @@ export default {
         })
       }
     },
-
 
     //-----------------发货管理-发货列表 - 查看页面 --------------
     //发货管理-发货列表 - 查看页面 - 获取数据
@@ -648,10 +650,31 @@ export default {
       }
     },
 
+    // shippingList:{
+    //   tableData:{
+    //     list: [],
+    //     purchase:[],
+    //     pagination:{},
+    //     // id:'',
+    //     // usercode:'',
+    //     // isDelete:'',
+    //     item:{
+    //       sendName:"",
+    //       sendTel:"",
+    //       express:"",
+    //       waybillNo:"",
+    //       getName:"",
+    //       getcode:"",
+    //       getTel:"",
+
+    //     },
+    //   },
+    // },
+
 
     // 我要发货- 分页 -
     getPagingR(state, action){
-      // console.log('分页',action.payload.list)
+      console.log('heeessssssssssss2222',action.payload.list)
       return {
         ...state,
         shippingList:{
@@ -728,9 +751,12 @@ export default {
 
     //-----------------发货管理-选择发货商品 --------------
 
+
+
+
     //选择发货商品 跳页接口
     getchooseShipmentR(state, action){
-        console.log('action',action)
+
       return {
         ...state,
         chooseShipment:{
@@ -739,32 +765,62 @@ export default {
           id:action.payload.id,
           isDelete:action.payload.isDelete,
           usercode:action.payload.usercode,
+        },
+      }
+    },
+  //  选择发货商品 跳页接口 - 携带数据
+
+    getChooseShipmentSaveDataR(state, action){
+      // console.log('action',action.payload.payload)
+      // console.log('state',state)
+      return {
+        ...state,
+        shippingListBig:{
+          ...state.shippingListBig,
+          tableData:{
+            ...state.shippingListBig.tableData,
+            item:action.payload.payload
+          }
         }
       }
     },
 
+
+    // ...state,
+    //     shippingListBig:{
+    //       ...state.shippingListBig,
+    //       tableData:{
+    //         ...state.shippingListBig.tableData,
+    //         list:newData
+    //       }
+    //     }
+
+
     //发货管理-选择发货商品-获取数据
     getChooseShipmentDataR(state, action){
+      // console.log('获取数据',action.payload)
       return {
         ...state,
         chooseShipment:{
           ...state.chooseShipment,
-          tableData:action.payload
+          tableData:action.payload,
+          dotNum:action.payload.item.num
         }
       }
     },
+
 
 
 
      //发货管理-选择发货商品-勾选
      getChecklistR(state, action){
-      //  console.log('fs',action)
+      //  console.log('勾选',action.payload)
         return {
           ...state,
           chooseShipment:{
             ...state.chooseShipment,
             ...state.chooseShipment.tableData,
-            msg:action.payload.msg
+            dotNum:action.payload.msg
           }
         }
       },

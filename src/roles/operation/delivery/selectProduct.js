@@ -29,7 +29,7 @@ export default class selectProduct extends Component {
 
   //****/
   init(){
-    //e.log('www',this.props.roleOperationDistribution)
+    //console.log('www',this.props.roleOperationDistribution)
     if(this.props.roleOperationDistribution.chooseShipment.tableData.list == ''){
       this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
     }else {
@@ -89,6 +89,8 @@ export default class selectProduct extends Component {
     });
     this.init();
   }
+
+  //翻页
   handleTableChange=(pagination, filters, sorter)=>{
    // console.log(11111,this.props.roleOperationDistribution.chooseShipment.tableData.item.id)
     const params = {
@@ -96,7 +98,8 @@ export default class selectProduct extends Component {
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'roleOperationDistribution/Warehouse/DeliverOrderList',
+      // type: 'roleOperationDistribution/Warehouse/DeliverOrderList',
+      type: 'roleOperationDistribution/getChooseShipmentData',
       //payload: params,
       payload: {
         // ...values,
@@ -119,13 +122,13 @@ export default class selectProduct extends Component {
   //勾选
   Checklist = (e, record, index)=>{
    // console.log('xxx',this.props.roleOperationDistribution.chooseShipment.tableData.item.num)
-    if(e.target.checked == true){
-      this.props.roleOperationDistribution.chooseShipment.tableData.item.num ++
+    // if(e.target.checked == true){
+    //   this.props.roleOperationDistribution.chooseShipment.tableData.item.num ++
     
-    }else if (e.target.checked == false) {
-      this.props.roleOperationDistribution.chooseShipment.tableData.item.num --
+    // }else if (e.target.checked == false) {
+    //   this.props.roleOperationDistribution.chooseShipment.tableData.item.num --
      
-    }
+    // }
 
     this.props.dispatch({
       type: 'roleOperationDistribution/getChecklist',
@@ -151,7 +154,10 @@ export default class selectProduct extends Component {
 
 
   renderForm(){
-    const { roleOperationDistribution:{chooseShipment:{tableData:{item,list,msg}}} } = this.props;
+    const { roleOperationDistribution:{chooseShipment:{dotNum}} } = this.props;
+
+
+    console.log('dot',dotNum)
     const { getFieldDecorator } = this.props.form;
     const { publicDictionary:{wareHouseGoodsArr} } = this.props;
     // console.log('chooseShipment',this.props.roleOperationDistribution)
@@ -205,7 +211,7 @@ export default class selectProduct extends Component {
         <Divider dashed />
         <div className={styles.recordNum} style={{ marginBottom:10,fontSize:16 }}>
           <div className={styles.recordNum_w}  style={{ float: 'float' }}>
-            <div className={styles.recordNum_num}>{ item.num?item.num:0}</div> 
+            <div className={styles.recordNum_num}>{ dotNum}</div> 
             
             {/* <div className={styles.recordNum_num}>{ this.props.roleOperationDistribution.chooseShipment.msg ==undefined?item.num:this.props.roleOperationDistribution.chooseShipment.msg}</div> */}
             <div></div>
@@ -246,10 +252,6 @@ export default class selectProduct extends Component {
               <Checkbox  
                 onChange={(e) => this.Checklist(e, record, index)}
                 defaultChecked = {record.ischoose}
-
-              // checked={this.state.checked}
-              // disabled={this.state.disabled}
-              // onChange={this.Checklist}
 
               >
               </Checkbox>
