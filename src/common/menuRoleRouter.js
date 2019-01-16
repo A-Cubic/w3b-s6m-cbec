@@ -147,7 +147,7 @@ export function operation (dynamicWrapper,app){
     },
     //手动调账（查看）
     '/finance/manualTransfer': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/finance/purchaseSettlement')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/finance/manualTransfer')),
     },
 
 

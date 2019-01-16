@@ -140,10 +140,18 @@ export default {
         list:[],
         pagination:{}
       }
-    }
+    },
 
     //------------------手动调账（查看） 页---
+    manualTransfer:{
+      tableData:{
+        list: [],
+        pagination:{},
+      },
+      childModelDetails:{
 
+      }
+    }
   },
   effects:{
     //---------------------------------------------库存管理部分-----------------------------------------
@@ -250,7 +258,7 @@ export default {
             payload: response,
           })
           yield put(routerRedux.push('/delivery/deliveryList'));
-        
+
         }
       }
     },
@@ -266,7 +274,7 @@ export default {
             type: 'getDeliverGoodsSaveR',
             payload: response,
           })
-      yield put(routerRedux.push('/delivery/deliveryList'));    
+      yield put(routerRedux.push('/delivery/deliveryList'));
         }
       }
     },
@@ -296,7 +304,7 @@ export default {
         })
       }
     },
-   
+
 
      //选择发货商品 跳页接口
      *getchooseShipment({ payload,callback },{ call,put }){
@@ -428,7 +436,7 @@ export default {
             })
           }
         }
-        
+
       }
     },
 
@@ -535,7 +543,17 @@ export default {
     },
 
     //------------------手动调账（查看） 页---
-
+    //获取手动调账列表
+    *getManualTransferData({ payload },{ call,put }){
+      const response = yield call(getManualTransferData, payload);
+      // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getManualTransferDataR',
+          payload: response,
+        })
+      }
+    },
 
   },
   reducers:{
@@ -735,7 +753,7 @@ export default {
         }
       }
     },
- 
+
 
 
      //发货管理-选择发货商品-勾选
