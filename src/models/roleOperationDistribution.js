@@ -4,6 +4,7 @@ import {
   //----------------发货管理-------------------
   //库存
   platformStock,getUploadOrderbillDX,
+  storesStock,//门店库存
 
   //我要发货
   deleteList,deliverGoodsuploadOrderbill,deleteGoodsList,getDeliverGoods,getDeliverGoodsSave,getChangeNum,getPaging,
@@ -13,8 +14,13 @@ import {
   getDeliveryListData,getdeleteDeliveryList,getSubmission,
    //发货列表 -查看页面
   getShipmentListViewData,getPagingShipmentListView,getWithdraw,getSeeData,
+  //--------------销售管理--------------
+  storesSales,//门店销售
+
+
   //---------------------------------------------财务管理部分-----------------------------------------
   //------------------采购结算 页---------
+
   getChildModelPrintData,             // 采购结算 - 打印
   getPaymentSettlementData,           // 采购结算 - 列表
   getSettlementDetailsData,           // 采购结算 - 查看结算明细 - 货款
@@ -22,6 +28,7 @@ import {
   changeStatusCompleteReconciliation, // 采购结算 - 完成对账
   //------------------手动调账 页---------
   getManualTransferData               // 获取调账列表
+
 
 } from "../services/roleOperationDistribution_S";
 
@@ -34,11 +41,20 @@ export default {
     //列表获取
     platformStock:{
       tableData:{
+        item:[],
         list: [],
         pagination:{},
       },
     },
     //-----------------库存 - 门店库存 页-----------
+    storesStock:{
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
+
 
     //---------------------------------------------发货管理部分-----------------------------------------
     //-----------------发货单表单 页---------------
@@ -86,7 +102,9 @@ export default {
 
       },
     },
+
     //-----------------发货列表- 查看发货单 页------
+
     //发货列表 -查看 获取数据
     checkDelivery: {
       tableData:{
@@ -97,7 +115,22 @@ export default {
     },
     //---------------------------------------------销售管理部分-----------------------------------------
     //-----------------门店销售//（查看弹窗） 页-----
-
+    //获取列表
+    storesSales: {
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
+    //弹窗
+    myqa: {
+      show: false,
+      tableData: {
+        list: [],
+        pagination: {},
+      },
+    },
 
     //---------------------------------------------合同管理部分-----------------------------------------
     //-----------------合同列表 页----------
@@ -189,6 +222,17 @@ export default {
 
 
     //-----------------库存 - 门店库存 页-----------
+    //平台库存 - 列表查询
+    *storesStock({ payload },{ call,put }){
+      const response = yield call(storesStock, payload);
+     // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'storesStockR',
+          payload: response,
+        })
+      }
+    },
 
     //---------------------------------------------发货管理部分-----------------------------------------
     //-----------------发货单表单 页---------------
@@ -443,7 +487,17 @@ export default {
 
     //---------------------------------------------销售管理部分-----------------------------------------
     //-----------------门店销售//（查看弹窗） 页-----
-
+    //门店销售 - 列表查询
+    *storesSales({ payload },{ call,put }){
+      const response = yield call(storesSales, payload);
+     // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'storesSalesR',
+          payload: response,
+        })
+      }
+    },
 
     //---------------------------------------------合同管理部分-----------------------------------------
     //-----------------合同列表 页----------
@@ -600,6 +654,18 @@ export default {
 
 
     //-----------------库存 - 门店库存 页-----------
+     //获取列表
+     storesStockR(state, action){
+      //  console.log('fs',action.payload)
+        return {
+          ...state,
+          storesStock:{
+            ...state.storesStock,
+            tableData:action.payload
+          }
+        }
+      },
+
 
     //---------------------------------------------发货管理部分-----------------------------------------
 
@@ -891,7 +957,17 @@ export default {
 
     //---------------------------------------------销售管理部分-----------------------------------------
     //-----------------门店销售//（查看弹窗） 页-----
-
+     //获取列表
+     storesSalesR(state, action){
+      //  console.log('fs',action.payload)
+        return {
+          ...state,
+          storesSales:{
+            ...state.storesSales,
+            tableData:action.payload
+          }
+        }
+      },
 
     //---------------------------------------------合同管理部分-----------------------------------------
     //-----------------合同列表 页----------
