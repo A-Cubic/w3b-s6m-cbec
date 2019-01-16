@@ -122,13 +122,13 @@ export default class selectProduct extends Component {
   //勾选
   Checklist = (e, record, index)=>{
    // console.log('xxx',this.props.roleOperationDistribution.chooseShipment.tableData.item.num)
-    if(e.target.checked == true){
-      this.props.roleOperationDistribution.chooseShipment.tableData.item.num ++
+    // if(e.target.checked == true){
+    //   this.props.roleOperationDistribution.chooseShipment.tableData.item.num ++
     
-    }else if (e.target.checked == false) {
-      this.props.roleOperationDistribution.chooseShipment.tableData.item.num --
+    // }else if (e.target.checked == false) {
+    //   this.props.roleOperationDistribution.chooseShipment.tableData.item.num --
      
-    }
+    // }
 
     this.props.dispatch({
       type: 'roleOperationDistribution/getChecklist',

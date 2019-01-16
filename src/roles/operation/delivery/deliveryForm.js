@@ -332,11 +332,11 @@ export default class deliveryForm extends Component {
             that.props.dispatch({
               type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
               payload: {
-             //  fileTemp: info.file.response.fileName[0],
+              fileTemp: info.file.response.fileName[0],
                 //usercode:"cgs",
                 usercode:that.state.usercode,
                 id:this.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.shippingList.tableData.list[0].id,
-                fileTemp:info.file.name
+                //fileTemp:info.file.name
               },
               callback: that.onUploadCallback
             });
@@ -353,11 +353,11 @@ export default class deliveryForm extends Component {
                 that.props.dispatch({
                   type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
                   payload: {
-                   // fileTemp: info.file.response.fileName[0],
+                  fileTemp: info.file.response.fileName[0],
                     //usercode:"cgs",
                     usercode:that.state.usercode,
                     id:that.props.roleOperationDistribution.shippingList.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.shippingList.tableData.list[0].id,
-                   fileTemp:info.file.name
+                   //fileTemp:info.file.name
                   },
                   callback: that.onUploadCallback
                 });

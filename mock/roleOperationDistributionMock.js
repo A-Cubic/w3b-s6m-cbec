@@ -37,15 +37,13 @@ export default function roleOperationDistributionMock() {
     // 我要发货 - 改变数量
     'POST /llback/Warehouse/DeliverGoodsNum': a,
 
-    // 我要发货- 选择发货商品 跳页接口
-    // 发货管理-选择发货商品 - 获取数据
-    'POST /llback/Warehouse/ChooseDeliverGoods': a,
-
-    // 我要发货- 选择发货商品 勾选 
-    'POST /llback/Warehouse/ChooseGoods': a,
-
     // -----------------发货管理-选择发货商品 -----------------
 
+    // 发货管理-选择发货商品 - 获取数据 选择发货商品 跳页接口
+    'POST /llback/Warehouse/ChooseDeliverGoods': a,
+
+    // 选择发货商品 勾选 
+    'POST /llback/Warehouse/ChooseGoods': a,
 
 
     // -----------------发货管理-发货列表 -----------------

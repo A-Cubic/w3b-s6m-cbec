@@ -249,6 +249,8 @@ export default {
           })
           yield put(routerRedux.push('/delivery/deliveryList'));
         
+        } else {
+          message.error('发货商品不能为0');
         }
       }
     },
@@ -303,7 +305,11 @@ export default {
       //  callback(response)
         yield put({
           type: 'getchooseShipmentR',
-          payload: {...response,id:payload.id,usercode:payload.usercode,isDelete:payload.isDelete,payload},
+          payload: {...response,id:payload.id,usercode:payload.usercode,isDelete:payload.isDelete},
+        }),
+        yield put({
+          type: 'getChooseShipmentSaveDataR',
+          payload: {payload},
         }),
         yield put(routerRedux.push('/delivery/selectProduct'));
       }
@@ -731,8 +737,7 @@ export default {
 
     //选择发货商品 跳页接口
     getchooseShipmentR(state, action){
-         console.log('action',action.payload.payload)
-         console.log('state',state)  
+      
       return {
         ...state,
         chooseShipment:{
@@ -742,15 +747,35 @@ export default {
           isDelete:action.payload.isDelete,
           usercode:action.payload.usercode,
         },
-        
-        shippingListBig:{
-          ...state.shippingListBig,
-          ...state.shippingListBig.tableData,
-          'tableData.item':action.payload.payload
-        }
-
       }
     },
+  //  选择发货商品 跳页接口 - 携带数据
+
+    getChooseShipmentSaveDataR(state, action){
+      // console.log('action',action.payload.payload)
+      // console.log('state',state)  
+      return {
+        ...state,
+        shippingListBig:{
+          ...state.shippingListBig,
+          tableData:{
+            ...state.shippingListBig.tableData,
+            item:action.payload.payload
+          }
+        }
+      }
+    },
+
+
+    // ...state,
+    //     shippingListBig:{
+    //       ...state.shippingListBig,
+    //       tableData:{
+    //         ...state.shippingListBig.tableData,
+    //         list:newData
+    //       }
+    //     }
+
 
     //发货管理-选择发货商品-获取数据
     getChooseShipmentDataR(state, action){
@@ -765,7 +790,8 @@ export default {
       }
     },
 
-   
+    
+ 
 
 
      //发货管理-选择发货商品-勾选
