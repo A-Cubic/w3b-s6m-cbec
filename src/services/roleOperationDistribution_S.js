@@ -5,14 +5,16 @@ import request from '../utils/request';
 //-----------------库存 - 平台库存 页-----------
 //平台库存 - 列表查询
 export async function platformStock(params) {
-  return request(`/llback/Sales/platformStock`,{
+  //return request(`/llback/Sales/platformStock`,{
+  return request(`/llback/Warehouse/PlatformInventory`,{  
     method: 'POST',
     body: params,
   })
 }
 //平台库存 - 上传销售数据
 export async function getUploadOrderbillDX(params) {
-  return request(`/llback/delivery/UploadOrderDXttt`, {
+  // return request(`/llback/delivery/UploadOrderDXttt`, {
+  return request(`/llback/Warehouse/OnloadWarehousingGoods`, {
     method: 'POST',
     body: params,
   });
@@ -26,6 +28,14 @@ export async function deleteList(params) {
 }
 
 //-----------------库存 - 门店库存 页-----------
+// //获取列表
+export async function storesStock(params) {
+  // return request(`/llback/Sales/deleteList`, {
+  return request(`/llback/Warehouse/StoreInventory`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 //---------------------------------------------发货管理部分-----------------------------------------
 //-----------------发货单表单 页---------------
@@ -196,7 +206,14 @@ export async function getDeliveryListData(params) {
 
 //---------------------------------------------销售管理部分-----------------------------------------
 //-----------------门店销售//（查看弹窗） 页-----
-
+// //获取列表
+export async function storesSales(params) {
+   return request(`/llback/Sales/storesSales`, {
+  //return request(`/llback/Warehouse/StoreInventory`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 //---------------------------------------------合同管理部分-----------------------------------------
 //-----------------合同列表 页----------

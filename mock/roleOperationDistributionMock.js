@@ -8,14 +8,17 @@ export default function roleOperationDistributionMock() {
     // ---------------------------------------------库存管理部分-----------------------------------------
     // -----------------库存 - 平台库存 页---------------
     // 平台库存 - 列表查询
-    'POST /llback/Sales/platformStock': getPayment,
+    //'POST /llback/Sales/platformStock': getPayment,
+    'POST /llback/Warehouse/PlatformInventory': a,
     // 平台库存 - 上传销售数据
-    'POST /llback/delivery/UploadOrderDXttt': UpdateDistributor,
+    //'POST /llback/delivery/UploadOrderDXttt': UpdateDistributor,
+    'POST /llback/Warehouse/OnloadWarehousingGoods': a,
 
     // 平台库存 - 删除
     'POST /llback/Sales/deleteList': getPayment,
     // -----------------库存 - 门店库存 页---------------
-
+    //门店库存 获取列表
+    'POST /llback/Warehouse/StoreInventory': a,
 
     // ---------------------------------------------发货管理部分-----------------------------------------
     // -----------------我要发货-------------------
@@ -68,7 +71,7 @@ export default function roleOperationDistributionMock() {
 
     // ---------------------------------------------销售管理部分-----------------------------------------
     // -----------------门店销售//（查看弹窗） 页---------
-
+    'POST /llback/Sales/storesSales': getPayment,
 
     // ---------------------------------------------合同管理部分-----------------------------------------
     // -----------------合同列表 页--------------
@@ -99,7 +102,7 @@ export function getPayment(req, res) {
     msg: '已删除',
     type: '1',
     list: [{
-      keyId: '1',
+      keyId: '11',
       date: '20190101~20190103',
       order: '215451245',
       goMoney: '2000.00',

@@ -95,7 +95,7 @@ export function operation (dynamicWrapper,app){
     },
     //库存 - 门店库存
     '/stock/storesStock': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/stock/storesStock')),
     },
     //-----------------------------发货-----------------------------
     //发货单表单
@@ -122,7 +122,7 @@ export function operation (dynamicWrapper,app){
     //-----------------------------销售-----------------------------
     //门店销售//（查看弹窗）
     '/sales/storesSales': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/sales/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/sales/storesSales')),
     },
 
 
