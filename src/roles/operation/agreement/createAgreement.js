@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
-import styles from './storesStock.less';
+import styles from './createAgreement.less';
 import moment from 'moment';
 import {getCurrentUrl, getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
@@ -16,9 +16,9 @@ const FormItem = Form.Item;
   roleOperationDistribution,
 }))
 // --------  --------------
-    // 库存 - 门店库存
+    // 合同 - 创建合同
 @Form.create()
-export default class storesStock extends Component {
+export default class createAgreement extends Component {
   state={
     formValues:{},
     visible: false,

@@ -129,15 +129,15 @@ export function operation (dynamicWrapper,app){
     //-----------------------------合同-----------------------------
     //合同列表
     '/agreement/agreementList': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/agreementList')),
     },
     //创建合同
     '/agreement/createAgreement': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/platformStock')),
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/createAgreement')),
     },
     //查看合同
-    '/agreement/checkAgreement': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/platformStock')),
+    '/agreement/seeAgreement': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/seeAgreement')),
     },
 
     //-----------------------------财务-----------------------------

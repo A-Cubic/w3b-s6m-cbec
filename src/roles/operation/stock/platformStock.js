@@ -173,7 +173,7 @@ export default class platformStock extends Component {
 
   render() {
     const { roleOperationDistribution:{platformStock:{tableData:{list, pagination}}} } = this.props;
-    console.log()
+    console.log('777',list)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

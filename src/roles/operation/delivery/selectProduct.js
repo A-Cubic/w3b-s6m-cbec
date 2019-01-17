@@ -154,10 +154,10 @@ export default class selectProduct extends Component {
 
 
   renderForm(){
-    const { roleOperationDistribution:{selectProduct:{dotNum}} } = this.props;
+    const { roleOperationDistribution:{selectProduct:{dotNum,item}} } = this.props;
 
 
-    console.log('dot',dotNum)
+   // console.log('selectProduct',this.props.roleOperationDistribution.selectProduct.tableData.item.list)
     const { getFieldDecorator } = this.props.form;
     const { publicDictionary:{wareHouseGoodsArr} } = this.props;
     // console.log('selectProduct',this.props.roleOperationDistribution)
@@ -182,7 +182,7 @@ export default class selectProduct extends Component {
                     {/* <Option value="">全部</Option>
                     <Option value="1">21库</Option>
                     <Option value="2">32库</Option> */}
-                    {wareHouseGoodsArr.map(val => <Option key={val} value={val} label={val}>{val}</Option>)}
+                    {this.props.roleOperationDistribution.selectProduct.tableData.item.list.map(val => <Option key={val} value={val} label={val}>{val}</Option>)}
                   </Select>
                 )}
             </FormItem>

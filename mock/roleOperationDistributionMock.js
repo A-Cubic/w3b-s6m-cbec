@@ -71,11 +71,14 @@ export default function roleOperationDistributionMock() {
 
     // ---------------------------------------------销售管理部分-----------------------------------------
     // -----------------门店销售//（查看弹窗） 页---------
-    'POST /llback/Sales/storesSales': getPayment,
+    //获取列表
+    'POST /llback/Sales/ShopSalseOrders': a, 
+    //查看-弹窗
+    'POST /llback/Sales/ShopSalseOrdersDetails': a, 
 
     // ---------------------------------------------合同管理部分-----------------------------------------
     // -----------------合同列表 页--------------
-
+    'POST /llback/Sales/getAgreementListData': getPayment,
     // -----------------创建合同 页--------------
 
     // -----------------查看合同 页--------------

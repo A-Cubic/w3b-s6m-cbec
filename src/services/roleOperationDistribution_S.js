@@ -208,15 +208,33 @@ export async function getDeliveryListData(params) {
 //-----------------门店销售//（查看弹窗） 页-----
 // //获取列表
 export async function storesSales(params) {
-   return request(`/llback/Sales/storesSales`, {
-  //return request(`/llback/Warehouse/StoreInventory`, {
+   //return request(`/llback/Sales/storesSales`, {
+  return request(`/llback/Sales/ShopSalseOrders`, {
     method: 'POST',
     body: params,
   });
 }
+// 查看 弹窗
+export async function storesSalesClickList(params) {
+ // return request(`/llback/Sales/storesSalesClickList`, {
+ return request(`/llback/Sales/ShopSalseOrdersDetails`, {
+   method: 'POST',
+   body: params,
+ });
+}
+
+
 
 //---------------------------------------------合同管理部分-----------------------------------------
 //-----------------合同列表 页----------
+// //获取列表
+export async function getAgreementListData(params) {
+  //return request(`/llback/Sales/storesSales`, {
+ return request(`/llback/Sales/getAgreementListData`, {
+   method: 'POST',
+   body: params,
+ });
+}
 
 //-----------------创建合同 页----------
 

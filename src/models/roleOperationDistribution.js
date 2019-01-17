@@ -15,8 +15,11 @@ import {
    //发货列表 -查看页面
   getShipmentListViewData,getPagingShipmentListView,getWithdraw,getSeeData,
   //--------------销售管理--------------
-  storesSales,//门店销售
+  storesSales,//门店销售-获取列表-翻页-查询
+  storesSalesClickList, //门店销售-获取列表-翻页-查询
 
+  //---------------------------------------------合同管理---------------------------------------------
+  getAgreementListData, //合同列表
 
   //---------------------------------------------财务管理部分-----------------------------------------
   //------------------采购结算 页---------
@@ -80,7 +83,9 @@ export default {
     //发货管理-选择发货商品
     selectProduct: {
       tableData:{
-        item:{},
+        item:{
+          list:[]
+        },
         list: [],
         pagination:{},
         id:'',
@@ -122,18 +127,23 @@ export default {
         list: [],
         pagination:{},
       },
-    },
-    //弹窗
-    myqa: {
-      show: false,
-      tableData: {
+      childDetailsModelVisible:false,
+      storesSalesDetails: {
+        item:{},
         list: [],
-        pagination: {},
-      },
+        pagination:{},
+      }
     },
 
     //---------------------------------------------合同管理部分-----------------------------------------
     //-----------------合同列表 页----------
+    agreementList: {
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+    },
 
     //-----------------创建合同 页----------
 
@@ -498,9 +508,31 @@ export default {
         })
       }
     },
+    //门店销售 - 查看
+    *storesSalesClickList({ payload },{ call,put }){
+      const response = yield call(storesSalesClickList, payload);
+     // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'storesSalesClickListR',
+          payload: {response,childDetailsModelVisible:true,}
+        })
+      }
+    },
+
 
     //---------------------------------------------合同管理部分-----------------------------------------
     //-----------------合同列表 页----------
+    *getAgreementListData({ payload },{ call,put }){
+      const response = yield call(getAgreementListData, payload);
+     // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getAgreementListDataR',
+          payload: response,
+        })
+      }
+    },
 
     //-----------------创建合同 页----------
 
@@ -957,10 +989,48 @@ export default {
           }
         }
       },
+      
+      //查看弹窗 storesSalesClickList  storesSales
+      storesSalesClickListR(state, action){
+        return {
+          ...state,
+          storesSales:{
+            ...state.storesSales,
+            //tableData:action.payload.list,
+            childDetailsModelVisible: action.payload.childDetailsModelVisible,
+            storesSalesDetails: {
+              list:action.payload.response.list,
+              pagination:action.payload.response.pagination,
+              item:action.payload.response.item,
+            }
+          }
+        }
+      }, 
+      // 关闭 - 弹窗
+      storesSalesCloseR(state, action) {
+        return {
+          ...state,
+          storesSales: {
+            ...state.storesSales,
+            childDetailsModelVisible: action.payload.childDetailsModelVisible
+          }
+        }
+      },
 
     //---------------------------------------------合同管理部分-----------------------------------------
     //-----------------合同列表 页----------
-
+    //获取列表
+    getAgreementListDataR(state, action){
+      //  console.log('fs',action.payload)
+        return {
+          ...state,
+          agreementList:{
+            ...state.agreementList,
+            tableData:action.payload
+          }
+        }
+      },  
+    
     //-----------------创建合同 页----------
 
     //-----------------查看合同 页----------

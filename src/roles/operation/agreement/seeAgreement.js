@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
-import styles from './platformStock.less';
+import styles from './seeAgreement.less';
 import moment from 'moment';
 import {getCurrentUrl, getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
@@ -15,10 +15,10 @@ const FormItem = Form.Item;
 @connect(({roleOperationDistribution }) => ({
   roleOperationDistribution,
 }))
-// -------- 商品销售 --------------
-    // 商品销售-列表查询
+// --------  --------------
+    // 合同 - 查看合同
 @Form.create()
-export default class platformStock extends Component {
+export default class seeAgreement extends Component {
   state={
     formValues:{},
     visible: false,
@@ -28,7 +28,7 @@ export default class platformStock extends Component {
   //****/
   init(){
     this.props.dispatch({
-      type:'roleOperationDistribution/platformStock',
+      type:'roleOperationDistribution/storesStock',
       payload:{}
     })
   }
@@ -51,7 +51,7 @@ export default class platformStock extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'rolePurchaserConsignment/platformStock',
+        type: 'roleOperationDistribution/storesStock',
         payload: {
           ...values,
         },
@@ -72,7 +72,7 @@ export default class platformStock extends Component {
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'roleOperationDistribution/platformStock',
+      type: 'roleOperationDistribution/storesStock',
       payload: params,
     });
   }
@@ -82,50 +82,26 @@ export default class platformStock extends Component {
       visibleChildCheck:!!flag,
     });
   }
-  // 下载销售模板
-  downloadTemplate=()=>{
-    // window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/order.xlsx'
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/dealershipOrder.xlsx'
-  }
-  // 上传销售数据
-  handleUploadChange=(info)=>{
-    if(info.file.status === 'done') {
-      this.props.dispatch({
-        type: 'roleOperationDistribution/uploadOrderbill',
-        payload: {
-          userId:userId,
-          fileTemp: info.file.response.fileName[0]
-        },
-        callback: this.onUploadCallback,
-      });
-    }
-  }
-  onUploadCallback = (params) => {
-    const msg = params.msg;
-    if(params.type==="0"){
-      message.error(msg,8);
-    }else{
-      message.success("上传成功",5);
-    }
-    this.init();
-  }
+  
   renderForm(){
-    const { roleOperationDistribution:{platformStock:{tableData}} } = this.props;
+    const { roleOperationDistribution:{storesStock:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
+    
+    console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem >
-              {getFieldDecorator('date')(
-                <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
+            <FormItem label="采购商：">
+              {getFieldDecorator('purchasesnName')(
+                <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
               )}
             </FormItem>
           </Col>
           <Col md={9} sm={24}>
-            <FormItem label="">
+            <FormItem label="商品：">
               {getFieldDecorator('select')(
-                <Input style={{ width: '100%' }} placeholder="可输入商品条码，商品名称，商品品牌进行查询" />
+                <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
               )}
             </FormItem>
           </Col>
@@ -137,12 +113,7 @@ export default class platformStock extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
-            <span>商品总数：{tableData.item?tableData.item.totalnum:0}， </span>
-            <span>订单金额：¥{tableData.item?tableData.item.totalOrderMoney:0}， </span>
-            <span>优惠金额：¥{tableData.item?tableData.item.totalDiscountMoney:0}， </span>
-            <span>应收金额：¥{tableData.item?tableData.item.totalReceivable:0}， </span>
-            <span>供货金额：¥{tableData.item?tableData.item.totalSupplyMoney:0}</span>
+            {/* <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span> */}
           </div>
         </div>
       </Form>
@@ -150,7 +121,7 @@ export default class platformStock extends Component {
   }
 
   render() {
-    const { roleOperationDistribution:{platformStock:{tableData:{list, pagination}}} } = this.props;
+    const { roleOperationDistribution:{storesStock:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -162,47 +133,60 @@ export default class platformStock extends Component {
       dataIndex: 'keyId',
       key: 'keyId',
     }, {
-      title: '订单号',
-      dataIndex: 'orderId',
-      key: 'orderId',
+      title: '采购商',
+      dataIndex: 'purchasesnName',
+      key: 'purchasesnName',
     }, {
-      title: '商品数量',
-      dataIndex: 'num',
-      key: 'num',
+      title: '商品名称',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
     }, {
-      title: '订单金额',
-      dataIndex: 'orderMoney',
-      key: 'orderMoney',
+      title: '商品条码',
+      dataIndex: 'barcode',
+      key: 'barcode',
         render:val=>`¥${val}`
     },{
-      title: '结账时间',
-      dataIndex: 'payTime',
-      key: 'payTime',
+      title: '规格',
+      dataIndex: 'model',
+      key: 'model',
 
     },{
-      title: '应收金额',
-      dataIndex: 'receivable',
-      key: 'receivable',
+      title: '原产地',
+      dataIndex: 'country',
+      key: 'country',
       render:val=>`¥${val}`
     },{
-        title: '支付方式',
-        dataIndex: 'payType',
-        key: 'payType',
-      },{
-        title: '支付金额',
-        dataIndex: 'paymoney',
-        key: 'paymoney',
-        render:val=>`¥${val}`
-      },{
-        title: '优惠名称',
-        dataIndex: 'discountName',
-        key: 'discountName',
-      },{
-        title: '优惠金额',
-        dataIndex: 'discountMoney',
-        key: 'discountMoney',
-        render:val=>`¥${val}`
-      }
+      title: '生产商',
+      dataIndex: 'brand',
+      key: 'brand',
+    },{
+      title: '库存数量',
+      dataIndex: 'pNum',
+      key: 'pNum',
+      render:val=>`¥${val}`
+    },{
+      title: '零售价',
+      dataIndex: 'rprice',
+      key: 'rprice',
+    },{
+      title: '平台供货价',
+      dataIndex: 'pprice',
+      key: 'pprice',
+    },{
+      title: '供货商',
+      dataIndex: 'supplierName',
+      key: 'supplierName',
+      render:val=>`¥${val}`
+    },{
+      title: '安全库存数',
+      dataIndex: 'safeNum',
+      key: 'safeNum',
+      render:val=>`¥${val}`
+    },{
+      title: '库存同步时间',
+      dataIndex: 'time',
+      key: 'time',
+    }
     ];
 
     const props = {
@@ -218,16 +202,7 @@ export default class platformStock extends Component {
     return (
       <div>
         <Card bordered={false}>
-          <div style={{display: 'inline-flex',marginBottom:20,}} className={styles.hot}>
-            <Button  type="primary" onClick={this.downloadTemplate} style={{ marginLeft: 8 }}>
-              <Icon type="download" />下载销售模板
-            </Button>
-            <Upload {...props}>
-              <Button style={{ marginLeft: 8 }}>
-                <Icon type="upload" /> 上传销售数据
-              </Button>
-            </Upload>
-          </div>
+         
 
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
@@ -246,6 +221,7 @@ export default class platformStock extends Component {
       </div>
     );
   }
+  
 }
 
 
