@@ -85,7 +85,7 @@ export default class storesSales extends Component {
  
 
   renderForm(){
-    const { roleOperationDistribution:{storesSales:{tableData}} } = this.props;
+    const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     
     //console.log('xxx',this.props)
@@ -101,7 +101,7 @@ export default class storesSales extends Component {
           </Col>
           <Col md={9} sm={24}>
             <FormItem label="采购商：">
-              {getFieldDecorator('select')(
+              {getFieldDecorator('purchaseName')(
                 <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
               )}
             </FormItem>
@@ -114,7 +114,7 @@ export default class storesSales extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span>零售价：<em style={{color:'orange',fontStyle:'normal'}}>3000.00</em>  平台采购价：<em style={{color:'orange',fontStyle:'normal'}}>2000.00</em>  平台供货价：<em style={{color:'orange',fontStyle:'normal'}}>2600.00 </em>服务费：<em style={{color:'orange',fontStyle:'normal'}}>300.00</em></span>
+            <span>零售价：<em style={{color:'orange',fontStyle:'normal'}}>{item.rprice}</em>  平台采购价：<em style={{color:'orange',fontStyle:'normal'}}>{item.inprice}</em>  平台供货价：<em style={{color:'orange',fontStyle:'normal'}}>{item.pprice} </em>服务费：<em style={{color:'orange',fontStyle:'normal'}}>{item.platformPrice}</em></span>
           </div>
         </div>
       </Form>
@@ -129,65 +129,50 @@ export default class storesSales extends Component {
       ...pagination,
     };
     const columns = [
-    {
-      title: '序号',
-      dataIndex: 'keyId',
-      key: 'keyId',
-    }, {
-      title: '供货商',
-      dataIndex: 'purchasesn',
-      key: 'purchasesn',
-    }, {
-      title: '仓库',
-      dataIndex: 'date',
-      key: 'date',
-    }, {
-      title: '商品名称',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
-        render:val=>`¥${val}`
-    },{
-      title: '商品条码',
-      dataIndex: 'barcode',
-      key: 'barcode',
+      {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      },{
+        title: '订单号',
+        dataIndex: 'orderId',
+        key: 'orderId',
+      } ,{
+        title: '销售日期',
+        dataIndex: 'tradeTime',
+        key: 'tradeTime',
+      }, {
+        title: '采购商',
+        dataIndex: 'purchaseName',
+        key: 'purchaseName',
+      }, {
+        title: '零售价',
+        dataIndex: 'rprice',
+        key: 'rprice',
+          render:val=>`¥${val}`
+      },{
+        title: '平台采购价（元）',
+        dataIndex: 'inprice',
+        key: 'inprice',
 
-    },{
-      title: '规格',
-      dataIndex: 'receivable',
-      key: 'receivable',
-      render:val=>`¥${val}`
-    },{
-      title: '原产地',
-      dataIndex: 'payType',
-      key: 'payType',
-    },{
-      title: '生产商',
-      dataIndex: 'paymoney',
-      key: 'paymoney',
-      render:val=>`¥${val}`
-    },{
-      title: '库存数量',
-      dataIndex: 'discountName',
-      key: 'discountName',
-    },{
-      title: '零售价',
-      dataIndex: 'a',
-      key: 'a',
-      render:val=>`¥${val}`
-    },{
-      title: '平台采购价',
-      dataIndex: 'discountMoney',
-      key: 'discountMoney',
-      render:val=>`¥${val}`
-    },{
-      title: '操作',
-      dataIndex: 'b',
-      key: 'b',
-      render: (val,record) =>
-      <div>
-          {<a onClick={(e) => this.handlestoresSalesCli(e, record)}>查看</a>}
-      </div>
-    }
+      },{
+        title: '平台供货价（元）',
+        dataIndex: 'pprice',
+        key: 'pprice',
+        render:val=>`¥${val}`
+      },{
+        title: '服务费（元）',
+        dataIndex: 'platformPrice',
+        key: 'platformPrice',
+      },{
+        title: '操作',
+        dataIndex: '',
+        key: '',
+        render: (val,record) =>
+        <div>
+            {<a onClick={(e) => this.handlestoresSalesClick(e, record)}>查看</a>}
+        </div>
+      }
     ];
 
     const props = {
@@ -217,17 +202,17 @@ export default class storesSales extends Component {
                  // loading={submitting}
           />
         </Card>
-        <Myqa />
+        <StoresSalesSee />
       </div>
     );
   }
-   //删除
-   handlestoresSalesCli = (e, record)=>{
-    // console.log('record',record)
+   //查看
+   handlestoresSalesClick = (e, record)=>{
+     //console.log('record',11)
     this.props.dispatch({
-      type: 'roleOperationDistribution/clickList',
+      type: 'roleOperationDistribution/storesSalesClickList',
       payload: {
-      // purchasesn:record.barcode,
+        orderId:record.orderId,
         //barcode:record.barcode,
         //index:index
       },
@@ -236,36 +221,132 @@ export default class storesSales extends Component {
 }
 
 
-
+//查看弹窗
 @connect(({roleOperationDistribution }) => ({
   roleOperationDistribution,
 }))
-class Myqa  extends Component {
+class StoresSalesSee  extends Component {
 
   handleCancel = () => {
     this.props.dispatch({
-      type:'goodsManagement/qadR',
+      type:'roleOperationDistribution/storesSalesCloseR',
+      payload:false
+    })
+  }
+  handleOk = () => {
+    this.props.dispatch({
+      type:'roleOperationDistribution/storesSalesCloseR',
       payload:false
     })
   }
 
+  //翻页
+  handleTableChange=(pagination, filters, sorter)=>{
+   // const { roleOperationDistribution:{storesSales:{childDetailsModelVisible,storesSalesDetails:{item,list,pagination}}} } = this.props;
+    const orderId = this.props.roleOperationDistribution.storesSales.storesSalesDetails.item
+    console.log('qqq',this.props.roleOperationDistribution.storesSales.storesSalesDetails)
+    const params = {
+      ...pagination,
+      
+    };
+    this.props.dispatch({
+      type: 'roleOperationDistribution/storesSalesClickList',
+      payload: {
+        ...params,
+        orderId:orderId
+      }
+    });
+  }
   render(){
     
-    //const { roleOperationDistribution:{popup:{show,tableData:{list,pagination}}} } = this.props;
-
-    console.log(this.props)
+    const { roleOperationDistribution:{storesSales:{childDetailsModelVisible,storesSalesDetails:{item,list,pagination}}} } = this.props;
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...pagination,
+    };
+     console.log('777', this.props.roleOperationDistribution.storesSales.storesSalesDetails.item)
+  
+    const columns = [
+      {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      }, {
+        title: '销售时间',
+        dataIndex: 'tradeTime',
+        key: 'tradeTime',
+      }, {
+        title: '供货商',
+        dataIndex: 'supplierName',
+        key: 'supplierName',
+        
+      },  {
+        title: '商品名称',
+        dataIndex: 'goodsName',
+        key: 'goodsName',
+      }, {
+        title: '商品条码',
+        dataIndex: 'barcode',
+        key: 'barcode',
+      }, {
+        title: '规格',
+        dataIndex: 'model',
+        key: 'model',
+      }, {
+        title: '原产地',
+        dataIndex: 'country',
+        key: 'country',
+      }, {
+        title: '生产商',
+        dataIndex: 'brand',
+        key: 'brand',
+      }, {
+        title: '销售数量',
+        dataIndex: 'num',
+        key: 'num',
+      }, {
+        title: '零售价',
+        dataIndex: 'rprice',
+        key: 'rprice',
+      }, {
+        title: '平台采购价',
+        dataIndex: 'inprice',
+        key: 'inprice',
+      }, {
+        title: '平台供货价',
+        dataIndex: 'pprice',
+        key: 'pprice',
+      }, {
+        title: '服务费',
+        dataIndex: 'platformPrice',
+        key: 'platformPrice',
+      }
+    ];
 
     return(
       <div>
         <Modal
-          visible= {true}
+          visible= {childDetailsModelVisible}
           onCancel={this.handleCancel}
+          width={'80%'}
+          onOk={this.handleOk}
         >
-         qqqqaaaaaa
+         <Table dataSource={list}
+            columns={columns}
+            rowKey={record => record.keyId}
+            pagination={paginationProps}
+            onChange={this.handleTableChange}
+          />
 
         </Modal>
       </div>
     )
+
+    
+    
+   
+    
 
   }
 

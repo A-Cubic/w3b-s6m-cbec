@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
-import styles from './storesStock.less';
+import styles from './agreementList.less';
 import moment from 'moment';
 import {getCurrentUrl, getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
@@ -16,9 +16,9 @@ const FormItem = Form.Item;
   roleOperationDistribution,
 }))
 // --------  --------------
-    // 库存 - 门店库存
+    // 合同 - 合同列表
 @Form.create()
-export default class storesStock extends Component {
+export default class agreementList extends Component {
   state={
     formValues:{},
     visible: false,
@@ -28,7 +28,7 @@ export default class storesStock extends Component {
   //****/
   init(){
     this.props.dispatch({
-      type:'roleOperationDistribution/storesStock',
+      type:'roleOperationDistribution/getAgreementListData',
       payload:{}
     })
   }
@@ -51,7 +51,7 @@ export default class storesStock extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'roleOperationDistribution/storesStock',
+        type: 'roleOperationDistribution/getAgreementListData',
         payload: {
           ...values,
         },
@@ -72,7 +72,7 @@ export default class storesStock extends Component {
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'roleOperationDistribution/storesStock',
+      type: 'roleOperationDistribution/getAgreementListData',
       payload: params,
     });
   }
@@ -84,24 +84,96 @@ export default class storesStock extends Component {
   }
   
   renderForm(){
-    const { roleOperationDistribution:{storesStock:{tableData}} } = this.props;
+    const { roleOperationDistribution:{agreementList:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     
     console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
-            <FormItem label="采购商：">
-              {getFieldDecorator('purchasesnName')(
-                <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
+          <Col md={6} sm={24}>
+            <FormItem label="客商编码：">
+              {getFieldDecorator('select')(
+                <Input style={{ width: '100%' }} placeholder="可输入客商编码进行查询" />
               )}
             </FormItem>
           </Col>
-          <Col md={9} sm={24}>
-            <FormItem label="商品：">
-              {getFieldDecorator('select')(
-                <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
+          <Col md={6} sm={24}>
+            <FormItem label="客商编码：">
+              {getFieldDecorator('status',{
+              })(
+                <Select
+                  placeholder="全部"
+                  optionFilterProp="label"
+                >
+                  <Option value="1">大连XX公司</Option>
+                  <Option value="2">青岛XX公司</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="合作模式：">
+              {getFieldDecorator('status',{
+              })(
+                <Select
+                  placeholder="全部"
+                  optionFilterProp="label"
+                >
+                  <Option value="1">代销</Option>
+                  <Option value="2">直营</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            
+          </Col>
+        </Row>
+
+        
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={6} sm={24}>
+           <FormItem label="结算账期">
+              {getFieldDecorator('status',{
+              })(
+                <Select
+                  placeholder="全部"
+                  optionFilterProp="label"
+                >
+                  <Option value="1">周结账</Option>
+                  <Option value="2">半月结</Option>
+                  <Option value="3">月结</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="合同状态">
+              {getFieldDecorator('status',{
+              })(
+                <Select
+                  placeholder="全部"
+                  optionFilterProp="label"
+                >
+                  <Option value="1">履行中</Option>
+                  <Option value="2">已到期</Option>
+                  <Option value="3">即将到期</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="合同类型">
+              {getFieldDecorator('status',{
+              })(
+                <Select
+                  placeholder="全部"
+                  optionFilterProp="label"
+                >
+                  <Option value="1">供货合同</Option>
+                  <Option value="2">采购合同</Option>
+                </Select>
               )}
             </FormItem>
           </Col>
@@ -110,18 +182,23 @@ export default class storesStock extends Component {
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </Col>
         </Row>
+
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
             {/* <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span> */}
           </div>
         </div>
+        <div>
+          <Button type="primary" style={{marginBottom:'10px'}}>创建合同</Button>
+        </div>
       </Form>
+      
     );
   }
 
   render() {
-    const { roleOperationDistribution:{storesStock:{tableData:{list, pagination}}} } = this.props;
+    const { roleOperationDistribution:{agreementList:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -133,60 +210,46 @@ export default class storesStock extends Component {
       dataIndex: 'keyId',
       key: 'keyId',
     }, {
-      title: '采购商',
+      title: '客商编码',
       dataIndex: 'purchasesnName',
       key: 'purchasesnName',
     }, {
-      title: '商品名称',
+      title: '客商名称',
       dataIndex: 'goodsName',
       key: 'goodsName',
     }, {
-      title: '商品条码',
+      title: '合同类型',
       dataIndex: 'barcode',
       key: 'barcode',
         render:val=>`¥${val}`
     },{
-      title: '规格',
+      title: '签订日期',
       dataIndex: 'model',
       key: 'model',
 
     },{
-      title: '原产地',
+      title: '结算账期',
       dataIndex: 'country',
       key: 'country',
       render:val=>`¥${val}`
     },{
-      title: '生产商',
+      title: '合作模式',
       dataIndex: 'brand',
       key: 'brand',
     },{
-      title: '库存数量',
+      title: '合同状态',
       dataIndex: 'pNum',
       key: 'pNum',
       render:val=>`¥${val}`
     },{
-      title: '零售价',
+      title: '操作',
       dataIndex: 'rprice',
       key: 'rprice',
-    },{
-      title: '平台供货价',
-      dataIndex: 'pprice',
-      key: 'pprice',
-    },{
-      title: '供货商',
-      dataIndex: 'supplierName',
-      key: 'supplierName',
-      render:val=>`¥${val}`
-    },{
-      title: '安全库存数',
-      dataIndex: 'safeNum',
-      key: 'safeNum',
-      render:val=>`¥${val}`
-    },{
-      title: '库存同步时间',
-      dataIndex: 'time',
-      key: 'time',
-    }
+      render: (val,record) =>
+        <div>
+            {<a onClick={(e) => this.agreementListSee(e, record)}>查看</a>}
+        </div>
+      }
     ];
 
     const props = {
@@ -220,6 +283,17 @@ export default class storesStock extends Component {
         </Card>
       </div>
     );
+  }
+  agreementListSee = (e, record)=>{
+    // console.log('record',record)
+    this.props.dispatch({
+      type: 'roleOperationDistribution/agreementListSee',
+      payload: {
+       purchasesn:1,
+        //barcode:record.barcode,
+        //index:index
+      },
+    });
   }
   
 }
