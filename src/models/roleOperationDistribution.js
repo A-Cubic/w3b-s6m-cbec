@@ -27,8 +27,8 @@ import {
   getSettlementDetailsElseData,       // 采购结算 - 查看结算明细 - 其他
   changeStatusCompleteReconciliation, // 采购结算 - 完成对账
   //------------------手动调账 页---------
-  getManualTransferData               // 获取调账列表
-
+  getManualTransferData,               // 获取调账列表
+  saveCreatOrder                       // 保存 新建调账单
 
 } from "../services/roleOperationDistribution_S";
 
@@ -172,10 +172,8 @@ export default {
         list: [],
         pagination:{},
       },
-      childCreatOrderModelVisible:true,
-      childModelCreatOrder:{
-        a:''
-      }
+      childCreatOrderModelVisible:false,
+      childModelCreatOrder:{}
     }
   },
   effects:{
@@ -602,6 +600,23 @@ export default {
         })
       }
     },
+    //获取手动调账列表
+    *saveCreatOrder({ callback,payload },{ call,put }){
+      const response = yield call(saveCreatOrder, payload);
+      if(response!==undefined){
+        if(response.type==1){
+          message.success('保存成功')
+          yield put({
+            type: 'changeVisibleR',
+            payload: false,
+          })
+          callback()
+        }else{
+          message.error(response.msg)
+        }
+      }
+    },
+
 
   },
   reducers:{
@@ -1041,7 +1056,6 @@ export default {
     },
     //改变弹窗状态
     changeVisibleR(state, action){
-      console.log('R',action.payload)
       return {
         ...state,
         manualTransfer:{

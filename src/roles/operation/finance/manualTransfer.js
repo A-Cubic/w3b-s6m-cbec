@@ -20,6 +20,7 @@ export default class manualTransfer extends Component {
     visible: false,
     formValues:{}
   }
+  // 初始加载
   init(){
     this.props.dispatch({
       type: 'roleOperationDistribution/getManualTransferData',
@@ -28,6 +29,7 @@ export default class manualTransfer extends Component {
       },
     });
   }
+  // 查询
   onSearch=(e)=>{
 
     e.preventDefault();
@@ -52,6 +54,7 @@ export default class manualTransfer extends Component {
     });
 
   }
+  // 换页
   handleTableChange=(pagination)=>{
     const params = {
       ...pagination,
@@ -62,8 +65,13 @@ export default class manualTransfer extends Component {
       payload: params
     });
   }
+  // 删除
+  handleDelete=(record)=>{
+    // console.log(record)
+    //  删除逻辑
+  }
+  // 新建手动调账单
   addAdjustmentOrder=()=>{
-    console.log(111)
     this.props.dispatch({
       type: 'roleOperationDistribution/changeVisibleR',
       payload:true
@@ -179,17 +187,19 @@ export default class manualTransfer extends Component {
 @Form.create()
 class ChildModelCreatOrder extends React.Component {
   handleOk = (e) => {
-    const {channelManagement: {goodsChannel: {childEdit}, channelTypeArr}} = this.props
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('fieldsValue',fieldsValue)
+      console.log('fieldsValue',fieldsValue)
       if (!err) {
         this.props.dispatch({
-          type: 'roleOperationDistribution/save',
+          type: 'roleOperationDistribution/saveCreatOrder',
           payload: {
             ...fieldsValue,
           },
+          callback:function () {
+            that.props.form.resetFields();
+          }
         })
       }
     })
@@ -218,7 +228,7 @@ class ChildModelCreatOrder extends React.Component {
           onCancel={this.handleCancel}
           footer={[
             <Button key="1" onClick={this.handleCancel}>关闭</Button>,
-            <Button key="3" type="primary" onClick={this.handleOk}>确定</Button>
+            <Button key="3" type="primary" onClick={this.handleOk}>保存</Button>
           ]}
         >
           <div className={styles.tableListForm}>
@@ -227,7 +237,6 @@ class ChildModelCreatOrder extends React.Component {
                 <Col md={12} sm={24}>
                   <FormItem label="调整日期：">
                     {getFieldDecorator('date', {
-                      initialValue: childModelCreatOrder.a,
                       rules:[{
                         required:true,message:'请输入调整日期',
                       }]
@@ -238,8 +247,7 @@ class ChildModelCreatOrder extends React.Component {
                 </Col>
                 <Col md={12} sm={24}>
                   <FormItem label="调整金额" >
-                    {getFieldDecorator('profitAgent', {
-                      initialValue: childModelCreatOrder.a,
+                    {getFieldDecorator('m', {
                       rules:[{
                         required:true,message:'请输入调整金额',
                       }]
@@ -252,8 +260,7 @@ class ChildModelCreatOrder extends React.Component {
               <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                 <Col md={12} sm={24}>
                   <FormItem label="调整事项" >
-                    {getFieldDecorator('profitAgent', {
-                      initialValue: childModelCreatOrder.a,
+                    {getFieldDecorator('t', {
                       rules:[{
                         required:true,message:'请输入调整事项',
                       }]
@@ -264,8 +271,7 @@ class ChildModelCreatOrder extends React.Component {
                 </Col>
                 <Col md={12} sm={24}>
                   <FormItem label="调整客商" >
-                    {getFieldDecorator('profitAgent', {
-                      initialValue: childModelCreatOrder.a,
+                    {getFieldDecorator('k', {
                       rules:[{
                         required:true,message:'请输入调整客商',
                       }]
@@ -278,8 +284,7 @@ class ChildModelCreatOrder extends React.Component {
               <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                 <Col md={12} sm={24}>
                   <FormItem label="商客编码" >
-                    {getFieldDecorator('profitAgent', {
-                      initialValue: childModelCreatOrder.a,
+                    {getFieldDecorator('c', {
                       rules:[{
                         required:true,message:'请输入商客编码',
                       }]
@@ -290,8 +295,7 @@ class ChildModelCreatOrder extends React.Component {
                 </Col>
                 <Col md={12} sm={24}>
                   <FormItem label="商客名称" >
-                    {getFieldDecorator('profitAgent', {
-                      initialValue: childModelCreatOrder.a,
+                    {getFieldDecorator('n', {
                       rules:[{
                         required:true,message:'请输入商客名称',
                       }]
@@ -304,8 +308,7 @@ class ChildModelCreatOrder extends React.Component {
               <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                 <Col md={24} sm={48}>
                   <FormItem label="调整事由" >
-                    {getFieldDecorator('profitAgent', {
-                      initialValue: childModelCreatOrder.a,
+                    {getFieldDecorator('y', {
                       rules:[{
                         required:true,message:'请输入调整事由',
                       }]

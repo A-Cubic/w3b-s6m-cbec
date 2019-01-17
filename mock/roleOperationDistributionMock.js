@@ -97,6 +97,7 @@ export default function roleOperationDistributionMock() {
 
     // 采购结算 - 完成对账
     'POST /llback/Balance/getManualTransferData': GetOrderList,
+    'POST /llback/Balance/saveCreatOrder': SendOrder,
 
   };
 }
@@ -275,23 +276,6 @@ export function pageshipment(req, res) {
     },
   });
 }
-// export function delList(req, res) {
-//   res.send({
-//     list: [{
-//       keyId: '1',
-//       date: '20190101~20190103',
-//       order: '215451245',
-//       goMoney: '2000.00',
-//       tuiMoney: '1000.00',
-//       elseMoney: '500.00',
-//       doMoney: '500.00',
-//       status: 0,
-//       purchasesn: "2018121313045638",
-//       goodsName: "兰芝精华液",
-//       barcode: "11111",
-//     }]
-//   });
-// }
 
 export function contractInformation(req, res) {
   res.send({

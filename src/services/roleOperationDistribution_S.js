@@ -6,7 +6,7 @@ import request from '../utils/request';
 //平台库存 - 列表查询
 export async function platformStock(params) {
   //return request(`/llback/Sales/platformStock`,{
-  return request(`/llback/Warehouse/PlatformInventory`,{  
+  return request(`/llback/Warehouse/PlatformInventory`,{
     method: 'POST',
     body: params,
   })
@@ -266,6 +266,12 @@ export async function changeStatusCompleteReconciliation(params) {
 // 手动调账 - 列表
 export async function getManualTransferData(params) {
   return request(`/llback/Balance/getManualTransferData`,{
+    method: 'POST',
+    body: params,
+  })
+}// 手动调账 - 保存 手动调账单
+export async function saveCreatOrder(params) {
+  return request(`/llback/Balance/saveCreatOrder`,{
     method: 'POST',
     body: params,
   })
