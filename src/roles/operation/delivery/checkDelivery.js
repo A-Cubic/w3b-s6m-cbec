@@ -77,59 +77,7 @@ export default class deliveryForm extends Component {
   renderForm(){
   const { roleOperationDistribution:{checkDelivery:{tableData:{list, pagination,item}}} } = this.props;
   const { getFieldDecorator } = this.props.form;
-  const paginationProps = {
-    showSizeChanger: true,
-    showQuickJumper: true,
-    ...pagination,
-  };
-  //下拉数据
-    const columns = [
-      {
-        title: '序号',
-        dataIndex: 'keyId',
-        key: 'keyId',
-      }, {
-        title: '商品名称',
-        dataIndex: 'goodsName',
-        key: 'goodsName',
-      }, {
-        title: '商品条码',
-        dataIndex: 'barcode',
-        key: 'barcode',
-      }, {
-        title: '原产地',
-        dataIndex: 'country',
-        key: 'country',
-      }, {
-        title: '生产商',
-        dataIndex: 'brand',
-        key: 'brand',
-      }, , {
-        title: '规格',
-        dataIndex: 'string',
-        key: 'string',
-      }, {
-        title: '零售价',
-        dataIndex: 'rprice',
-        key: 'rprice',
-      }, {
-        title: '供货价',
-        dataIndex: 'pprice',
-        key: 'pprice',
-      }, {
-        title: '当前库存数',
-        dataIndex: 'pNum',
-        key: 'pNum',
-      }, {
-        title: '发货数量',
-        dataIndex: 'goodsNum',
-        key: 'goodsNum',
-      }, {
-        title: '安全库存',
-        dataIndex: 'safeNum',
-        key: 'safeNum',
-      }
-    ];
+
     const props = {
       action: getUploadUrl(),
       headers: getHeader(),
@@ -223,30 +171,67 @@ export default class deliveryForm extends Component {
         <div style={{marginBottom:'20px'}}>
 
         </div>
-        <Table dataSource={list}
-                // showHeader={false}
-                 // scroll={{ x: 1500}}
-                 rowKey={record => record.keyId}
-                 columns={columns}
-                 pagination={paginationProps}
-                 onChange={this.handleTableChange}
-                 // loading={submitting}
-          />
-          <p onClick={this.showConfirm}>
-            {/* Confirm 777*/}
-          </p>
-        <Row style={{marginTop:'15px', marginBottom:'5px'}}>
-          <Col md={9} sm={24}></Col>
-          <Col md={6} sm={24}>
 
-          </Col>
-          <Col md={9} sm={24}></Col>
-        </Row>
       </Form>
     );
   }
 
   render() {
+    const { roleOperationDistribution:{checkDelivery:{tableData:{list, pagination,item}}} } = this.props;
+
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...pagination,
+    };
+    //下拉数据
+    const columns = [
+      {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      }, {
+        title: '商品名称',
+        dataIndex: 'goodsName',
+        key: 'goodsName',
+      }, {
+        title: '商品条码',
+        dataIndex: 'barcode',
+        key: 'barcode',
+      }, {
+        title: '原产地',
+        dataIndex: 'country',
+        key: 'country',
+      }, {
+        title: '生产商',
+        dataIndex: 'brand',
+        key: 'brand',
+      }, , {
+        title: '规格',
+        dataIndex: 'string',
+        key: 'string',
+      }, {
+        title: '零售价',
+        dataIndex: 'rprice',
+        key: 'rprice',
+      }, {
+        title: '供货价',
+        dataIndex: 'pprice',
+        key: 'pprice',
+      }, {
+        title: '当前库存数',
+        dataIndex: 'pNum',
+        key: 'pNum',
+      }, {
+        title: '发货数量',
+        dataIndex: 'goodsNum',
+        key: 'goodsNum',
+      }, {
+        title: '安全库存',
+        dataIndex: 'safeNum',
+        key: 'safeNum',
+      }
+    ];
     return (
       <div className={styles.qa}>
         <Card bordered={false}>
@@ -254,6 +239,15 @@ export default class deliveryForm extends Component {
             <div className={styles.tableListForm}>
               {this.renderForm()}
             </div>
+            <Table dataSource={list}
+              // showHeader={false}
+              // scroll={{ x: 1500}}
+                   rowKey={record => record.keyId}
+                   columns={columns}
+                   pagination={paginationProps}
+                   onChange={this.handleTableChange}
+              // loading={submitting}
+            />
           </div>
         </Card>
       </div>
