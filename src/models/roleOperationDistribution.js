@@ -788,7 +788,16 @@ export default {
           ...state.deliveryForm,
           tableData:{
             ...state.deliveryForm.tableData,
-            list:delList
+            list:delList,
+            item:{
+              sendName:"",
+              sendTel:"",
+              express:"",
+              waybillNo:"",
+              getName:"",
+              getcode:"",
+              getTel:"",
+            },
           }
         }
       }
@@ -803,7 +812,16 @@ export default {
           ...state.initiateInquiry,
           tableData:{
             ...state.deliveryForm.tableData,
-            list:delList
+            list:delList,
+            item:{
+              sendName:"",
+              sendTel:"",
+              express:"",
+              waybillNo:"",
+              getName:"",
+              getcode:"",
+              getTel:"",
+            },
           }
         }
       }
@@ -1021,7 +1039,7 @@ export default {
           }
         }
       },
-      
+
       //查看弹窗 storesSalesClickList  storesSales
       storesSalesClickListR(state, action){
         return {
@@ -1037,7 +1055,7 @@ export default {
             }
           }
         }
-      }, 
+      },
       // 关闭 - 弹窗
       storesSalesCloseR(state, action) {
         return {
@@ -1061,8 +1079,8 @@ export default {
             tableData:action.payload
           }
         }
-      },  
-    
+      },
+
     //-----------------创建合同 页----------
 
     //-----------------查看合同 页----------
@@ -1075,7 +1093,7 @@ export default {
             tableData:action.payload
           }
         }
-      },   
+      },
 
     //---------------------------------------------财务管理部分-----------------------------------------
     //------------------采购结算 页---------
