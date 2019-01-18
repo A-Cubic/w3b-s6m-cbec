@@ -3,66 +3,66 @@
 const a = 'http://192.168.0.127:54195/';
 
 
-export default function roleOperationDistributionMock() {
+export default function roleOperationDistributionMock(url) {
   return {
     // ---------------------------------------------库存管理部分-----------------------------------------
     // -----------------库存 - 平台库存 页---------------
     // 平台库存 - 列表查询
     // 'POST /llback/Sales/platformStock': getPayment,
-    'POST /llback/Warehouse/PlatformInventory': a,
+    'POST /llback/Warehouse/PlatformInventory': url,
     // 平台库存 - 上传销售数据
     // 'POST /llback/delivery/UploadOrderDXttt': UpdateDistributor,
-    'POST /llback/Warehouse/OnloadWarehousingGoods': a,
+    'POST /llback/Warehouse/OnloadWarehousingGoods': url,
 
     // 平台库存 - 删除
     'POST /llback/Sales/deleteList': getPayment,
     // -----------------库存 - 门店库存 页---------------
     // 门店库存 获取列表
-    'POST /llback/Warehouse/StoreInventory': a,
+    'POST /llback/Warehouse/StoreInventory': url,
 
     // ---------------------------------------------发货管理部分-----------------------------------------
     // -----------------我要发货-------------------
 
     // 我要发货 - 选择发货
-    'POST /llback/Warehouse/OperationDeliveryImport': a,
+    'POST /llback/Warehouse/OperationDeliveryImport': url,
 
     // 我要发货 - 删除
-    'POST /llback/Warehouse/DeliverGoodsDelete': a,
+    'POST /llback/Warehouse/DeliverGoodsDelete': url,
 
     // 我要发货 - 分页
-    'POST /llback/Warehouse/DeliverGoodsList': a,
+    'POST /llback/Warehouse/DeliverGoodsList': url,
 
     // 我要发货 - 提交
-    'POST /llback/Warehouse/DeliverOrderSubmission': a,
+    'POST /llback/Warehouse/DeliverOrderSubmission': url,
 
     // 我要发货 - 保存
-    'POST /llback/Warehouse/DeliverOrderConserve': a,
+    'POST /llback/Warehouse/DeliverOrderConserve': url,
 
     // 我要发货 - 改变数量
-    'POST /llback/Warehouse/DeliverGoodsNum': a,
+    'POST /llback/Warehouse/DeliverGoodsNum': url,
 
     // -----------------发货管理-选择发货商品 -----------------
 
     // 发货管理-选择发货商品 - 获取数据 选择发货商品 跳页接口
-    'POST /llback/Warehouse/ChooseDeliverGoods': a,
+    'POST /llback/Warehouse/ChooseDeliverGoods': url,
 
     // 选择发货商品 勾选
-    'POST /llback/Warehouse/ChooseGoods': a,
+    'POST /llback/Warehouse/ChooseGoods': url,
 
 
     // -----------------发货管理-发货列表 -----------------
     // 发货列表-获取data列表 翻页，查询等
-    'POST /llback/Warehouse/DeliverOrderList': a,
+    'POST /llback/Warehouse/DeliverOrderList': url,
 
     // 发货列表 - 删除
-    'POST /llback/Warehouse/DeliverOrderListDelete': a,
+    'POST /llback/Warehouse/DeliverOrderListDelete': url,
 
     // 发货列表- 点击查看
     // 'POST /llback/Warehouse/DeliverOrderDetails': a,
-    'POST /llback/Warehouse/DeliverOrderDetails': a,
+    'POST /llback/Warehouse/DeliverOrderDetails': url,
 
     // 发货列表- 撤回
-    'POST /llback/Warehouse/DeliverOrderListWithdraw': a,
+    'POST /llback/Warehouse/DeliverOrderListWithdraw': url,
 
     // -----------------选择商品返回发货单（带参） 页------
 
@@ -72,20 +72,20 @@ export default function roleOperationDistributionMock() {
 
     // ---------------------------------------------销售管理部分-----------------------------------------
     // -----------------门店销售//（查看弹窗） 页---------
-    //获取列表
-    'POST /llback/Sales/ShopSalseOrders': a, 
-    //查看-弹窗
-    'POST /llback/Sales/ShopSalseOrdersDetails': a, 
+    // 获取列表
+    'POST /llback/Sales/ShopSalseOrders': a,
+    // 查看-弹窗
+    'POST /llback/Sales/ShopSalseOrdersDetails': a,
 
     // ---------------------------------------------合同管理部分-----------------------------------------
     // -----------------合同列表 页--------------
     'POST /llback/Agreement/ContractList': a,
-    // 'POST /llback/Agreement/ContractDetails': a, //查看跳页  
+    // 'POST /llback/Agreement/ContractDetails': a, //查看跳页
     'POST /llback/Agreement/ContractDetails': contractInformation,
     // -----------------创建合同 页--------------
 
     // -----------------查看合同 页--------------
-    'POST /llback/Agreement/ContractDetails': contractInformation,
+    // 'POST /llback/Agreement/ContractDetails': contractInformation,
     // ---------------------------------------------财务管理部分-----------------------------------------
     // ------------------采购结算 页-------------
     // 采购结算 - 列表
@@ -103,6 +103,7 @@ export default function roleOperationDistributionMock() {
 
     // 采购结算 - 完成对账
     'POST /llback/Balance/getManualTransferData': GetOrderList,
+    // 采购结算 - 创建对账单保存按钮
     'POST /llback/Balance/saveCreatOrder': SendOrder,
 
   };
@@ -320,7 +321,7 @@ export function contractInformation(req, res) {
       },
       {
         imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
-      }
+      },
     ],
     pagination: null,
   });

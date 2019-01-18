@@ -21,31 +21,16 @@ const FormItem = Form.Item;
 export default class selectProduct extends Component {
   state={
     formValues:{},
-    // selectedRowKeys: [], // Check here to configure the default column
-    // loading: false,
     checked: true,
     disabled: false,
   }
 
   //****/
   init(){
-    //console.log('www',this.props.roleOperationDistribution.selectProduct.tableData.item.usercode)
-    // if(this.props.roleOperationDistribution.selectProduct.tableData.list == ''){
-    if(this.props.roleOperationDistribution.selectProduct.tableData.item.usercode == undefined){  
+    if(this.props.roleOperationDistribution.selectProduct.tableData.item.usercode == undefined){
       this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
-    }else {
-      this.props.dispatch({
-        type:'roleOperationDistribution/getChooseShipmentData',
-        payload:{
-          usercode:this.props.roleOperationDistribution.selectProduct.usercode,
-          id:this.props.roleOperationDistribution.selectProduct.id,
-          isDelete:this.props.roleOperationDistribution.selectProduct.isDelete
-        }
-      })
     }
 
-// this.props.dispatch(routerRedux.push('/bulkPurchases/initiateInquiry/' + JSON.stringify(getdata)  ));
-    //this.props.roleOperationDistribution.selectProduct.usercode
     this.props.dispatch({
       type: 'publicDictionary/getGoodsWareHouse',
       payload: {
@@ -163,7 +148,7 @@ export default class selectProduct extends Component {
                     placeholder="请选择"
                     optionFilterProp="label"
                   >
-                   
+
                     {this.props.roleOperationDistribution.selectProduct.tableData.item.list.map(val => <Option key={val} value={val} label={val}>{val}</Option>)}
                   </Select>
                 )}

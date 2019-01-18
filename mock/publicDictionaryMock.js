@@ -17,10 +17,10 @@ export default function publicDictionaryMock(url) {
     'POST /llback/Goods/GetWarehouse': url,
     // 获取快递
     'POST /llback/Order/GetExpress': url,
-
-    'POST /llback/Warehouse/DeliveryPurchasersList': 'http://192.168.0.127:54195/',
-     //客商名称 http://192.168.0.127:54195/
-     'POST /llback/nameOfMerchant/nameOfMerchant': bb,
+    // 获取采购商信息（运营发货单）
+    'POST /llback/Warehouse/DeliveryPurchasersList': url,
+    // 客商名称
+    'POST /llback/nameOfMerchant/nameOfMerchant': url,
   };
 }
 export function getPlatform(req, res) {
