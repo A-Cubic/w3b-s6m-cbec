@@ -136,8 +136,8 @@ export function operation (dynamicWrapper,app){
       component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/createAgreement')),
     },
     //查看合同
-    '/agreement/seeAgreement': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/seeAgreement')),
+    '/agreement/checkAgreement': {
+      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/checkAgreement')),
     },
 
     //-----------------------------财务-----------------------------

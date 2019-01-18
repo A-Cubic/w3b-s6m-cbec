@@ -82,7 +82,7 @@ export default function roleOperationDistributionMock() {
     // -----------------创建合同 页--------------
 
     // -----------------查看合同 页--------------
-
+    'POST /llback/Sales/getCheckAgreementData': contractInformation,
     // ---------------------------------------------财务管理部分-----------------------------------------
     // ------------------采购结算 页-------------
     // 采购结算 - 列表
@@ -294,6 +294,30 @@ export function contractInformation(req, res) {
       {
         imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
       },
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
+      },
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
+      },
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
+      },
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
+      },
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
+      },
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
+      },
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
+      },
+      {
+        imgUrl: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809438410106_cp_1.jpg',
+      }
     ],
     pagination: null,
   });

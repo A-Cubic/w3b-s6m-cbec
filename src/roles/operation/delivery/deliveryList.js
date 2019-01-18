@@ -69,7 +69,6 @@ export default class deliveryList extends Component {
     this.init();
   }
   handleTableChange=(pagination, filters, sorter)=>{
-    console.log('翻页')
     const params = {
       ...pagination,
       ...this.state.formValues,

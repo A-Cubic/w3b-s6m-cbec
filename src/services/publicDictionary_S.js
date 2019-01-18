@@ -48,13 +48,7 @@ export async function getWareHouseData(params) {
     body: params,
   });
 }
-// 发货管理-选择商品-获取仓库
-export async function getGoodsWareHouse(params) {
-  return request(`/llback/Goods/getGoodsWareHouse`, {
-    method: 'POST',
-    body: params,
-  });
-}
+
 
 // 获取采购商
 export async function getPurchaserArr(params) {

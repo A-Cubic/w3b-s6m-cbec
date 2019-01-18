@@ -76,9 +76,6 @@ export default class deliveryForm extends Component {
 
   renderForm(){
   const { roleOperationDistribution:{checkDelivery:{tableData:{list, pagination,item}}} } = this.props;
-
-  console.log('xxx',this.props.roleOperationDistribution.checkDelivery)
-
   const { getFieldDecorator } = this.props.form;
   const paginationProps = {
     showSizeChanger: true,

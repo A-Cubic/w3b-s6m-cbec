@@ -81,7 +81,6 @@ export default class deliveryForm extends Component {
         ...fieldsValue,
       }:{
         ...fieldsValue,
-        //'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
       this.setState({
         formValues: values,
@@ -103,7 +102,6 @@ export default class deliveryForm extends Component {
     });
   }
   onSubmissionCallback = (params) => {
-    //console.log('params',params.type)
     if(params.type==="1"){
       this.handleFormReset()
       this.props.form.resetFields();
@@ -119,7 +117,6 @@ export default class deliveryForm extends Component {
   onPreservation=(e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
@@ -131,7 +128,6 @@ export default class deliveryForm extends Component {
       this.setState({
         formValues: values,
       });
-     // console.log('this.setState',{...values})
       this.props.dispatch({
 
         type: 'roleOperationDistribution/getDeliverGoodsSave',
@@ -145,7 +141,6 @@ export default class deliveryForm extends Component {
     });
   }
   onPreservationCallback = (params) => {
-    //console.log('xxxxparams',params.type)
     if(params.type==="1"){
       message.success("保存成功");
       this.handleFormReset()
@@ -167,7 +162,6 @@ export default class deliveryForm extends Component {
     this.setState({
       formValues: {},
     });
-    //this.init();
   }
   //分页
   handleTableChange=(pagination, filters, sorter)=>{
@@ -175,12 +169,8 @@ export default class deliveryForm extends Component {
       ...pagination,
       ...this.state.formValues,
     };
-    //console.log('分页',params,pagination, filters, sorter)
     this.props.dispatch({
-      //type: 'rolePurchaserBulkPurchases/getInquiryListData',
-      //type: 'rolePurchaserBulkPurchases/getPagingData',
       type: 'roleOperationDistribution/getPaging',
-      //payload: params,
        payload: {
          ...params,
          id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id
@@ -203,10 +193,8 @@ export default class deliveryForm extends Component {
 
   //选择发货商品按钮
   deliverGoods = (e) => {
-
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
@@ -218,12 +206,6 @@ export default class deliveryForm extends Component {
       this.setState({
         formValues: values,
       });
-      console.log('this.setState',{...values})
-
-     // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
-    //});
-
-
       const that =  this
       if(this.props.roleOperationDistribution.deliveryForm.tableData.list ==''){
         if(that.state.purchase == true){
@@ -277,11 +259,6 @@ export default class deliveryForm extends Component {
 
   // 上传销售数据
   handleUploadChange=(info)=>{
-   // console.log('fileTemp',info.file.response)
-   //console.log('上传销售数据',this.props.roleOperationDistribution.D.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id)
-
-  //  console.log('xx',this.props.roleOperationDistribution.deliveryForm.tableData.item)
-  //  console.log('qq',this.state.usercode)
       if(info.file.status === 'done') {
         const that =  this
         if(this.props.roleOperationDistribution.deliveryForm.tableData.list ==''){
@@ -338,10 +315,8 @@ export default class deliveryForm extends Component {
     }else{
       message.success("上传成功",5);
     }
-    //this.init();
   }
   onChangeNum=(v)=>{
-  //  console.log('valueGoodsNum',v)
     this.setState({
       valueGoodsNum: v
     },()=>{
@@ -474,7 +449,6 @@ export default class deliveryForm extends Component {
       multiple: false,
       // customRequest:this.upload,
     };
-    //console.log('sex',parseInt(item.sex ))
     return (
       <Form onSubmit={this.onPreservation} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -682,15 +656,10 @@ export default class deliveryForm extends Component {
         dataIndex: 'goodsNum',
         key: 'goodsNum',
         render: (val,record,e) =>{
-          // console.log(2,record)
-          // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
           return (
-
             <InputNumber
-              // onChange={this.onChange(record)}
               onChange={this.onChangeNum}
               onBlur={()=>this.inputOnBlur(record) }
-              //  onClick={(e) => this.handleDelCheck(e, record, index)}>
               min={parseInt(1)}
               max={parseInt(record.pNum)+1}
               defaultValue={record.goodsNum}
@@ -702,11 +671,8 @@ export default class deliveryForm extends Component {
         dataIndex: 'safeNum',
         key: 'safeNum',
         render: (val,record,e) =>{
-          // console.log(2,record)
-          // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
           return (
             <InputNumber
-              // onChange={this.onChange(record)}
               onChange={this.onChangeSafeNum}
               onBlur={()=>this.inputOnBlurSafeNum(record) }
               min={parseInt(0)}

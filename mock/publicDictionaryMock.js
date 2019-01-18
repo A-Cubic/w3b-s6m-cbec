@@ -17,8 +17,6 @@ export default function publicDictionaryMock(url) {
     'POST /llback/Goods/GetWarehouse': url,
     // 获取快递
     'POST /llback/Order/GetExpress': url,
-    // 发货管理-选择商品-获取仓库
-    'POST /llback/Goods/getGoodsWareHouse': bb,
 
     // 发货管理-我要发货-采购商
     // 'POST /llback/Goods/getPurchaserArr': getPlatform,

@@ -34,7 +34,7 @@ export default {
     // 获取采购商
     purchaserArr:[],
     // 发货管理-选择商品-获取仓库
-    wareHouseGoodsArr:[],
+    //wareHouseGoodsArr:[],
   },
   effects:{
     // 获取平台渠道类型
@@ -126,15 +126,15 @@ export default {
 
 
     // 发货管理-选择商品-获取仓库
-    *getGoodsWareHouse({ payload },{ call,put}){
-      const response = yield call(getGoodsWareHouse, payload);
-      if (response !== undefined) {
-        yield put({
-          type: 'getGoodsWareHouseR',
-          payload: response,
-        });
-      }
-    },
+    // *getGoodsWareHouse({ payload },{ call,put}){
+    //   const response = yield call(getGoodsWareHouse, payload);
+    //   if (response !== undefined) {
+    //     yield put({
+    //       type: 'getGoodsWareHouseR',
+    //       payload: response,
+    //     });
+    //   }
+    // },
 
 
 
@@ -192,12 +192,6 @@ export default {
       return {
         ...state,
         wareHouseArr:action.payload,
-      };
-    },
-    getGoodsWareHouseR(state, action) {
-      return {
-        ...state,
-        wareHouseGoodsArr:action.payload,
       };
     },
 

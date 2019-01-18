@@ -29,8 +29,9 @@ export default class selectProduct extends Component {
 
   //****/
   init(){
-    //console.log('www',this.props.roleOperationDistribution)
-    if(this.props.roleOperationDistribution.selectProduct.tableData.list == ''){
+    //console.log('www',this.props.roleOperationDistribution.selectProduct.tableData.item.usercode)
+    // if(this.props.roleOperationDistribution.selectProduct.tableData.list == ''){
+    if(this.props.roleOperationDistribution.selectProduct.tableData.item.usercode == undefined){  
       this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
     }else {
       this.props.dispatch({
@@ -121,15 +122,6 @@ export default class selectProduct extends Component {
 
   //勾选
   Checklist = (e, record, index)=>{
-   // console.log('xxx',this.props.roleOperationDistribution.selectProduct.tableData.item.num)
-    // if(e.target.checked == true){
-    //   this.props.roleOperationDistribution.selectProduct.tableData.item.num ++
-
-    // }else if (e.target.checked == false) {
-    //   this.props.roleOperationDistribution.selectProduct.tableData.item.num --
-
-    // }
-
     this.props.dispatch({
       type: 'roleOperationDistribution/getChecklist',
       payload: {
@@ -142,7 +134,6 @@ export default class selectProduct extends Component {
   }
   //点击发货单
   handleInvoice = () => {
-  // console.log('okllllllllllllllllll',this.props.roleOperationDistribution.selectProduct.tableData.item.id)
     this.props.dispatch({
       type: 'roleOperationDistribution/getPaging',
       payload: {
@@ -155,14 +146,8 @@ export default class selectProduct extends Component {
 
   renderForm(){
     const { roleOperationDistribution:{selectProduct:{dotNum,item}} } = this.props;
-
-
-   // console.log('selectProduct',this.props.roleOperationDistribution.selectProduct.tableData.item.list)
     const { getFieldDecorator } = this.props.form;
     const { publicDictionary:{wareHouseGoodsArr} } = this.props;
-    // console.log('selectProduct',this.props.roleOperationDistribution)
-    //console.log('qqqq',this.props.roleOperationDistribution.selectProduct)
-  //console.log('www',this.props.roleOperationDistribution)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -177,11 +162,8 @@ export default class selectProduct extends Component {
                   <Select
                     placeholder="请选择"
                     optionFilterProp="label"
-                    // onChange={this.onSelectChange}
                   >
-                    {/* <Option value="">全部</Option>
-                    <Option value="1">21库</Option>
-                    <Option value="2">32库</Option> */}
+                   
                     {this.props.roleOperationDistribution.selectProduct.tableData.item.list.map(val => <Option key={val} value={val} label={val}>{val}</Option>)}
                   </Select>
                 )}
@@ -338,14 +320,6 @@ export default class selectProduct extends Component {
                  columns={columns}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
-                 // loading={submitting}
-                // rowSelection={rowSelection}
-                // rowSelection={rowSelection}
-                // onRow={record => ({
-                //   onClick: () => {
-                //     this.selectRow(record);
-                //   }
-                // })}
           />
         </Card>
       </div>

@@ -239,6 +239,13 @@ export async function getAgreementListData(params) {
 //-----------------创建合同 页----------
 
 //-----------------查看合同 页----------
+export async function getCheckAgreementData(params) {
+  //return request(`/llback/Sales/storesSales`, {
+ return request(`/llback/Sales/getCheckAgreementData`, {
+   method: 'POST',
+   body: params,
+ });
+}
 
 //---------------------------------------------财务管理部分-----------------------------------------
 //------------------采购结算 页---------
