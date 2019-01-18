@@ -151,6 +151,15 @@ export default {
     checkAgreement: {
       tableData:{
         item:{},
+        customersCode: "",
+        userName: "",
+        createTime: "",
+        cycle: "",
+        model: "",
+        contractDuration: "",
+        platformPoint: "",
+        supplierPoint: "",
+        purchasePoint: "",
         list: [],
         contractCode:''
       },
@@ -559,16 +568,16 @@ export default {
     //-----------------创建合同 页----------
 
     //-----------------查看合同 页----------
-    *getCheckAgreementData({ payload },{ call,put }){
-      const response = yield call(getCheckAgreementData, payload);
-      console.log('~res',payload)
-      if(response!==undefined){
-        yield put({
-          type: 'getCheckAgreementDataR',
-          payload: {...response,src:payload.src,visible:payload.visible},
-        })
-      }
-    },
+    // *getCheckAgreementData({ payload },{ call,put }){
+    //   const response = yield call(getCheckAgreementData, payload);
+    //   console.log('~res',payload)
+    //   if(response!==undefined){
+    //     yield put({
+    //       type: 'getCheckAgreementDataR',
+    //       payload: {...response,src:payload.src,visible:payload.visible},
+    //     })
+    //   }
+    // },
 
 
     //---------------------------------------------财务管理部分-----------------------------------------

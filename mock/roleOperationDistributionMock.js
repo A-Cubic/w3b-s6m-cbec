@@ -81,7 +81,7 @@ export default function roleOperationDistributionMock(url) {
     // -----------------合同列表 页--------------
     'POST /llback/Agreement/ContractList': a,
     // 'POST /llback/Agreement/ContractDetails': a, //查看跳页
-    'POST /llback/Agreement/ContractDetails': contractInformation,
+    'POST /llback/Agreement/ContractDetails': a,
     // -----------------创建合同 页--------------
 
     // -----------------查看合同 页--------------

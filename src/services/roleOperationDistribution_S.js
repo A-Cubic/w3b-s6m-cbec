@@ -248,8 +248,7 @@ export async function agreementListSee(params) {
 
 //-----------------查看合同 页----------
 export async function getCheckAgreementData(params) {
-  //return request(`/llback/Sales/storesSales`, {
-//  return request(`/llback/Sales/getCheckAgreementData`, {
+//return request(`/llback/Sales/getCheckAgreementData`, {
   return request(`/llback/Agreement/ContractDetails`, {
    method: 'POST',
    body: params,

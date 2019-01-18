@@ -29,10 +29,10 @@ export default class checkAgreement extends Component {
   init(){
 
 
-    this.props.dispatch({
-      type:'roleOperationDistribution/getCheckAgreementData',
-      payload:{}
-    })
+    // this.props.dispatch({
+    //   type:'roleOperationDistribution/getCheckAgreementData',
+    //   payload:{}
+    // })
 
 
 
@@ -56,8 +56,8 @@ export default class checkAgreement extends Component {
   
  
   render() {
-    const { roleOperationDistribution:{checkAgreement:{tableData:{list, item}}} } = this.props;
-   
+    const { roleOperationDistribution:{checkAgreement:{tableData:{list,customersCode }}} } = this.props;
+    const { roleOperationDistribution:{checkAgreement:{tableData}} } = this.props;
     console.log('777',this.props)
     
     return (
@@ -73,37 +73,37 @@ export default class checkAgreement extends Component {
           <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginTop:'25px',marginBottom:'15px'}}>
             <Col md={8} sm={24}></Col>
             <Col md={16} sm={24} style={{fontSize:'16px'}}>
-              <span style={{marginLeft:'70px',marginRight:'25px'}}>客商编码：</span>124891823
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>客商编码：</span>{tableData.customersCode}
             </Col>
           </Row>
           <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
             <Col md={8} sm={24}></Col>
             <Col md={16} sm={24} style={{fontSize:'16px'}}>
-              <span style={{marginLeft:'70px',marginRight:'25px'}}>客商名称：</span>{item.cycle}
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>客商名称：</span>{tableData.cycle}
             </Col>
           </Row>
           <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
             <Col md={8} sm={24}></Col>
             <Col md={16} sm={24} style={{fontSize:'16px'}}>
-              <span style={{marginLeft:'70px',marginRight:'25px'}}>签订日期：</span>{item.cycle}
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>签订日期：</span>{tableData.createTime}
             </Col>
           </Row>
           <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
             <Col md={8} sm={24}></Col>
             <Col md={16} sm={24} style={{fontSize:'16px'}}>
-              <span style={{marginLeft:'70px',marginRight:'25px'}}>结算账期：</span>{item.cycle}
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>结算账期：</span>{tableData.cycle}
             </Col>
           </Row>
           <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
             <Col md={8} sm={24}></Col>
             <Col md={16} sm={24} style={{fontSize:'16px'}}>
-              <span style={{marginLeft:'70px',marginRight:'25px'}}>合作模式：</span>{item.cycle}
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>合作模式：</span>{tableData.model}
             </Col>
           </Row>
           <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'35px'}}>
             <Col md={8} sm={24}></Col>
             <Col md={16} sm={24} style={{fontSize:'16px'}}>
-              <span style={{marginLeft:'70px',marginRight:'25px'}}>合作期限：</span>2018.09.01~2019.09.01 9.09.01
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>合作期限：</span>{tableData.contractDuration}
             </Col>
           </Row>
           <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -135,7 +135,7 @@ export default class checkAgreement extends Component {
                 list!=''?
                   list.map((i,index) => {
                     return(
-                      <li key={index}><img src={i.imgUrl} onClick={()=>this.handleClickImg(i.imgUrl)}/></li>
+                      <li key={index}><img src={i} onClick={()=>this.handleClickImg(i)}/></li>
                     )
                   }):
                   <div style={{textAlign:'center',fontSize:15}}>
