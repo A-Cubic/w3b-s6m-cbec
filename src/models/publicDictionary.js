@@ -33,8 +33,8 @@ export default {
     expressArr:[],
     // 获取采购商
     purchaserArr:[],
-    // 发货管理-选择商品-获取仓库
-    //wareHouseGoodsArr:[],
+    //客商名称
+    nameOfMerchant:[],
   },
   effects:{
     // 获取平台渠道类型
@@ -125,16 +125,16 @@ export default {
     },
 
 
-    // 发货管理-选择商品-获取仓库
-    // *getGoodsWareHouse({ payload },{ call,put}){
-    //   const response = yield call(getGoodsWareHouse, payload);
-    //   if (response !== undefined) {
-    //     yield put({
-    //       type: 'getGoodsWareHouseR',
-    //       payload: response,
-    //     });
-    //   }
-    // },
+    // 客商名称
+    *nameOfMerchant({ payload },{ call,put}){
+      const response = yield call(nameOfMerchant, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'nameOfMerchantR',
+          payload: response,
+        });
+      }
+    },
 
 
 
@@ -208,5 +208,12 @@ export default {
         purchaserArr:action.payload,
       };
     },
+    nameOfMerchantR(state, action) {
+       console.log('XXXnameOfMerchant',action.payload)
+       return {
+         ...state,
+         nameOfMerchant:action.payload,
+       };
+     },
   }
 }

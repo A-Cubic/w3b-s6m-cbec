@@ -18,11 +18,9 @@ export default function publicDictionaryMock(url) {
     // 获取快递
     'POST /llback/Order/GetExpress': url,
 
-    // 发货管理-我要发货-采购商
-    // 'POST /llback/Goods/getPurchaserArr': getPlatform,
-    // 'POST /llback/Warehouse/DeliveryPurchasersList':'http://192.168.191.1:54195/',
     'POST /llback/Warehouse/DeliveryPurchasersList': 'http://192.168.0.127:54195/',
-
+     //客商名称 http://192.168.0.127:54195/
+     'POST /llback/nameOfMerchant/nameOfMerchant': bb,
   };
 }
 export function getPlatform(req, res) {

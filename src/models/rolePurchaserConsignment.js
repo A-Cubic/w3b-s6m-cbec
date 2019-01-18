@@ -51,7 +51,9 @@ export default {
     contractInformation:{
       getData:{
         item:{},
-        list:[]
+        list:[],
+        visible:false,
+        src:''
       },
       childHelpData:{
         visible:false,
@@ -360,7 +362,8 @@ export default {
         ...state,
         contractInformation:{
           ...state.contractInformation,
-          getData:action.payload
+          getData:action.payload,
+          
         }
       }
     },
@@ -373,6 +376,9 @@ export default {
         }
       }
     },
+
+
+
 
 
     // -------- 货款结算 --------------

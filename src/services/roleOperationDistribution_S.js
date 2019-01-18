@@ -229,8 +229,16 @@ export async function storesSalesClickList(params) {
 //-----------------合同列表 页----------
 // //获取列表
 export async function getAgreementListData(params) {
-  //return request(`/llback/Sales/storesSales`, {
- return request(`/llback/Sales/getAgreementListData`, {
+  return request(`/llback/Agreement/ContractList`, {
+//  return request(`/llback/Sales/getAgreementListData`, {
+   method: 'POST',
+   body: params,
+ });
+}
+// 查看跳页
+export async function agreementListSee(params) {
+ return request(`/llback/Agreement/ContractDetails`, {
+  //return request(`/llback/Sales/getAgreementListData`, {
    method: 'POST',
    body: params,
  });
@@ -241,7 +249,8 @@ export async function getAgreementListData(params) {
 //-----------------查看合同 页----------
 export async function getCheckAgreementData(params) {
   //return request(`/llback/Sales/storesSales`, {
- return request(`/llback/Sales/getCheckAgreementData`, {
+//  return request(`/llback/Sales/getCheckAgreementData`, {
+  return request(`/llback/Agreement/ContractDetails`, {
    method: 'POST',
    body: params,
  });

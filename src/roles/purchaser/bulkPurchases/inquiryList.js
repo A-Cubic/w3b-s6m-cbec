@@ -242,41 +242,7 @@ export default class inquiryList extends Component {
     //JSON.parse JSON.stringify
 
     //let type;
-    switch (record.status){
-
-      case '1':
-         // type=1; //询价中
-
-          break;
-        case '2':
-         // type=2; //已报价
-
-          break;
-        case '3':
-        //  type=3; //报价中
-
-          break;
-        case '4':
-        //  type=4; //已报价(二次)
-
-          break;
-        case '5':
-       //   type=5; //已完成
-
-          break;
-        case '6':
-        //  type=6; //已关闭
-
-          break;
-        case '7':
-        //  type=7; //待提交
-
-          break;
-        default:
-          //console.log(1)
-          break;
-    }
-    //console.log(record)
+    
 
 
   }

@@ -152,7 +152,12 @@ export default {
       tableData:{
         item:{},
         list: [],
+        contractCode:''
       },
+      childHelpData:{
+        visible:false,
+        src:''
+      }
     },
 
     //---------------------------------------------财务管理部分-----------------------------------------
@@ -537,17 +542,30 @@ export default {
         })
       }
     },
+    //查看跳页
+    *getCheckAgreementData({ payload },{ call,put }){
+      const response = yield call(getCheckAgreementData, payload);
+      console.log('~payload',payload)
+      if(response!==undefined){
+        yield put({
+          type: 'getCheckAgreementDataR',
+          payload: {...response,contractCode:payload.contractCode}
+        })
+        //yield put(routerRedux.push('/agreement/checkAgreement'));
+      }
+    },
+  
 
     //-----------------创建合同 页----------
 
     //-----------------查看合同 页----------
     *getCheckAgreementData({ payload },{ call,put }){
       const response = yield call(getCheckAgreementData, payload);
-     // console.log('~res',response)
+      console.log('~res',payload)
       if(response!==undefined){
         yield put({
           type: 'getCheckAgreementDataR',
-          payload: response,
+          payload: {...response,src:payload.src,visible:payload.visible},
         })
       }
     },
@@ -1076,6 +1094,19 @@ export default {
           }
         }
       },   
+      //查看跳页
+      getCheckAgreementDataR(state, action){
+       console.log('fs',action)
+        return {
+          ...state,
+          checkAgreement:{
+            ...state.checkAgreement,
+            tableData:action.payload
+          }
+        }
+      },  
+
+
 
     //---------------------------------------------财务管理部分-----------------------------------------
     //------------------采购结算 页---------

@@ -58,6 +58,7 @@ export default function roleOperationDistributionMock() {
     'POST /llback/Warehouse/DeliverOrderListDelete': a,
 
     // 发货列表- 点击查看
+    // 'POST /llback/Warehouse/DeliverOrderDetails': a,
     'POST /llback/Warehouse/DeliverOrderDetails': a,
 
     // 发货列表- 撤回
@@ -78,11 +79,13 @@ export default function roleOperationDistributionMock() {
 
     // ---------------------------------------------合同管理部分-----------------------------------------
     // -----------------合同列表 页--------------
-    'POST /llback/Sales/getAgreementListData': getPayment,
+    'POST /llback/Agreement/ContractList': a,
+    // 'POST /llback/Agreement/ContractDetails': a, //查看跳页  
+    'POST /llback/Agreement/ContractDetails': contractInformation,
     // -----------------创建合同 页--------------
 
     // -----------------查看合同 页--------------
-    'POST /llback/Sales/getCheckAgreementData': contractInformation,
+    'POST /llback/Agreement/ContractDetails': contractInformation,
     // ---------------------------------------------财务管理部分-----------------------------------------
     // ------------------采购结算 页-------------
     // 采购结算 - 列表

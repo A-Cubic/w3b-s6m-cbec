@@ -12,8 +12,8 @@ import {message} from "antd/lib/index";
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
-@connect(({roleOperationDistribution }) => ({
-  roleOperationDistribution,
+@connect(({roleOperationDistribution,publicDictionary }) => ({
+  roleOperationDistribution,publicDictionary
 }))
 // --------  --------------
     // 合同 - 合同列表
@@ -31,6 +31,12 @@ export default class agreementList extends Component {
       type:'roleOperationDistribution/getAgreementListData',
       payload:{}
     })
+    this.props.dispatch({
+      type: 'publicDictionary/nameOfMerchant',
+      payload: {
+        userId:userId,
+      },
+    });
   }
   componentDidMount() {
     this.init();
@@ -86,21 +92,21 @@ export default class agreementList extends Component {
   renderForm(){
     const { roleOperationDistribution:{agreementList:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    
+   // const { publicDictionary:{nameOfMerchant} } = this.props;
     console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
             <FormItem label="客商编码：">
-              {getFieldDecorator('select')(
+              {getFieldDecorator('customersCode')(
                 <Input style={{ width: '100%' }} placeholder="可输入客商编码进行查询" />
               )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="客商编码：">
-              {getFieldDecorator('status',{
+            <FormItem label="客商名称：">
+              {getFieldDecorator('userName',{
               })(
                 <Select
                   placeholder="全部"
@@ -120,8 +126,10 @@ export default class agreementList extends Component {
                   placeholder="全部"
                   optionFilterProp="label"
                 >
-                  <Option value="1">代销</Option>
-                  <Option value="2">直营</Option>
+                  <Option value="1">直营</Option>
+                  <Option value="2">代销</Option>
+                  <Option value="3">一件代发</Option>
+                  <Option value="4">bbc</Option>
                 </Select>
               )}
             </FormItem>
@@ -135,15 +143,22 @@ export default class agreementList extends Component {
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
            <FormItem label="结算账期">
-              {getFieldDecorator('status',{
+              {getFieldDecorator('cycle',{
               })(
                 <Select
                   placeholder="全部"
                   optionFilterProp="label"
                 >
-                  <Option value="1">周结账</Option>
-                  <Option value="2">半月结</Option>
-                  <Option value="3">月结</Option>
+                  <Option value="1">实时</Option>
+                  <Option value="2">日结</Option>
+                  <Option value="3">周结</Option>
+                  <Option value="4">半月结</Option>
+                  <Option value="5">月结</Option>
+                  <Option value="6">季结</Option>
+                  <Option value="7">半年结</Option>
+                  <Option value="8">年结</Option>
+                  <Option value="9">其他</Option>
+                 
                 </Select>
               )}
             </FormItem>
@@ -157,15 +172,15 @@ export default class agreementList extends Component {
                   optionFilterProp="label"
                 >
                   <Option value="1">履行中</Option>
-                  <Option value="2">已到期</Option>
-                  <Option value="3">即将到期</Option>
+                  <Option value="2">即将到期</Option>
+                  <Option value="3">已到期</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="合同类型">
-              {getFieldDecorator('status',{
+              {getFieldDecorator('contractType',{
               })(
                 <Select
                   placeholder="全部"
@@ -211,36 +226,52 @@ export default class agreementList extends Component {
       key: 'keyId',
     }, {
       title: '客商编码',
-      dataIndex: 'purchasesnName',
-      key: 'purchasesnName',
+      dataIndex: 'customersCode',
+      key: 'customersCode',
     }, {
       title: '客商名称',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
+      dataIndex: 'userName',
+      key: 'userName',
     }, {
       title: '合同类型',
-      dataIndex: 'barcode',
-      key: 'barcode',
-        render:val=>`¥${val}`
+      dataIndex: 'contractType',
+      key: 'contractType',
+      render: (val) => {
+        return(<div>
+          {['','供货合同','采购合同'][`${val}`]}
+        </div>)
+      }
     },{
       title: '签订日期',
-      dataIndex: 'model',
-      key: 'model',
-
+      dataIndex: 'createTime',
+      key: 'createTime',
     },{
       title: '结算账期',
-      dataIndex: 'country',
-      key: 'country',
-      render:val=>`¥${val}`
+      dataIndex: 'cycle',
+      key: 'cycle',
+      render: (val) => {
+        return(<div>
+          {['','实时','日结','周结','半月结','月结','季结','半年结','年结','其他'][`${val}`]}
+        </div>)
+         }
     },{
       title: '合作模式',
-      dataIndex: 'brand',
-      key: 'brand',
+      dataIndex: 'model',
+      key: 'model',
+      render: (val) => {
+        return(<div>
+          {['','直营','代销','一件代发','bbc'][`${val}`]}
+        </div>)
+      }
     },{
       title: '合同状态',
-      dataIndex: 'pNum',
-      key: 'pNum',
-      render:val=>`¥${val}`
+      dataIndex: 'status',
+      key: 'status',
+      render: (val) => {
+        return(<div>
+          {['','履行中','即将到期','已到期'][`${val}`]}
+        </div>)
+      }
     },{
       title: '操作',
       dataIndex: 'rprice',
@@ -285,15 +316,16 @@ export default class agreementList extends Component {
     );
   }
   agreementListSee = (e, record)=>{
-    // console.log('record',record)
+     console.log('record',record.contractCode)
     this.props.dispatch({
-      type: 'roleOperationDistribution/agreementListSee',
+      type: 'roleOperationDistribution/getCheckAgreementData',
       payload: {
-       purchasesn:1,
+        contractCode:record.contractCode,
         //barcode:record.barcode,
         //index:index
       },
     });
+    this.props.dispatch(routerRedux.push('/agreement/checkAgreement'  ))
   }
   
 }

@@ -67,5 +67,12 @@ export async function getExpressData(params) {
     body: params,
   });
 }
+// 客商名称
+export async function nameOfMerchant(params) {
+  return request(`/llback/nameOfMerchant/nameOfMerchant`, {
+    method: 'POST',
+    body: params,
+  });
+}
 
 
