@@ -110,7 +110,7 @@ export default class deliveryList extends Component {
           },
         });
 
-        this.props.dispatch(routerRedux.push('/delivery/checkDelivery/'  ));
+        this.props.dispatch(routerRedux.push('/delivery/returnDeliveryForm'  ));
       }
     }
 

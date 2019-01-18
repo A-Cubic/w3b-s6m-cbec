@@ -107,8 +107,8 @@ export function operation (dynamicWrapper,app){
       component: dynamicWrapper(app, ['roleOperationDistribution','publicDictionary'], () => import('../roles/operation/delivery/selectProduct')),
     },
     //选择商品返回发货单（带参）
-    '/delivery/returnDeliveryForm/:id': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/delivery/platformStock')),
+    '/delivery/returnDeliveryForm': {
+      component: dynamicWrapper(app, ['roleOperationDistribution','publicDictionary'], () => import('../roles/operation/delivery/returnDeliveryForm')),
     },
     //发货列表
     '/delivery/deliveryList': {
