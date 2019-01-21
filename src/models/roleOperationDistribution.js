@@ -20,7 +20,8 @@ import {
 
   //---------------------------------------------合同管理---------------------------------------------
   getAgreementListData, //合同列表
-  getCheckAgreementData,//合同查看
+  getCheckAgreementData,getImg,//合同查看
+  getcreateAgreementData, //创建合同,
   //---------------------------------------------财务管理部分-----------------------------------------
   //------------------采购结算 页---------
 
@@ -139,13 +140,31 @@ export default {
     //-----------------合同列表 页----------
     agreementList: {
       tableData:{
+        item:{
+          customersCode:"",
+          userName:"",
+          createTime:"",
+          cycle:"",
+          model:"",
+          beginTime:"",
+          endTime:"",
+          platformPoint:"",
+          supplierPoint:"",
+          purchasePoint:"",
+        },
+        list: [],
+      },
+    },
+
+    //-----------------创建合同 页----------
+    createAgreement: {
+      tableData:{
         item:{},
         list: [],
         pagination:{},
       },
     },
 
-    //-----------------创建合同 页----------
 
     //-----------------查看合同 页----------
     checkAgreement: {
@@ -486,6 +505,7 @@ export default {
      //  发货管理-发货列表 - 撤回
      *getWithdraw({ payload,callback },{ call,put }){
       const response = yield call(getWithdraw, payload);
+      const responseListData = yield call(getDeliveryListData,{});
     //console.log('~撤回',response)
       if(response!==undefined){
         if (response.type==1) {
@@ -493,12 +513,12 @@ export default {
             type: 'getWithdrawR',
             payload: response,
           })
-          const response = yield call(getDeliveryListData);
+        
           console.log('~ ',payload)
-          if(response!==undefined){
+          if(responseListData!==undefined){
             yield put({
               type: 'getDeliveryListDataR',
-              payload: response,
+              payload: responseListData,
             })
           }
         }
@@ -551,34 +571,47 @@ export default {
         })
       }
     },
-    //查看跳页
-    *getCheckAgreementData({ payload },{ call,put }){
-      const response = yield call(getCheckAgreementData, payload);
-      console.log('~payload',payload)
+   
+
+
+    //-----------------创建合同 页----------
+    *getcreateAgreementData({ payload },{ call,put }){
+      const response = yield call(getcreateAgreementData, payload);
+     // console.log('~res',response)
       if(response!==undefined){
         yield put({
-          type: 'getCheckAgreementDataR',
-          payload: {...response,contractCode:payload.contractCode}
+          type: 'getcreateAgreementDataR',
+          payload: response,
         })
-        //yield put(routerRedux.push('/agreement/checkAgreement'));
       }
     },
 
 
-    //-----------------创建合同 页----------
 
     //-----------------查看合同 页----------
-    // *getCheckAgreementData({ payload },{ call,put }){
-    //   const response = yield call(getCheckAgreementData, payload);
-    //   console.log('~res',payload)
-    //   if(response!==undefined){
-    //     yield put({
-    //       type: 'getCheckAgreementDataR',
-    //       payload: {...response,src:payload.src,visible:payload.visible},
-    //     })
-    //   }
-    // },
-
+  
+    *getCheckAgreementData({ payload },{ call,put }){
+      const response = yield call(getCheckAgreementData, payload);
+      //console.log('~~payload',payload)
+      if(response!==undefined){
+        yield put({
+          type: 'getCheckAgreementDataR',
+          payload: {...response,contractCode:payload.contractCode,src:payload.src,visible:payload.visible}
+        })
+        yield put(routerRedux.push('/agreement/checkAgreement'));
+      }
+    },
+    //查看图片 getImg
+    *getImg({ payload },{ call,put }){
+      const response = yield call(getImg, payload);
+      //console.log('~~payload',payload)
+      if(response!==undefined){
+        yield put({
+          type: 'getImgR',
+          payload: {src:payload.src,visible:payload.visible}
+        })
+      }
+    },
 
     //---------------------------------------------财务管理部分-----------------------------------------
     //------------------采购结算 页---------
@@ -1109,19 +1142,55 @@ export default {
       },
 
     //-----------------创建合同 页----------
+    getcreateAgreementDataR(state, action){
+      //  console.log('fs',action.payload)
+        return {
+          ...state,
+          createAgreement:{
+            ...state.createAgreement,
+            tableData:action.payload
+          }
+        }
+      },
+
 
     //-----------------查看合同 页----------
     getCheckAgreementDataR(state, action){
-      //  console.log('fs',action.payload)
+       // console.log('qqq',action.payload)
         return {
           ...state,
           checkAgreement:{
             ...state.checkAgreement,
-            tableData:action.payload
+            tableData:action.payload,
+            contractCode :action.payload.contractCode
           }
         }
     },
 
+    getImg(state, action){
+     // console.log('qqq',action.payload)
+      return {
+        ...state,
+        checkAgreement:{
+          ...state.checkAgreement,
+          childHelpData:action.payload,
+        }
+      }
+    },
+    getImgCloseR(state, action){
+      //console.log('qqq',action.payload)
+      return {
+        ...state,
+        checkAgreement:{
+          ...state.checkAgreement,
+          childHelpData: {
+            visible:action.payload.visible
+          }
+          
+        }
+      }
+    },
+ 
 
     //---------------------------------------------财务管理部分-----------------------------------------
     //------------------采购结算 页---------

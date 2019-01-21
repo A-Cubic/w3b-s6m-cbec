@@ -31,12 +31,16 @@ export default class agreementList extends Component {
       type:'roleOperationDistribution/getAgreementListData',
       payload:{}
     })
+    // this.props.dispatch({
+    //   type: 'publicDictionary/nameOfMerchant',
+    //   payload: {
+    //     userId:userId,
+    //   },
+    // });
     this.props.dispatch({
-      type: 'publicDictionary/nameOfMerchant',
-      payload: {
-        userId:userId,
-      },
-    });
+      type:'publicDictionary/nameOfMerchant',
+      payload:{}
+    })
   }
   componentDidMount() {
     this.init();
@@ -325,7 +329,7 @@ export default class agreementList extends Component {
         //index:index
       },
     });
-    this.props.dispatch(routerRedux.push('/agreement/checkAgreement'  ))
+  //  this.props.dispatch(routerRedux.push('/agreement/checkAgreement'))
   }
   
 }

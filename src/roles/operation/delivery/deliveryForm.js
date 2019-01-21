@@ -661,7 +661,7 @@ export default class deliveryForm extends Component {
               onChange={this.onChangeNum}
               onBlur={()=>this.inputOnBlur(record) }
               min={parseInt(1)}
-              max={parseInt(record.pNum)+1}
+              max={parseInt(record.mNum)}
               defaultValue={record.goodsNum}
             />
           )

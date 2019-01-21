@@ -79,13 +79,19 @@ export default function roleOperationDistributionMock(url) {
 
     // ---------------------------------------------合同管理部分-----------------------------------------
     // -----------------合同列表 页--------------
-    'POST /llback/Agreement/ContractList': a,
+   'POST /llback/Agreement/ContractList': a,
+   //'POST /llback/Agreement/ContractList': a,
+
     // 'POST /llback/Agreement/ContractDetails': a, //查看跳页
-    'POST /llback/Agreement/ContractDetails': a,
+    //'POST /llback/Sales/getAgreementListData': getPayment,
     // -----------------创建合同 页--------------
 
+    'POST /llback/Agreement/getcreateAgreementData': contractInformation,
+
     // -----------------查看合同 页--------------
-    // 'POST /llback/Agreement/ContractDetails': contractInformation,
+     'POST /llback/Agreement/ContractDetails': a,
+     'POST /llback/Agreement/getImg': contractInformation,
+
     // ---------------------------------------------财务管理部分-----------------------------------------
     // ------------------采购结算 页-------------
     // 采购结算 - 列表
@@ -126,7 +132,8 @@ export function getPayment(req, res) {
       barcode: '11111',
       ischoose: true,
       id: 1,
-
+      record:1,
+      contractCode:1,
     }, {
       keyId: '2',
       date: '20190104~20190105',
@@ -141,6 +148,8 @@ export function getPayment(req, res) {
       barcode: '2',
       ischoose: false,
       id: 1,
+      record:2,
+      contractCode:2,
     }],
     pagination: {
       current: 1,

@@ -353,8 +353,8 @@ export default class initiateInquiry extends Component {
                  initialValue: item.deliveryTime==''?null:moment(item.deliveryTime, 'YYYY.MM.DD'),
                  rules: [{ required: true, message: '请输入截止日期'}],
               })(
-                <DatePicker  style={{ width: '100%' }}  onChange={this.onTest} format={dateFormat}/>
-                //<DatePicker style={{ width: '100%' }}  placeholder="" />
+               // <DatePicker  style={{ width: '100%' }}  onChange={this.onTest} format={dateFormat}/>
+                <DatePicker style={{ width: '100%' }}  placeholder="" />
               )}
             </FormItem>
           </Col>

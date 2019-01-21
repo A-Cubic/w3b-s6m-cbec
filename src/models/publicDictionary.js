@@ -9,7 +9,8 @@ import {
   getWareHouseData,
   getExpressData,
   getGoodsWareHouse,
-  getPurchaserArr
+  getPurchaserArr,
+  merchantName
 } from "../services/publicDictionary_S";
 
 export default {
@@ -35,6 +36,8 @@ export default {
     purchaserArr:[],
     //客商名称
     nameOfMerchant:[],
+    //客商名称
+    merchantName:[]
   },
   effects:{
     // 获取平台渠道类型
@@ -135,7 +138,16 @@ export default {
         });
       }
     },
-
+    // 客商名称
+    *merchantName({ payload },{ call,put}){
+      const response = yield call(merchantName, payload);
+      if (response !== undefined) {
+        yield put({
+          type: 'merchantNameR',
+          payload: response,
+        });
+      }
+    },
 
 
     // 获取快递
@@ -215,5 +227,13 @@ export default {
          nameOfMerchant:action.payload,
        };
      },
+
+     merchantName(state, action) {
+      console.log('qqqqmerchantName',action.payload)
+      return {
+        ...state,
+        merchantName:action.payload,
+      };
+    },
   }
 }

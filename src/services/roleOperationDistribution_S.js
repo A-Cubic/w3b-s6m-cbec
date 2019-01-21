@@ -229,8 +229,8 @@ export async function storesSalesClickList(params) {
 //-----------------合同列表 页----------
 // //获取列表
 export async function getAgreementListData(params) {
-  return request(`/llback/Agreement/ContractList`, {
-//  return request(`/llback/Sales/getAgreementListData`, {
+return request(`/llback/Agreement/ContractList`, {
+ // return request(`/llback/Sales/getAgreementListData`, {
    method: 'POST',
    body: params,
  });
@@ -245,6 +245,14 @@ export async function agreementListSee(params) {
 }
 
 //-----------------创建合同 页----------
+export async function getcreateAgreementData(params) {
+//return request(`/llback/Sales/getCheckAgreementData`, {
+  return request(`/llback/Agreement/getcreateAgreementData`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 
 //-----------------查看合同 页----------
 export async function getCheckAgreementData(params) {
@@ -254,7 +262,13 @@ export async function getCheckAgreementData(params) {
    body: params,
  });
 }
-
+export async function getImg(params) {
+  //return request(`/llback/Sales/getCheckAgreementData`, {
+    return request(`/llback/Agreement/getImg`, {
+     method: 'POST',
+     body: params,
+   });
+  }
 //---------------------------------------------财务管理部分-----------------------------------------
 //------------------采购结算 页---------
 // 采购结算 - 列表

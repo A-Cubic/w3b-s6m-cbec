@@ -28,13 +28,11 @@ export default class checkAgreement extends Component {
   //****/
   init(){
 
-
-    // this.props.dispatch({
-    //   type:'roleOperationDistribution/getCheckAgreementData',
-    //   payload:{}
-    // })
-
-
+    const { roleOperationDistribution:{checkAgreement:{tableData:{contractCode}}} } = this.props;
+    //console.log('contractCode',contractCode=="")
+    if(contractCode==""){
+      this.props.dispatch(routerRedux.push('/agreement/agreementList' ));
+    }
 
   }
   componentDidMount() {
@@ -43,7 +41,8 @@ export default class checkAgreement extends Component {
   
   handleClickImg=(a)=>{
     this.props.dispatch({
-      type:'roleOperationDistribution/getCheckAgreementData',
+      // type:'roleOperationDistribution/getCheckAgreementData',
+      type:'roleOperationDistribution/getImg',
       payload:{
         src:a,
         visible:true
@@ -56,9 +55,9 @@ export default class checkAgreement extends Component {
   
  
   render() {
-    const { roleOperationDistribution:{checkAgreement:{tableData:{list,customersCode }}} } = this.props;
+    const { roleOperationDistribution:{checkAgreement:{tableData:{contractCode,list,customersCode }}} } = this.props;
     const { roleOperationDistribution:{checkAgreement:{tableData}} } = this.props;
-    console.log('777',this.props)
+   // console.log('777',this.props)
     
     return (
       <div>
@@ -119,7 +118,7 @@ export default class checkAgreement extends Component {
           <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px',marginTop:'20px'}}>
             
             <Row style={{marginTop:'15px', marginBottom:'5px',textAlign:'center'}}>
-              <span style={{fontSize:'16px'}}>平台：3% + 供货中介：1% + 采购中介：1%</span>
+              <span style={{fontSize:'16px'}}>平台：{tableData.platformPoint}% + 供货中介：{tableData.supplierPoint}% + 采购中介：{tableData.purchasePoint}%</span>
             </Row>
           </Row>
           <Row gutter={{ md: 12, lg: 24, xl: 48 }}  style={{marginBottom:'25px',}}>
@@ -135,7 +134,8 @@ export default class checkAgreement extends Component {
                 list!=''?
                   list.map((i,index) => {
                     return(
-                      <li key={index}><img src={i} onClick={()=>this.handleClickImg(i)}/></li>
+                       <li key={index}><img src={i} onClick={()=>this.handleClickImg(i)}/></li>
+                      //<li key={index}><img src={i.imgUrl} onClick={()=>this.handleClickImg(i.imgUrl)}/></li>
                     )
                   }):
                   <div style={{textAlign:'center',fontSize:15}}>
@@ -159,16 +159,18 @@ export default class checkAgreement extends Component {
 class ShowImg extends Component {
   handleCancel = (e) => {
     this.props.dispatch({
-      type:'roleOperationDistribution/getCheckAgreementData',
+      type:'roleOperationDistribution/getImgCloseR',
+      
       payload:{
         visible:false
       }
+     // payload:false
     })
   }
   render() {
-    const { roleOperationDistribution:{checkAgreement:{tableData:{src,visible,list, item}}} } = this.props;
+    const { roleOperationDistribution:{checkAgreement:{childHelpData:{src,visible,list, item}}} } = this.props;
    
-    console.log('fs',this.props.rolePurchaserConsignment)
+   // console.log('fs',this.props.rolePurchaserConsignment)
     return(
     <div>
       <Modal
@@ -183,8 +185,8 @@ class ShowImg extends Component {
           onCancel={this.handleCancel}
         >
           <div> 
-            {/* <img className={styles.bigImg} src={src}></img> */}
-            <img src = 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809420800199_cp_1.jpg'></img>
+            <img className={styles.bigImg} src={src}></img>
+          {/* <img src = 'http://ecc-product.oss-cn-beijing.aliyuncs.com/goodsuploads/8809420800199_cp_1.jpg'></img> */}
           </div>
         </Modal>
     </div>

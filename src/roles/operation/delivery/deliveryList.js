@@ -29,7 +29,7 @@ export default class deliveryList extends Component {
     this.props.dispatch({
       type:'roleOperationDistribution/getDeliveryListData',
       payload:{
-
+       // payload:{}
       }
     })
   }
@@ -122,6 +122,7 @@ export default class deliveryList extends Component {
             id:record.id,
           },
       });
+      // this.init()
     }
 
     //提交
