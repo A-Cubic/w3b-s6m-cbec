@@ -173,7 +173,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img1')(
-	                             	<Upload {...propsImg1}  >
+	                             	<Upload {...propsImg1} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
 	                             	      <Icon type="upload"/> 营业执照/销售端截图
 	                             	    </Button>
@@ -185,7 +185,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img2')(
-	                             	<Upload {...propsImg2} >
+	                             	<Upload {...propsImg2} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
 	                             	      <Icon type="upload" /> 组织机构代码
 	                             	    </Button>
@@ -199,7 +199,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img3')(
-	                             	<Upload {...propsImg3} >
+	                             	<Upload {...propsImg3} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
 	                             	      <Icon type="upload"/> 税务登记证
 	                             	    </Button>
@@ -211,9 +211,9 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img4')(
-	                             	<Upload {...propsImg4} >
+	                             	<Upload {...propsImg4} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
-	                             	      <Icon type="upload" /> 营业执照（三证合一）
+	                             	      <Icon type="upload"  /> 营业执照（三证合一）
 	                             	    </Button>
 	                             	  </Upload>
 	                             	)}
