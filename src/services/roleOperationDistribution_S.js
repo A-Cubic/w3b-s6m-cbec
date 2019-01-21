@@ -273,28 +273,32 @@ export async function getImg(params) {
 //------------------采购结算 页---------
 // 采购结算 - 列表
 export async function getPaymentSettlementData(params) {
-  return request(`/llback/Balance/AA`,{
+  // return request(`/llback/Balance/AA`,{
+  return request(`/llback/Balance/PurchasePayment`,{
     method: 'POST',
     body: params,
   })
 }
 // 采购结算 - 查看结算明细 - 货款
 export async function getSettlementDetailsData(params) {
-  return request(`/llback/Balance/BB`,{
+ // return request(`/llback/Balance/BB`,{
+  return request(`/llback/Balance/GetPaymentDetailed`,{
     method: 'POST',
     body: params,
   })
 }
 // 采购结算 - 查看结算明细 - 其他
 export async function getSettlementDetailsElseData(params) {
-  return request(`/llback/Balance/CC`,{
+  // return request(`/llback/Balance/CC`,{
+  return request(`/llback/Balance/GetPaymentOtherDetailed`,{  
     method: 'POST',
     body: params,
   })
 }
 // 采购结算 - 打印
 export async function getChildModelPrintData(params) {
-  return request(`/llback/Balance/DD`,{
+ // return request(`/llback/Balance/DD`,{
+  return request(`/llback/Balance/PurchasePayment`,{
     method: 'POST',
     body: params,
   })

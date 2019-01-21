@@ -21,6 +21,9 @@ export default function publicDictionaryMock(url) {
     'POST /llback/Warehouse/DeliveryPurchasersList': url,
     // 客商名称
     'POST /llback/nameOfMerchant/nameOfMerchant': url,
+    // 客商名称
+    'POST /llback/nameOfMerchant/merchantName': bb,
+
   };
 }
 export function getPlatform(req, res) {

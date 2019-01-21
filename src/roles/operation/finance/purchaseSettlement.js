@@ -194,7 +194,11 @@ export default class purchaseSettlement extends Component {
                         <div style={{ float:"right" }}>
                           <Button  style={{ marginRight:7 }} type="primary" ghost onClick={()=>this.handleChildDetailsModel(record)}>结算明细</Button>
                           {record.status==0?
-                            <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleCompleteReconciliation(record)}>完成对账</Button>
+                            // <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleCompleteReconciliation(record)}>完成对账</Button>
+                            //{record.flag ==2 ?<a onClick={()=>this.handleViewState(record)}>完成对账<br/></a>:<div>对账中</div>}
+                            <Button style={{ marginRight:7 }} type="primary" >
+                              {record.flag ==2 ?<a onClick={()=>this.handleCompleteReconciliation(record)}>完成对账<br/></a>:<div>待付款</div>}
+                            </Button>
                             :
                             <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleChildPrintModel(record)}>预览打印</Button>
                           }
