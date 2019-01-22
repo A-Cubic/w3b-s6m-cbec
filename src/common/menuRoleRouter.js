@@ -1,13 +1,26 @@
 
 export default function(dynamicWrapper,app){
   return {
+    // 供应商
+
     // 采购商
     ...procurement(dynamicWrapper,app),
     // 运营
     ...operation(dynamicWrapper,app)
+
   }
 
 };
+//-------------------------------------供应商-------------------------------------
+export function supplier (dynamicWrapper,app){
+  return{
+    //测试demo
+    '/goods/test': {
+      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/test')),
+    },
+
+  }
+}
 //-------------------------------------采购商-------------------------------------
 export function procurement (dynamicWrapper,app){
   return{

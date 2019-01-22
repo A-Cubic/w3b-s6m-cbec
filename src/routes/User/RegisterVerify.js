@@ -3,8 +3,8 @@ import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress,Steps,notification,Upload,Icon ,message  } from 'antd';
 import styles from './Register.less';
-import { getAuthority } from '../../utils/Global';
-import { getCurrentUrl } from '../../services/api'
+import {getAuthority, getHeader} from '../../utils/Global';
+import {getCurrentUrl, getUploadUrl} from '../../services/api'
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -17,9 +17,20 @@ var temUploadKey = '';
 }))
 @Form.create()
 export default class RegisterVerify extends Component {
-	// state = {
-	//   currentStep : 1
-	// };
+	state = {
+    fileList1:[],
+    fileList2:[],
+    fileList3:[],
+    fileList4:[],
+    file1:{},
+    file2:{},
+    file3:{},
+    file4:{},
+    thumbUrl1:'',
+    thumbUrl2:'',
+    thumbUrl3:'',
+    thumbUrl4:'',
+	};
 	renderStep = (currentStep) => {
 	  const { form, submitting } = this.props;
 	  const { getFieldDecorator,getFieldsValue,validateFields,setFields } = form;
@@ -36,16 +47,45 @@ export default class RegisterVerify extends Component {
 	    },
 	  };
 	   const url = getCurrentUrl('/llback/user/validate');
-	  const props = {
-	      action: url,
-	      listType: 'picture',
-        accept:'image/*',
-	      onChange({ file, fileList }) {
-	          if (file.status !== 'uploading') {
-	            // console.log(fileList);
-	          }
-	        }
-	    };
+	  // const props = {
+	  //     action: url,
+	  //     listType: 'picture',
+       //  accept:'image/*',
+	  //     onChange({ file, fileList }) {
+	  //         if (file.status !== 'uploading') {
+	  //           // console.log(fileList);
+	  //         }
+	  //       }
+	  //   };
+    const propsImg1 = {
+      action: getUploadUrl(),
+      // data: {test: 123}, //传递到后台的自定义参数
+      headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
+      onChange: this.handleUploadChangeImg1, //回调函数通过res.filelist[i].respose获取回传的文件名
+      multiple: false
+    };
+
+    const propsImg2 = {
+      action: getUploadUrl(),
+      // data: {test: 123}, //传递到后台的自定义参数
+      headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
+      onChange: this.handleUploadChangeImg2, //回调函数通过res.filelist[i].respose获取回传的文件名
+      multiple: false,
+    };
+    const propsImg3 = {
+      action: getUploadUrl(),
+      // data: {test: 123}, //传递到后台的自定义参数
+      headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
+      onChange: this.handleUploadChangeImg3, //回调函数通过res.filelist[i].respose获取回传的文件名
+      multiple: false,
+    };
+    const propsImg4 = {
+      action: getUploadUrl(),
+      // data: {test: 123}, //传递到后台的自定义参数
+      headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
+      onChange: this.handleUploadChangeImg4, //回调函数通过res.filelist[i].respose获取回传的文件名
+      multiple: false,
+    };
   const cusUpload = (e)=>{
     temUploadKey = e.target.id;
   }
@@ -133,7 +173,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img1')(
-	                             	<Upload {...props} beforeUpload={this.beforeUpload} >
+	                             	<Upload {...propsImg1} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
 	                             	      <Icon type="upload"/> 营业执照/销售端截图
 	                             	    </Button>
@@ -145,7 +185,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img2')(
-	                             	<Upload {...props} beforeUpload={this.beforeUpload}>
+	                             	<Upload {...propsImg2} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
 	                             	      <Icon type="upload" /> 组织机构代码
 	                             	    </Button>
@@ -159,7 +199,7 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img3')(
-	                             	<Upload {...props} beforeUpload={this.beforeUpload}>
+	                             	<Upload {...propsImg3} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
 	                             	      <Icon type="upload"/> 税务登记证
 	                             	    </Button>
@@ -171,9 +211,9 @@ export default class RegisterVerify extends Component {
 	                           <FormItem
 	                             {...formItemLayout}>
 	                             {getFieldDecorator('img4')(
-	                             	<Upload {...props} beforeUpload={this.beforeUpload}>
+	                             	<Upload {...propsImg4} beforeUpload={this.beforeUpload}>
 	                             	    <Button>
-	                             	      <Icon type="upload" /> 营业执照（三证合一）
+	                             	      <Icon type="upload"  /> 营业执照（三证合一）
 	                             	    </Button>
 	                             	  </Upload>
 	                             	)}
@@ -224,7 +264,34 @@ export default class RegisterVerify extends Component {
 	          break;
 	  }
 	}
-
+  handleUploadChangeImg1=(info)=>{
+    this.setState({
+      fileList1:info.fileList,
+      file1:info.file,
+      thumbUrl1:info.file.thumbUrl
+    })
+  }
+  handleUploadChangeImg2=(info)=>{
+    this.setState({
+      fileList2:info.fileList,
+      file2:info.file,
+      thumbUrl2:info.file.thumbUrl
+    })
+  }
+  handleUploadChangeImg3=(info)=>{
+    this.setState({
+      fileList3:info.fileList,
+      file3:info.file,
+      thumbUrl3:info.file.thumbUrl
+    })
+  }
+  handleUploadChangeImg4=(info)=>{
+    this.setState({
+      fileList4:info.fileList,
+      file4:info.file,
+      thumbUrl4:info.file.thumbUrl
+    })
+  }
   beforeUpload(file) {
     const isJPG = file.type;
     let bolImg = true;
@@ -240,22 +307,38 @@ export default class RegisterVerify extends Component {
   }
 
 	handleVerify = (e) => {
+    // if(this.state.file1.response!==undefined||this.state.file2.response!==undefined){
+    //   this.props.dispatch({
+    //     type: 'goods/step2Upload',
+    //     payload: {
+    //       logId:match.params.id,
+    //       userId:userId,
+    //       fileTemp: this.state.file1.response?this.state.file1.response.fileName[0]:'',
+    //       fileTemp1: this.state.file2.response?this.state.file2.response.fileName[0]:''
+    //     },
+    //     callback:(res)=> this.onUploadCallback(res, match.params.id),
+    //   });
+    // }else{
+    //   message.warning('请选择需要上传的文件')
+    // }
+
+
 	    e.preventDefault();
 	    this.props.form.validateFields({ force: true }, (err, values) => {
 	    	// console.log(values);
-	      const img1Vaule = values.img1 !== undefined ? values.img1.file.thumbUrl : '';
-	      const img2Vaule = values.img2 !== undefined ? values.img2.file.thumbUrl : '';
-	      const img3Vaule = values.img3 !== undefined ? values.img3.file.thumbUrl : '';
-	      const img4Vaule = values.img4 !== undefined ? values.img4.file.thumbUrl : '';
+	      // const img1Vaule = values.img1 !== undefined ? values.img1.file.thumbUrl : '';
+	      // const img2Vaule = values.img2 !== undefined ? values.img2.file.thumbUrl : '';
+	      // const img3Vaule = values.img3 !== undefined ? values.img3.file.thumbUrl : '';
+	      // const img4Vaule = values.img4 !== undefined ? values.img4.file.thumbUrl : '';
 
 	      if (!err) {
 
 	      	var data = {
 	      		...values,
-	      		img1 : img1Vaule,
-	      		img2 : img2Vaule,
-	      		img3 : img3Vaule,
-	      		img4 : img4Vaule,
+	      		img1 : this.state.file1.response?this.state.file1.response.fileName[0]:'',
+	      		img2 : this.state.file2.response?this.state.file2.response.fileName[0]:'',
+	      		img3 : this.state.file3.response?this.state.file3.response.fileName[0]:'',
+	      		img4 : this.state.file4.response?this.state.file4.response.fileName[0]:'',
 	      	};
 	         this.props.dispatch({
 	          type: 'registerVerify/upload',

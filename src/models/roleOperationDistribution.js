@@ -498,7 +498,7 @@ export default {
           type: 'getSubmissionR',
           payload: response,
         })
-        yield put(routerRedux.push('/delivery/deliveryForm'));
+        yield put(routerRedux.push('/delivery/returnDeliveryForm'));
       }
     },
 
@@ -513,7 +513,7 @@ export default {
             type: 'getWithdrawR',
             payload: response,
           })
-        
+
           console.log('~ ',payload)
           if(responseListData!==undefined){
             yield put({
@@ -571,7 +571,7 @@ export default {
         })
       }
     },
-   
+
 
 
     //-----------------创建合同 页----------
@@ -589,7 +589,7 @@ export default {
 
 
     //-----------------查看合同 页----------
-  
+
     *getCheckAgreementData({ payload },{ call,put }){
       const response = yield call(getCheckAgreementData, payload);
       //console.log('~~payload',payload)
@@ -938,6 +938,7 @@ export default {
         selectProduct:{
           ...state.selectProduct,
           tableData:action.payload,
+          dotNum:action.payload.item.num,
           id:action.payload.id,
           isDelete:action.payload.isDelete,
           usercode:action.payload.usercode,
@@ -1186,11 +1187,11 @@ export default {
           childHelpData: {
             visible:action.payload.visible
           }
-          
+
         }
       }
     },
- 
+
 
     //---------------------------------------------财务管理部分-----------------------------------------
     //------------------采购结算 页---------
