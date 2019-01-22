@@ -28,7 +28,7 @@ export default class quoteWithDetails extends Component {
     const {match,dispatch}=this.props;
     //console.log('match',match)
     const getData = JSON.parse(match.params.biography)
-    if(getData.status == 3 || getData.status == 4 || getData.status == 5){
+    // if(getData.status == 3 || getData.status == 4 || getData.status == 5){
       this.props.dispatch({
         type:'rolePurchaserBulkPurchases/getquotedPrice',
         payload:{
@@ -36,10 +36,10 @@ export default class quoteWithDetails extends Component {
           status:getData.status
         }
       })
-    } 
+    // }
   }
 
-  //分页 
+  //分页
   handleTableChange=(pagination, filters, sorter)=>{
     const params = {
       ...pagination,
@@ -113,15 +113,15 @@ export default class quoteWithDetails extends Component {
             )
           }
         }
-            
-        
+
+
       }
     ];
-    
+
     return (
       <div >
         <Card bordered={false} >
-        
+
           <div className={styles.titleName}>采购单</div>
           <div className={styles.takeGoods}>
             <span></span>
@@ -165,19 +165,19 @@ export default class quoteWithDetails extends Component {
           商品金额：<span>{item.purchasePrice}</span>　运费：<span>￥{item.waybillfee}</span>　税费：<span>￥{item.tax}</span>
           </div>
           <PurchaseOrder />
-          
+
            {
-             
+
               this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status==4?
                 // <div onClick={()=>this.demo()}>777</div>:
                 <Row style={{marginTop:'30px', marginBottom:'35px'}}>
-                  <Col md={9} sm={24}></Col>      
+                  <Col md={9} sm={24}></Col>
                   <Col md={6} sm={24}>
                     <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnPlaceAnOrder} >立即下单</Button>
                     <Button style={{ marginLeft: 48 }} onClick={this.handleReturn}>取消</Button>
                   </Col>
-                  <Col md={9} sm={24}></Col>      
-                </Row>: 
+                  <Col md={9} sm={24}></Col>
+                </Row>:
                 <div></div>
            }
 
@@ -209,7 +209,7 @@ export default class quoteWithDetails extends Component {
         status:getData.status
       },
     });
-    
+
   }
   handleReturn = () => {
     this.props.dispatch(routerRedux.push('/bulkPurchases/inquiryList/' ))
@@ -220,7 +220,7 @@ export default class quoteWithDetails extends Component {
   rolePurchaserBulkPurchases
 }))
 class PurchaseOrder extends Component {
-  
+
   handleCancel = () => {
    // console.log('del')
     this.props.dispatch({
@@ -231,7 +231,7 @@ class PurchaseOrder extends Component {
 
 
   render(){
-    
+
    // const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
    const {rolePurchaserBulkPurchases:{inquiryDetailsList:{show,tableData}}} = this.props
   //  console.log('22ok',this.props.rolePurchaserBulkPurchases.inquiryDetailsList.tableData)
@@ -249,21 +249,21 @@ class PurchaseOrder extends Component {
         title: '供货单价',
         dataIndex: 'offerPrice',
         key: 'offerPrice',
-        
+
       },  {
         title: '可供数量',
         dataIndex: 'maxOfferNum',
         key: 'maxOfferNum',
         render: (val,record) =>{
-         
+
             return (
               <div>
                 {record.minOfferNum}-{record.maxOfferNum}
               </div>
             )
-          
+
         }
-        
+
       }, {
         title: '采购数量',
         dataIndex: 'demand',
@@ -272,7 +272,7 @@ class PurchaseOrder extends Component {
         title: '采购金额',
         dataIndex: 'purchaseAmount',
         key: 'purchaseAmount',
-      
+
       }
     ];
 

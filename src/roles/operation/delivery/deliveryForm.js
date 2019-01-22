@@ -593,11 +593,11 @@ export default class deliveryForm extends Component {
             <Icon type="snippets" />选择发货商品
           </Button>
           <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
-            <Icon type="download" />下载询价模板
+            <Icon type="download" />下载发货模板
           </Button>
           <Upload  {...props}>
             <Button style={{ marginLeft: 8 }}>
-              <Icon type="cloud-upload-o" /> 导入询价商品
+              <Icon type="cloud-upload-o" /> 导入发货商品
             </Button>
 
           </Upload>
