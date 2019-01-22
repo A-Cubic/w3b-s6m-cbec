@@ -93,7 +93,9 @@ export default class createAgreement extends Component {
       visibleChildCheck:!!flag,
     });
   }
- 
+  handlecancel = () => {
+    this.props.dispatch(routerRedux.push('/agreement/agreementList'))
+  }
 
   renderForm(){
     const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;

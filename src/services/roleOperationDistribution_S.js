@@ -297,15 +297,16 @@ export async function getSettlementDetailsElseData(params) {
 }
 // 采购结算 - 打印
 export async function getChildModelPrintData(params) {
- // return request(`/llback/Balance/DD`,{
-  return request(`/llback/Balance/PurchasePayment`,{
+ //return request(`/llback/Balance/DD`,{
+  return request(`/llback/Balance/GetPaymentPrinting`,{
     method: 'POST',
     body: params,
   })
 }
 // 采购结算 - 完成对账
 export async function changeStatusCompleteReconciliation(params) {
-  return request(`/llback/Balance/EE`,{
+  // return request(`/llback/Balance/EE`,{
+  return request(`/llback/Balance/FinishReconciliation`,{  
     method: 'POST',
     body: params,
   })
@@ -316,7 +317,7 @@ export async function changeStatusCompleteReconciliation(params) {
 
 // 手动调账 - 列表
 export async function getManualTransferData(params) {
-  return request(`/llback/Balance/getManualTransferData`,{
+  return request(`/llback/Balance/ManualChangeAccount`,{
     method: 'POST',
     body: params,
   })

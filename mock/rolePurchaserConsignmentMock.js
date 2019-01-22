@@ -31,11 +31,11 @@ export default function rolePurchaserConsignmentMock(url) {
     // -------- 货款结算 --------------
     // 货款结算 - 列表
     'POST /llback/Balance/GetPayment': url,
-    // 货款结算 - 查看结算明细 - 货款
-    'POST /llback/Balance/GetPaymentDetailed': url,
-    // 货款结算 - 查看结算明细 - 其他
-    'POST /llback/Balance/GetPaymentOtherDetailed': url,
-    // 货款结算 - 查看结算明细 - 打印
+    // 货款结算 - 查看结算明细 - 货款    -------运营 采购结算 -查看明细 共用接口
+     'POST /llback/Balance/GetPaymentDetailed': url,
+    // // 货款结算 - 查看结算明细 - 其他   -------运营 采购结算 -查看明细 共用接口
+     'POST /llback/Balance/GetPaymentOtherDetailed': url,
+    // 货款结算 - 查看结算明细 - 打印      -------运营 采购结算 -打印 共用接口   
     'POST /llback/Balance/GetPaymentPrinting': url,
   };
 }

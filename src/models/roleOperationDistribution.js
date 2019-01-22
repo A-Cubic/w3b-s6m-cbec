@@ -679,7 +679,7 @@ export default {
     // 采购结算 - 完成对账
     *completeReconciliation({ payload },{ call,put }){
       const response = yield call(changeStatusCompleteReconciliation, payload);
-      const responseList = yield call(getPaymentSettlementData, payload);
+      const responseList = yield call(getPaymentSettlementData, {});
       // console.log('~res',response)
       if(response!==undefined){
       //  判断成功 刷新主列表页面

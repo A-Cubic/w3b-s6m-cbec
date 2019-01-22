@@ -10,8 +10,8 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const userId = getToken().userId;
 const { TextArea } = Input;
-@connect(({roleOperationDistribution }) => ({
-  roleOperationDistribution,
+@connect(({roleOperationDistribution,publicDictionary }) => ({
+  roleOperationDistribution,publicDictionary
 }))
 
 @Form.create()
@@ -24,6 +24,18 @@ export default class manualTransfer extends Component {
   init(){
     this.props.dispatch({
       type: 'roleOperationDistribution/getManualTransferData',
+      payload: {
+        userId:userId
+      },
+    });
+    this.props.dispatch({
+      type: 'publicDictionary/getAdjustmentMatters',
+      payload: {
+        userId:userId
+      },
+    });
+    this.props.dispatch({
+      type: 'publicDictionary/getTypesOfMerchants',
       payload: {
         userId:userId
       },
@@ -80,6 +92,15 @@ export default class manualTransfer extends Component {
   componentDidMount() {
     this.init();
   }
+
+  handleFormReset =()=>{
+    this.props.form.resetFields();
+    this.setState({
+      formValues: {},
+      sortedInfo: null,
+    });
+   this.init();
+  }
   renderForm(){
     const {roleOperationDistribution:{manualTransfer:{tableData:{ list, pagination }}}}  = this.props;
     const { getFieldDecorator } = this.props.form;
@@ -134,13 +155,13 @@ export default class manualTransfer extends Component {
         render:val=>val?val:'--'
       }, {
         title: '调整金额',
-        dataIndex: 'money',
-        key: 'money',
+        dataIndex: 'price',
+        key: 'price',
         render:val=>val?val + '元':'--'
       }, {
         title: '调整项目',
-        dataIndex: 'pro',
-        key: 'pro',
+        dataIndex: 'detail',
+        key: 'detail',
         render:val=>val?val:''
       }, {
         title: '操作',
@@ -149,7 +170,7 @@ export default class manualTransfer extends Component {
         render: (val,record) => {
           return (
             <Fragment>
-              <a href="javascript:;" onClick={(e) => this.handleDelete(record)}>删除</a><br/>
+              {/* <a href="javascript:;" onClick={(e) => this.handleDelete(record)}>删除</a><br/> */}
             </Fragment>
           )
         }
@@ -181,8 +202,8 @@ export default class manualTransfer extends Component {
 
 
 // 创建手动调账单
-@connect(({roleOperationDistribution }) => ({
-  roleOperationDistribution,
+@connect(({roleOperationDistribution,publicDictionary }) => ({
+  roleOperationDistribution,publicDictionary
 }))
 @Form.create()
 class ChildModelCreatOrder extends React.Component {
@@ -217,6 +238,9 @@ class ChildModelCreatOrder extends React.Component {
     // console.log(this.props)
     const {getFieldDecorator} = this.props.form;
     const {roleOperationDistribution: {manualTransfer: {childModelCreatOrder,childCreatOrderModelVisible}}} = this.props;
+     const {publicDictionary:{adjustmentMatters}} = this.props;
+     const {publicDictionary:{typesOfMerchants}} = this.props;
+   
     return (
       <div>
         <Modal
@@ -247,7 +271,7 @@ class ChildModelCreatOrder extends React.Component {
                 </Col>
                 <Col md={12} sm={24}>
                   <FormItem label="调整金额" >
-                    {getFieldDecorator('m', {
+                    {getFieldDecorator('price', {
                       rules:[{
                         required:true,message:'请输入调整金额',
                       }]
@@ -259,50 +283,64 @@ class ChildModelCreatOrder extends React.Component {
               </Row>
               <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                 <Col md={12} sm={24}>
-                  <FormItem label="调整事项" >
-                    {getFieldDecorator('t', {
-                      rules:[{
-                        required:true,message:'请输入调整事项',
-                      }]
+                <FormItem label="调整事项：">
+                  {getFieldDecorator('a',{
+                    rules:[{
+                      required:true,message:'请输入调整事项：',
+                    }]
                     })(
-                      <Input placeholder=""/>
-                    )}
-                  </FormItem>
+                      <Select
+                      placeholder="选择"
+                      optionFilterProp="label"
+                      >
+                        
+                        {/* <Option value="1">大连XX公司</Option>
+                        <Option value="2">青岛XX公司</Option> */}
+                        {/* {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)} */}
+                        {adjustmentMatters.map((val) => <Option key={val.adjustCode} value={val.adjustCode} label={val.adjustName}>{val.adjustName}</Option>)}
+                      </Select>
+                    )}        
+                </FormItem>
                 </Col>
                 <Col md={12} sm={24}>
                   <FormItem label="调整客商" >
-                    {getFieldDecorator('k', {
-                      rules:[{
-                        required:true,message:'请输入调整客商',
+                    {getFieldDecorator('userName',{
+                       rules:[{
+                        required:true,message:'请输调整客商',
                       }]
                     })(
-                      <Input placeholder=""/>
-                    )}
+                      <Select
+                        placeholder="请选择"
+                        optionFilterProp="label"
+                        // onChange={this.onSelectChange}
+                      >
+                        <Option value="0">供货商</Option>
+                        <Option value="1">采购商</Option>
+
+                      </Select>
+                    )}   
+                    
                   </FormItem>
                 </Col>
               </Row>
               <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                 <Col md={12} sm={24}>
-                  <FormItem label="商客编码" >
-                    {getFieldDecorator('c', {
-                      rules:[{
-                        required:true,message:'请输入商客编码',
+                  <FormItem label="客商编码" >
+                    {getFieldDecorator('userName',{
+                       rules:[{
+                        required:true,message:'请输商客编码',
                       }]
                     })(
-                      <Input placeholder=""/>
-                    )}
+                      <Select
+                      placeholder="选择"
+                      optionFilterProp="label"
+                      >
+                        {typesOfMerchants.map((val) => <Option key={val.userCode} value={val.userType} label={val.customersCode}>{val.customersCode}</Option>)}
+                      </Select>
+                    )}   
                   </FormItem>
                 </Col>
                 <Col md={12} sm={24}>
-                  <FormItem label="商客名称" >
-                    {getFieldDecorator('n', {
-                      rules:[{
-                        required:true,message:'请输入商客名称',
-                      }]
-                    })(
-                      <Input placeholder=""/>
-                    )}
-                  </FormItem>
                 </Col>
               </Row>
               <Row gutter={{ md: 12, lg: 24, xl: 48 }}>

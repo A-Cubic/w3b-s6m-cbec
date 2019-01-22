@@ -20,10 +20,11 @@ export default function publicDictionaryMock(url) {
     // 获取采购商信息（运营发货单）
     'POST /llback/Warehouse/DeliveryPurchasersList': url,
     // 客商名称
-    'POST /llback/nameOfMerchant/nameOfMerchant': url,
-    // 客商名称
-    'POST /llback/nameOfMerchant/merchantName': bb,
-
+    'POST /llback/Agreement/SelectUserName': 'http://192.168.0.127:54195/',
+    // 调整事项
+    'POST /llback/Balance/AdjustmentMatters': 'http://192.168.0.127:54195/',
+    // 客商编码 客商名 客商类型 客商码
+    'POST /llback/Balance/CustomersInformation': 'http://192.168.0.127:54195/',
   };
 }
 export function getPlatform(req, res) {

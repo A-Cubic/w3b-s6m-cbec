@@ -31,16 +31,16 @@ export default class agreementList extends Component {
       type:'roleOperationDistribution/getAgreementListData',
       payload:{}
     })
-    // this.props.dispatch({
-    //   type: 'publicDictionary/nameOfMerchant',
-    //   payload: {
-    //     userId:userId,
-    //   },
-    // });
     this.props.dispatch({
-      type:'publicDictionary/nameOfMerchant',
-      payload:{}
-    })
+      type: 'publicDictionary/merchantName',
+      payload: {
+        userId:userId,
+      },
+    });
+    // this.props.dispatch({
+    //   type:'publicDictionary/nameOfMerchant',
+    //   payload:{}
+    // })
   }
   componentDidMount() {
     this.init();
@@ -91,14 +91,16 @@ export default class agreementList extends Component {
     this.setState({
       visibleChildCheck:!!flag,
     });
-  }
+  }   
+  handleEstablish = () => {
+    this.props.dispatch(routerRedux.push('/agreement/createAgreement'))
+  } 
   
   renderForm(){
     const { roleOperationDistribution:{agreementList:{tableData}} } = this.props;
-    //const { publicDictionary:{merchantName} } = this.props;
     const { getFieldDecorator } = this.props.form;
-   // const { publicDictionary:{nameOfMerchant} } = this.props;
-   // console.log('xxx',this.props)
+    const { publicDictionary:{merchantName} } = this.props;
+    // console.log('xxx',merchantName)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -114,11 +116,14 @@ export default class agreementList extends Component {
               {getFieldDecorator('userName',{
               })(
                 <Select
-                  placeholder="全部"
-                  optionFilterProp="label"
+                placeholder="全部"
+                optionFilterProp="label"
                 >
-                  <Option value="1">大连XX公司</Option>
-                  <Option value="2">青岛XX公司</Option>
+                  
+                  {/* <Option value="1">大连XX公司</Option>
+                  <Option value="2">青岛XX公司</Option> */}
+                   {/* {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)} */}
+                  {merchantName.map((val) => <Option key={val.keyId} value={val.keyId} label={val.userName}>{val.userName}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -210,7 +215,7 @@ export default class agreementList extends Component {
           </div>
         </div>
         <div>
-          <Button type="primary" style={{marginBottom:'10px'}}>创建合同</Button>
+          <Button onClick={this.handleEstablish} type="primary" style={{marginBottom:'10px'}}><span  >创建合同</span></Button>
         </div>
       </Form>
       

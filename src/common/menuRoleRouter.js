@@ -129,7 +129,7 @@ export function operation (dynamicWrapper,app){
     //-----------------------------合同-----------------------------
     //合同列表
     '/agreement/agreementList': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/agreementList')),
+      component: dynamicWrapper(app, ['roleOperationDistribution','publicDictionary'], () => import('../roles/operation/agreement/agreementList')),
     },
     //创建合同
     '/agreement/createAgreement': {
@@ -147,7 +147,7 @@ export function operation (dynamicWrapper,app){
     },
     //手动调账（查看）
     '/finance/manualTransfer': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/finance/manualTransfer')),
+      component: dynamicWrapper(app, ['roleOperationDistribution','publicDictionary'], () => import('../roles/operation/finance/manualTransfer')),
     },
 
 

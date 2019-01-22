@@ -10,7 +10,9 @@ import {
   getExpressData,
   getGoodsWareHouse,
   getPurchaserArr,
-  merchantName
+  merchantName,
+  getAdjustmentMatters,
+  getTypesOfMerchants,
 } from "../services/publicDictionary_S";
 
 export default {
@@ -35,9 +37,11 @@ export default {
     // 获取采购商
     purchaserArr:[],
     //客商名称
-    nameOfMerchant:[],
-    //客商名称
-    merchantName:[]
+    merchantName:[],
+    //调整事项
+    adjustmentMatters:[],
+    //客商编码 客商名 客商类型 客商码
+    typesOfMerchants:[]
   },
   effects:{
     // 获取平台渠道类型
@@ -127,20 +131,10 @@ export default {
       }
     },
 
-
-    // 客商名称
-    *nameOfMerchant({ payload },{ call,put}){
-      const response = yield call(nameOfMerchant, payload);
-      if (response !== undefined) {
-        yield put({
-          type: 'nameOfMerchantR',
-          payload: response,
-        });
-      }
-    },
     // 客商名称
     *merchantName({ payload },{ call,put}){
       const response = yield call(merchantName, payload);
+     // console.log('fs',response)
       if (response !== undefined) {
         yield put({
           type: 'merchantNameR',
@@ -157,6 +151,29 @@ export default {
       if (response !== undefined) {
         yield put({
           type: 'getExpressR',
+          payload: response,
+        });
+      }
+    },
+
+    // 调整事项
+    *getAdjustmentMatters({ payload },{ call,put}){
+      const response = yield call(getAdjustmentMatters, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getAdjustmentMattersR',
+          payload: response,
+        });
+      }
+    },
+    // 客商编码 客商名 客商类型 客商码
+    *getTypesOfMerchants({ payload },{ call,put}){
+      const response = yield call(getTypesOfMerchants, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getTypesOfMerchantsR',
           payload: response,
         });
       }
@@ -220,19 +237,23 @@ export default {
         purchaserArr:action.payload,
       };
     },
-    nameOfMerchantR(state, action) {
-       console.log('XXXnameOfMerchant',action.payload)
+     merchantNameR(state, action) {
        return {
          ...state,
-         nameOfMerchant:action.payload,
+         merchantName:action.payload,
        };
      },
 
-     merchantName(state, action) {
-      console.log('qqqqmerchantName',action.payload)
+     getAdjustmentMattersR(state, action) {
       return {
         ...state,
-        merchantName:action.payload,
+        adjustmentMatters:action.payload,
+      };
+    },
+    getTypesOfMerchantsR(state, action) {
+      return {
+        ...state,
+        typesOfMerchants:action.payload,
       };
     },
   }

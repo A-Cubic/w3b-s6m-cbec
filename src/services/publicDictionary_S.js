@@ -68,16 +68,23 @@ export async function getExpressData(params) {
   });
 }
 // 客商名称
-export async function nameOfMerchant(params) {
-  return request(`/llback/nameOfMerchant/nameOfMerchant`, {
+export async function merchantName(params) {
+  return request(`/llback/Agreement/SelectUserName`, {
+    method: 'POST',
+    body: params,
+  });
+}
+// 调整事项
+export async function getAdjustmentMatters(params) {
+  return request(`/llback/Balance/AdjustmentMatters`, {
     method: 'POST',
     body: params,
   });
 }
 
-// 客商名称
-export async function merchantName(params) {
-  return request(`/llback/nameOfMerchant/merchantName`, {
+// 客商编码 客商名 客商类型 客商码
+export async function getTypesOfMerchants(params) {
+  return request(`/llback/Balance/CustomersInformation`, {
     method: 'POST',
     body: params,
   });

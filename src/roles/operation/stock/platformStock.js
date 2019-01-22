@@ -236,7 +236,7 @@ export default class platformStock extends Component {
         key: 'time',
         render: (val,record) =>
         <div>
-            {<a onClick={(e) => this.handleDel(e, record)}>删除</a>}
+            {/* {<a onClick={(e) => this.handleDel(e, record)}>删除</a>} */}
         </div>
       }
     ];
