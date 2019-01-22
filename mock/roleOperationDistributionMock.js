@@ -95,13 +95,17 @@ export default function roleOperationDistributionMock(url) {
     // ---------------------------------------------财务管理部分-----------------------------------------
     // ------------------采购结算 页-------------
     // 采购结算 - 列表
-    'POST /llback/Balance/AA': GetOrderList,
+    // 'POST /llback/Balance/AA': GetOrderList,
+    'POST /llback/Balance/PurchasePayment': a,
     // 采购结算 - 查看结算明细 - 货款
-    'POST /llback/Balance/BB': GetOrderList,
+   // 'POST /llback/Balance/BB': GetOrderList, //
+    'POST /llback/Balance/GetPaymentDetailed': a,
     // 采购结算 - 查看结算明细 - 其他
-    'POST /llback/Balance/CC': GetOrderList,
-    // 采购结算 - 打印
-    'POST /llback/Balance/DD': GetOrderList,
+   // 'POST /llback/Balance/CC': GetOrderList,
+    'POST /llback/Balance/GetPaymentOtherDetailed': a,
+    // 采购结算 - 打印  Balance/GetPaymentPrinting
+    //'POST /llback/Balance/DD': GetOrderList,
+    'POST /llback/Balance/PurchasePayment': a,
     // 采购结算 - 完成对账
     'POST /llback/Balance/EE': confirmDelivery,
 
@@ -401,6 +405,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
+      flag:'2'
     }, {
       id: '2',
       status: '1',
@@ -418,6 +423,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
+      flag:'2'
     }, {
       id: '3',
       sendid: 3,
@@ -435,6 +441,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
+      flag:'1'
     }, {
       id: '4',
       sendid: 4,
@@ -452,6 +459,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
+      flag:'1'
     }, {
       id: '5',
       status: '2',
@@ -469,6 +477,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
+      flag:'1'
     }],
     pagination: {
       current: 1,

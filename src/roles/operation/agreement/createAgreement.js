@@ -32,6 +32,10 @@ export default class createAgreement extends Component {
     //   type:'roleOperationDistribution/storesSales',
     //   payload:{}
     // })
+    this.props.dispatch({
+      type:'publicDictionary/merchantName',
+      payload:{}
+    })
   }
   componentDidMount() {
     this.init();
@@ -71,7 +75,7 @@ export default class createAgreement extends Component {
       formValues: {},
       sortedInfo: null,
     });
-    this.init();
+   // this.init();
   }
   // handleTableChange=(pagination, filters, sorter)=>{
   //   const params = {
@@ -94,10 +98,12 @@ export default class createAgreement extends Component {
   renderForm(){
     const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-
+    console.log('fs',this.props)
+   // const { publicDictionary:{merchantName} } = this.props;
+    //console.log('xxxmerchantName',this.props)
     //上传 
     const propsa = {
-      name: 'file',
+     name: 'file',
      multiple: true,
      action: '//jsonplaceholder.typicode.com/posts/',
       onChange(info) {
@@ -114,7 +120,7 @@ export default class createAgreement extends Component {
       },
     };
 
-    //console.log('xxx',this.props)
+
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>

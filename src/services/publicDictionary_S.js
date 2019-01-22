@@ -75,4 +75,10 @@ export async function nameOfMerchant(params) {
   });
 }
 
-
+// 客商名称
+export async function merchantName(params) {
+  return request(`/llback/nameOfMerchant/merchantName`, {
+    method: 'POST',
+    body: params,
+  });
+}

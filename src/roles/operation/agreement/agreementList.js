@@ -95,9 +95,10 @@ export default class agreementList extends Component {
   
   renderForm(){
     const { roleOperationDistribution:{agreementList:{tableData}} } = this.props;
+    //const { publicDictionary:{merchantName} } = this.props;
     const { getFieldDecorator } = this.props.form;
    // const { publicDictionary:{nameOfMerchant} } = this.props;
-    console.log('xxx',this.props)
+   // console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
