@@ -804,6 +804,21 @@ export default {
         }
       }
     },
+    newDataR(state, action){
+      // console.log('xxx',action.payload.list)
+      
+      return {
+        ...state,
+        deliveryForm:{
+          ...state.deliveryForm,
+          tableData:{
+            ...state.deliveryForm.tableData,
+            list:[],
+            
+          }
+        }
+      }
+    },
 
     // 我要发货- 删除
     deleteGoodsListR(state,action){
