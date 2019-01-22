@@ -938,6 +938,7 @@ export default {
         selectProduct:{
           ...state.selectProduct,
           tableData:action.payload,
+          dotNum:action.payload.item.num,
           id:action.payload.id,
           isDelete:action.payload.isDelete,
           usercode:action.payload.usercode,

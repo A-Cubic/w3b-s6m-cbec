@@ -90,13 +90,13 @@ export default class deliveryForm extends Component {
           type: 'roleOperationDistribution/getDeliverGoods',
             payload: {
               ...values,
-              id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id
+              id:item.id
             },
             callback: this.onSubmissionCallback
         });
        // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
       } else {
-        message.error("请导入询价商品");
+        message.error("请导入发货商品");
       }
 
     });
@@ -115,6 +115,7 @@ export default class deliveryForm extends Component {
 
   //保存
   onPreservation=(e)=>{
+    const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -133,7 +134,7 @@ export default class deliveryForm extends Component {
         type: 'roleOperationDistribution/getDeliverGoodsSave',
           payload: {
             ...values,
-            id:this.props.roleOperationDistribution.deliveryForm.tableData.list == ''?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id
+            id:item.id
           },
           callback:this.onPreservationCallback
       });
@@ -720,5 +721,6 @@ export default class deliveryForm extends Component {
     );
   }
 }
+
 
 
