@@ -93,6 +93,7 @@ export default class initiateInquiry extends Component {
       this.setState({
         formValues: {},
       });
+      this.props.dispatch(routerRedux.push('/bulkPurchases/inquiryList'))
      }else{
       message.error("保存失败");
      }
@@ -143,8 +144,6 @@ export default class initiateInquiry extends Component {
   //提交
   handleOnSubmission = (e)=>{
     const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
-  //  console.log('ffffff',this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list=='')
-   // console.log(this.props)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)

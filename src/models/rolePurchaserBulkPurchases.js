@@ -201,14 +201,14 @@ export default {
     *getPreservationData({ payload,callback  },{ call,put }){
       const response = yield call(getPreservationData, payload);
     console.log('~res111保存接口',response)
-    //   if(response!==undefined){
-    //     callback(response)
-    //     yield put({
-    //       type: 'getPreservationDataR',
-    //       payload: response,
-    //     })
-    //     yield put(routerRedux.push('/bulkPurchases/inquiryList'));
-    //   }
+      if(response!==undefined){
+        callback(response)
+        // yield put({
+        //   type: 'getPreservationDataR',
+        //   payload: response,
+        // })
+        // yield put(routerRedux.push('/bulkPurchases/inquiryList'));
+      }
     },
 
      // 发起询价-提交接口
@@ -258,7 +258,7 @@ export default {
     //发起询价 - 导入询价商品
     *uploadOrderbill({ payload,callback },{ call,put}){
       const response = yield call(getUploadOrderbillDX, payload);
-      // console.log('~uploadOrderbill',response)
+      console.log('~uploadOrderbill',response)
       if (response !== undefined) {
         callback(response)
         yield put({
@@ -651,8 +651,11 @@ export default {
         ...state,
         initiateInquiry:{
           ...state.initiateInquiry,
-          pur:action.payload.list[0].purchasesn,
-          tableData:action.payload
+          tableData:{
+            ...state.initiateInquiry.tableData,
+
+            list:action.payload.list
+          }
           //list:action.payload
         }
       }
