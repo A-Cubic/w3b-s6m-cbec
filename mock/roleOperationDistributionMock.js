@@ -24,45 +24,45 @@ export default function roleOperationDistributionMock(url) {
     // -----------------我要发货-------------------
 
     // 我要发货 - 选择发货
-    'POST /llback/Warehouse/OperationDeliveryImport': url,
+    'POST /llback/Warehouse/OperationDeliveryImport': a,
 
     // 我要发货 - 删除
-    'POST /llback/Warehouse/DeliverGoodsDelete': url,
+    'POST /llback/Warehouse/DeliverGoodsDelete': a,
 
     // 我要发货 - 分页
-    'POST /llback/Warehouse/DeliverGoodsList': url,
+    'POST /llback/Warehouse/DeliverGoodsList': a,
 
     // 我要发货 - 提交
-    'POST /llback/Warehouse/DeliverOrderSubmission': url,
+    'POST /llback/Warehouse/DeliverOrderSubmission': a,
 
     // 我要发货 - 保存
-    'POST /llback/Warehouse/DeliverOrderConserve': url,
+    'POST /llback/Warehouse/DeliverOrderConserve': a,
 
     // 我要发货 - 改变数量
-    'POST /llback/Warehouse/DeliverGoodsNum': url,
+    'POST /llback/Warehouse/DeliverGoodsNum': a,
 
     // -----------------发货管理-选择发货商品 -----------------
 
     // 发货管理-选择发货商品 - 获取数据 选择发货商品 跳页接口
-    'POST /llback/Warehouse/ChooseDeliverGoods': url,
+    'POST /llback/Warehouse/ChooseDeliverGoods': a,
 
     // 选择发货商品 勾选
-    'POST /llback/Warehouse/ChooseGoods': url,
+    'POST /llback/Warehouse/ChooseGoods': a,
 
 
     // -----------------发货管理-发货列表 -----------------
     // 发货列表-获取data列表 翻页，查询等
-    'POST /llback/Warehouse/DeliverOrderList': url,
+    'POST /llback/Warehouse/DeliverOrderList': a,
 
     // 发货列表 - 删除
-    'POST /llback/Warehouse/DeliverOrderListDelete': url,
+    'POST /llback/Warehouse/DeliverOrderListDelete': a,
 
     // 发货列表- 点击查看
-    // 'POST /llback/Warehouse/DeliverOrderDetails': a,
-    'POST /llback/Warehouse/DeliverOrderDetails': url,
+    // 'POST /llback/Warehouse/DeliverOrderDetails': a, 
+    'POST /llback/Warehouse/DeliverOrderDetails': a,
 
     // 发货列表- 撤回
-    'POST /llback/Warehouse/DeliverOrderListWithdraw': url,
+    'POST /llback/Warehouse/DeliverOrderListWithdraw': a,
 
     // -----------------选择商品返回发货单（带参） 页------
 
@@ -90,7 +90,7 @@ export default function roleOperationDistributionMock(url) {
 
     // -----------------查看合同 页--------------
      'POST /llback/Agreement/ContractDetails': a,
-     'POST /llback/Agreement/getImg': contractInformation,
+    
 
     // ---------------------------------------------财务管理部分-----------------------------------------
     // ------------------采购结算 页-------------
@@ -108,10 +108,10 @@ export default function roleOperationDistributionMock(url) {
     // ------------------手动调账（查看） 页-------
 
     // 采购结算 - 完成对账
-    'POST /llback/Balance/ManualChangeAccount': a, 
+    'POST /llback/Balance/ManualChangeAccount': url, 
     // 采购结算 - 创建对账单保存按钮
-    'POST /llback/Balance/saveCreatOrder': SendOrder,
-
+    //'POST /llback/Balance/saveCreatOrder': SendOrder,
+    'POST /llback/Balance/CreateAccount': url,
   };
 }
 export function getPayment(req, res) {

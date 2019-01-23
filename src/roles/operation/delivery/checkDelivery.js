@@ -45,11 +45,11 @@ export default class deliveryForm extends Component {
   }
 
   componentDidMount() {
-    this.init()
+   
   }
 
   init(){
-
+    
   }
 
 
@@ -77,7 +77,7 @@ export default class deliveryForm extends Component {
   renderForm(){
   const { roleOperationDistribution:{checkDelivery:{tableData:{list, pagination,item}}} } = this.props;
   const { getFieldDecorator } = this.props.form;
-
+   // console.log('tableData',this.props)
     const props = {
       action: getUploadUrl(),
       headers: getHeader(),

@@ -20,7 +20,7 @@ import {
 
   //---------------------------------------------合同管理---------------------------------------------
   getAgreementListData, //合同列表
-  getCheckAgreementData,getImg,//合同查看
+  getCheckAgreementData,//getImg,//合同查看
   getcreateAgreementData, //创建合同,
   //---------------------------------------------财务管理部分-----------------------------------------
   //------------------采购结算 页---------
@@ -78,6 +78,7 @@ export default {
           getTel:"",
         },
       },
+      id:''
     },
 
     //-----------------选择发货商品 页--------------
@@ -478,13 +479,19 @@ export default {
     //  发货管理-发货列表 - 查看页面 - 分页
     *getPagingShipmentListView({ payload,callback },{ call,put }){
       const response = yield call(getPagingShipmentListView, payload);
-
+      const responseLIstData = yield call(getSeeData, payload);
       if(response!==undefined){
       //  callback(response)
         yield put({
           type: 'getPagingShipmentListViewR',
           payload: response,
         })
+        if(responseLIstData!==undefined){
+          yield put({
+            type: 'getSeeDataR',
+            payload: responseLIstData,
+          })
+        }
       }
     },
 
@@ -603,14 +610,10 @@ export default {
     },
     //查看图片 getImg
     *getImg({ payload },{ call,put }){
-      const response = yield call(getImg, payload);
-      //console.log('~~payload',payload)
-      if(response!==undefined){
         yield put({
           type: 'getImgR',
           payload: {src:payload.src,visible:payload.visible}
         })
-      }
     },
 
     //---------------------------------------------财务管理部分-----------------------------------------
@@ -712,6 +715,7 @@ export default {
     //获取手动调账列表
     *saveCreatOrder({ callback,payload },{ call,put }){
       const response = yield call(saveCreatOrder, payload);
+      const responseListData = yield call(getManualTransferData, {});
       if(response!==undefined){
         if(response.type==1){
           message.success('保存成功')
@@ -720,6 +724,12 @@ export default {
             payload: false,
           })
           callback()
+          if(responseListData!==undefined){
+            yield put({
+              type: 'getManualTransferDataR',
+              payload: responseListData,
+            })
+          }
         }else{
           message.error(response.msg)
         }
@@ -791,11 +801,12 @@ export default {
      // 我要发货- 导入询价商品
 
      deliverGoodsuploadOrderbillR(state, action){
-      // console.log('xxx',action.payload.list)
+     //console.log('xxx',action.payload.item.id,)
       return {
         ...state,
         deliveryForm:{
           ...state.deliveryForm,
+          id:action.payload.item.id,
           tableData:{
             ...state.deliveryForm.tableData,
             list:action.payload.list,
@@ -839,6 +850,7 @@ export default {
 
     // 我要发货- 分页 -
     getPagingR(state, action){
+      console.log('勾返回',action)
       return {
         ...state,
         deliveryForm:{
@@ -958,6 +970,8 @@ export default {
           isDelete:action.payload.isDelete,
           usercode:action.payload.usercode,
         },
+        ...state.deliveryForm,
+        id:action.payload.item.id,
       }
     },
 
@@ -1053,11 +1067,11 @@ export default {
      //发货管理-发货列表 - 查看页面 - 分页
      //  我要发货- 分页 -
      getPagingShipmentListViewR(state, action){
+       console.log('qqq',action.payload.list)
       return {
         ...state,
         checkDelivery:{
           ...state.checkDelivery,
-
             list:action.payload.list,
             pagination:action.payload.pagination,
         }
@@ -1078,7 +1092,8 @@ export default {
             list:action.payload.list,
             pagination:action.payload.pagination,
             item:action.payload.item,
-          }
+          },
+          id:action.payload.item.id
         }
       }
     },
@@ -1183,7 +1198,7 @@ export default {
         }
     },
 
-    getImg(state, action){
+    getImgR(state, action){
      // console.log('qqq',action.payload)
       return {
         ...state,
