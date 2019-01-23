@@ -72,6 +72,7 @@ export default class deliveryForm extends Component {
   //提交
   handleOnSubmission = (e)=>{
     const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
+    //console.log(item.id)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -90,7 +91,7 @@ export default class deliveryForm extends Component {
           type: 'roleOperationDistribution/getDeliverGoods',
             payload: {
               ...values,
-              id:item.id
+              id:item.id==''?list[0].id:item.id
             },
             callback: this.onSubmissionCallback
         });
@@ -109,13 +110,13 @@ export default class deliveryForm extends Component {
       this.setState({
         formValues: {},
       });
-     }else{
      }
   }
 
   //保存
   onPreservation=(e)=>{
-    const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
+    const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
+    // console.log('bb',item.id)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -134,7 +135,9 @@ export default class deliveryForm extends Component {
         type: 'roleOperationDistribution/getDeliverGoodsSave',
           payload: {
             ...values,
-            id:item.id
+            //id:item.id
+            //id:item.id==''||list!==''?list[0].id:item.id
+            id:id
           },
           callback:this.onPreservationCallback
       });
@@ -194,6 +197,8 @@ export default class deliveryForm extends Component {
 
   //选择发货商品按钮
   deliverGoods = (e) => {
+  const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -216,7 +221,7 @@ export default class deliveryForm extends Component {
              // fileTemp: info.file.response.fileName[0],
               //usercode:"cgs",
               usercode:that.state.usercode,
-              id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
+              id:item.id==''?list[0].id:item.id,
               isDelete:'0',
               ...values
             },
@@ -236,7 +241,7 @@ export default class deliveryForm extends Component {
                 type: 'roleOperationDistribution/getchooseShipment',
                 payload: {
                   usercode:that.state.usercode,
-                  id:that.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
+                  id:item.id==''?list[0].id:item.id,
                   isDelete:'1',
                   ...values
                 },
@@ -250,9 +255,6 @@ export default class deliveryForm extends Component {
           message.error('请填写采购商');
         }
       }
-
-
-
     });  }
 
 
@@ -260,6 +262,10 @@ export default class deliveryForm extends Component {
 
   // 上传销售数据
   handleUploadChange=(info)=>{
+  const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+  // const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
+  // console.log(this.props.roleOperationDistribution)
+  // console.log('id',id)
       if(info.file.status === 'done') {
         const that =  this
         if(this.props.roleOperationDistribution.deliveryForm.tableData.list ==''){
@@ -267,10 +273,10 @@ export default class deliveryForm extends Component {
             that.props.dispatch({
               type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
               payload: {
-              fileTemp: info.file.response.fileName[0],
+                fileTemp: info.file.response.fileName[0],
                 //usercode:"cgs",
                 usercode:that.state.usercode,
-                id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
+                id:item.id==''?list[0].id:item.id,
                 //fileTemp:info.file.name
                 //fileTemp:'2.xlsx'
               },
@@ -287,22 +293,24 @@ export default class deliveryForm extends Component {
               title: '提示',
               content: '确定覆盖现有发货商品？',
               onOk() {
+                const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = that.props;
+
                 let no = that.props.roleOperationDistribution.deliveryForm.tableData.list
-                console.log('yes',no)
+  
                 that.props.dispatch({
                   type: 'roleOperationDistribution/newDataR',
                   payload:{}
                 });
-                console.log('no',no)
+      
                 that.props.dispatch({
                   type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
                   payload: {
-                  fileTemp: info.file.response.fileName[0],
+                    fileTemp: info.file.response.fileName[0],
                     //usercode:"cgs",
                     usercode:that.state.usercode,
-                    id:that.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
+                    id:item.id==''?list[0].id:item.id,
                    //fileTemp:info.file.name
-                   //fileTemp:'2.xlsx'
+                  // fileTemp:'2.xlsx'
                   },
                   callback: that.onUploadCallback
                 });
@@ -446,8 +454,8 @@ export default class deliveryForm extends Component {
   const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
 
   const { publicDictionary:{purchaserArr} } = this.props;
-  //console.log('XXXX',this.props.roleOperationDistribution.deliveryForm)
-
+  // console.log('XXXX',item.id )
+  // console.log('qqq',list[0].id =='')  
   const { getFieldDecorator } = this.props.form;
 
     const props = {

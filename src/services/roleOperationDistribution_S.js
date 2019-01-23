@@ -179,14 +179,21 @@ export async function getDeliveryListData(params) {
   }
 
   //发货管理-发货列表 - 查看页面 - 分页
+  // export async function getPagingShipmentListView(params) {
+  //   // return request(`/llback/delivery/getPagingShipmentListView`, {
+  //   // return request(`/llback/Warehouse/DeliverOrderList`, {
+  //   return request(`/llback/Warehouse/DeliverOrderDetails`, {
+  //     method: 'POST',
+  //     body: params,
+  //   });
+  // }
   export async function getPagingShipmentListView(params) {
-    // return request(`/llback/delivery/getPagingShipmentListView`, {
-    return request(`/llback/Warehouse/DeliverOrderList`, {
+    // return request(`/llback/delivery/getSeeData`, {
+    return request(`/llback/Warehouse/DeliverOrderDetails`, {
       method: 'POST',
       body: params,
     });
   }
-
 
 
    //发货管理-发货列表 - 撤回
@@ -262,13 +269,7 @@ export async function getCheckAgreementData(params) {
    body: params,
  });
 }
-export async function getImg(params) {
-  //return request(`/llback/Sales/getCheckAgreementData`, {
-    return request(`/llback/Agreement/getImg`, {
-     method: 'POST',
-     body: params,
-   });
-  }
+
 //---------------------------------------------财务管理部分-----------------------------------------
 //------------------采购结算 页---------
 // 采购结算 - 列表
@@ -317,13 +318,15 @@ export async function changeStatusCompleteReconciliation(params) {
 
 // 手动调账 - 列表
 export async function getManualTransferData(params) {
+  //return request(`/llback/Balance/QQ`,{
   return request(`/llback/Balance/ManualChangeAccount`,{
     method: 'POST',
     body: params,
   })
 }// 手动调账 - 保存 手动调账单
 export async function saveCreatOrder(params) {
-  return request(`/llback/Balance/saveCreatOrder`,{
+  // return request(`/llback/Balance/saveCreatOrder`,{
+  return request(`/llback/Balance/CreateAccount`,{
     method: 'POST',
     body: params,
   })

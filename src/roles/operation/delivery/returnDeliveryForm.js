@@ -34,7 +34,7 @@ const confirm = Modal.confirm;
 
 @Form.create()
 // 发货管理 - 发货单表单
-export default class returnDeliveryForm extends Component {
+export default class deliveryForm extends Component {
   state={
     formValues:{},
     data: [],
@@ -52,8 +52,8 @@ export default class returnDeliveryForm extends Component {
   init(){
     if(this.props.roleOperationDistribution.deliveryForm.tableData.item.getName !=''){
       this.setState({
-        purchase:true,
-        usercode:this.props.roleOperationDistribution.deliveryForm.tableData.item.usercode
+          purchase:true,
+          usercode:this.props.roleOperationDistribution.deliveryForm.tableData.item.usercode
       });
     }else {
       this.setState({
@@ -72,6 +72,7 @@ export default class returnDeliveryForm extends Component {
   //提交
   handleOnSubmission = (e)=>{
     const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
+   // console.log(item.id)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -88,13 +89,13 @@ export default class returnDeliveryForm extends Component {
       if(this.props.roleOperationDistribution.deliveryForm.tableData.list != ''){
         this.props.dispatch({
           type: 'roleOperationDistribution/getDeliverGoods',
-          payload: {
-            ...values,
-            id:item.id
-          },
-          callback: this.onSubmissionCallback
+            payload: {
+              ...values,
+              id:item.id==''?list[0].id:item.id
+            },
+            callback: this.onSubmissionCallback
         });
-        // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
+       // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
       } else {
         message.error("请导入发货商品");
       }
@@ -109,13 +110,13 @@ export default class returnDeliveryForm extends Component {
       this.setState({
         formValues: {},
       });
-    }else{
-    }
+     }
   }
 
   //保存
   onPreservation=(e)=>{
-    const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
+    const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
+    // console.log('bb',item.id)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -132,13 +133,15 @@ export default class returnDeliveryForm extends Component {
       this.props.dispatch({
 
         type: 'roleOperationDistribution/getDeliverGoodsSave',
-        payload: {
-          ...values,
-          id:item.id
-        },
-        callback:this.onPreservationCallback
+          payload: {
+            ...values,
+            //id:item.id
+            //id:item.id==''||list!==''?list[0].id:item.id
+            id:id
+          },
+          callback:this.onPreservationCallback
       });
-      // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
+     // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
     });
   }
   onPreservationCallback = (params) => {
@@ -149,9 +152,9 @@ export default class returnDeliveryForm extends Component {
       this.setState({
         formValues: {},
       });
-    }else{
+     }else{
       message.error("保存失败");
-    }
+     }
   }
 
   //下载运单模板
@@ -172,10 +175,10 @@ export default class returnDeliveryForm extends Component {
     };
     this.props.dispatch({
       type: 'roleOperationDistribution/getPaging',
-      payload: {
-        ...params,
-        id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id
-      },
+       payload: {
+         ...params,
+         id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id
+       },
     });
   }
 
@@ -194,6 +197,8 @@ export default class returnDeliveryForm extends Component {
 
   //选择发货商品按钮
   deliverGoods = (e) => {
+  const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -213,10 +218,10 @@ export default class returnDeliveryForm extends Component {
           that.props.dispatch({
             type: 'roleOperationDistribution/getchooseShipment',
             payload: {
-              // fileTemp: info.file.response.fileName[0],
+             // fileTemp: info.file.response.fileName[0],
               //usercode:"cgs",
               usercode:that.state.usercode,
-              id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
+              id:item.id==''?list[0].id:item.id,
               isDelete:'0',
               ...values
             },
@@ -236,7 +241,7 @@ export default class returnDeliveryForm extends Component {
                 type: 'roleOperationDistribution/getchooseShipment',
                 payload: {
                   usercode:that.state.usercode,
-                  id:that.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
+                  id:item.id==''?list[0].id:item.id,
                   isDelete:'1',
                   ...values
                 },
@@ -250,9 +255,6 @@ export default class returnDeliveryForm extends Component {
           message.error('请填写采购商');
         }
       }
-
-
-
     });  }
 
 
@@ -260,59 +262,75 @@ export default class returnDeliveryForm extends Component {
 
   // 上传销售数据
   handleUploadChange=(info)=>{
-    if(info.file.status === 'done') {
-      const that =  this
-      if(this.props.roleOperationDistribution.deliveryForm.tableData.list ==''){
-        if(that.state.purchase == true){
-          that.props.dispatch({
-            type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
-            payload: {
-              fileTemp: info.file.response.fileName[0],
-              //usercode:"cgs",
-              usercode:that.state.usercode,
-              id:this.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':this.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
-              //fileTemp:info.file.name
-            },
-            callback: that.onUploadCallback
-          });
+  const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+  // const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
+  // console.log(this.props.roleOperationDistribution)
+  // console.log('id',id)
+      if(info.file.status === 'done') {
+        const that =  this
+        if(this.props.roleOperationDistribution.deliveryForm.tableData.list ==''){
+          if(that.state.purchase == true){
+            that.props.dispatch({
+              type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
+              payload: {
+                fileTemp: info.file.response.fileName[0],
+                //usercode:"cgs",
+                usercode:that.state.usercode,
+                id:item.id==''?list[0].id:item.id,
+                //fileTemp:info.file.name
+                //fileTemp:'2.xlsx'
+              },
+              callback: that.onUploadCallback
+            });
+          } else {
+            message.error('请填写采购商');
+          }
+
         } else {
-          message.error('请填写采购商');
-        }
+          if(that.state.purchase == true){
 
-      } else {
-        if(that.state.purchase == true){
-          confirm({
-            title: '提示',
-            content: '确定覆盖现有发货商品？',
-            onOk() {
-              that.props.dispatch({
-                type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
-                payload: {
-                  fileTemp: info.file.response.fileName[0],
-                  //usercode:"cgs",
-                  usercode:that.state.usercode,
-                  id:that.props.roleOperationDistribution.deliveryForm.tableData.list[0]==undefined?'':that.props.roleOperationDistribution.deliveryForm.tableData.list[0].id,
-                  //fileTemp:info.file.name
-                },
-                callback: that.onUploadCallback
-              });
-            },
-            onCancel() {
-              //console.log('Cancel');
-            },
-          });
-        }else {
-          message.error('请填写采购商');
-        }
+            confirm({
+              title: '提示',
+              content: '确定覆盖现有发货商品？',
+              onOk() {
+                const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = that.props;
 
-      }
+                let no = that.props.roleOperationDistribution.deliveryForm.tableData.list
+  
+                that.props.dispatch({
+                  type: 'roleOperationDistribution/newDataR',
+                  payload:{}
+                });
+      
+                that.props.dispatch({
+                  type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
+                  payload: {
+                    fileTemp: info.file.response.fileName[0],
+                    //usercode:"cgs",
+                    usercode:that.state.usercode,
+                    id:item.id==''?list[0].id:item.id,
+                   //fileTemp:info.file.name
+                  // fileTemp:'2.xlsx'
+                  },
+                  callback: that.onUploadCallback
+                });
+              },
+              onCancel() {
+                //console.log('Cancel');
+              },
+            });
+          }else {
+            message.error('请填写采购商');
+          }
+
+        }
     }
   }
   onUploadCallback = (params) => {
     const msg = params.msg;
     if(params.item.type==="0"){
 
-      message.error(params.item.msg);
+     message.error(params.item.msg);
     }else{
       message.success("上传成功",5);
     }
@@ -323,7 +341,7 @@ export default class returnDeliveryForm extends Component {
     },()=>{
       //console.log('bbbbbb',this.state.value)
     });
-  }
+    }
 
 
 //改变数量 GoodsNum
@@ -331,90 +349,90 @@ export default class returnDeliveryForm extends Component {
   inputOnBlur = (record,val) =>{
 
     //.log('val',this.state.value)
-    // console.log('record',record.id)
-    const b = this.props.roleOperationDistribution.deliveryForm.tableData.list.map((item) => {
+   // console.log('record',record.id)
+     const b = this.props.roleOperationDistribution.deliveryForm.tableData.list.map((item) => {
       return {
-        // demand:this.state.value,
-        // price:item.supplyPrice,
-        goodsNum:this.state.valueGoodsNum, //发货数量
-        // safeNum:this.state.value,  //安全数量
-        // supplyPrice:item.supplyPrice,
-        id:record.id,
-        barcode:item.barcode,
+       // demand:this.state.value,
+       // price:item.supplyPrice,
+       goodsNum:this.state.valueGoodsNum, //发货数量
+      // safeNum:this.state.value,  //安全数量
+      // supplyPrice:item.supplyPrice,
+       id:record.id,
+       barcode:item.barcode,
       }
-    })
-    const c =b.find(item=>
-      item.barcode===record.barcode
-    )
+     })
+     const c =b.find(item=>
+       item.barcode===record.barcode
+     )
     // console.log('c',c)
 
     if(this.state.valueGoodsNum != ''){
       //if(record.goodsNum != this.state.value){
-      //    console.log('传数')
-      this.props.dispatch({
-        type: 'roleOperationDistribution/getChangeNum',
-        //payload: params,
-        payload: {
-          barcode: c.barcode,
-          goodsNum: c.goodsNum,
-          id: c.id
-        },
-      });
+    //    console.log('传数')
+        this.props.dispatch({
+          type: 'roleOperationDistribution/getChangeNum',
+          //payload: params,
+          payload: {
+            barcode: c.barcode,
+            goodsNum: c.goodsNum,
+            id: c.id
+          },
+        });
       //}
     }
-  }
+   }
 
-  //记录改变SafeNum
-  onChangeSafeNum=(v)=>{
-    //  console.log('valueGoodsNum',v)
+   //记录改变SafeNum
+   onChangeSafeNum=(v)=>{
+  //  console.log('valueGoodsNum',v)
     this.setState({
       valueSafeNum: v
     },()=>{
       //console.log('bbbbbb',this.state.value)
     });
 
-  }
+    }
 
 //改变数量 SafeNum
   //onChange
   inputOnBlurSafeNum = (record,val) =>{
 
-    //  console.log('valxxx',this.state.valueSafeNum)
-    // console.log('record',record.id)
-    const b = this.props.roleOperationDistribution.deliveryForm.tableData.list.map((item) => {
+  //  console.log('valxxx',this.state.valueSafeNum)
+   // console.log('record',record.id)
+     const b = this.props.roleOperationDistribution.deliveryForm.tableData.list.map((item) => {
       return {
-        // demand:this.state.value,
-        // price:item.supplyPrice,
-        safeNum:this.state.valueSafeNum, //发货数量
-        // safeNum:this.state.value,  //安全数量
-        // supplyPrice:item.supplyPrice,
-        id:record.id,
-        barcode:item.barcode,
+       // demand:this.state.value,
+       // price:item.supplyPrice,
+       safeNum:this.state.valueSafeNum, //发货数量
+      // safeNum:this.state.value,  //安全数量
+      // supplyPrice:item.supplyPrice,
+       id:record.id,
+       barcode:item.barcode,
       }
-    })
-    const c =b.find(item=>
-      item.barcode===record.barcode
-    )
-    //  console.log('c',c)
+     })
+     const c =b.find(item=>
+       item.barcode===record.barcode
+     )
+   //  console.log('c',c)
 
     if(this.state.valueSafeNum != ''){
       //if(record.safeNum != this.state.value){
-      //    console.log('传数')
-      this.props.dispatch({
-        type: 'roleOperationDistribution/getChangeNum',
-        //payload: params,
-        payload: {
-          barcode: c.barcode,
-          safeNum: c.safeNum,
-          id: c.id
-        },
-      });
+    //    console.log('传数')
+        this.props.dispatch({
+          type: 'roleOperationDistribution/getChangeNum',
+          //payload: params,
+          payload: {
+            barcode: c.barcode,
+            safeNum: c.safeNum,
+            id: c.id
+          },
+        });
       //}
     }
-  }
+   }
 
 
-  //获取采购商
+   //获取采购商
 
   handleSearch = (value) => {
     //console.log('handleSearch_value',value)
@@ -422,7 +440,7 @@ export default class returnDeliveryForm extends Component {
   }
 
   handleChange = (value) => {
-    //  console.log('value',value)
+  //  console.log('value',value)
     this.setState({
       purchase:true,
       usercode:value,
@@ -433,12 +451,12 @@ export default class returnDeliveryForm extends Component {
 
 
   renderForm(){
-    const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+  const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
 
-    const { publicDictionary:{purchaserArr} } = this.props;
-    //console.log('XXXX',this.props.roleOperationDistribution.deliveryForm)
-
-    const { getFieldDecorator } = this.props.form;
+  const { publicDictionary:{purchaserArr} } = this.props;
+  // console.log('XXXX',item.id )
+  // console.log('qqq',list[0].id =='')  
+  const { getFieldDecorator } = this.props.form;
 
     const props = {
       action: getUploadUrl(),
@@ -536,28 +554,28 @@ export default class returnDeliveryForm extends Component {
           <Col md={6} sm={24}>
             <FormItem label="采购商：">
 
-              {getFieldDecorator('usercode',{
-                //initialValue:'1'
-                // initialValue:item.sendType==''?'1':item.sendType,
-                initialValue:item.usercode,
-                // placeholder:"请输入采购商",
-                rules: [{ required: true, message: '请输入采购商：' }],
-              })(
-                <Select
-                  showSearch
-                  // value={this.state.value}
-                  placeholder="请输入采购商"
-                  defaultActiveFirstOption={false}
-                  showArrow={false}
-                  onSearch={this.handleSearch}
-                  onChange={this.handleChange}
-                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                  // filterOption={false}
-                  // notFoundContent={null}
-                >
-                  {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)}
-                </Select>
-              )}
+                {getFieldDecorator('usercode',{
+                  //initialValue:'1'
+                  // initialValue:item.sendType==''?'1':item.sendType,
+                  initialValue:item.usercode,
+                 // placeholder:"请输入采购商",
+                  rules: [{ required: true, message: '请输入采购商：' }],
+                })(
+                  <Select
+                    showSearch
+                   // value={this.state.value}
+                    placeholder="请输入采购商"
+                    defaultActiveFirstOption={false}
+                    showArrow={false}
+                    onSearch={this.handleSearch}
+                    onChange={this.handleChange}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                   // filterOption={false}
+                   // notFoundContent={null}
+                  >
+                    {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)}
+                  </Select>
+                )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -583,28 +601,28 @@ export default class returnDeliveryForm extends Component {
           <Col md={3} sm={24}></Col>
         </Row>
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <div className={styles.line} style={{marginBottom:25}}></div>
-          <div className={styles.takeGoods}>
-            <span></span>
-            发货商品
-            <div style={{marginBottom:'35px'}}></div>
-          </div>
-          <div style={{marginBottom:'20px'}}>
-            <Button style={{ marginLeft: 8 }} type="" onClick={this.deliverGoods}>
-              <Icon type="snippets" />选择发货商品
+        <div className={styles.line} style={{marginBottom:25}}></div>
+        <div className={styles.takeGoods}>
+          <span></span>
+          发货商品
+          <div style={{marginBottom:'35px'}}></div>
+        </div>
+        <div style={{marginBottom:'20px'}}>
+          <Button style={{ marginLeft: 8 }} type="" onClick={this.deliverGoods}>
+            <Icon type="snippets" />选择发货商品
+          </Button>
+          <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
+            <Icon type="download" />下载发货模板
+          </Button>
+          <Upload  {...props}>
+            <Button style={{ marginLeft: 8 }}>
+              <Icon type="cloud-upload-o" /> 导入发货商品
             </Button>
-            <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
-              <Icon type="download" />下载发货模板
-            </Button>
-            <Upload  {...props}>
-              <Button style={{ marginLeft: 8 }}>
-                <Icon type="cloud-upload-o" /> 导入发货商品
-              </Button>
 
-            </Upload>
-          </div>
-          <div>
-          </div>
+          </Upload>
+        </div>
+        <div>
+        </div>
         </Row>
 
       </Form>

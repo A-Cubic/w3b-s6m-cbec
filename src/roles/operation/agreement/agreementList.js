@@ -118,6 +118,8 @@ export default class agreementList extends Component {
                 <Select
                 placeholder="全部"
                 optionFilterProp="label"
+                showSearch
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
                   
                   {/* <Option value="1">大连XX公司</Option>

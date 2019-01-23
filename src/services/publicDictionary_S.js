@@ -76,7 +76,8 @@ export async function merchantName(params) {
 }
 // 调整事项
 export async function getAdjustmentMatters(params) {
-  return request(`/llback/Balance/AdjustmentMatters`, {
+   return request(`/llback/Balance/AdjustmentMatters`, {
+ // return request(`/llback/Balance/DD`, {
     method: 'POST',
     body: params,
   });
@@ -84,7 +85,8 @@ export async function getAdjustmentMatters(params) {
 
 // 客商编码 客商名 客商类型 客商码
 export async function getTypesOfMerchants(params) {
-  return request(`/llback/Balance/CustomersInformation`, {
+ return request(`/llback/Balance/CustomersInformation`, {
+ // return request(`/llback/Balance/EE`, {  
     method: 'POST',
     body: params,
   });

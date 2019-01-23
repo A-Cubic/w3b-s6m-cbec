@@ -164,17 +164,26 @@ export default class manualTransfer extends Component {
         key: 'detail',
         render:val=>val?val:''
       }, {
-        title: '操作',
-        dataIndex: 'operate',
-        key: 'operate',
-        render: (val,record) => {
-          return (
-            <Fragment>
-              {/* <a href="javascript:;" onClick={(e) => this.handleDelete(record)}>删除</a><br/> */}
-            </Fragment>
-          )
-        }
-      }
+        title: '客商编码',
+        dataIndex: 'customersCode',
+        key: 'customersCode',
+      }, {
+        title: '客商名',
+        dataIndex: 'userName',
+        key: 'userName',
+      },
+      // {
+      //   title: '操作',
+      //   dataIndex: 'operate',
+      //   key: 'operate',
+      //   render: (val,record) => {
+      //     return (
+      //       <Fragment>
+      //         {/* <a href="javascript:;" onClick={(e) => this.handleDelete(record)}>删除</a><br/> */}
+      //       </Fragment>
+      //     )
+      //   }
+      // }
     ];
 
     return (
@@ -284,7 +293,7 @@ class ChildModelCreatOrder extends React.Component {
               <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                 <Col md={12} sm={24}>
                 <FormItem label="调整事项：">
-                  {getFieldDecorator('a',{
+                  {getFieldDecorator('adjustType',{
                     rules:[{
                       required:true,message:'请输入调整事项：',
                     }]
@@ -304,7 +313,7 @@ class ChildModelCreatOrder extends React.Component {
                 </Col>
                 <Col md={12} sm={24}>
                   <FormItem label="调整客商" >
-                    {getFieldDecorator('userName',{
+                    {getFieldDecorator('A',{
                        rules:[{
                         required:true,message:'请输调整客商',
                       }]
@@ -316,6 +325,7 @@ class ChildModelCreatOrder extends React.Component {
                       >
                         <Option value="0">供货商</Option>
                         <Option value="1">采购商</Option>
+                        <Option value="2">代理</Option>
 
                       </Select>
                     )}   
@@ -325,19 +335,20 @@ class ChildModelCreatOrder extends React.Component {
               </Row>
               <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                 <Col md={12} sm={24}>
-                  <FormItem label="客商编码" >
-                    {getFieldDecorator('userName',{
-                       rules:[{
-                        required:true,message:'请输商客编码',
-                      }]
+                  
+                  <FormItem label="客商编码">
+                    {getFieldDecorator('userCode',{
+                      rules: [{ required: true, message: '请输入客商编码：' }],
                     })(
                       <Select
-                      placeholder="选择"
-                      optionFilterProp="label"
+                        showSearch
+                        placeholder="请输入客商编码"
+                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                      
                       >
-                        {typesOfMerchants.map((val) => <Option key={val.userCode} value={val.userType} label={val.customersCode}>{val.customersCode}</Option>)}
+                        {typesOfMerchants.map(val => <Option key={val.customersCode} value={val.userCode} label={val.userCode}>{val.userCode}</Option>)}
                       </Select>
-                    )}   
+                    )}
                   </FormItem>
                 </Col>
                 <Col md={12} sm={24}>
@@ -346,7 +357,7 @@ class ChildModelCreatOrder extends React.Component {
               <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                 <Col md={24} sm={48}>
                   <FormItem label="调整事由" >
-                    {getFieldDecorator('y', {
+                    {getFieldDecorator('detail', {
                       rules:[{
                         required:true,message:'请输入调整事由',
                       }]

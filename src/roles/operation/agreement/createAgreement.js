@@ -24,6 +24,9 @@ export default class createAgreement extends Component {
     formValues:{},
     visible: false,
     visibleChildCheck:false,
+    fileList:[],
+    file:{},
+    thumbUrl:'',
   }
 
   //****/
@@ -97,6 +100,43 @@ export default class createAgreement extends Component {
     this.props.dispatch(routerRedux.push('/agreement/agreementList'))
   }
 
+  //导入
+  handleUploadChange=(info)=>{
+    // console.log(info)
+    this.setState({
+      fileList:info.fileList,
+      file:info.file,
+      thumbUrl:info.file.thumbUrl
+    })
+    if(info.file.status === 'done') {
+      this.props.dispatch({
+        type: 'roleOperationDistribution/uploadOrderbill',
+        payload: {
+          //userId:userId,
+          //fileTemp: info.file.response.fileName[0]
+          fileTemp:info.file.name
+        },
+        callback: this.onUploadCallback,
+      });
+     
+    }
+
+  }
+
+
+  onUploadCallback = (params) => {
+    const msg = params.msg;
+    if(params.item.type==="0"){
+
+     message.error(params.item.msg);
+    }else{
+      message.success("上传成功",5);
+    }
+  }
+
+
+
+
   renderForm(){
     const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
@@ -104,24 +144,27 @@ export default class createAgreement extends Component {
    // const { publicDictionary:{merchantName} } = this.props;
     //console.log('xxxmerchantName',this.props)
     //上传 
-    const propsa = {
-     name: 'file',
-     multiple: true,
-     action: '//jsonplaceholder.typicode.com/posts/',
-      onChange(info) {
-        const status = info.file.status;
-        console.log('status',status)
-        if (status !== 'uploading') {
-          console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-          message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      },
+    const props = {
+      action: getUploadUrl(),
+      // data: {test: 123}, //传递到后台的自定义参数
+      headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
+      onChange: this.handleUploadChange, //回调函数通过res.filelist[i].respose获取回传的文件名
+      multiple: false
     };
-
+    // const onValidateForm = () => {
+    //   if(this.state.file.response!==undefined){
+    //     this.props.dispatch({
+    //       type: 'goods/step1Upload',
+    //       payload: {
+    //         userId:userId,
+    //         fileTemp: this.state.file.response.fileName[0]
+    //       },
+    //       callback: this.onUploadCallback,
+    //     });
+    //   }else{
+    //     message.warning('请选择需要上传的.xlsx文件')
+    //   }
+    // };
 
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -255,39 +298,52 @@ export default class createAgreement extends Component {
             扣点方式
           </div>
         </Row>        
-                      {/* //////////         */}
-                      <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+                    
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={3} sm={24}></Col>
           <Col md={5} sm={24}>
             <FormItem label="平台：">
-              {getFieldDecorator('purchaseName',{
-                rules: [{ required: true, message: '请输入平台' }],
+              {getFieldDecorator('aa',{
+                rules: [{ required: true, message: '请输入平台扣点' }],
               })(
-                <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
+                <Input style={{ width: '100%' }} placeholder="请输入平台扣点" />
               )}
             </FormItem>
           </Col>
-          <Col md={1} sm={24}></Col>
+          <Col md={1} sm={24}>
+            <span style={{textAlign:'center',fontSize:'18px',marginTop:'10px',fontStyle:'normal',lineHeight:'200%'}}>
+              <em>%</em><em>+</em> 
+            </span>
+          </Col>
           <Col md={5} sm={24}>
             <FormItem label="供货中介：">
-              {getFieldDecorator('purchaseName',{
-                rules: [{ required: true, message: '请输入供货中介：' }],
+              {getFieldDecorator('bb',{
+                rules: [{ required: true, message: '请输入供货中介扣点：' }],
               })(
-                <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
+                <Input style={{ width: '100%' }} placeholder="请输入供货中介扣点" />
               )}
             </FormItem>
           </Col>
-          <Col md={1} sm={24}></Col>
+          <Col md={1} sm={24}>
+            <span style={{textAlign:'center',fontSize:'18px',marginTop:'10px',fontStyle:'normal',lineHeight:'200%'}}>
+              <em>%</em><em>+</em> 
+            </span>
+          </Col>
           <Col md={5} sm={24}>
             <FormItem label="采购中介：">
-              {getFieldDecorator('purchaseName',{
-                rules: [{ required: true, message: '请输入采购中介：' }],
+              {getFieldDecorator('cc',{
+                rules: [{ required: true, message: '请输入采购中介扣点：' }],
               })(
-                <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
+                <Input style={{ width: '100%' }} placeholder="请输入采购中介扣点" />
               )}
+              
             </FormItem>
           </Col>
-          <Col md={1} sm={24}></Col>      
+          <Col md={1} sm={24}>
+            <span style={{textAlign:'center',fontSize:'18px',marginTop:'10px',fontStyle:'normal',lineHeight:'200%'}}>
+              <em>%</em>
+            </span>
+          </Col>      
           <Col md={3} sm={24}></Col>
         </Row>           
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -301,7 +357,7 @@ export default class createAgreement extends Component {
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
-            <Dragger {...propsa}>
+            <Dragger {...props}>
               <p className="ant-upload-drag-icon">
                 <Icon type="inbox" />
               </p>
@@ -313,18 +369,10 @@ export default class createAgreement extends Component {
           <Col md={7} sm={24}></Col>
         </Row>          
 
-        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
-            
-          </Col>
-          <Col md={9} sm={24}>
-            <Button type="primary" htmlType="submit">保存</Button>
-            {/* <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button> */}
-            <Button style={{ marginLeft: 8 }} onClick={this.handlecancel}>取消</Button>
-          </Col>
-          <Col md={6} sm={24}>
-            
-          </Col>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginTop:'15px', marginBottom:'5px',textAlign:'center'}}>
+          <Button type="primary" htmlType="submit">保存</Button>
+          {/* <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button> */}
+          <Button style={{ marginLeft: 8 }} onClick={this.handlecancel}>取消</Button>
         </Row>
         {/* <Divider dashed /> */}
       </Form>

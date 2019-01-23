@@ -1,4 +1,4 @@
-// const orderManagement = 'http://console.llwell.net/';
+// const orderManagement = 'http://192.168.0.127:54195/';
 export default function publicDictionaryMock(url) {
   return {
     // 获取代理合作方
@@ -20,11 +20,13 @@ export default function publicDictionaryMock(url) {
     // 获取采购商信息（运营发货单）
     'POST /llback/Warehouse/DeliveryPurchasersList': url,
     // 客商名称
-    'POST /llback/Agreement/SelectUserName': 'http://192.168.0.127:54195/',
+    'POST /llback/Agreement/SelectUserName': url,
     // 调整事项
-    'POST /llback/Balance/AdjustmentMatters': 'http://192.168.0.127:54195/',
+    'POST /llback/Balance/AdjustmentMatters': url,
+    // 'POST /llback/Balance/DD': DD,
     // 客商编码 客商名 客商类型 客商码
-    'POST /llback/Balance/CustomersInformation': 'http://192.168.0.127:54195/',
+    'POST /llback/Balance/CustomersInformation': url,
+    // 'POST /llback/Balance/EE': EE,
   };
 }
 export function getPlatform(req, res) {
@@ -43,6 +45,8 @@ export function getPlatform(req, res) {
     },
   ]);
 }
+
+
 export function bb(req, res) {
   res.send([
     '大连仓D',
