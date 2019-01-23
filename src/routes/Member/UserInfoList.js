@@ -125,7 +125,7 @@ export default class UserInfoList extends Component {
       type: 'member/updateStatus',
       payload: {
         userid: record.id,
-        flag: record.flag,
+        flag: record.flag==1?0:1,
       },
       callback: this.onChangeStatusCallback,
     });
