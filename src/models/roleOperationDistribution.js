@@ -815,6 +815,37 @@ export default {
         }
       }
     },
+
+
+    
+    getDatanoR(state, action){
+      //console.log('xxx',action.payload.item.id,)
+       return {
+         ...state,
+         deliveryForm:{
+           ...state.deliveryForm,
+           id:'',
+           tableData:{
+            list: [],
+          purchase:[],
+          pagination:{},
+          item:{
+            sendName:"",
+            sendTel:"",
+            express:"",
+            waybillNo:"",
+            getName:"",
+            getcode:"",
+            getTel:"",
+          },
+           }
+         }
+       }
+     },
+
+     
+
+
     newDataR(state, action){
       // console.log('xxx',action.payload.list)
       

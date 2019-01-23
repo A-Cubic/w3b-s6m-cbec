@@ -34,12 +34,12 @@ export default class initiateInquiry extends Component {
         this.init()
     }else{
 
-        console.log('这是menu 的 发货单 此处填写清空modal数据')
+      //  console.log('这是menu 的 发货单 此处填写清空modal数据')
     }
   }
   init(){
     const {match,dispatch}=this.props;
-    console.log('fs',JSON.parse(match.params.biography))
+   // console.log('fs',JSON.parse(match.params.biography))
     //const b=JSON.parse(match.params.biography)}
     const getData = JSON.parse(match.params.biography)
     //console.log('getData',getData)
@@ -56,7 +56,8 @@ export default class initiateInquiry extends Component {
   }
   //保存
   onPreservation=(e)=>{
-    console.log('ttttt',this.props.rolePurchaserBulkPurchases)
+    const {rolePurchaserBulkPurchases:{initiateInquiry:{id}} } = this.props;
+  //  console.log('保存',id)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -78,7 +79,7 @@ export default class initiateInquiry extends Component {
       type: 'rolePurchaserBulkPurchases/getPreservationData',
         payload: {
           ...values,
-          purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur!=''?this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list[0].purchasesn:''
+          purchasesn:id
         },
         callback:this.onPreservationCallback
       });
@@ -144,6 +145,8 @@ export default class initiateInquiry extends Component {
   //提交
   handleOnSubmission = (e)=>{
     const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
+    const {rolePurchaserBulkPurchases:{initiateInquiry:{id}} } = this.props;
+  //  console.log('提交',id)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -160,14 +163,14 @@ export default class initiateInquiry extends Component {
       });
      // console.log('pur',this.props.rolePurchaserBulkPurchases.initiateInquiry.pur)
      // || this.props.rolePurchaserBulkPurchases.initiateInquiry
-      if (this.props.rolePurchaserBulkPurchases.initiateInquiry.pur!==''  ) {
+      if (id!==''  ) {
         message.success('提交成功');
         this.props.dispatch({
           // type: 'rolePurchaserBulkPurchases/getInquiryListData',
          type: 'rolePurchaserBulkPurchases/getSubmissionData',
            payload: {
              ...values,
-            purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur==''?this.props.rolePurchaserBulkPurchases.initiateInquiry.tableData.list[0].purchasesn:this.props.rolePurchaserBulkPurchases.initiateInquiry.pur
+            purchasesn:id
            },
            callback: this.onSubmissionCallback
          });
@@ -195,13 +198,16 @@ export default class initiateInquiry extends Component {
   // 上传销售数据
   handleUploadChange=(info)=>{
    // console.log('fileTemp',info.file.response)
+    const {rolePurchaserBulkPurchases:{initiateInquiry:{id}} } = this.props;
+
+    //console.log('导入',id)
     if(info.file.status === 'done') {
       this.props.dispatch({
         type: 'rolePurchaserBulkPurchases/uploadOrderbill',
         payload: {
-          purchasesn:'',
-           fileTemp: info.file.response.fileName[0]
-          //fileTemp:info.file.name
+          purchasesn:id,
+           //fileTemp: info.file.response.fileName[0]
+          fileTemp:info.file.name
         },
         callback: this.onUploadCallback
       });
@@ -222,7 +228,7 @@ export default class initiateInquiry extends Component {
     const RadioGroup = Radio.Group;
     const { getFieldDecorator } = this.props.form;
     const {rolePurchaserBulkPurchases:{initiateInquiry:{information,pur,tableData:{item,list, pagination}}} } = this.props;
-   console.log('111111', item)
+   //console.log('111111', item)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

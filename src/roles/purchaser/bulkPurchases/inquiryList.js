@@ -25,6 +25,10 @@ export default class inquiryList extends Component {
       type:'rolePurchaserBulkPurchases/getInquiryListData',
       payload:{}
     })
+    this.props.dispatch({
+      type:'rolePurchaserBulkPurchases/noDataR',
+      payload:{}
+    })
   }
   componentDidMount() {
     this.init();
@@ -184,8 +188,8 @@ export default class inquiryList extends Component {
         key: 'sendTime',
         render: (val,record) =>
           <div>
-              {/*{record.status !=6?<a onClick={()=>this.handleViewState(record)}>查看<br/></a>:<div></div>}*/}
-              <a onClick={()=>this.handleViewState(record)}>查看<br/></a>
+              {record.status !=6?<a onClick={()=>this.handleViewState(record)}>查看<br/></a>:<div></div>}
+              {/* <a onClick={()=>this.handleViewState(record)}>查看<br/></a> */}
               {record.status ==7?<a onClick={(e) => this.handleDel(e, record)}>删除</a>:<div></div>}
           </div>
       }

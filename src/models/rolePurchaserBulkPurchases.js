@@ -38,6 +38,7 @@ export default {
         },
       list: [],
       pagination:{},
+      id:''
     },
 
       // information:{
@@ -629,28 +630,44 @@ export default {
       }
     },
 
-    //  发起询价- 分页 -改
-    getPagingR(state, action){
+    //  发起询价- 清空数据
+    noDataR(state, action){
        return {
          ...state,
          initiateInquiry:{
            ...state.initiateInquiry,
           // tableData:action.payload
           // ...state.initiateInquiry.tableData,
-             list:action.payload.list,
-             pagination:action.payload.pagination,
+          id:'',
+          tableData:{
+            ...state.initiateInquiry.tableData,
+            pagination:action.payload.pagination,
+            list:[],
+            item:{
+              purchasesn: "",
+              sendType:"",
+              contacts:"",
+              sex:0,
+              tel:"",
+              deliveryTime:'',
+              remark:""
+            },
+          },
+             
          }
        }
      },
-
-
+     
+     
 
     // 发起询价- 导入询价商品
     uploadOrderbillR(state, action){
+      console.log('action',action)
       return {
         ...state,
         initiateInquiry:{
           ...state.initiateInquiry,
+          id:action.payload.item.purchasesn,
           tableData:{
             ...state.initiateInquiry.tableData,
 
@@ -660,6 +677,7 @@ export default {
         }
       }
     },
+    
 
 
     //发起询价 - 删除
@@ -737,8 +755,10 @@ export default {
          initiateInquiry:{
            ...state.initiateInquiry,
            //pur:action.payload.list[0].purchasesn,
-           tableData:action.payload
+           tableData:action.payload,
+           id:action.payload.item.purchasesn
          },
+
          information:{
            ...state.initiateInquiry.information,
            information:action.payload

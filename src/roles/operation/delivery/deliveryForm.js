@@ -50,6 +50,7 @@ export default class deliveryForm extends Component {
   }
 
   init(){
+    console.log(1111111111)
     if(this.props.roleOperationDistribution.deliveryForm.tableData.item.getName !=''){
       this.setState({
           purchase:true,
@@ -60,11 +61,18 @@ export default class deliveryForm extends Component {
         purchase:false,
       });
     }
+    // this.props.dispatch({
+    //   type: 'publicDictionary/getPurchaserArr',
+    //   //payload: params,
+    //   payload: {
+    //     purchasesn:1,
+    //   },
+    // });
     this.props.dispatch({
-      type: 'publicDictionary/getPurchaserArr',
+      type: 'publicDictionary/getDatanoR',
       //payload: params,
       payload: {
-        purchasesn:1,
+
       },
     });
   }
