@@ -173,7 +173,6 @@ export default class platformStock extends Component {
 
   render() {
     const { roleOperationDistribution:{platformStock:{tableData:{list, pagination}}} } = this.props;
-    console.log('777',list)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -196,7 +195,7 @@ export default class platformStock extends Component {
       title: '商品名称',
       dataIndex: 'goodsName',
       key: 'goodsName',
-        render:val=>`¥${val}`
+        
     },{
       title: '商品条码',
       dataIndex: 'barcode',
@@ -206,7 +205,6 @@ export default class platformStock extends Component {
       title: '规格',
       dataIndex: 'model',
       key: 'model',
-      render:val=>`¥${val}`
     },{
         title: '原产地',
         dataIndex: 'country',
@@ -215,7 +213,7 @@ export default class platformStock extends Component {
         title: '生产商',
         dataIndex: 'brand',
         key: 'brand',
-        render:val=>`¥${val}`
+      
       },{
         title: '库存数量',
         dataIndex: 'pNum',

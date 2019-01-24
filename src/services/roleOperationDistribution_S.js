@@ -253,8 +253,8 @@ export async function agreementListSee(params) {
 
 //-----------------创建合同 页----------
 export async function getcreateAgreementData(params) {
-//return request(`/llback/Sales/getCheckAgreementData`, {
-  return request(`/llback/Agreement/getcreateAgreementData`, {
+//  return request(`/llback/Agreement/getcreateAgreementData`, {
+  return request(`/llback/Agreement/CreateContract`, {
     method: 'POST',
     body: params,
   });
@@ -263,8 +263,8 @@ export async function getcreateAgreementData(params) {
 
 //创建合同 - 上传销售数据
 export async function getcreateAgreementImg(params) {
-   return request(`/llback/delivery/getcreateAgreementImg`, {
- // return request(`/llback/Warehouse/OnloadWarehousingGoods`, {
+  // return request(`/llback/delivery/getcreateAgreementImg`, {
+  return request(`/llback/Agreement/ContractUploadImg`, {
     method: 'POST',
     body: params,
   });

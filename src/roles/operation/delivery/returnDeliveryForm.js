@@ -95,7 +95,7 @@ export default class deliveryForm extends Component {
             },
             callback: this.onSubmissionCallback
         });
-       // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
+        this.props.dispatch(routerRedux.push('/agreement/agreementList'  ))
       } else {
         message.error("请导入发货商品");
       }

@@ -24,9 +24,11 @@ export default class createAgreement extends Component {
     formValues:{},
     visible: false,
     visibleChildCheck:false,
-    fileList:[],
-    file:{},
-    thumbUrl:'',
+    // fileList:[],
+    // file:{},
+    // thumbUrl:'',
+    img:false,//检查img初始是否为空
+    listImg:[]
   }
 
   //****/
@@ -59,17 +61,27 @@ export default class createAgreement extends Component {
       this.setState({
         formValues: values,
       });
-      this.props.dispatch({
-        type: 'roleOperationDistribution/getcreateAgreementData',
-        payload: {
-          ...values,
-        },
-      });
-      this.props.form.resetFields();
-      this.setState({
-        formValues: {},
-        sortedInfo: null,
-      });
+      console.log('img',this.state.listImg.length > 0)
+      if( this.state.img == true){
+        this.props.dispatch({
+          type: 'roleOperationDistribution/getcreateAgreementData',
+          payload: {
+            ...values,
+            list:this.state.listImg
+          },
+        });
+        this.props.form.resetFields();
+        this.setState({
+          formValues: {},
+          sortedInfo: null,
+        });
+       
+      }else{
+        message.error('请上传附件');
+      }
+
+
+     
     });
   }
   handleFormReset =()=>{
@@ -102,41 +114,48 @@ export default class createAgreement extends Component {
 
   //导入
   handleUploadChange=(info)=>{
+    let that = this
     // console.log(info)
-    this.setState({
-      fileList:info.fileList,
-      file:info.file,
-      thumbUrl:info.file.thumbUrl
-    })
     if(info.file.status === 'done') {
       this.props.dispatch({
         type: 'roleOperationDistribution/getcreateAgreementImg',
         payload: {
           //userId:userId,
-          //fileTemp: info.file.response.fileName[0]
-          fileTemp:info.file.name
+          //fileName: info.file.response.fileName[0]
+         fileName:info.file.name
         },
-        callback: this.onUploadCallback,
+        callback: that.onUploadCallback,
       });
      
     }
-    console.log('fileList',fileList)
+   // console.log('info',info)
 
 
   }
 
 
+
   onUploadCallback = (params) => {
-    console.log(params.msg)
+    console.log('1111',params)
     const msg = params.msg;
-    if(params.item.type==="0"){
+    if(params.type==="0"){
 
    //  message.error(params.item.msg);
     }else{
       message.success("上传成功",5);
+       this.state.listImg.push(params.msg)
+       
+      // console.log(this.state.listImg)
+      this.setState({
+        img: true,
+      });
     }
   }
-
+// onRemoveR = (e) => {
+//   //console.log(1111)
+//   console.log('e',e)
+  
+// }
 
 
 
@@ -144,16 +163,19 @@ export default class createAgreement extends Component {
     const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { publicDictionary:{merchantName} } = this.props;
-    console.log('fs',this.props)
+   // console.log('listImg',this.state.listImg)
    // const { publicDictionary:{merchantName} } = this.props;
     //console.log('xxxmerchantName',this.props)
     //上传 
+
     const props = {
       action: getUploadUrl(),
       // data: {test: 123}, //传递到后台的自定义参数
       headers: getHeader(), //未封装的头信息，以满足后台对头参数的验证
       onChange: this.handleUploadChange, //回调函数通过res.filelist[i].respose获取回传的文件名
-      multiple: false
+      multiple: false,
+      // onRemove: this.onRemoveR
+      onRemove:false,
     };
     // const onValidateForm = () => {
     //   if(this.state.file.response!==undefined){
@@ -183,10 +205,10 @@ export default class createAgreement extends Component {
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
             <FormItem label="客商编码：">
-              {getFieldDecorator('purchaseName',{
-                rules: [{ required: true, message: 'bbb请输入联系人' }],
+              {getFieldDecorator('customersCode',{
+                rules: [{ required: true, message: '请输入客商编码' }],
               })(
-                <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
+                <Input style={{ width: '100%' }} placeholder="请输客商编码" />
               )}
             </FormItem>
           </Col>
@@ -198,9 +220,10 @@ export default class createAgreement extends Component {
            
             <FormItem label="客商名称：">
               {getFieldDecorator('userName',{
+                  rules: [{ required: true, message: '请输入客商名称' }],
               })(
                 <Select
-                placeholder="全部"
+                placeholder="选择"
                 optionFilterProp="label"
                 showSearch
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -209,7 +232,7 @@ export default class createAgreement extends Component {
                   {/* <Option value="1">大连XX公司</Option>
                   <Option value="2">青岛XX公司</Option> */}
                    {/* {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)} */}
-                  {merchantName.map((val) => <Option key={val.keyId} value={val.keyId} label={val.userName}>{val.userName}</Option>)}
+                  {merchantName.map((val) => <Option key={val.keyId} value={val.userName} label={val.userName}>{val.userName}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -222,7 +245,7 @@ export default class createAgreement extends Component {
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
             <FormItem label="签订日期：">
-                {getFieldDecorator('aaa',{
+                {getFieldDecorator('createTime',{
                   //initialValue:'1'
                   rules: [{ required: true, message: '请输入签订日期：' }],
                 
@@ -238,13 +261,13 @@ export default class createAgreement extends Component {
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
             <FormItem label="结算账期：">
-                {getFieldDecorator('bbb',{
+                {getFieldDecorator('cycle',{
                   //initialValue:'1'
                   initialValue:item.sendType==''?'1':item.sendType,
                   rules: [{ required: true, message: '请输入结算账期：' }],
                 })(
                   <Select
-                      placeholder="全部"
+                      placeholder="选择"
                     >
                     <Option value="1">实时</Option>
                     <Option value="2">日结</Option>
@@ -266,13 +289,13 @@ export default class createAgreement extends Component {
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
             <FormItem label="合作模式：">
-                {getFieldDecorator('ccc',{
+                {getFieldDecorator('model',{
                   //initialValue:'1'
                   initialValue:item.sendType==''?'1':item.sendType,
                   rules: [{ required: true, message: '请输入合作模式：' }],
                 })(
                   <Select
-                      placeholder="全部"
+                      placeholder="选择"
                     >
                     <Option value="1">直营</Option>
                     <Option value="2">代销</Option>
@@ -310,7 +333,7 @@ export default class createAgreement extends Component {
           <Col md={3} sm={24}></Col>
           <Col md={5} sm={24}>
             <FormItem label="平台：">
-              {getFieldDecorator('aa',{
+              {getFieldDecorator('platformPoint',{
                 rules: [{ required: true, message: '请输入平台扣点' }],
               })(
                 <Input style={{ width: '100%' }} placeholder="请输入平台扣点" />
@@ -324,7 +347,7 @@ export default class createAgreement extends Component {
           </Col>
           <Col md={5} sm={24}>
             <FormItem label="供货中介：">
-              {getFieldDecorator('bb',{
+              {getFieldDecorator('supplierPoint',{
                 rules: [{ required: true, message: '请输入供货中介扣点：' }],
               })(
                 <Input style={{ width: '100%' }} placeholder="请输入供货中介扣点" />
@@ -338,7 +361,7 @@ export default class createAgreement extends Component {
           </Col>
           <Col md={5} sm={24}>
             <FormItem label="采购中介：">
-              {getFieldDecorator('cc',{
+              {getFieldDecorator('purchasePoint',{
                 rules: [{ required: true, message: '请输入采购中介扣点：' }],
               })(
                 <Input style={{ width: '100%' }} placeholder="请输入采购中介扣点" />

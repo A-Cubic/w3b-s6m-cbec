@@ -590,11 +590,13 @@ export default {
           type: 'getcreateAgreementDataR',
           payload: response,
         })
+        yield put(routerRedux.push('/agreement/agreementList'));
       }
     },
 
 
     //创建合同 - 上传销售数据
+ 
     *getcreateAgreementImg({ payload,callback },{ call,put}){
       const response = yield call(getcreateAgreementImg, payload);
     //  console.log('~上传销售数据',response)
@@ -603,6 +605,7 @@ export default {
       }
     },
 
+   
 
 
     //-----------------查看合同 页----------
@@ -1238,6 +1241,21 @@ export default {
     //     }
     //   }
     //   },  
+
+          //userId:userId,
+    //   getcreateAgreementImgR(state, action){
+    //   //console.log('xxx',action.payload.item.id,)
+    //    return {
+    //      ...state,
+    //      createAgreement:{
+    //        ...state.createAgreement,
+         
+    //        tableData:{
+    //         tableData:action.payload
+    //        }
+    //      }
+    //    }
+    //  },
 
     //-----------------查看合同 页----------
     getCheckAgreementDataR(state, action){
