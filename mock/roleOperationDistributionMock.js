@@ -24,45 +24,45 @@ export default function roleOperationDistributionMock(url) {
     // -----------------我要发货-------------------
 
     // 我要发货 - 选择发货
-    'POST /llback/Warehouse/OperationDeliveryImport': a,
+    'POST /llback/Warehouse/OperationDeliveryImport': url,
 
     // 我要发货 - 删除
-    'POST /llback/Warehouse/DeliverGoodsDelete': a,
+    'POST /llback/Warehouse/DeliverGoodsDelete': url,
 
     // 我要发货 - 分页
-    'POST /llback/Warehouse/DeliverGoodsList': a,
+    'POST /llback/Warehouse/DeliverGoodsList': url,
 
     // 我要发货 - 提交
-    'POST /llback/Warehouse/DeliverOrderSubmission': a,
+    'POST /llback/Warehouse/DeliverOrderSubmission': url,
 
     // 我要发货 - 保存
-    'POST /llback/Warehouse/DeliverOrderConserve': a,
+    'POST /llback/Warehouse/DeliverOrderConserve': url,
 
     // 我要发货 - 改变数量
-    'POST /llback/Warehouse/DeliverGoodsNum': a,
+    'POST /llback/Warehouse/DeliverGoodsNum': url,
 
     // -----------------发货管理-选择发货商品 -----------------
 
     // 发货管理-选择发货商品 - 获取数据 选择发货商品 跳页接口
-    'POST /llback/Warehouse/ChooseDeliverGoods': a,
+    'POST /llback/Warehouse/ChooseDeliverGoods': url,
 
     // 选择发货商品 勾选
-    'POST /llback/Warehouse/ChooseGoods': a,
+    'POST /llback/Warehouse/ChooseGoods': url,
 
 
     // -----------------发货管理-发货列表 -----------------
     // 发货列表-获取data列表 翻页，查询等
-    'POST /llback/Warehouse/DeliverOrderList': a,
+    'POST /llback/Warehouse/DeliverOrderList': url,
 
     // 发货列表 - 删除
-    'POST /llback/Warehouse/DeliverOrderListDelete': a,
+    'POST /llback/Warehouse/DeliverOrderListDelete': url,
 
     // 发货列表- 点击查看
     // 'POST /llback/Warehouse/DeliverOrderDetails': a, 
-    'POST /llback/Warehouse/DeliverOrderDetails': a,
+    'POST /llback/Warehouse/DeliverOrderDetails': url,
 
     // 发货列表- 撤回
-    'POST /llback/Warehouse/DeliverOrderListWithdraw': a,
+    'POST /llback/Warehouse/DeliverOrderListWithdraw': url,
 
     // -----------------选择商品返回发货单（带参） 页------
 
@@ -73,20 +73,23 @@ export default function roleOperationDistributionMock(url) {
     // ---------------------------------------------销售管理部分-----------------------------------------
     // -----------------门店销售//（查看弹窗） 页---------
     // 获取列表
-    'POST /llback/Sales/ShopSalseOrders': a,
+    'POST /llback/Sales/ShopSalseOrders': url,
     // 查看-弹窗
-    'POST /llback/Sales/ShopSalseOrdersDetails': a,
+    'POST /llback/Sales/ShopSalseOrdersDetails': url,
 
     // ---------------------------------------------合同管理部分-----------------------------------------
     // -----------------合同列表 页--------------
-   'POST /llback/Agreement/ContractList': a,
+   'POST /llback/Agreement/ContractList': url,
    //'POST /llback/Agreement/ContractList': a,
 
     // 'POST /llback/Agreement/ContractDetails': a, //查看跳页
     //'POST /llback/Sales/getAgreementListData': getPayment,
     // -----------------创建合同 页--------------
 
-    'POST /llback/Agreement/getcreateAgreementData': contractInformation,
+    //获取数据
+    'POST /llback/Agreement/getcreateAgreementData': getPayment,
+    // 导入数据
+    'POST /llback/delivery/getcreateAgreementImg': getPayment,
 
     // -----------------查看合同 页--------------
      'POST /llback/Agreement/ContractDetails': a,

@@ -110,7 +110,7 @@ export default class createAgreement extends Component {
     })
     if(info.file.status === 'done') {
       this.props.dispatch({
-        type: 'roleOperationDistribution/uploadOrderbill',
+        type: 'roleOperationDistribution/getcreateAgreementImg',
         payload: {
           //userId:userId,
           //fileTemp: info.file.response.fileName[0]
@@ -120,15 +120,18 @@ export default class createAgreement extends Component {
       });
      
     }
+    console.log('fileList',fileList)
+
 
   }
 
 
   onUploadCallback = (params) => {
+    console.log(params.msg)
     const msg = params.msg;
     if(params.item.type==="0"){
 
-     message.error(params.item.msg);
+   //  message.error(params.item.msg);
     }else{
       message.success("上传成功",5);
     }
@@ -140,6 +143,7 @@ export default class createAgreement extends Component {
   renderForm(){
     const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
+    const { publicDictionary:{merchantName} } = this.props;
     console.log('fs',this.props)
    // const { publicDictionary:{merchantName} } = this.props;
     //console.log('xxxmerchantName',this.props)
@@ -191,23 +195,26 @@ export default class createAgreement extends Component {
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={7} sm={24}></Col>
           <Col md={10} sm={24}>
-            <FormItem label="提货地点：">
-                {getFieldDecorator('sendType',{
-                  //initialValue:'1'
-                  initialValue:item.sendType==''?'1':item.sendType,
-                  rules: [{ required: true, message: '请输入提供地点' }],
-                })(
-                  <Select
-                      placeholder="日本提货"
-                    >
-                    <Option value="1">日本提货</Option>
-                    <Option value="2">韩国提货</Option>
-                    <Option value="3">香港提货</Option>
-                    <Option value="6">国内提货</Option>
-                    </Select>
-                )}
-
+           
+            <FormItem label="客商名称：">
+              {getFieldDecorator('userName',{
+              })(
+                <Select
+                placeholder="全部"
+                optionFilterProp="label"
+                showSearch
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                >
+                  
+                  {/* <Option value="1">大连XX公司</Option>
+                  <Option value="2">青岛XX公司</Option> */}
+                   {/* {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)} */}
+                  {merchantName.map((val) => <Option key={val.keyId} value={val.keyId} label={val.userName}>{val.userName}</Option>)}
+                </Select>
+              )}
             </FormItem>
+
+
           </Col>
           <Col md={7} sm={24}></Col>
         </Row>

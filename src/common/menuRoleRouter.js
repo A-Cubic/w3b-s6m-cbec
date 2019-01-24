@@ -146,7 +146,7 @@ export function operation (dynamicWrapper,app){
     },
     //创建合同
     '/agreement/createAgreement': {
-      component: dynamicWrapper(app, ['roleOperationDistribution'], () => import('../roles/operation/agreement/createAgreement')),
+      component: dynamicWrapper(app, ['roleOperationDistribution','publicDictionary'], () => import('../roles/operation/agreement/createAgreement')),
     },
     //查看合同
     '/agreement/checkAgreement': {

@@ -50,7 +50,7 @@ export default class deliveryForm extends Component {
   }
 
   init(){
-    console.log(1111111111)
+   //判断采购商为空
     if(this.props.roleOperationDistribution.deliveryForm.tableData.item.getName !=''){
       this.setState({
           purchase:true,
@@ -61,15 +61,15 @@ export default class deliveryForm extends Component {
         purchase:false,
       });
     }
-    // this.props.dispatch({
-    //   type: 'publicDictionary/getPurchaserArr',
-    //   //payload: params,
-    //   payload: {
-    //     purchasesn:1,
-    //   },
-    // });
     this.props.dispatch({
-      type: 'publicDictionary/getDatanoR',
+      type: 'publicDictionary/getPurchaserArr',
+      //payload: params,
+      payload: {
+        purchasesn:1,
+      },
+    });
+    this.props.dispatch({
+      type: 'roleOperationDistribution/getDatanoR',
       //payload: params,
       payload: {
 
@@ -80,6 +80,8 @@ export default class deliveryForm extends Component {
   //提交
   handleOnSubmission = (e)=>{
     const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
+    const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
+  
     //console.log(item.id)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
@@ -94,15 +96,45 @@ export default class deliveryForm extends Component {
       this.setState({
         formValues: values,
       });
+      //判断list数据不为空
       if(this.props.roleOperationDistribution.deliveryForm.tableData.list != ''){
+        //判断发货数量不为空
+        // var a  = ''
+        // for(let i=0; i<list.length;i++){
+        //   console.log('000',list[i].goodsNum)
+        //   console.log('list',list)
+        //   if(list[i].goodsNum == 0){
+        //     a = a+list[i].goodsName+','
+        //     console.log('no')
+        //     //break
+        //   } 
+        // }
+        // if(a == ''){
+        //   console.log('yes')
+        //   this.props.dispatch({
+        //     type: 'roleOperationDistribution/getDeliverGoods',
+        //       payload: {
+        //         ...values,
+        //         // id:item.id==''?list[0].id:item.id
+        //         id:id
+        //       },
+        //       callback: this.onSubmissionCallback
+        //   });
+        // }else {
+        //   message.error(a+"发货数量不能为0");
+        // }
+      
         this.props.dispatch({
           type: 'roleOperationDistribution/getDeliverGoods',
             payload: {
               ...values,
-              id:item.id==''?list[0].id:item.id
+              // id:item.id==''?list[0].id:item.id
+              id:id==''?list[0].id:id
             },
             callback: this.onSubmissionCallback
         });
+
+
        // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
       } else {
         message.error("请导入发货商品");
@@ -124,7 +156,8 @@ export default class deliveryForm extends Component {
   //保存
   onPreservation=(e)=>{
     const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
-    // console.log('bb',item.id)
+    const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
+    
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -138,6 +171,7 @@ export default class deliveryForm extends Component {
       this.setState({
         formValues: values,
       });
+
       this.props.dispatch({
 
         type: 'roleOperationDistribution/getDeliverGoodsSave',
@@ -145,7 +179,8 @@ export default class deliveryForm extends Component {
             ...values,
             //id:item.id
             //id:item.id==''||list!==''?list[0].id:item.id
-            id:id
+            // id:id==''?list[0].id:id
+            id:id==''?list[0].id:id
           },
           callback:this.onPreservationCallback
       });
@@ -271,9 +306,9 @@ export default class deliveryForm extends Component {
   // 上传销售数据
   handleUploadChange=(info)=>{
   const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
-  // const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
+  const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
   // console.log(this.props.roleOperationDistribution)
-  // console.log('id',id)
+  
       if(info.file.status === 'done') {
         const that =  this
         if(this.props.roleOperationDistribution.deliveryForm.tableData.list ==''){
@@ -281,12 +316,12 @@ export default class deliveryForm extends Component {
             that.props.dispatch({
               type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
               payload: {
-                fileTemp: info.file.response.fileName[0],
+               fileTemp: info.file.response.fileName[0],
                 //usercode:"cgs",
                 usercode:that.state.usercode,
                 id:item.id==''?list[0].id:item.id,
                 //fileTemp:info.file.name
-                //fileTemp:'2.xlsx'
+               // fileTemp:'2.xlsx'
               },
               callback: that.onUploadCallback
             });

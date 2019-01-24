@@ -261,6 +261,15 @@ export async function getcreateAgreementData(params) {
 }
 
 
+//创建合同 - 上传销售数据
+export async function getcreateAgreementImg(params) {
+   return request(`/llback/delivery/getcreateAgreementImg`, {
+ // return request(`/llback/Warehouse/OnloadWarehousingGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 //-----------------查看合同 页----------
 export async function getCheckAgreementData(params) {
 //return request(`/llback/Sales/getCheckAgreementData`, {

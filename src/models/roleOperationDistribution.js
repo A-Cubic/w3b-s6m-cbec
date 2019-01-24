@@ -21,7 +21,7 @@ import {
   //---------------------------------------------合同管理---------------------------------------------
   getAgreementListData, //合同列表
   getCheckAgreementData,//getImg,//合同查看
-  getcreateAgreementData, //创建合同,
+  getcreateAgreementData,getcreateAgreementImg, //创建合同,
   //---------------------------------------------财务管理部分-----------------------------------------
   //------------------采购结算 页---------
 
@@ -164,6 +164,7 @@ export default {
         list: [],
         pagination:{},
       },
+      listImg:[]
     },
 
 
@@ -398,7 +399,7 @@ export default {
       //  callback(response)
         yield put({
           type: 'getchooseShipmentR',
-          payload: {...response,id:payload.id,usercode:payload.usercode,isDelete:payload.isDelete},
+          payload: {...response,id:payload.id,usercode:payload.usercode,isDelete:payload.isDelete,},
         }),
         yield put({
           type: 'getDeliveryFormSaveFormR',
@@ -521,7 +522,6 @@ export default {
             payload: response,
           })
 
-          console.log('~ ',payload)
           if(responseListData!==undefined){
             yield put({
               type: 'getDeliveryListDataR',
@@ -590,6 +590,16 @@ export default {
           type: 'getcreateAgreementDataR',
           payload: response,
         })
+      }
+    },
+
+
+    //创建合同 - 上传销售数据
+    *getcreateAgreementImg({ payload,callback },{ call,put}){
+      const response = yield call(getcreateAgreementImg, payload);
+    //  console.log('~上传销售数据',response)
+      if (response !== undefined) {
+        callback(response)
       }
     },
 
@@ -769,16 +779,16 @@ export default {
       }
     },
 
-      //平台库存 - 导入列表
-    uploadOrderbillR(state, action){
-     return {
-       ...state,
-       importList:{
-         ...state.importList,
-         tableData:action.payload
-       }
-     }
-   },
+  //     //平台库存 - 导入列表
+  //   uploadOrderbillR(state, action){
+  //    return {
+  //      ...state,
+  //      importList:{
+  //        ...state.importList,
+  //        tableData:action.payload
+  //      }
+  //    }
+  //  },
 
 
     //-----------------库存 - 门店库存 页-----------
@@ -819,7 +829,6 @@ export default {
 
     
     getDatanoR(state, action){
-      //console.log('xxx',action.payload.item.id,)
        return {
          ...state,
          deliveryForm:{
@@ -827,17 +836,17 @@ export default {
            id:'',
            tableData:{
             list: [],
-          purchase:[],
-          pagination:{},
-          item:{
-            sendName:"",
-            sendTel:"",
-            express:"",
-            waybillNo:"",
-            getName:"",
-            getcode:"",
-            getTel:"",
-          },
+            purchase:[],
+            pagination:{},
+            item:{
+              sendName:"",
+              sendTel:"",
+              express:"",
+              waybillNo:"",
+              getName:"",
+              getcode:"",
+              getTel:"",
+            },
            }
          }
        }
@@ -881,7 +890,7 @@ export default {
 
     // 我要发货- 分页 -
     getPagingR(state, action){
-      console.log('勾返回',action)
+  
       return {
         ...state,
         deliveryForm:{
@@ -991,6 +1000,8 @@ export default {
 
     //选择发货商品 跳页接口
     getchooseShipmentR(state, action){
+      // console.log('action',action)
+      // console.log('fs',action.payload.item.id)
       return {
         ...state,
         selectProduct:{
@@ -1016,7 +1027,10 @@ export default {
           ...state.selectProduct,
           tableData:action.payload,
           dotNum:action.payload.item.num
-        }
+        },
+        ...state.deliveryForm,
+        id:action.payload.item.id,
+        
       }
     },
 
@@ -1098,7 +1112,6 @@ export default {
      //发货管理-发货列表 - 查看页面 - 分页
      //  我要发货- 分页 -
      getPagingShipmentListViewR(state, action){
-       console.log('qqq',action.payload.list)
       return {
         ...state,
         checkDelivery:{
@@ -1215,6 +1228,16 @@ export default {
         }
       },
 
+    //  //平台库存 - 导入列表
+    //  uploadOrderbillR(state, action){
+    //   return {
+    //     ...state,
+    //     importList:{
+    //       ...state.importList,
+    //       tableData:action.payload
+    //     }
+    //   }
+    //   },  
 
     //-----------------查看合同 页----------
     getCheckAgreementDataR(state, action){
