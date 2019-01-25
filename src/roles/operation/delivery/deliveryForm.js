@@ -148,7 +148,7 @@ export default class deliveryForm extends Component {
   onPreservation=(e)=>{
     const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
     const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
-    
+  //  console.log(this.props.roleOperationDistribution)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -169,7 +169,8 @@ export default class deliveryForm extends Component {
             //id:item.id
             //id:item.id==''||list!==''?list[0].id:item.id
             // id:id==''?list[0].id:id
-            id:id==''?list[0].id:id
+            //id:id=='' && list[0]==undefined?id :list[0].id
+            id:id
           },
           callback:this.onPreservationCallback
       });
@@ -308,7 +309,7 @@ export default class deliveryForm extends Component {
                 usercode:that.state.usercode,
                 id:item.id==''?list[0].id:item.id,
                 //fileTemp:info.file.name
-               // fileTemp:'2.xlsx'
+                //fileTemp:'2.xlsx'
               },
               callback: that.onUploadCallback
             });
@@ -335,7 +336,7 @@ export default class deliveryForm extends Component {
                     usercode:that.state.usercode,
                     id:item.id==''?list[0].id:item.id,
                    //fileTemp:info.file.name
-                  // fileTemp:'2.xlsx'
+                 //fileTemp:'2.xlsx'
                   },
                   callback: that.onUploadCallback
                 });
@@ -470,6 +471,8 @@ export default class deliveryForm extends Component {
 
   renderForm(){
   const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+  const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
+ 
 
   const { publicDictionary:{purchaserArr} } = this.props;
   // console.log('XXXX',item.id )

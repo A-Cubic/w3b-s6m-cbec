@@ -120,7 +120,8 @@ export default class selectProduct extends Component {
         id: this.props.roleOperationDistribution.selectProduct.tableData.item.id,
       },
     });
-     this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
+    //  this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
+    this.props.dispatch(routerRedux.push('/delivery/returnDeliveryForm' ));  
   }
 
   renderForm(){

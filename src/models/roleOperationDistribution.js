@@ -333,7 +333,7 @@ export default {
       // 我要发货-提交接口
      *getDeliverGoods({ payload,callback  },{ call,put }){
       const response = yield call(getDeliverGoods, payload);
-     //console.log('~resxxxx提交接口',response)
+    // console.log('~resxxxx提交接口',response.type)
       if(response!==undefined){
         if(response.type == 1){
           callback(response)
@@ -343,7 +343,7 @@ export default {
           })
           yield put(routerRedux.push('/delivery/deliveryList'));
         } else {
-          message.error('发货商品不能为0');
+          message.error(response.msg);
 
         }
       }
@@ -499,7 +499,7 @@ export default {
      //  发货管理-发货列表 - 提交
      *getSubmission({ payload,callback },{ call,put }){
       const response = yield call(getSubmission, payload);
-      console.log('提交',response)
+     
       if(response!==undefined){
       //  callback(response)
         yield put({
@@ -599,7 +599,7 @@ export default {
  
     *getcreateAgreementImg({ payload,callback },{ call,put}){
       const response = yield call(getcreateAgreementImg, payload);
-     console.log('~上传销售数据',response)
+    // console.log('~上传销售数据',response)
       if (response !== undefined) {
         
         callback(response)
@@ -1232,31 +1232,7 @@ export default {
         }
       },
 
-    //  //平台库存 - 导入列表
-    //  uploadOrderbillR(state, action){
-    //   return {
-    //     ...state,
-    //     importList:{
-    //       ...state.importList,
-    //       tableData:action.payload
-    //     }
-    //   }
-    //   },  
 
-          //userId:userId,
-    //   getcreateAgreementImgR(state, action){
-    //   //console.log('xxx',action.payload.item.id,)
-    //    return {
-    //      ...state,
-    //      createAgreement:{
-    //        ...state.createAgreement,
-         
-    //        tableData:{
-    //         tableData:action.payload
-    //        }
-    //      }
-    //    }
-    //  },
 
     //-----------------查看合同 页----------
     getCheckAgreementDataR(state, action){
