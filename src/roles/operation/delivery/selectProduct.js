@@ -30,7 +30,6 @@ export default class selectProduct extends Component {
     if(this.props.roleOperationDistribution.selectProduct.tableData.item.usercode == undefined){
       this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
     }
-
     this.props.dispatch({
       type: 'publicDictionary/getGoodsWareHouse',
       payload: {
@@ -52,7 +51,6 @@ export default class selectProduct extends Component {
         ...fieldsValue,
         'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
-
       this.setState({
         formValues: values,
       });
@@ -75,7 +73,6 @@ export default class selectProduct extends Component {
     });
     this.init();
   }
-
   //翻页
   handleTableChange=(pagination, filters, sorter)=>{
    // console.log(11111,this.props.roleOperationDistribution.selectProduct.tableData.item.id)
@@ -97,13 +94,11 @@ export default class selectProduct extends Component {
       },
     });
   }
-
   handleVisible = (flag,who) => {
     this.setState({
       visibleChildCheck:!!flag,
     });
   }
-
 
   //勾选
   Checklist = (e, record, index)=>{
@@ -128,19 +123,17 @@ export default class selectProduct extends Component {
      this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
   }
 
-
   renderForm(){
     const { roleOperationDistribution:{selectProduct:{dotNum,item}} } = this.props;
+    const { roleOperationDistribution:{selectProduct:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { publicDictionary:{wareHouseGoodsArr} } = this.props;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={2} sm={24}>
-
           </Col>
           <Col md={5} sm={24}>
-
             <FormItem label="仓库：">
               {getFieldDecorator('warehouse',{
                 })(
@@ -148,7 +141,6 @@ export default class selectProduct extends Component {
                     placeholder="请选择"
                     optionFilterProp="label"
                   >
-
                     {this.props.roleOperationDistribution.selectProduct.tableData.item.list.map(val => <Option key={val} value={val} label={val}>{val}</Option>)}
                   </Select>
                 )}
@@ -176,6 +168,11 @@ export default class selectProduct extends Component {
           </Col>
         </Row>
         <Divider dashed />
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <div style={{ float: 'right' }}>
+            <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
+          </div>
+        </Row>
         <div className={styles.recordNum} style={{ marginBottom:10,fontSize:16 }}>
           <div className={styles.recordNum_w}  style={{ float: 'float' }}>
             <div className={styles.recordNum_num}>{ dotNum}</div>
@@ -184,9 +181,7 @@ export default class selectProduct extends Component {
             <div></div>
             <Button onClick={this.handleInvoice} type="primary" icon="form">发货单</Button>
           </div>
-          <div style={{ float: 'right' }}>
-            {/* <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span> */}
-          </div>
+          
         </div>
       </Form>
     );
@@ -199,14 +194,11 @@ export default class selectProduct extends Component {
       showQuickJumper: true,
       ...pagination,
     };
-
-
     const { selectedRowKeys } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectedRowKeysChange
     };
-
     const columns = [
       {
         title: '选择',
@@ -219,7 +211,6 @@ export default class selectProduct extends Component {
               <Checkbox
                 onChange={(e) => this.Checklist(e, record, index)}
                 defaultChecked = {record.ischoose}
-
               >
               </Checkbox>
             </Fragment>
@@ -278,7 +269,6 @@ export default class selectProduct extends Component {
         title: '库存同步时间',
         dataIndex: 'time',
         key: 'time',
-
       }
     ];
     const props = {

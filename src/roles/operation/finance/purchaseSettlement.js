@@ -104,7 +104,7 @@ export default class purchaseSettlement extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="结算单号">
-              {getFieldDecorator('status')(
+              {getFieldDecorator('accountCode')(
                 <Input placeholder="请输入结算单号" />
               )}
             </FormItem>

@@ -192,11 +192,13 @@ export default class deliveryList extends Component {
 
         </Row>
         <Divider dashed />
-        <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-          <div style={{ float: 'right' }}>
-            {/* <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span> */}
-          </div>
-        </div>
+        <Row>
+          <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+            <div style={{ float: 'right' }}>
+              <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
+            </div>
+          </div>        
+        </Row>
       </Form>
     );
   }

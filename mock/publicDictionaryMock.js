@@ -19,14 +19,14 @@ export default function publicDictionaryMock(url) {
     // 获取快递
     'POST /llback/Order/GetExpress': url,
     // 获取采购商信息（运营发货单）
-    'POST /llback/Warehouse/DeliveryPurchasersList': a,
+    'POST /llback/Warehouse/DeliveryPurchasersList': url,
     // 客商名称
-    'POST /llback/Agreement/SelectUserName': a,
+    'POST /llback/Agreement/SelectUserName': url,
     // 调整事项
-    'POST /llback/Balance/AdjustmentMatters': a,
+    'POST /llback/Balance/AdjustmentMatters': url,
     // 'POST /llback/Balance/DD': DD,
     // 客商编码 客商名 客商类型 客商码
-    'POST /llback/Balance/CustomersInformation': a,
+    'POST /llback/Balance/CustomersInformation': url,
     // 'POST /llback/Balance/EE': EE,
   };
 }

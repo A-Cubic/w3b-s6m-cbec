@@ -2,7 +2,6 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs,Radio ,InputNumber,AutoComplete,Cascader
-
 } from 'antd';
 import styles from './deliveryForm.less';
 import moment from 'moment';
@@ -11,7 +10,6 @@ import { getCurrentUrl } from '../../../services/api'
 import {message} from "antd/lib/index";
 import {getUploadUrl} from '../../../services/api'
 import {getHeader, getToken} from "../../../utils/Global";
-
 //import jsonp from 'fetch-jsonp';
 import querystring from 'querystring';
 import { init } from 'rollbar';
@@ -23,15 +21,12 @@ const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
-
 const confirm = Modal.confirm;
-
 
 
 @connect(({roleOperationDistribution,publicDictionary }) => ({
   roleOperationDistribution,publicDictionary
 }))
-
 @Form.create()
 // 发货管理 - 发货单表单
 export default class deliveryForm extends Component {
@@ -44,11 +39,9 @@ export default class deliveryForm extends Component {
     purchase:false,
     usercode:''
   }
-
   componentDidMount() {
     this.init()
   }
-
   init(){
     if(this.props.roleOperationDistribution.deliveryForm.tableData.item.getName !=''){
       this.setState({
@@ -99,7 +92,6 @@ export default class deliveryForm extends Component {
       } else {
         message.error("请导入发货商品");
       }
-
     });
   }
   onSubmissionCallback = (params) => {
@@ -156,7 +148,6 @@ export default class deliveryForm extends Component {
       message.error("保存失败");
      }
   }
-
   //下载运单模板
   downloadTemplate=()=>{
     window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/downloadDeliveryTemplate.xlsx'
@@ -194,11 +185,9 @@ export default class deliveryForm extends Component {
     });
   }
 
-
   //选择发货商品按钮
   deliverGoods = (e) => {
   const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
-
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -257,9 +246,6 @@ export default class deliveryForm extends Component {
       }
     });  }
 
-
-
-
   // 上传销售数据
   handleUploadChange=(info)=>{
   const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
@@ -301,7 +287,6 @@ export default class deliveryForm extends Component {
                   type: 'roleOperationDistribution/newDataR',
                   payload:{}
                 });
-      
                 that.props.dispatch({
                   type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
                   payload: {
@@ -322,7 +307,6 @@ export default class deliveryForm extends Component {
           }else {
             message.error('请填写采购商');
           }
-
         }
     }
   }
@@ -343,11 +327,9 @@ export default class deliveryForm extends Component {
     });
     }
 
-
 //改变数量 GoodsNum
   //onChange
   inputOnBlur = (record,val) =>{
-
     //.log('val',this.state.value)
    // console.log('record',record.id)
      const b = this.props.roleOperationDistribution.deliveryForm.tableData.list.map((item) => {
@@ -365,7 +347,6 @@ export default class deliveryForm extends Component {
        item.barcode===record.barcode
      )
     // console.log('c',c)
-
     if(this.state.valueGoodsNum != ''){
       //if(record.goodsNum != this.state.value){
     //    console.log('传数')
@@ -381,7 +362,6 @@ export default class deliveryForm extends Component {
       //}
     }
    }
-
    //记录改变SafeNum
    onChangeSafeNum=(v)=>{
   //  console.log('valueGoodsNum',v)
@@ -390,9 +370,7 @@ export default class deliveryForm extends Component {
     },()=>{
       //console.log('bbbbbb',this.state.value)
     });
-
     }
-
 //改变数量 SafeNum
   //onChange
   inputOnBlurSafeNum = (record,val) =>{
@@ -430,8 +408,6 @@ export default class deliveryForm extends Component {
       //}
     }
    }
-
-
    //获取采购商
 
   handleSearch = (value) => {
@@ -445,19 +421,14 @@ export default class deliveryForm extends Component {
       purchase:true,
       usercode:value,
     });
-
-
   }
-
 
   renderForm(){
   const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
-
   const { publicDictionary:{purchaserArr} } = this.props;
   // console.log('XXXX',item.id )
   // console.log('qqq',list[0].id =='')  
   const { getFieldDecorator } = this.props.form;
-
     const props = {
       action: getUploadUrl(),
       headers: getHeader(),

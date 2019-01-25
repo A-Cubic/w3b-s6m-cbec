@@ -149,12 +149,12 @@ export default class storesSales extends Component {
         title: '零售价',
         dataIndex: 'rprice',
         key: 'rprice',
-          render:val=>`¥${val}`
+        render:val=>`¥${val}`
       },{
         title: '平台采购价（元）',
         dataIndex: 'inprice',
         key: 'inprice',
-
+        render:val=>`¥${val}`
       },{
         title: '平台供货价（元）',
         dataIndex: 'pprice',
@@ -164,6 +164,7 @@ export default class storesSales extends Component {
         title: '服务费（元）',
         dataIndex: 'platformPrice',
         key: 'platformPrice',
+        render:val=>`¥${val}`
       },{
         title: '操作',
         dataIndex: '',
@@ -244,7 +245,7 @@ class StoresSalesSee  extends Component {
   handleTableChange=(pagination, filters, sorter)=>{
    // const { roleOperationDistribution:{storesSales:{childDetailsModelVisible,storesSalesDetails:{item,list,pagination}}} } = this.props;
     const orderId = this.props.roleOperationDistribution.storesSales.storesSalesDetails.item
-    console.log('qqq',this.props.roleOperationDistribution.storesSales.storesSalesDetails)
+   // console.log('qqq',this.props.roleOperationDistribution.storesSales.storesSalesDetails)
     const params = {
       ...pagination,
       
@@ -265,7 +266,7 @@ class StoresSalesSee  extends Component {
       showQuickJumper: true,
       ...pagination,
     };
-     console.log('777', this.props.roleOperationDistribution.storesSales.storesSalesDetails.item)
+     //console.log('777', this.props.roleOperationDistribution.storesSales.storesSalesDetails.item)
   
     const columns = [
       {

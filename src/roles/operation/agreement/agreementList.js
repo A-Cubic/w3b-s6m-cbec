@@ -98,9 +98,11 @@ export default class agreementList extends Component {
   
   renderForm(){
     const { roleOperationDistribution:{agreementList:{tableData}} } = this.props;
+    const { roleOperationDistribution:{agreementList:{tableData:{pagination}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { publicDictionary:{merchantName} } = this.props;
-    // console.log('xxx',merchantName)
+   
+     //console.log('xxx',this.props.roleOperationDistribution.agreementList.tableData.list.length)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -125,14 +127,14 @@ export default class agreementList extends Component {
                   {/* <Option value="1">大连XX公司</Option>
                   <Option value="2">青岛XX公司</Option> */}
                    {/* {purchaserArr.map(val => <Option key={val.usercode} value={val.usercode} label={val.getName}>{val.getName}</Option>)} */}
-                  {merchantName.map((val) => <Option key={val.keyId} value={val.keyId} label={val.userName}>{val.userName}</Option>)}
+                  {merchantName.map((val) => <Option key={val.keyId} value={val.userName} label={val.keyId}>{val.userName}</Option>)}
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="合作模式：">
-              {getFieldDecorator('status',{
+              {getFieldDecorator('model',{
               })(
                 <Select
                   placeholder="全部"
@@ -211,14 +213,17 @@ export default class agreementList extends Component {
         </Row>
 
         <Divider dashed />
-        <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-          <div style={{ float: 'right' }}>
-            {/* <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span> */}
+        <Row  gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+            <div style={{ float: 'right' }}>
+              <span>共查询出符合条件的数据：{tableData?tableData.list.length:0}条，</span>
+            </div>
           </div>
-        </div>
+         
+        </Row>
         <div>
-          <Button onClick={this.handleEstablish} type="primary" style={{marginBottom:'10px'}}><span  >创建合同</span></Button>
-        </div>
+            <Button onClick={this.handleEstablish} type="primary" style={{marginBottom:'10px'}}><span  >创建合同</span></Button>
+          </div>        
       </Form>
       
     );
@@ -328,7 +333,7 @@ export default class agreementList extends Component {
     );
   }
   agreementListSee = (e, record)=>{
-     console.log('record',record.contractCode)
+  //   console.log('record',record.contractCode)
     this.props.dispatch({
       type: 'roleOperationDistribution/getCheckAgreementData',
       payload: {

@@ -24,7 +24,6 @@ export default class storesStock extends Component {
     visible: false,
     visibleChildCheck:false,
   }
-
   //****/
   init(){
     this.props.dispatch({
@@ -46,7 +45,6 @@ export default class storesStock extends Component {
         ...fieldsValue,
         'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
       };
-
       this.setState({
         formValues: values,
       });
@@ -82,12 +80,11 @@ export default class storesStock extends Component {
       visibleChildCheck:!!flag,
     });
   }
-  
   renderForm(){
     const { roleOperationDistribution:{storesStock:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     
-    console.log('xxx',this.props)
+    //console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -101,7 +98,7 @@ export default class storesStock extends Component {
           <Col md={9} sm={24}>
             <FormItem label="商品：">
               {getFieldDecorator('select')(
-                <Input style={{ width: '100%' }} placeholder="可输入采购商名称进行查询" />
+                <Input style={{ width: '100%' }} placeholder="可输入商品条码，商品名称进行查询" />
               )}
             </FormItem>
           </Col>
@@ -111,11 +108,14 @@ export default class storesStock extends Component {
           </Col>
         </Row>
         <Divider dashed />
-        <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-          <div style={{ float: 'right' }}>
-            {/* <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span> */}
+        <Row  gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+            <div style={{ float: 'right' }}>
+              <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
+            </div>
           </div>
-        </div>
+        </Row>
+        
       </Form>
     );
   }
@@ -144,7 +144,7 @@ export default class storesStock extends Component {
       title: '商品条码',
       dataIndex: 'barcode',
       key: 'barcode',
-        render:val=>`¥${val}`
+       
     },{
       title: '规格',
       dataIndex: 'model',
@@ -154,7 +154,7 @@ export default class storesStock extends Component {
       title: '原产地',
       dataIndex: 'country',
       key: 'country',
-      render:val=>`¥${val}`
+     
     },{
       title: '生产商',
       dataIndex: 'brand',
@@ -163,25 +163,27 @@ export default class storesStock extends Component {
       title: '库存数量',
       dataIndex: 'pNum',
       key: 'pNum',
-      render:val=>`¥${val}`
+      
     },{
       title: '零售价',
       dataIndex: 'rprice',
       key: 'rprice',
+      render:val=>`¥${val}`
     },{
       title: '平台供货价',
       dataIndex: 'pprice',
       key: 'pprice',
+      render:val=>`¥${val}`
     },{
       title: '供货商',
       dataIndex: 'supplierName',
       key: 'supplierName',
-      render:val=>`¥${val}`
+      
     },{
       title: '安全库存数',
       dataIndex: 'safeNum',
       key: 'safeNum',
-      render:val=>`¥${val}`
+      
     },{
       title: '库存同步时间',
       dataIndex: 'time',
@@ -202,8 +204,6 @@ export default class storesStock extends Component {
     return (
       <div>
         <Card bordered={false}>
-         
-
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               {this.renderForm()}
@@ -221,7 +221,6 @@ export default class storesStock extends Component {
       </div>
     );
   }
-  
 }
 
 

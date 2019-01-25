@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
+import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,InputNumber  } from 'antd';
 import styles from './createAgreement.less';
 import moment from 'moment';
 import {getCurrentUrl, getUploadUrl} from '../../../services/api'
@@ -37,6 +37,8 @@ export default class createAgreement extends Component {
     //   type:'roleOperationDistribution/storesSales',
     //   payload:{}
     // })
+
+    //获取下拉菜单 客商名字
     this.props.dispatch({
       type:'publicDictionary/merchantName',
       payload:{}
@@ -61,7 +63,7 @@ export default class createAgreement extends Component {
       this.setState({
         formValues: values,
       });
-      console.log('img',this.state.listImg.length > 0)
+    //  console.log('img',this.state.listImg.length > 0)
       if( this.state.img == true){
         this.props.dispatch({
           type: 'roleOperationDistribution/getcreateAgreementData',
@@ -75,13 +77,9 @@ export default class createAgreement extends Component {
           formValues: {},
           sortedInfo: null,
         });
-       
       }else{
         message.error('请上传附件');
       }
-
-
-     
     });
   }
   handleFormReset =()=>{
@@ -121,26 +119,20 @@ export default class createAgreement extends Component {
         type: 'roleOperationDistribution/getcreateAgreementImg',
         payload: {
           //userId:userId,
-          //fileName: info.file.response.fileName[0]
-         fileName:info.file.name
+         fileName: info.file.response.fileName[0]
+         //fileName:info.file.name
         },
         callback: that.onUploadCallback,
       });
      
     }
-   // console.log('info',info)
-
-
   }
-
-
-
   onUploadCallback = (params) => {
-    console.log('1111',params)
+   // console.log('1111',params)
     const msg = params.msg;
     if(params.type==="0"){
 
-   //  message.error(params.item.msg);
+    message.error(params.msg);
     }else{
       message.success("上传成功",5);
        this.state.listImg.push(params.msg)
@@ -177,21 +169,7 @@ export default class createAgreement extends Component {
       // onRemove: this.onRemoveR
       onRemove:false,
     };
-    // const onValidateForm = () => {
-    //   if(this.state.file.response!==undefined){
-    //     this.props.dispatch({
-    //       type: 'goods/step1Upload',
-    //       payload: {
-    //         userId:userId,
-    //         fileTemp: this.state.file.response.fileName[0]
-    //       },
-    //       callback: this.onUploadCallback,
-    //     });
-    //   }else{
-    //     message.warning('请选择需要上传的.xlsx文件')
-    //   }
-    // };
-
+   
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -328,7 +306,8 @@ export default class createAgreement extends Component {
             扣点方式
           </div>
         </Row>        
-                    
+    
+
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={3} sm={24}></Col>
           <Col md={5} sm={24}>
@@ -336,7 +315,8 @@ export default class createAgreement extends Component {
               {getFieldDecorator('platformPoint',{
                 rules: [{ required: true, message: '请输入平台扣点' }],
               })(
-                <Input style={{ width: '100%' }} placeholder="请输入平台扣点" />
+                <InputNumber style={{ width: '100%' }} placeholder="请输入平台扣点"  min={0} max={100}  />
+               
               )}
             </FormItem>
           </Col>
@@ -350,7 +330,7 @@ export default class createAgreement extends Component {
               {getFieldDecorator('supplierPoint',{
                 rules: [{ required: true, message: '请输入供货中介扣点：' }],
               })(
-                <Input style={{ width: '100%' }} placeholder="请输入供货中介扣点" />
+                <InputNumber style={{ width: '100%' }} placeholder="请输入供货中介扣点" min={0} max={100} />
               )}
             </FormItem>
           </Col>
@@ -364,7 +344,7 @@ export default class createAgreement extends Component {
               {getFieldDecorator('purchasePoint',{
                 rules: [{ required: true, message: '请输入采购中介扣点：' }],
               })(
-                <Input style={{ width: '100%' }} placeholder="请输入采购中介扣点" />
+                <InputNumber style={{ width: '100%' }} placeholder="请输入采购中介扣点"   min={0} max={100}  />
               )}
               
             </FormItem>
@@ -392,11 +372,11 @@ export default class createAgreement extends Component {
                 <Icon type="inbox" />
               </p>
               <p className="ant-upload-text">点击或将文件拖拽到这里上传</p>
-              <p className="ant-upload-hint">支持扩展名：.rar .zip .doc .docx .pdf .jpg...</p>
-            </Dragger>,
-           
+              <p className="ant-upload-hint">支持扩展名：.jpg .png .jpeg .tga .tif,并且不能大写</p>
+            </Dragger>
+          
           </Col>
-          <Col md={7} sm={24}></Col>
+          <Col md={7} sm={24}></Col> 
         </Row>          
 
         <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginTop:'15px', marginBottom:'5px',textAlign:'center'}}>

@@ -93,14 +93,14 @@ export default class platformStock extends Component {
   // 上传销售数据
   handleUploadChange=(info)=>{
 
-    console.log('userId',)
+  //  console.log('userId',)
     if(info.file.status === 'done') {
       this.props.dispatch({
         type: 'roleOperationDistribution/uploadOrderbill',
         payload: {
           //userId:userId,
-          //fileTemp: info.file.response.fileName[0]
-          fileTemp:info.file.name
+          fileTemp: info.file.response.fileName[0]
+         // fileTemp:info.file.name
         },
         callback: this.onUploadCallback,
       });
@@ -118,9 +118,8 @@ export default class platformStock extends Component {
   }
   renderForm(){
     const { roleOperationDistribution:{platformStock:{tableData:{item}}} } = this.props;
+    const { roleOperationDistribution:{platformStock:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    
-     console.log('aa',item)
     // console.log(777)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -162,15 +161,16 @@ export default class platformStock extends Component {
           </Col>
         </Row>
         <Divider dashed />
-        <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-          <div style={{ float: 'right' }}>
-            {/* <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span> */}
-          </div>
-        </div>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+            <div style={{ float: 'right' }}>
+              <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
+            </div>
+          </div>       
+        </Row>
       </Form>
     );
   }
-
   render() {
     const { roleOperationDistribution:{platformStock:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
@@ -259,7 +259,7 @@ export default class platformStock extends Component {
           </div>
           <div style={{display: 'inline-flex',marginBottom:20,}} className={styles.hot}>
             <Button  type="primary" onClick={this.downloadTemplate} style={{ marginLeft: 8 }}>
-              <Icon type="download" />下载销售模板
+              <Icon type="download" />下载库存模板
             </Button>
             <Upload {...props}>
               <Button style={{ marginLeft: 8 }}>

@@ -18,15 +18,11 @@ import { init } from 'rollbar';
 import { isRegExp } from 'util';
 
 const userId = getToken().userId;
-
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
-
 const confirm = Modal.confirm;
-
-
 
 @connect(({roleOperationDistribution,publicDictionary }) => ({
   roleOperationDistribution,publicDictionary
@@ -81,7 +77,6 @@ export default class deliveryForm extends Component {
   handleOnSubmission = (e)=>{
     const {roleOperationDistribution:{deliveryForm:{tableData:{item,list, pagination}}} } = this.props;
     const { roleOperationDistribution:{deliveryForm:{id}} } = this.props;
-  
     //console.log(item.id)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
@@ -123,7 +118,6 @@ export default class deliveryForm extends Component {
         // }else {
         //   message.error(a+"发货数量不能为0");
         // }
-      
         this.props.dispatch({
           type: 'roleOperationDistribution/getDeliverGoods',
             payload: {
@@ -133,13 +127,10 @@ export default class deliveryForm extends Component {
             },
             callback: this.onSubmissionCallback
         });
-
-
        // this.props.dispatch(routerRedux.push('/delivery/deliveryList/'  ))
       } else {
         message.error("请导入发货商品");
       }
-
     });
   }
   onSubmissionCallback = (params) => {
@@ -171,9 +162,7 @@ export default class deliveryForm extends Component {
       this.setState({
         formValues: values,
       });
-
       this.props.dispatch({
-
         type: 'roleOperationDistribution/getDeliverGoodsSave',
           payload: {
             ...values,
@@ -301,8 +290,6 @@ export default class deliveryForm extends Component {
     });  }
 
 
-
-
   // 上传销售数据
   handleUploadChange=(info)=>{
   const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
@@ -328,23 +315,18 @@ export default class deliveryForm extends Component {
           } else {
             message.error('请填写采购商');
           }
-
         } else {
           if(that.state.purchase == true){
-
             confirm({
               title: '提示',
               content: '确定覆盖现有发货商品？',
               onOk() {
                 const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = that.props;
-
                 let no = that.props.roleOperationDistribution.deliveryForm.tableData.list
-  
                 that.props.dispatch({
                   type: 'roleOperationDistribution/newDataR',
                   payload:{}
                 });
-      
                 that.props.dispatch({
                   type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
                   payload: {
@@ -365,7 +347,6 @@ export default class deliveryForm extends Component {
           }else {
             message.error('请填写采购商');
           }
-
         }
     }
   }
@@ -385,7 +366,6 @@ export default class deliveryForm extends Component {
       //console.log('bbbbbb',this.state.value)
     });
     }
-
 
 //改变数量 GoodsNum
   //onChange
@@ -457,7 +437,6 @@ export default class deliveryForm extends Component {
        item.barcode===record.barcode
      )
    //  console.log('c',c)
-
     if(this.state.valueSafeNum != ''){
       //if(record.safeNum != this.state.value){
     //    console.log('传数')
@@ -474,7 +453,6 @@ export default class deliveryForm extends Component {
     }
    }
 
-
    //获取采购商
 
   handleSearch = (value) => {
@@ -488,10 +466,7 @@ export default class deliveryForm extends Component {
       purchase:true,
       usercode:value,
     });
-
-
   }
-
 
   renderForm(){
   const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
@@ -661,13 +636,11 @@ export default class deliveryForm extends Component {
             <Button style={{ marginLeft: 8 }}>
               <Icon type="cloud-upload-o" /> 导入发货商品
             </Button>
-
           </Upload>
         </div>
         <div>
         </div>
         </Row>
-
       </Form>
     );
   }
@@ -679,7 +652,6 @@ export default class deliveryForm extends Component {
       showQuickJumper: true,
       ...pagination,
     };
-
     const columns = [
       {
         title: '序号',
@@ -771,7 +743,6 @@ export default class deliveryForm extends Component {
                    onChange={this.handleTableChange}
               // loading={submitting}
             />
-
             <Row style={{marginTop:'15px', marginBottom:'5px',textAlign:'center'}}>
               <Button style={{ marginLeft: 48 }} htmlType="submit" onClick={this.onPreservation}>保存</Button>
               <Button style={{ marginLeft: 20}} type="primary" onClick={this.handleOnSubmission} >提交</Button>

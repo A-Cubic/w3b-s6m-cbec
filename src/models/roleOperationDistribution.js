@@ -499,7 +499,7 @@ export default {
      //  发货管理-发货列表 - 提交
      *getSubmission({ payload,callback },{ call,put }){
       const response = yield call(getSubmission, payload);
-
+      console.log('提交',response)
       if(response!==undefined){
       //  callback(response)
         yield put({
@@ -599,8 +599,9 @@ export default {
  
     *getcreateAgreementImg({ payload,callback },{ call,put}){
       const response = yield call(getcreateAgreementImg, payload);
-    //  console.log('~上传销售数据',response)
+     console.log('~上传销售数据',response)
       if (response !== undefined) {
+        
         callback(response)
       }
     },

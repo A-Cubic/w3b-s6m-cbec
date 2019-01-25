@@ -220,7 +220,7 @@ class ChildModelCreatOrder extends React.Component {
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue) => {
-      console.log('fieldsValue',fieldsValue)
+     // console.log('fieldsValue',fieldsValue)
       if (!err) {
         this.props.dispatch({
           type: 'roleOperationDistribution/saveCreatOrder',
@@ -346,7 +346,7 @@ class ChildModelCreatOrder extends React.Component {
                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                       
                       >
-                        {typesOfMerchants.map(val => <Option key={val.customersCode} value={val.userCode} label={val.userCode}>{val.userCode}</Option>)}
+                        {typesOfMerchants.map(val => <Option key={val.customersCode} value={val.userCode} label={val.customersCode}>{val.customersCode}</Option>)}
                       </Select>
                     )}
                   </FormItem>
