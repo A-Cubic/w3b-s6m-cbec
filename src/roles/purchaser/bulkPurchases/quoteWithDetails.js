@@ -136,7 +136,7 @@ export default class quoteWithDetails extends Component {
             采购商信息
           </div>
           <div className={styles.information}>
-            <p>姓名：{item.contacts}</p>
+            <p>姓名：{item.contacts}<span style={{marginLeft:'25px'}}>{item.sex==0?'男士':'女士'}</span></p>
             <p>联系电话：{item.tel}</p>
             <p>采购截止日期：{item.deliveryTime}</p>
           </div>
@@ -145,7 +145,7 @@ export default class quoteWithDetails extends Component {
             <span></span>
             采购商品
           </div>
-          <div className={styles.describe}>
+          <div className={styles.describe} style={{textAlign:"center"}}>
             <p>询价单描述：{item.remark}<span></span></p>
           </div>
           <Table dataSource={list}
@@ -247,8 +247,8 @@ class PurchaseOrder extends Component {
         key: 'id',
       }, {
         title: '供货单价',
-        dataIndex: 'offerPrice',
-        key: 'offerPrice',
+        dataIndex: 'price',
+        key: 'price',
 
       },  {
         title: '可供数量',

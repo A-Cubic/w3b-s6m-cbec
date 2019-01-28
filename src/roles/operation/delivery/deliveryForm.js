@@ -308,7 +308,7 @@ export default class deliveryForm extends Component {
                 //usercode:"cgs",
                 usercode:that.state.usercode,
                 id:item.id==''?list[0].id:item.id,
-                //fileTemp:info.file.name
+                fileTemp:info.file.name,
                 //fileTemp:'2.xlsx'
               },
               callback: that.onUploadCallback
@@ -331,7 +331,7 @@ export default class deliveryForm extends Component {
                 that.props.dispatch({
                   type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
                   payload: {
-                    fileTemp: info.file.response.fileName[0],
+                  fileTemp: info.file.response.fileName[0],
                     //usercode:"cgs",
                     usercode:that.state.usercode,
                     id:item.id==''?list[0].id:item.id,
@@ -393,6 +393,8 @@ export default class deliveryForm extends Component {
     if(this.state.valueGoodsNum != ''){
       //if(record.goodsNum != this.state.value){
     //    console.log('传数')
+    
+      if(c.goodsNum != undefined){
         this.props.dispatch({
           type: 'roleOperationDistribution/getChangeNum',
           //payload: params,
@@ -402,6 +404,9 @@ export default class deliveryForm extends Component {
             id: c.id
           },
         });
+      }else {
+        message.error('请填写发货数量');
+      }
       //}
     }
    }

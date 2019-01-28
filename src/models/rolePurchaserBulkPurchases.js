@@ -201,7 +201,7 @@ export default {
     //  发起询价-保存接口
     *getPreservationData({ payload,callback  },{ call,put }){
       const response = yield call(getPreservationData, payload);
-    console.log('~res111保存接口',response)
+    //console.log('~res111保存接口',response)
       if(response!==undefined){
         callback(response)
         // yield put({
@@ -259,7 +259,7 @@ export default {
     //发起询价 - 导入询价商品
     *uploadOrderbill({ payload,callback },{ call,put}){
       const response = yield call(getUploadOrderbillDX, payload);
-      console.log('~uploadOrderbill',response)
+     // console.log('~uploadOrderbill',response)
       if (response !== undefined) {
         callback(response)
         yield put({
@@ -397,19 +397,20 @@ export default {
     },
 
     // 询价列表 - 已报价-点击详情
-    *completedDetails({ payload },{ call,put }){
+  *completedDetails({ payload },{ call,put }){
+  
     const response = yield call(completedDetails, payload);
-  //  console.log('~res',response)
-    if(response!==undefined){
-      yield put({
-        type: 'completedDetailsR',
-        payload: {response,show: true}
-      }),
-      yield put({
-        type: 'detailsArePassedR',
-        payload: payload
-      })
-    }
+    //  console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'completedDetailsR',
+          payload: {response,show: true}
+        })
+        yield put({
+          type: 'detailsArePassedR',
+          payload: payload
+        })
+      }
   },
 
 
@@ -662,7 +663,7 @@ export default {
 
     // 发起询价- 导入询价商品
     uploadOrderbillR(state, action){
-      console.log('action',action)
+   //   console.log('action',action)
       return {
         ...state,
         initiateInquiry:{
@@ -824,6 +825,8 @@ export default {
 
     // 询价列表 - 已报价-详情
     completedDetailsR(state, action) {
+     // console.log('action',action.payload.response)
+      // 
       return {
         ...state,
         inquiryDetailsListDetails  : {
@@ -833,12 +836,13 @@ export default {
           show: action.payload.show
         },
       };
+      
     },
 
 
     // 询价列表 - 已报价-详情 传值
     detailsArePassedR(state, action) {
-      //console.log(action)
+      //console.log(' 已报价-详情 传值',action)
       return {
         ...state,
         inquiryDetailsListDetails  : {
@@ -855,12 +859,15 @@ export default {
 
     // 询价列表-已报价-点击详情-隐藏
     gethideR(state, action) {
+      //console.log(' 隐藏',action)
       return {
         ...state,
-        inquiryDetailsListDetails: {
-          ...state.inquiryDetailsListDetails,
+        inquiryDetailsListDetails  : {
+          ...state.inquiryDetailsListDetails  ,
+          tableData: [],
+      
           show: action.payload.show
-        }
+        },
       }
      },
 
@@ -909,6 +916,9 @@ export default {
         item.barcode===action.payload.barcode
       )
       b.totalPrice = action.payload.totalPrice
+      b.purchaseNum = action.payload.purchaseNum
+      b.supplyPrice = action.payload.supplyPrice
+
       state.listQuotedQriceOver.tableData.item.purchasePrice = action.payload.allPrice
 
       // console.log('b',action.payload)
@@ -921,7 +931,9 @@ export default {
           ...state.listQuotedQriceOver,
           //tableData:action.payload
           'item.purchasePrice':action.payload.allPrice,
-          'b.totalPric':action.payload.totalPrice
+          'b.totalPric':action.payload.totalPrice,
+          'b.purchaseNum':action.payload.purchaseNum,
+          'b.supplyPrice':action.payload.supplyPrice,
         },
       }
       },

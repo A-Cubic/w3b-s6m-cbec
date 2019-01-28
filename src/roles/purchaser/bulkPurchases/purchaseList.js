@@ -34,7 +34,7 @@ export default class purchaseList extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values111',fieldsValue)
-      console.log('this.props',this.props.rolePurchaserBulkPurchases.inquiryList.tableData.pagination)
+      //console.log('this.props',this.props.rolePurchaserBulkPurchases.inquiryList.tableData.pagination)
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue==undefined ? {
@@ -69,7 +69,7 @@ export default class purchaseList extends Component {
       ...pagination,
       ...this.state.formValues,
     };
-    console.log('params',params)
+   // console.log('params',params)
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/getPurchaseListData',
       //payload: params,
@@ -108,7 +108,7 @@ export default class purchaseList extends Component {
         <Row>
           <Col md={12} sm={24}>
             <FormItem label="状态">
-              {getFieldDecorator('status',{
+              {getFieldDecorator('stage',{
               })(
                 <Select
                   placeholder="请选择"
@@ -223,34 +223,6 @@ export default class purchaseList extends Component {
   //this.props.dispatch(routerRedux.push('/goods/step-form/confirm/'+params.id));
     const data = {purchasesn:record.purchasesn,stage:record.stage}
     this.props.dispatch(routerRedux.push('/bulkPurchases/listDetails/' + JSON.stringify(data)  ));
-    //console.log(record) 
-    //JSON.parse JSON.stringify
-    let type;
-    switch (record.stage){
-    
-      case '1':
-          type=1; //待完成
-          console.log(type)
-          break;
-        case '2':
-          type=2; //已完成
-          console.log(type)
-          break;
-        case '9':
-          type=9; //已关闭
-          console.log(type)
-          break;
-       
-        default:
-          console.log(1)
-          break;
-    }
-    //console.log(record)
-    
-   
   }
-
-
-
 }
 

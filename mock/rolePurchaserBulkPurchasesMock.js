@@ -49,8 +49,9 @@ export default function rolePurchaserBulkPurchasesMock(url) {
     'POST /llback/Purchase/InquiryGoodsDelete': url,
 
     // 询价列表-已报价 - 提交
-    // 询价列表-已报价(二次) - 立即下单
     'POST /llback/Purchase/OfferSub': url,
+    // 询价列表-已报价(二次) - 立即下单
+    'POST /llback/Purchase/OfferedSub': url,
 
     // 询价列表-已报价 - 取消
     'POST /llback/Purchase/OfferCancel': url,

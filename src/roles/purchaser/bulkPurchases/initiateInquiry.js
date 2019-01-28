@@ -146,6 +146,7 @@ export default class initiateInquiry extends Component {
   handleOnSubmission = (e)=>{
     const {rolePurchaserBulkPurchases:{initiateInquiry:{information,tableData:{list, pagination}}} } = this.props;
     const {rolePurchaserBulkPurchases:{initiateInquiry:{id}} } = this.props;
+    //console.log('list',list!='' )
   //  console.log('提交',id)
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
@@ -163,7 +164,7 @@ export default class initiateInquiry extends Component {
       });
      // console.log('pur',this.props.rolePurchaserBulkPurchases.initiateInquiry.pur)
      // || this.props.rolePurchaserBulkPurchases.initiateInquiry
-      if (id!==''  ) {
+      if (list!=''  ) {
         message.success('提交成功');
         this.props.dispatch({
           // type: 'rolePurchaserBulkPurchases/getInquiryListData',
@@ -199,6 +200,8 @@ export default class initiateInquiry extends Component {
   handleUploadChange=(info)=>{
    // console.log('fileTemp',info.file.response)
     const {rolePurchaserBulkPurchases:{initiateInquiry:{id}} } = this.props;
+    const {rolePurchaserBulkPurchases:{initiateInquiry:{information,pur,tableData:{item,list, pagination}}} } = this.props;
+
 
     //console.log('导入',id)
     if(info.file.status === 'done') {
@@ -206,8 +209,8 @@ export default class initiateInquiry extends Component {
         type: 'rolePurchaserBulkPurchases/uploadOrderbill',
         payload: {
           purchasesn:id,
-           fileTemp: info.file.response.fileName[0]
-         // fileTemp:info.file.name
+          fileTemp: info.file.response.fileName[0]
+         //fileTemp:info.file.name
         },
         callback: this.onUploadCallback
       });

@@ -120,7 +120,7 @@ export default class listDetails extends Component {
             采购商信息
           </div>
           <div className={styles.information}>
-            <p>姓名：{item.contacts}</p>
+            <p>姓名：{item.contacts}<span style={{marginLeft:'25px'}}>{item.sex==0?'男士':'女士'}</span></p>
             <p>联系电话：{item.tel}</p>
             <p>采购截止日期：{item.deliveryTime}</p>
           </div>
@@ -183,7 +183,7 @@ class PurchaseOrder extends Component {
     
    // const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
    const {rolePurchaserBulkPurchases:{detailsList:{show,tableData}}} = this.props
-    console.log('22ok',this.props.rolePurchaserBulkPurchases.detailsList.tableData)
+    //console.log('22ok',this.props.rolePurchaserBulkPurchases.detailsList.tableData)
 
     const columns = [
       {
@@ -196,8 +196,8 @@ class PurchaseOrder extends Component {
         key: 'id',
       }, {
         title: '供货单价',
-        dataIndex: 'offerPrice',
-        key: 'offerPrice',
+        dataIndex: 'price',
+        key: 'price',
         
       },  {
         title: '可供数量',

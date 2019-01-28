@@ -100,8 +100,8 @@ export async function getAllListdetails(params) {
 }
 //  // 询价列表-已报价(二次) - 立即下单
 export async function getPlaceAnOrder(params) {
-   return request(`/llback/Purchase/OfferSub`, {
-     method: 'POST',
+   return request(`/llback/Purchase/OfferedSub`, {
+     method: 'POST',               
      body: params,
    });
  }

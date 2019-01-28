@@ -287,12 +287,12 @@ export default class deliveryForm extends Component {
             that.props.dispatch({
               type: 'roleOperationDistribution/deliverGoodsuploadOrderbill',
               payload: {
-                fileTemp: info.file.response.fileName[0],
+               fileTemp: info.file.response.fileName[0],
                 //usercode:"cgs",
                 usercode:that.state.usercode,
                 id:item.id==''?list[0].id:item.id,
                 //fileTemp:info.file.name
-               // fileTemp:'2.xlsx'
+               //fileTemp:'2.xlsx'
               },
               callback: that.onUploadCallback
             });
@@ -323,7 +323,7 @@ export default class deliveryForm extends Component {
                     usercode:that.state.usercode,
                     id:item.id==''?list[0].id:item.id,
                    //fileTemp:info.file.name
-                  // fileTemp:'2.xlsx'
+                   //fileTemp:'2.xlsx'
                   },
                   callback: that.onUploadCallback
                 });
@@ -374,19 +374,24 @@ export default class deliveryForm extends Component {
      const c =b.find(item=>
        item.barcode===record.barcode
      )
-    // console.log('c',c)
+   //  console.log('c',c)
     if(this.state.valueGoodsNum != ''){
       //if(record.goodsNum != this.state.value){
+        if(c.goodsNum != undefined){
+          this.props.dispatch({
+            type: 'roleOperationDistribution/getChangeNum',
+            //payload: params,
+            payload: {
+              barcode: c.barcode,
+              goodsNum: c.goodsNum,
+              id: c.id
+            },
+          });
+        }else {
+          message.error('请填写发货数量');
+        }
     //    console.log('传数')
-        this.props.dispatch({
-          type: 'roleOperationDistribution/getChangeNum',
-          //payload: params,
-          payload: {
-            barcode: c.barcode,
-            goodsNum: c.goodsNum,
-            id: c.id
-          },
-        });
+       
       //}
     }
    }
@@ -631,6 +636,7 @@ export default class deliveryForm extends Component {
 
   render() {
     const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+ //   console.log('goodsNum',list[0].goodsNum)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -681,7 +687,8 @@ export default class deliveryForm extends Component {
               onBlur={()=>this.inputOnBlur(record) }
               min={parseInt(1)}
               max={parseInt(record.mNum)}
-              defaultValue={record.goodsNum}
+              
+              defaultValue={record.goodsNum==undefined?1:record.goodsNum}
             />
           )
         }

@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs,InputNumber   } from 'antd';
 import styles from './listDetails.less';
+import {message} from "antd/lib/index";
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
 import {getToken} from "../../../utils/Global";
@@ -123,7 +124,7 @@ export default class quoted extends Component {
          // console.log(2,record)
           // {record.supplierNumType ==2?<a onClick={()=>this.handleDetailsCheck(record)}>详情<br/></a>:<span></span>}
           return (
-            record.supplierNumType ==2?<span >--</span>:
+            record.supplierNumType ==2?<span >{record.purchaseNum}</span>:
           <InputNumber 
             // onChange={this.onChange(record)} 
              onChange={this.onChange}
@@ -267,18 +268,25 @@ export default class quoted extends Component {
 
   //提交
   handleSubmission = () => {
-    //const { this.props:{listQuotedQrice:{listQuotedQrice:{item,list, pagination}}} } = this.props;
+
+  //  const { this.props:{listQuotedQrice:{listQuotedQrice:{item,list, pagination}}} } = this.props;
+  const { rolePurchaserBulkPurchases:{listQuotedQriceOver:{tableData:{item,list, pagination}}} } = this.props;
     const {match,dispatch}=this.props;
     const getData = JSON.parse(match.params.biography)
-    //console.log('qqqqq',getData)
-    this.props.dispatch({
-      type: 'rolePurchaserBulkPurchases/getOffer',
-      //payload: params,
-      payload: {
-        purchasesn:getData.purchasesn,
-        //status:getData.status
-      },
-    });
+    //console.log('提交',item)
+    if(item.purchasePrice != 0){
+      this.props.dispatch({
+        type: 'rolePurchaserBulkPurchases/getOffer',
+        //payload: params,
+        payload: {
+          purchasesn:getData.purchasesn,
+          //status:getData.status
+        },
+      });
+    } else {
+      message.error('采购商品数量不能为0');
+    }
+    
     
   }
    //取消
@@ -310,8 +318,10 @@ export default class quoted extends Component {
      });
    }
 
+  //点击详情打开
   handleDetailsCheck = (record) => {
-    //console.log('详情',record)
+    const {rolePurchaserBulkPurchases:{inquiryDetailsListDetails:{show,tableData}}} = this.props
+    //console.log('点击详情打开',this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails)
     this.props.dispatch({
       type: 'rolePurchaserBulkPurchases/completedDetails',
       payload: {
@@ -343,11 +353,16 @@ export default class quoted extends Component {
 @connect(({rolePurchaserBulkPurchases }) => ({
   rolePurchaserBulkPurchases
 }))
+
 class PurchaseOrder extends Component {
   state={
     valueDetails:{},
   
   }
+
+ 
+
+
   onChangeDetails=(v, r)=>{
     // console.log('v',v)
     // console.log('r',r)
@@ -377,6 +392,7 @@ class PurchaseOrder extends Component {
 
   handleOk = () => {
     const {rolePurchaserBulkPurchases:{inquiryDetailsListDetails:{show,tableData}}} = this.props
+    //console.log('tableData',tableData)
     this.props.dispatch({
       // type: 'rolePurchaserBulkPurchases/getChangeNum',
       type: 'rolePurchaserBulkPurchases/CommodityDetails',
@@ -411,6 +427,7 @@ class PurchaseOrder extends Component {
    // const {rolePurchaserBulkPurchases:{detailsList:{show,tableData:{list,pagination}}}} = this.props
    const {rolePurchaserBulkPurchases:{inquiryDetailsListDetails:{show,tableData}}} = this.props
     //console.log('22ok',this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData)
+    //console.log('小',tableData)
 
     const columns = [
       {
@@ -452,8 +469,8 @@ class PurchaseOrder extends Component {
              //  onClick={(e) => this.handleDelCheck(e, record, index)}>
               min={parseInt(record.minOfferNum)} 
               max={parseInt(record.maxOfferNum)} 
-              defaultValue={ this.state.valueDetails[record.keyId] == undefined ? record.demand : this.state.valueDetails[record.keyId]}
-              //defaultValue={record.demand}
+            ///  defaultValue={ this.state.valueDetails[record.keyId] == undefined ? record.demand : this.state.valueDetails[record.keyId]}
+             defaultValue={record.demand}
               onChange={(e)=>{this.onChangeDetails(e, record)}}
               onBlur={()=>this.inputOnBlurDetails(record) }
             />
@@ -494,7 +511,6 @@ class PurchaseOrder extends Component {
                 // loading={submitting}
                 rowKey={record => record.keyId}
               />
-
           </Card>
         </Modal>
       </div>
