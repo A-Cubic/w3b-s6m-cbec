@@ -11,10 +11,10 @@ export default function(dynamicWrapper,app){
       component: dynamicWrapper(app, ['workbench'], () => import('../routes/Workbench/workbenchO')),
     },
 
-    //商品管理 - 商品查看 - 供应商
-    '/goods/goodsAboutS': {
-      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutS')),
-    },
+    // //商品管理 - 商品查看 - 供应商
+    // '/goods/goodsAboutS': {
+    //   component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutS')),
+    // },
     //商品管理 - 商品查看 - 运营
     '/goods/goodsAboutO': {
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutO')),
@@ -61,10 +61,10 @@ export default function(dynamicWrapper,app){
     // },
 
 
-    //订单管理 - 供应商
-    '/orderManagement/supplierOrder': {
-      component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/supplierOrder')),
-    },
+    // //订单管理 - 供应商
+    // '/orderManagement/supplierOrder': {
+    //   component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/supplierOrder')),
+    // },
     //订单管理 - 运营商
     '/orderManagement/operatorOrder': {
       component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/operatorOrder')),

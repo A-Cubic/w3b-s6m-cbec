@@ -1,6 +1,6 @@
 
 // const h = 'http://192.168.191.1:54195/';
-const a = 'http://192.168.0.127:54195/';
+// const a = 'http://192.168.0.127:54195/';
 
 
 export default function roleOperationDistributionMock(url) {
@@ -58,7 +58,7 @@ export default function roleOperationDistributionMock(url) {
     'POST /llback/Warehouse/DeliverOrderListDelete': url,
 
     // 发货列表- 点击查看
-    // 'POST /llback/Warehouse/DeliverOrderDetails': a, 
+    // 'POST /llback/Warehouse/DeliverOrderDetails': a,
     'POST /llback/Warehouse/DeliverOrderDetails': url,
 
     // 发货列表- 撤回
@@ -79,22 +79,22 @@ export default function roleOperationDistributionMock(url) {
 
     // ---------------------------------------------合同管理部分-----------------------------------------
     // -----------------合同列表 页--------------
-   'POST /llback/Agreement/ContractList': url,
-   //'POST /llback/Agreement/ContractList': a,
+    'POST /llback/Agreement/ContractList': url,
+    // 'POST /llback/Agreement/ContractList': a,
 
     // 'POST /llback/Agreement/ContractDetails': a, //查看跳页
-    //'POST /llback/Sales/getAgreementListData': getPayment,
+    // 'POST /llback/Sales/getAgreementListData': getPayment,
     // -----------------创建合同 页--------------
 
-    //保存
+    // 保存
     // 'POST /llback/Agreement/getcreateAgreementData': getPayment,
     'POST /llback/Agreement/CreateContract': url,
     // 导入数据
-   // 'POST /llback/delivery/getcreateAgreementImg': upimg, 
-   'POST /llback/Agreement/ContractUploadImg':url,
+    // 'POST /llback/delivery/getcreateAgreementImg': upimg,
+    'POST /llback/Agreement/ContractUploadImg': url,
     // -----------------查看合同 页--------------
-     'POST /llback/Agreement/ContractDetails': url,
-    
+    'POST /llback/Agreement/ContractDetails': url,
+
 
     // ---------------------------------------------财务管理部分-----------------------------------------
     // ------------------采购结算 页-------------
@@ -105,25 +105,25 @@ export default function roleOperationDistributionMock(url) {
     // 'POST /llback/Balance/GetPaymentDetailed': url,
     // 采购结算 - 查看结算明细 - 其他
     // 'POST /llback/Balance/GetPaymentOtherDetailed': url,
-     // 采购结算 - 打印  Balance/GetPaymentPrinting
+    // 采购结算 - 打印  Balance/GetPaymentPrinting
     // 'POST /llback/Balance/GetPaymentPrinting': url,
     // 采购结算 - 完成对账
     'POST /llback/Balance/FinishReconciliation': url,
     // ------------------手动调账（查看） 页-------
 
     // 采购结算 - 完成对账
-    'POST /llback/Balance/ManualChangeAccount': url, 
+    'POST /llback/Balance/ManualChangeAccount': url,
     // 采购结算 - 创建对账单保存按钮
-    //'POST /llback/Balance/saveCreatOrder': SendOrder,
+    // 'POST /llback/Balance/saveCreatOrder': SendOrder,
     'POST /llback/Balance/CreateAccount': url,
   };
 }
 
 export function upimg(req, res) {
   res.send({
-    "msg": "wwwwwwwwwwwwww",
-    "type": "1"
-  })
+    msg: 'wwwwwwwwwwwwww',
+    type: '1',
+  });
 }
 export function getPayment(req, res) {
   res.send({
@@ -143,8 +143,8 @@ export function getPayment(req, res) {
       barcode: '11111',
       ischoose: true,
       id: 1,
-      record:1,
-      contractCode:1,
+      record: 1,
+      contractCode: 1,
     }, {
       keyId: '2',
       date: '20190104~20190105',
@@ -159,8 +159,8 @@ export function getPayment(req, res) {
       barcode: '2',
       ischoose: false,
       id: 1,
-      record:2,
-      contractCode:2,
+      record: 2,
+      contractCode: 2,
     }],
     pagination: {
       current: 1,
@@ -412,7 +412,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
-      flag:'2'
+      flag: '2',
     }, {
       id: '2',
       status: '1',
@@ -430,7 +430,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
-      flag:'2'
+      flag: '2',
     }, {
       id: '3',
       sendid: 3,
@@ -448,7 +448,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
-      flag:'1'
+      flag: '1',
     }, {
       id: '4',
       sendid: 4,
@@ -466,7 +466,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
-      flag:'1'
+      flag: '1',
     }, {
       id: '5',
       status: '2',
@@ -484,7 +484,7 @@ export function GetOrderList(req, res) {
       addrDistrict: null,
       addrDetail: null,
       orderGoods: null,
-      flag:'1'
+      flag: '1',
     }],
     pagination: {
       current: 1,

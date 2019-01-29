@@ -1,8 +1,7 @@
-const a = 'http://192.168.0.127:54195/';
+// const a = 'http://192.168.0.127:54195/';
 export default function rolePurchaserBulkPurchasesMock(url) {
   return {
     // -------- 发起询价 --------------
-
     // 发起询价 - 保存
     'POST /llback/Purchase/InquiryPreservation': url,
 

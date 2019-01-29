@@ -2,7 +2,7 @@
 export default function(dynamicWrapper,app){
   return {
     // 供应商
-
+    ...supplier(dynamicWrapper,app),
     // 采购商
     ...procurement(dynamicWrapper,app),
     // 运营
@@ -14,10 +14,55 @@ export default function(dynamicWrapper,app){
 //-------------------------------------供应商-------------------------------------
 export function supplier (dynamicWrapper,app){
   return{
-    //测试demo
-    '/goods/test': {
-      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/test')),
+    //-----------------------------订单统计-----------------------------
+    //订单管理 - 供应商
+    '/orderManagement/supplierOrder': {
+      component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/supplierOrder')),
     },
+
+    //-----------------------------商品管理-----------------------------
+
+    //商品入库
+    '/goods/putaway': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/Putaway')),
+    },
+    //商品入库表单
+    '/goods/step-form': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm')),
+    },
+    '/goods/step-form/info': {
+      // name: '分步表单（上传入库信息）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step1')),
+    },
+    '/goods/step-form/confirm/:id': {
+      // name: '分步表单（补全入库信息）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step2')),
+    },
+    '/goods/step-form/wait/:id': {
+      // name: '分步表单（等待审核）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step3')),
+    },
+    '/goods/step-form/result/:isSuccess/:id': {
+      // name: '分步表单（完成）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step4')),
+    },
+
+    //商品管理 - 商品查看 - 供应商
+    '/goods/goodsAboutS': {
+      component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../routes/GoodsManagement/GoodsAboutS')),
+    },
+    //-----------------------------合同管理-----------------------------
+    //查看合同
+    '/supplier/checkAgreement': {
+      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/checkAgreement')),
+    },
+
+    //-----------------------------结算管理-----------------------------
+    //货款结算
+    '/supplier/purchaseSettlement': {
+      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
+    },
+
 
   }
 }
@@ -97,10 +142,10 @@ export function procurement (dynamicWrapper,app){
 
   }
 }
+//------------------------------------------------------平台------------------------------------------------------
 //-------------------------------------运营-------------------------------------
 export function operation (dynamicWrapper,app){
   return {
-    //--------------------铺货--------------------
     //-----------------------------库存-----------------------------
     //库存 - 平台库存
     '/stock/platformStock': {
@@ -175,3 +220,4 @@ export function operation (dynamicWrapper,app){
 
   }
 }
+//-------------------------------------财务-------------------------------------
