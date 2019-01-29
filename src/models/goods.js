@@ -11,6 +11,11 @@ import {
   getCheckStepStatus,
   getStep2Upload,getStep3supplement,getStep4TrueSupplement,getStep4FalseSupplement
 } from '../services/api';
+import {
+  roleSupplierBus_S
+} from '../services/roleSupplierBus_S';
+
+
 import {routerRedux} from "dva/router";
 export default {
   namespace: 'goods',
@@ -54,7 +59,14 @@ export default {
     },
     step2supplementData:{},
     step3supplementData:{},
-    step4supplementData:{}
+    step4supplementData:{},
+    Step4:{
+      tableData:{
+        list: [],
+        pagination:{},
+      },
+      show:false
+    },
   },
 
   effects: {
@@ -96,6 +108,21 @@ export default {
     //     });
     //   }
     // },
+
+    //产品上架 弹窗
+    *getUploadviewData({ payload },{ call,put }){
+      const response = yield call(getUploadviewData, payload);
+     // console.log('~res',response)
+      if(response!==undefined){
+        yield put({
+          type: 'getUploadviewDataR',
+          payload: {response,show:true,}
+        })
+      }
+    },
+
+
+
     *downloadStoreTemp({ payload, callback }, { call, put }) {
       const response = yield call(downloadStoreTempUrl, payload);
       // console.log(response);
@@ -358,6 +385,30 @@ export default {
     //     wareHouseData:action.payload,
     //   };
     // },
+
+    //商品上架 -弹窗 storesSalesClickList  storesSales
+    getUploadviewDataR(state, action){
+      return {
+        ...state,
+        Step4:{
+          ...state.Step4,
+          //tableData:action.payload.list,
+          show: action.payload.show,
+          tableData:action.payload
+        }
+      }
+    },
+    //商品上架 -弹窗 关闭 
+    storesSalesCloseR(state, action) {
+      return {
+        ...state,
+        Step4: {
+          ...state.Step4,
+          show: action.payload.show
+        }
+      }
+    },
+
     goodslistR(state, action) {
       return {
         ...state,

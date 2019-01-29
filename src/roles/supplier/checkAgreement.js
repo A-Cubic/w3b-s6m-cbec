@@ -30,9 +30,9 @@ export default class checkAgreement extends Component {
 
     const { roleSupplierBus:{checkAgreement:{tableData:{contractCode}}} } = this.props;
     //console.log('contractCode',contractCode=="")
-    if(contractCode==""){
-      this.props.dispatch(routerRedux.push('/agreement/agreementList' ));
-    }
+    // if(contractCode==""){
+    //   this.props.dispatch(routerRedux.push('/agreement/agreementList' ));
+    // }
 
   }
   componentDidMount() {

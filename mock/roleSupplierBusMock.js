@@ -1,7 +1,13 @@
 // const h = 'http://192.168.191.1:54195/';
-// const a = 'http://192.168.0.127:54195/';
+ const a = 'http://192.168.0.127:54195/';
 export default function roleSupplierBusMock() {
   return {
+    //订单统计 发货传值
+    'POST /llback/Order/GetConsigneeMsg': a,
+
+    // //产品上架 弹窗
+    'POST /llback/Goods/SelectOnloadGoodsList': a,
+
 
     // ---------------------------------------------合同管理部分-----------------------------------------
 

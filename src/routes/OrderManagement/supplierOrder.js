@@ -178,6 +178,14 @@ export default class supplierOrder extends Component {
       type:'publicDictionary/getExpress',
       payload:{}
     })
+    //发货传参
+    //console.log('record22',record)
+    this.props.dispatch({
+      type:'orderManagement/getgoodsData',
+      payload:{
+        merchantOrderId:record.merchantOrderId
+      }
+    })
   }
   renderAdvancedForm(){
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr,wareHouseArr,expressArr} }= this.props;
@@ -346,9 +354,10 @@ export default class supplierOrder extends Component {
             <Button style={{ marginLeft: 8 }} onClick={this.downloadToSendOrder}>
               <Icon type="cloud-download-o" />导出需发货的订单
             </Button>
-            <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
+            {/* 新修改 去掉下载 */}
+            {/* <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
               <Icon type="download" />下载运单模板
-            </Button>
+            </Button> */}
             <Upload {...props} >
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="cloud-upload-o" /> 导入运单信息
@@ -388,33 +397,33 @@ export default class supplierOrder extends Component {
 @Form.create()
 class ChildrenDelivery extends React.Component {
 
-  // handleOk = (e) => {
-  //   e.preventDefault();
-  //   const that = this;
-  //   this.props.form.validateFields((err, fieldsValue)=>{
-  //     if(!err){
-  //       this.props.parent.dispatch({
-  //         type:'orderManagement/confirmDelivery',
-  //         payload:{
-  //           ...fieldsValue,
-  //           userId:userId,
-  //           orderId:this.props.parent.orderId
-  //         },
-  //         callback:function () {
-  //           that.props.parent.handleVisible(false,'childDelivery')
-  //           that.props.form.resetFields();
-  //           that.props.dispatch({
-  //             type: 'orderManagement/supplierOrderTable',
-  //             payload: {
-  //               userId:userId,
-  //               status:"全部"
-  //             },
-  //           });
-  //         }
-  //       })
-  //     }
-  //   })
-  // }
+  handleOk = (e) => {
+    e.preventDefault();
+    const that = this;
+    this.props.form.validateFields((err, fieldsValue)=>{
+      if(!err){
+        this.props.parent.dispatch({
+          type:'orderManagement/confirmDelivery',
+          payload:{
+            ...fieldsValue,
+            userId:userId,
+            orderId:this.props.parent.orderId
+          },
+          callback:function () {
+            that.props.parent.handleVisible(false,'childDelivery')
+            that.props.form.resetFields();
+            that.props.dispatch({
+              type: 'orderManagement/supplierOrderTable',
+              payload: {
+                userId:userId,
+                status:"全部"
+              },
+            });
+          }
+        })
+      }
+    })
+  }
   handleOverseas =(e)=>{
     e.preventDefault();
     const that = this;
@@ -444,8 +453,9 @@ class ChildrenDelivery extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { orderManagement:{supplierOrder:{fs}} } = this.props;
     // const {parent:{expressArr}} = this.props
-    // console.log(this.props)
+   //console.log(fs)
     return (
       <div>
         <Modal
@@ -463,6 +473,21 @@ class ChildrenDelivery extends React.Component {
           <Form onSubmit={this.handleOk} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={24} sm={24}>
+                <div style={{paddingBottom:'15px', color:'#000',opacity:'.83', fontSize:'14px'}}>
+                  <span style={{paddingLeft:'20px', paddingBottom:'15px'}}>收货人：</span>{fs.consigneeName}
+                </div>
+              </Col>
+              <Col md={24} sm={24}>
+                <div style={{paddingBottom:'15px', color:'#000',opacity:'.83', fontSize:'14px'}}>
+                  <span style={{paddingLeft:'20px', paddingBottom:'15px'}}>收货人联系电话：</span>{fs.consigneeMobile}
+                </div>
+              </Col>
+              <Col md={24} sm={24}>
+                <div style={{paddingBottom:'25px', color:'#000',opacity:'.83', fontSize:'14px'}}>
+                  <span style={{paddingLeft:'20px', paddingBottom:'15px'}}>收货人地址：</span>{fs.consigneeAdr}
+                </div>
+              </Col>
+              <Col md={24} sm={24}>
                 <FormItem label="运单号">
                   {getFieldDecorator('waybillno',{
                     rules:[{
@@ -475,7 +500,11 @@ class ChildrenDelivery extends React.Component {
               </Col>
               <Col md={24} sm={24}>
             <FormItem label="快递公司">
-              {getFieldDecorator('expressId')(
+              {getFieldDecorator('expressId',{
+                    rules:[{
+                      required:true,message:'请填写快递公司',
+                    }]
+                  })(
                 <Select
                   placeholder="请选择"
                   optionFilterProp="label"
@@ -488,6 +517,17 @@ class ChildrenDelivery extends React.Component {
                 </Select>
               )}
             </FormItem>
+              </Col>
+              <Col md={24} sm={24}>
+                <FormItem label="快递费：">
+                  {getFieldDecorator('inputFreight',{
+                    rules:[{
+                      required:true,message:'请填写快递费：',
+                    }]
+                  })(
+                    <Input placeholder="请输入" />
+                  )}
+                </FormItem>
               </Col>
               </Row>
           </Form>
