@@ -8,7 +8,8 @@ export default function roleSupplierBusMock() {
     //商品管理-商品上架 -弹窗
     'POST /llback/Goods/SelectOnloadGoodsList': a,
 
-    
+    //商品管理-商品上架 -弹窗
+    'POST /llback/Agreement/ContractDetails': a,
 
 
 

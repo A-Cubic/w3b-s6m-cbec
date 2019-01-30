@@ -2,7 +2,6 @@ import { message} from 'antd';
 import moment from 'moment';
 import {routerRedux} from "dva/router";
 import {
-
 } from '../services/roleSupplierBus_S'
 import {
   //---------------------------------------------合同管理---------------------------------------------
@@ -29,15 +28,21 @@ export default {
     checkAgreement: {
       tableData:{
         item:{},
-        customersCode: "",
-        userName: "",
-        createTime: "",
-        cycle: "",
-        model: "",
-        contractDuration: "",
+        customersCode: "333",
+        userName: "采购商测试",
+        createTime: "2019/1/18 10:19:25",
+        cycle: "实时",
+        model: "直营",
+        contractDuration: "2019-01-16 至 2020-02-01",
         platformPoint: "",
         supplierPoint: "",
         purchasePoint: "",
+        freightBelong: "",
+        taxBelong: "",
+        merchantName: "",
+        depositBank: "",
+        depositBankSubbranch: "",
+        bankCard: "",
         list: [],
         contractCode:''
       },
@@ -46,6 +51,9 @@ export default {
         src:''
       }
     },
+
+    
+
 
     //---------------------------------------------财务管理部分-----------------------------------------
     //------------------货款结算 页---------
@@ -86,7 +94,7 @@ export default {
           type: 'getCheckAgreementDataR',
           payload: {...response,contractCode:payload.contractCode,src:payload.src,visible:payload.visible}
         })
-        yield put(routerRedux.push('/agreement/checkAgreement'));
+        //yield put(routerRedux.push('/agreement/checkAgreement'));
       }
     },
     //查看图片 getImg
@@ -193,7 +201,7 @@ export default {
         checkAgreement:{
           ...state.checkAgreement,
           tableData:action.payload,
-          contractCode :action.payload.contractCode
+         // contractCode :action.payload.contractCode
         }
       }
     },
@@ -205,6 +213,20 @@ export default {
         checkAgreement:{
           ...state.checkAgreement,
           childHelpData:action.payload,
+        }
+      }
+    },
+
+    getImgCloseR(state, action){
+      //console.log('qqq',action.payload)
+      return {
+        ...state,
+        checkAgreement:{
+          ...state.checkAgreement,
+          childHelpData: {
+            visible:action.payload.visible
+          }
+
         }
       }
     },

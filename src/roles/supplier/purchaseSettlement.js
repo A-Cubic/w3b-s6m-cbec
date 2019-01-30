@@ -314,7 +314,19 @@ class ChildDetails extends Component {
         title: '序号',
         dataIndex: 'keyId',
         key: 'keyId',
-      }, {
+      }, 
+      {
+        title: '订单号',
+        dataIndex: 'orderId',
+        key: 'orderId',
+        render: (val,record) => (
+          <div>
+            <span style={{display:'inline-block',width:200}}>{record.orderId}</span>
+            <span style={{display:'inline-block',width:200}}>{record.orderType}</span>
+          </div>
+        )
+      },
+      {
         title: '商品（SKU）',
         dataIndex: 'goodsName',
         key: 'goodsName',
@@ -328,7 +340,8 @@ class ChildDetails extends Component {
         title: '商品条码',
         dataIndex: 'barCode',
         key: 'barCode',
-      }, {
+      }, 
+      {
         title: '品牌',
         dataIndex: 'brand',
         key: 'brand',

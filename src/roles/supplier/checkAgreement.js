@@ -28,11 +28,19 @@ export default class checkAgreement extends Component {
   //****/
   init(){
 
-    const { roleSupplierBus:{checkAgreement:{tableData:{contractCode}}} } = this.props;
+    //const { roleSupplierBus:{checkAgreement:{tableData:{contractCode}}} } = this.props;
     //console.log('contractCode',contractCode=="")
     // if(contractCode==""){
     //   this.props.dispatch(routerRedux.push('/agreement/agreementList' ));
     // }
+
+    this.props.dispatch({
+      type:'roleSupplierBus/getCheckAgreementData',
+      payload:{
+      }
+    })
+
+
 
   }
   componentDidMount() {
@@ -41,7 +49,6 @@ export default class checkAgreement extends Component {
 
   handleClickImg=(a)=>{
     this.props.dispatch({
-      // type:'roleSupplierBus/getCheckAgreementData',
       type:'roleSupplierBus/getImg',
       payload:{
         src:a,
@@ -57,7 +64,7 @@ export default class checkAgreement extends Component {
   render() {
     const { roleSupplierBus:{checkAgreement:{tableData:{contractCode,list,customersCode }}} } = this.props;
     const { roleSupplierBus:{checkAgreement:{tableData}} } = this.props;
-   // console.log('777',this.props)
+   //console.log('777',tableData)
 
     return (
       <div>
@@ -99,28 +106,55 @@ export default class checkAgreement extends Component {
               <span style={{marginLeft:'70px',marginRight:'25px'}}>合作模式：</span>{tableData.model}
             </Col>
           </Row>
-          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'35px'}}>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
             <Col md={8} sm={24}></Col>
             <Col md={16} sm={24} style={{fontSize:'16px'}}>
               <span style={{marginLeft:'70px',marginRight:'25px'}}>合作期限：</span>{tableData.contractDuration}
             </Col>
           </Row>
-          <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-            <div className={styles.line}></div>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>扣点方式：</span>{Number(tableData.platformPoint)+Number(tableData.supplierPoint)+Number(tableData.purchasePoint)}%
+            </Col>
           </Row>
-          <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-            <div className={styles.titleName}></div>
-            <div className={styles.takeGoods}>
-              <span></span>
-              扣点方式
-            </div>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>运费承担方式：</span>{tableData.freightBelong==1?'供货商':'平台'}
+            </Col>
           </Row>
-          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px',marginTop:'20px'}}>
-
-            <Row style={{marginTop:'15px', marginBottom:'5px',textAlign:'center'}}>
-              <span style={{fontSize:'16px'}}>平台：{tableData.platformPoint}% + 供货中介：{tableData.supplierPoint}% + 采购中介：{tableData.purchasePoint}%</span>
-            </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>税费承担方式：</span>{tableData.freightBelong==1?'供货商':'平台'}
+            </Col>
           </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>商户名称:</span>{tableData.merchantName}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>开户行:</span>{tableData.depositBank}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>开户行支行:</span>{tableData.depositBankSubbranch}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>银行卡号:</span>{tableData.bankCard}
+            </Col>
+          </Row>
+         
           <Row gutter={{ md: 12, lg: 24, xl: 48 }}  style={{marginBottom:'25px',}}>
             <div className={styles.titleName}></div>
             <div className={styles.takeGoods}>

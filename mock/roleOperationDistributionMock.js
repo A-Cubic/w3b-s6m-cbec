@@ -1,6 +1,6 @@
 
 // const h = 'http://192.168.191.1:54195/';
-// const a = 'http://192.168.0.127:54195/';
+const a = 'http://192.168.0.127:54195/';
 
 
 export default function roleOperationDistributionMock(url) {
@@ -73,13 +73,13 @@ export default function roleOperationDistributionMock(url) {
     // ---------------------------------------------销售管理部分-----------------------------------------
     // -----------------门店销售//（查看弹窗） 页---------
     // 获取列表
-    'POST /llback/Sales/ShopSalseOrders': url,
+    'POST /llback/Sales/ShopSalseOrders': a,
     // 查看-弹窗
-    'POST /llback/Sales/ShopSalseOrdersDetails': url,
+    'POST /llback/Sales/ShopSalseOrdersDetails': a,
 
     // ---------------------------------------------合同管理部分-----------------------------------------
     // -----------------合同列表 页--------------
-    'POST /llback/Agreement/ContractList': url,
+    'POST /llback/Agreement/ContractList': a,
     // 'POST /llback/Agreement/ContractList': a,
 
     // 'POST /llback/Agreement/ContractDetails': a, //查看跳页
@@ -88,19 +88,19 @@ export default function roleOperationDistributionMock(url) {
 
     // 保存
     // 'POST /llback/Agreement/getcreateAgreementData': getPayment,
-    'POST /llback/Agreement/CreateContract': url,
+    'POST /llback/Agreement/CreateContract': a,
     // 导入数据
     // 'POST /llback/delivery/getcreateAgreementImg': upimg,
-    'POST /llback/Agreement/ContractUploadImg': url,
+    'POST /llback/Agreement/ContractUploadImg': a,
     // -----------------查看合同 页--------------
-    'POST /llback/Agreement/ContractDetails': url,
+    'POST /llback/Agreement/ContractDetails': a,
 
 
     // ---------------------------------------------财务管理部分-----------------------------------------
     // ------------------采购结算 页-------------
     // 采购结算 - 列表
     // 'POST /llback/Balance/AA': GetOrderList,
-    'POST /llback/Balance/PurchasePayment': url,
+    'POST /llback/Balance/PurchasePayment': a,
     // 采购结算 - 查看结算明细 - 货款 ------代销 结算 -查看明细 共用接口
     // 'POST /llback/Balance/GetPaymentDetailed': url,
     // 采购结算 - 查看结算明细 - 其他
@@ -108,14 +108,14 @@ export default function roleOperationDistributionMock(url) {
     // 采购结算 - 打印  Balance/GetPaymentPrinting
     // 'POST /llback/Balance/GetPaymentPrinting': url,
     // 采购结算 - 完成对账
-    'POST /llback/Balance/FinishReconciliation': url,
+    'POST /llback/Balance/FinishReconciliation': a,
     // ------------------手动调账（查看） 页-------
 
     // 采购结算 - 完成对账
-    'POST /llback/Balance/ManualChangeAccount': url,
+    'POST /llback/Balance/ManualChangeAccount': a,
     // 采购结算 - 创建对账单保存按钮
     // 'POST /llback/Balance/saveCreatOrder': SendOrder,
-    'POST /llback/Balance/CreateAccount': url,
+    'POST /llback/Balance/CreateAccount': a,
   };
 }
 
