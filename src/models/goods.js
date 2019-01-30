@@ -12,7 +12,7 @@ import {
   getStep2Upload,getStep3supplement,getStep4TrueSupplement,getStep4FalseSupplement
 } from '../services/api';
 import {
-  roleSupplierBus_S
+  getUploadviewData
 } from '../services/roleSupplierBus_S';
 
 
@@ -109,7 +109,7 @@ export default {
     //   }
     // },
 
-    //产品上架 弹窗
+    //商品管理-商品上架 -弹窗
     *getUploadviewData({ payload },{ call,put }){
       const response = yield call(getUploadviewData, payload);
      // console.log('~res',response)
@@ -386,7 +386,7 @@ export default {
     //   };
     // },
 
-    //商品上架 -弹窗 storesSalesClickList  storesSales
+    //商品管理-商品上架 -弹窗 storesSalesClickList  storesSales
     getUploadviewDataR(state, action){
       return {
         ...state,
@@ -394,7 +394,7 @@ export default {
           ...state.Step4,
           //tableData:action.payload.list,
           show: action.payload.show,
-          tableData:action.payload
+          tableData:action.payload.response
         }
       }
     },

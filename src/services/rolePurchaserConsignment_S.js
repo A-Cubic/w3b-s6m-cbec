@@ -95,3 +95,12 @@ export async function getChildModelPrintData(params) {
     body: params,
   })
 }
+
+// 货款结算 - 确认付款
+export async function changeStatusCompleteReconciliation(params) {
+  // return request(`/llback/Balance/EE`,{
+  return request(`/llback/Balance/SurePayMent`,{  
+    method: 'POST',
+    body: params,
+  })
+}

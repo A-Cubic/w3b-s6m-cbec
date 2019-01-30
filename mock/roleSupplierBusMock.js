@@ -5,8 +5,16 @@ export default function roleSupplierBusMock() {
     //订单统计 发货传值
     'POST /llback/Order/GetConsigneeMsg': a,
 
-    // //产品上架 弹窗
+    //商品管理-商品上架 -弹窗
     'POST /llback/Goods/SelectOnloadGoodsList': a,
+
+    
+
+
+
+
+
+
 
 
     // ---------------------------------------------合同管理部分-----------------------------------------

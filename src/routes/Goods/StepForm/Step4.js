@@ -1,6 +1,6 @@
 import React, { Fragment,Component } from 'react';
 import { connect } from 'dva';
-import { Button, Row, Col ,Modal } from 'antd';
+import { Button, Row, Col ,Modal ,Table  } from 'antd';
 import { routerRedux } from 'dva/router';
 import styles from './style.less';
 import {getToken} from "../../../utils/Global";
@@ -44,7 +44,17 @@ class Step4 extends React.PureComponent {
     const onValidateForm = e => {
       e.preventDefault();
      // dispatch(routerRedux.push('/goods/goodsAboutS')); 修改 跳转页面 改弹窗
-    // console.log(1111)
+    console.log(1111)
+      const {match,dispatch}=this.props;
+      dispatch({
+        type:'goods/getUploadviewData',
+        payload:{
+         // userId:userId,
+        logId:match.params.id
+        //logId:95
+        }
+      })
+
     };
     return (
       <div>
@@ -133,9 +143,8 @@ class TestChild  extends Component {
 
   //翻页
   handleTableChange=(pagination, filters, sorter)=>{
-   // const { roleOperationDistribution:{storesSales:{childDetailsModelVisible,storesSalesDetails:{item,list,pagination}}} } = this.props;
-    const orderId = this.props.goods.storesSales.storesSalesDetails.item
-   // console.log('qqq',this.props.roleOperationDistribution.storesSales.storesSalesDetails)
+    const {match,dispatch}=this.props;
+
     const params = {
       ...pagination,
       
@@ -144,13 +153,16 @@ class TestChild  extends Component {
       type: 'goods/getUploadviewData',
       payload: {
         ...params,
-        orderId:orderId
+        logId:match.params.id
+         //logId:95
       }
     });
   }
   render(){
     
     const { goods:{Step4:{show,tableData:{item,list,pagination}}} } = this.props;
+    //const {goods:{Step4:{show}}} =this.props
+    console.log('11111',list)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -164,61 +176,37 @@ class TestChild  extends Component {
         dataIndex: 'keyId',
         key: 'keyId',
       }, {
-        title: '销售时间',
-        dataIndex: 'tradeTime',
-        key: 'tradeTime',
-      }, {
-        title: '供货商',
-        dataIndex: 'supplierName',
-        key: 'supplierName',
-        
-      },  {
-        title: '商品名称',
-        dataIndex: 'goodsName',
-        key: 'goodsName',
-      }, {
         title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
       }, {
-        title: '规格',
-        dataIndex: 'model',
-        key: 'model',
-      }, {
-        title: '原产地',
-        dataIndex: 'country',
-        key: 'country',
-      }, {
-        title: '生产商',
+        title: '商品（SKU）',
+        dataIndex: 'goodsName',
+        key: 'goodsName',
+        
+      },  {
+        title: '品牌',
         dataIndex: 'brand',
         key: 'brand',
       }, {
-        title: '销售数量',
-        dataIndex: 'num',
-        key: 'num',
+        title: '库存',
+        dataIndex: 'goodsnum',
+        key: 'goodsnum',
       }, {
-        title: '零售价',
-        dataIndex: 'rprice',
-        key: 'rprice',
+        title: '供货价',
+        dataIndex: 'price',
+        key: 'price',
       }, {
-        title: '平台采购价',
-        dataIndex: 'inprice',
-        key: 'inprice',
-      }, {
-        title: '平台供货价',
-        dataIndex: 'pprice',
-        key: 'pprice',
-      }, {
-        title: '服务费',
-        dataIndex: 'platformPrice',
-        key: 'platformPrice',
+        title: '仓库',
+        dataIndex: 'wname',
+        key: 'wname',
       }
     ];
 
     return(
       <div>
         <Modal
-          visible= {true}
+          visible= {show}
           onCancel={this.handleCancel}
           width={'80%'}
           onOk={this.handleOk}

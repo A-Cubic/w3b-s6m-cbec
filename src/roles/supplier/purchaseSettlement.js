@@ -79,7 +79,7 @@ export default class purchaseSettlement extends Component {
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="账期范围">
+            <FormItem label="单据日期">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
@@ -95,8 +95,8 @@ export default class purchaseSettlement extends Component {
                   // onChange={this.onSelectChange}
                 >
                   <Option value="">全部</Option>
-                  <Option value="0">待结算</Option>
-                  <Option value="1">已结算</Option>
+                  <Option value="1">待结算</Option>
+                  <Option value="0">已结算</Option>
 
                 </Select>
               )}
@@ -153,7 +153,8 @@ export default class purchaseSettlement extends Component {
                   <div className={styles.tableListForm}>
                     <Row>
                       <Col span={12}><p style={{fontWeight:"bold"}}>账期：<em style={{color:"red",fontWeight:"normal",fontStyle:"normal"}}>{record.date}</em></p></Col>
-                      <Col span={12}><p style={{textAlign:"right",color:"#737373 85%" }}>结算单{record.accountCode}</p></Col>
+                      <Col span={12}><p style={{textAlign:"right",color:"#737373 85%" }}><em style={{fontStyle:'normal',marginRight:'15px'}}>采购商：大连岂止科技</em> 结算单{record.accountCode}</p></Col>
+                      
                     </Row>
                     <div className={styles.line}></div>
                     <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -185,7 +186,7 @@ export default class purchaseSettlement extends Component {
                     <div className={styles.line}></div>
                     <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                       <Col md={12}>
-                        {record.status==0?
+                        {record.status==1?
                           <span className={styles.settled}>待结算</span>:
                           <span className={styles.settlement}>已结算</span>
                         }
@@ -193,7 +194,7 @@ export default class purchaseSettlement extends Component {
                       <Col md={12}>
                         <div style={{ float:"right" }}>
                           <Button  style={{ marginRight:7 }} type="primary" ghost onClick={()=>this.handleChildDetailsModel(record)}>结算明细</Button>
-                          {record.status==0?
+                          {record.status==1?
                             // <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleCompleteReconciliation(record)}>完成对账</Button>
                             //{record.flag ==2 ?<a onClick={()=>this.handleViewState(record)}>完成对账<br/></a>:<div>对账中</div>}
                             <Button style={{ marginRight:7 }} type="primary" >
