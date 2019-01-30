@@ -175,6 +175,22 @@ export default class GoodsAboutS extends Component {
               )}
             </FormItem>
           </Col>
+
+          <Col md={8} sm={24}>
+            <FormItem label="是否支持铺货：">
+              {getFieldDecorator('ifph')(
+                <Select
+                  placeholder="请选择"
+                  optionFilterProp="label"
+                 
+                >
+                  <Option value="1">是</Option>
+                  <Option value="0">否</Option>
+                
+                </Select>
+              )}
+            </FormItem>
+          </Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 0 }}>
@@ -218,7 +234,19 @@ export default class GoodsAboutS extends Component {
       title: '品牌',
       dataIndex: 'brand',
       key: 'brand',
-    },{
+    },
+    {
+      title: '是否支持铺货',
+      dataIndex: 'ifph',
+      key: 'ifph',
+      render: (val,record) => (
+        <div>
+          <span>{record.ifph==0?'否':'是'}</span>
+         
+        </div>
+          )
+    },
+    {
         title: '库存',
         dataIndex: 'goodsnum',
         key: 'goodsnum',

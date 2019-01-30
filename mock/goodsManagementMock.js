@@ -1,6 +1,7 @@
 
 // const h = 'http://172.16.10.51:54195/';
 // const orderManagement = 'http://console.llwell.net/';
+
 export default function goodsManagementMock(url) {
   return {
     // 代销 -商品库存

@@ -4,7 +4,8 @@ import {
   dataStatistics,
   goodsSales,getUploadOrderbillDX,
   contractInformation,
-  getPaymentSettlementData,getSettlementDetailsData,getSettlementDetailsElseData,getChildModelPrintData
+  getPaymentSettlementData,getSettlementDetailsData,getSettlementDetailsElseData,getChildModelPrintData,
+  changeStatusCompleteReconciliation //确认付款
 } from '../services/rolePurchaserConsignment_S'
 import {ReceiptModel} from "../roles/purchaser/consignment/receivingConfirmation";
 import {getDownloadToSendOrder} from "../services/orderManagement_S";
@@ -240,6 +241,33 @@ export default {
         })
       }
     },
+
+    // 货款结算 - 确认付款
+    *completeReconciliation({ payload },{ call,put }){
+      const response = yield call(changeStatusCompleteReconciliation, payload);
+      const responseList = yield call(getPaymentSettlementData, {});
+      // console.log('~res',response)
+      if(response!==undefined){
+      //  判断成功 刷新主列表页面
+      //  ...
+        if (response.type==1) {
+          if(responseList!==undefined){
+            yield put({
+              type:'getPaymentSettlementDataR',
+              payload: responseList
+            })
+          }
+        }else{
+          message.error('对账失败，请重新确认');
+        }
+      }
+    },
+
+
+
+
+
+
     // 货款结算 - 查看结算明细
     *getSettlementDetailsData({ payload },{ call,put }){
       const responseTab1 = yield call(getSettlementDetailsData, payload);

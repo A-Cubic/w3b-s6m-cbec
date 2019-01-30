@@ -71,6 +71,17 @@ export default class paymentSettlement extends Component {
       payload: params,
     });
   }
+
+
+  //新增确认付款
+  handleCompleteReconciliation=(record)=>{
+    this.props.dispatch({
+      type: 'rolePurchaserConsignment/completeReconciliation',
+      payload: {accountCode:record.accountCode},
+    });
+  }
+
+
   renderForm(){
     // console.log(this.props)
     const { rolePurchaserConsignment:{paymentSettlement:{tableData}} } = this.props;
@@ -95,8 +106,8 @@ export default class paymentSettlement extends Component {
                   // onChange={this.onSelectChange}
                 >
                   <Option value="">全部</Option>
-                  <Option value="0">待结算</Option>
-                  <Option value="1">已结算</Option>
+                  <Option value="1">待结算</Option>
+                  <Option value="0">已结算</Option>
 
                 </Select>
               )}
@@ -185,7 +196,7 @@ export default class paymentSettlement extends Component {
                   <div className={styles.line}></div>
                   <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
                     <Col md={12}>
-                      {record.status==0?
+                      {record.status==1?
                         <span className={styles.settled}>待结算</span>:
                         <span className={styles.settlement}>已结算</span>
                       }
@@ -193,10 +204,20 @@ export default class paymentSettlement extends Component {
                     <Col md={12}>
                       <div style={{ float:"right" }}>
                         <Button  style={{ marginRight:7 }} type="primary" ghost onClick={()=>this.handleChildDetailsModel(record)}>结算明细</Button>
-                        {record.status==0?
+                        {/* {record.status==1?
                           <span style={{ marginRight:7 }} className={styles.settled}>对账中…</span>:
                           <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleChildPrintModel(record)}>预览打印</Button>
-                        }
+                        } */}
+                        {record.status==1?
+                            // <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleCompleteReconciliation(record)}>完成对账</Button>
+                            //{record.flag ==2 ?<a onClick={()=>this.handleViewState(record)}>完成对账<br/></a>:<div>对账中</div>}
+                            <Button style={{ marginRight:7 }} type="primary" >
+                              {/* {record.flag ==2 ?<a onClick={()=>this.handleCompleteReconciliation(record)}>完成对账<br/></a>:<div>待付款</div>} */}
+                              {record.flag ==2 ?<a onClick={()=>this.handleCompleteReconciliation(record)}>确认付款<br/></a>:<div>对账中</div>}
+                            </Button>
+                            :
+                            <Button style={{ marginRight:7 }} type="primary" onClick={()=>this.handleChildPrintModel(record)}>预览打印</Button>
+                          }
                       </div>
                     </Col>
                   </Row>

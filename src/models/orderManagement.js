@@ -1,7 +1,7 @@
 import { message} from 'antd';
 import {getSupplierOrderTable,getSupplierOrderChildCheck,
   getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,getUploadDistributorsOrderbill,getExportWaybill,getExportOrders,
-  confirmDelivery,shipmentOverseas,getCode,getCustoms
+  confirmDelivery,shipmentOverseas,getCode,getCustoms,getgoodsData
 } from '../services/orderManagement_S'
 import {getBrandData} from "../services/publicDictionary_S";
 export default {
@@ -13,6 +13,11 @@ export default {
       tableData:{
         list: [],
         pagination:{},
+      },
+      fs:{
+        consigneeName:'',
+        consigneeMobile:'',
+        consigneeAdr:''
       },
       childCheck:{
         id:'',
@@ -91,6 +96,20 @@ export default {
         })
       }
     },
+
+      //新增发货接口
+      *getgoodsData({payload, callback},{call,put}){
+        const response = yield call(getgoodsData,payload);
+        // console.log('~',response)
+        if (response !== undefined){
+          yield put({
+            type:'getgoodsDataR',
+            payload: response
+          })
+        }
+      },
+
+
     //获取查看详情
     *supplierOrderChildCheck({payload, callback},{call,put}){
       const response = yield call(getSupplierOrderChildCheck,payload);
@@ -253,6 +272,23 @@ export default {
         }
       }
     },
+
+    getgoodsDataR(state,action){
+      return{
+        ...state,
+        supplierOrder:{
+          ...state.supplierOrder,
+          fs: {
+            consigneeName:action.payload.consigneeName,
+            consigneeMobile:action.payload.consigneeMobile,
+            consigneeAdr:action.payload.consigneeAdr
+          }
+        }
+      }
+    },
+
+
+
     supplierOrderChildCheckR(state,action){
       return{
         ...state,
