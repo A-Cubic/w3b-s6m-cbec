@@ -6,8 +6,9 @@ export default function(dynamicWrapper,app){
     // 采购商
     ...procurement(dynamicWrapper,app),
     // 运营
-    ...operation(dynamicWrapper,app)
-
+    ...operation(dynamicWrapper,app),
+    // 财务
+    ...finance(dynamicWrapper,app)
   }
 
 };
@@ -221,3 +222,12 @@ export function operation (dynamicWrapper,app){
   }
 }
 //-------------------------------------财务-------------------------------------
+export function finance (dynamicWrapper,app){
+  return {
+    //-----------------------------报表管理-----------------------------
+    //销售管理 - 销售日报表
+    '/report/salesDayReport': {
+      component: dynamicWrapper(app, ['roleFinanceManagement'], () => import('../roles/finance/salesDayReport')),
+    },
+  }
+}
