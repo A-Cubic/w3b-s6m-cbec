@@ -44,14 +44,14 @@ class Step4 extends React.PureComponent {
     const onValidateForm = e => {
       e.preventDefault();
      // dispatch(routerRedux.push('/goods/goodsAboutS')); 修改 跳转页面 改弹窗
-    console.log(1111)
+    //console.log(1111)
       const {match,dispatch}=this.props;
       dispatch({
         type:'goods/getUploadviewData',
         payload:{
          // userId:userId,
-        logId:match.params.id
-        //logId:95
+       logId:match.params.id
+        //logId:87
         }
       })
 
@@ -154,7 +154,7 @@ class TestChild  extends Component {
       payload: {
         ...params,
         logId:match.params.id
-         //logId:95
+        // logId:87
       }
     });
   }
@@ -196,6 +196,7 @@ class TestChild  extends Component {
         title: '供货价',
         dataIndex: 'price',
         key: 'price',
+        render:val=>`¥${val}`
       }, {
         title: '仓库',
         dataIndex: 'wname',

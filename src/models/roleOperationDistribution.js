@@ -182,7 +182,14 @@ export default {
         supplierPoint: "",
         purchasePoint: "",
         list: [],
-        contractCode:''
+        contractCode:'',
+        freightBelong:'',
+        taxBelong:'',
+        merchantName:'',
+        depositBank:'',
+        depositBankSubbranch:'',
+        bankCard:'',
+
       },
       childHelpData:{
         visible:false,

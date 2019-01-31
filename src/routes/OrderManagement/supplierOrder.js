@@ -247,6 +247,7 @@ export default class supplierOrder extends Component {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
+                
           </Col>
           <Col md={8} sm={24}>
             <span style={{ float: 'right' }}>

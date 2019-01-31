@@ -1,5 +1,5 @@
 // const orderManagement = 'http://console.llwell.net/';
-const a = 'http://192.168.0.127:54195/';
+// 1.31 const a = 'http://192.168.0.127:54195/';
 export default function orderManagementMock(url) {
   return {
     // 订单管理-获取订单列表
@@ -19,7 +19,7 @@ export default function orderManagementMock(url) {
     // 导出订单
     'POST /llback/Order/ExportSelectOrder': url,
     // 确认发货
-    'POST /llback/Order/SingleWaybill': a,
+    'POST /llback/Order/SingleWaybill': url,
     // 海外已出货
     'POST /llback/Order/Overseas': url,
     // 分销商 - 扫码支付

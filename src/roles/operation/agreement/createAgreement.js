@@ -355,7 +355,101 @@ export default class createAgreement extends Component {
             </span>
           </Col>      
           <Col md={3} sm={24}></Col>
-        </Row>           
+        </Row>                   
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={7} sm={24}></Col>
+          <Col md={10} sm={24}>
+            <FormItem label="运费承担方式">
+                {getFieldDecorator('freightBelong',{
+                  //initialValue:'1'
+                 // initialValue:item.sendType==''?'1':item.sendType,
+                  rules: [{ required: true, message: '请输入运费承担方式：' }],
+                })(
+                  <Select
+                      placeholder="选择"
+                    >
+                    <Option value="1">供货商承担</Option>
+                    <Option value="2">平台承担</Option>
+                  </Select>
+                )}
+
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}></Col>
+        </Row>               
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={7} sm={24}></Col>
+          <Col md={10} sm={24}>
+            <FormItem label="税费承担方式">
+                {getFieldDecorator('taxBelong',{
+                  //initialValue:'1'
+                 // initialValue:item.sendType==''?'1':item.sendType,
+                  rules: [{ required: true, message: '请输入税费承担方式：' }],
+                })(
+                  <Select
+                      placeholder="选择"
+                    >
+                    <Option value="1">供货商承担</Option>
+                    <Option value="2">平台承担</Option>
+                  </Select>
+                )}
+
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}></Col>
+        </Row>              
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={7} sm={24}></Col>
+          <Col md={10} sm={24}>
+            <FormItem label="商户名称：">
+              {getFieldDecorator('merchantName',{
+                rules: [{ required: true, message: '请输入商户名称' }],
+              })(
+                <Input style={{ width: '100%' }} placeholder="请输入商户名称" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}></Col>
+        </Row>            
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={7} sm={24}></Col>
+          <Col md={10} sm={24}>
+            <FormItem label="开户行：">
+              {getFieldDecorator('depositBank',{
+                rules: [{ required: true, message: '请输入开户行' }],
+              })(
+                <Input style={{ width: '100%' }} placeholder="请输入开户行" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}></Col>
+        </Row>    
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={7} sm={24}></Col>
+          <Col md={10} sm={24}>
+            <FormItem label="开户行支行：">
+              {getFieldDecorator('depositBankSubbranch',{
+                rules: [{ required: true, message: '请输入开户行支行' }],
+              })(
+                <Input style={{ width: '100%' }} placeholder="请输入开户行支行" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}></Col>
+        </Row>       
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <Col md={7} sm={24}></Col>
+          <Col md={10} sm={24}>
+            <FormItem label="银行卡号：">
+              {getFieldDecorator('bankCard',{
+                rules: [{ required: true, message: '请输入银行卡号' }],
+              })(
+                <Input style={{ width: '100%' }} placeholder="请输入银行卡号" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}></Col>
+        </Row>             
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <div className={styles.titleName}></div>
           <div className={styles.takeGoods}>

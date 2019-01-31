@@ -1,15 +1,15 @@
 // const h = 'http://192.168.191.1:54195/';
- const a = 'http://192.168.0.127:54195/';
-export default function roleSupplierBusMock() {
+ //const a = 'http://192.168.0.127:54195/';
+export default function roleSupplierBusMock(url) {
   return {
     //订单统计 发货传值
-    'POST /llback/Order/GetConsigneeMsg': a,
+    'POST /llback/Order/GetConsigneeMsg': url,
 
     //商品管理-商品上架 -弹窗
-    'POST /llback/Goods/SelectOnloadGoodsList': a,
+    'POST /llback/Goods/SelectOnloadGoodsList': url,
 
-    //商品管理-商品上架 -弹窗
-    'POST /llback/Agreement/ContractDetails': a,
+    //商品管理-商品查看   与运营  合同查看共用接口
+   // 'POST /llback/Agreement/ContractDetails': a,
 
 
 

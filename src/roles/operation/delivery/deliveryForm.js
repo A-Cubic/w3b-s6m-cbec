@@ -308,7 +308,7 @@ export default class deliveryForm extends Component {
                 //usercode:"cgs",
                 usercode:that.state.usercode,
                 id:item.id==''?list[0].id:item.id,
-                fileTemp:info.file.name,
+                //fileTemp:info.file.name,
                 //fileTemp:'2.xlsx'
               },
               callback: that.onUploadCallback

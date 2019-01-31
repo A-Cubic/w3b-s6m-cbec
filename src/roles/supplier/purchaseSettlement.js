@@ -321,8 +321,8 @@ class ChildDetails extends Component {
         key: 'orderId',
         render: (val,record) => (
           <div>
-            <span style={{display:'inline-block',width:200}}>{record.orderId}</span>
-            <span style={{display:'inline-block',width:200}}>{record.orderType}</span>
+            <span style={{display:'inline-block'}}>{record.orderId}</span>
+            <span style={{display:'inline-block'}}>{record.orderType}</span>
           </div>
         )
       },
