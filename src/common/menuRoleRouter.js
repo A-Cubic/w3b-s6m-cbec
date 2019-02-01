@@ -54,13 +54,13 @@ export function supplier (dynamicWrapper,app){
     },
     //-----------------------------合同管理-----------------------------
     //查看合同
-    '/supplier/checkAgreement': {
+    '/agreement/supplierCheckAgreement': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/checkAgreement')),
     },
 
     //-----------------------------结算管理-----------------------------
     //货款结算
-    '/supplier/purchaseSettlement': {
+    '/finance/supplierPurchaseSettlement': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
     },
 

@@ -83,21 +83,30 @@ export default class salesDayReport extends Component {
 
 
   renderForm(){
+    const { roleFinanceManagement:{salesDayReport:{tableData:{item}}} } = this.props;
     const { roleFinanceManagement:{salesDayReport:{tableData}} } = this.props;
+    console.log('item',item)
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
-            <FormItem label="供货商">
+          <Col md={8} sm={24}>
+            <FormItem label="">
+              {getFieldDecorator('date')(
+                <RangePicker style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="渠道商名称：">
               {getFieldDecorator('supplierName')(
                 <Input style={{ width: '100%' }} placeholder="请输入供货商名称" />
               )}
             </FormItem>
           </Col>
 
-          <Col md={6} sm={24}>
-            <FormItem label="商品：">
+          <Col md={8} sm={24}>
+            <FormItem label="订单编号：">
               {getFieldDecorator('select')(
                 <Input style={{ width: '100%' }} placeholder="可输入商品条码，商品名称进行查询" />
               )}
@@ -113,6 +122,13 @@ export default class salesDayReport extends Component {
           <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
             <div style={{ float: 'right' }}>
               <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
+            </div>
+          </div>
+        </Row>
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+            <div style={{ float: 'right' }}>
+              <span>销售收入合计(元)：{item.a}{item.a}{item.a}{item.a}{item.a}{item.a}不含税收入(元)：{item.b}运费(元)：0.00服务费(元)：0.00</span>
             </div>
           </div>
         </Row>

@@ -14,7 +14,10 @@ export default {
   //列表获取
     salesDayReport:{
         tableData:{
-          item:[],
+          item:{
+            a:'1',
+            b:"2",
+          },
           list: [],
           pagination:{},
         },
