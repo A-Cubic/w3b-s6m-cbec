@@ -64,7 +64,7 @@ export default class checkAgreement extends Component {
   render() {
     const { roleSupplierBus:{checkAgreement:{tableData:{contractCode,list,customersCode }}} } = this.props;
     const { roleSupplierBus:{checkAgreement:{tableData}} } = this.props;
-   //console.log('777',tableData)
+   //console.log('777',tableData.customersCode!='')
 
     return (
       <div>
@@ -77,7 +77,7 @@ export default class checkAgreement extends Component {
             </div>
           </Row>
           {
-            tableData.customersCode!=''?
+           tableData.customersCode!='' && tableData.customersCode!=null?
             <div>
               <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginTop:'25px',marginBottom:'15px'}}>
             <Col md={8} sm={24}></Col>
