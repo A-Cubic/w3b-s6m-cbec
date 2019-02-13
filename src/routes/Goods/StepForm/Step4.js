@@ -51,7 +51,7 @@ class Step4 extends React.PureComponent {
         payload:{
          // userId:userId,
        logId:match.params.id
-        //logId:87
+       //logId:87
         }
       })
 
@@ -154,7 +154,7 @@ class TestChild  extends Component {
       payload: {
         ...params,
         logId:match.params.id
-        // logId:87
+         //logId:87
       }
     });
   }
@@ -162,7 +162,7 @@ class TestChild  extends Component {
     
     const { goods:{Step4:{show,tableData:{item,list,pagination}}} } = this.props;
     //const {goods:{Step4:{show}}} =this.props
-    console.log('11111',list)
+    //console.log('11111',list)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,

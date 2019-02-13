@@ -28,12 +28,12 @@ export default {
     checkAgreement: {
       tableData:{
         item:{},
-        customersCode: "333",
-        userName: "采购商测试",
-        createTime: "2019/1/18 10:19:25",
-        cycle: "实时",
-        model: "直营",
-        contractDuration: "2019-01-16 至 2020-02-01",
+        customersCode: "",
+        userName: "",
+        createTime: "",
+        cycle: "",
+        model: "",
+        contractDuration: "",
         platformPoint: "",
         supplierPoint: "",
         purchasePoint: "",
@@ -110,7 +110,7 @@ export default {
     // 采购结算 - 列表
     *getPaymentSettlementData({ payload },{ call,put }){
       const response = yield call(getPaymentSettlementData, payload);
-      // console.log('~res',response)
+      // console.log('~res7777',response)
       if(response!==undefined){
         yield put({
           type: 'getPaymentSettlementDataR',

@@ -233,7 +233,7 @@ export default {
     // 货款结算 - 列表
     *getPaymentSettlementData({ payload },{ call,put }){
       const response = yield call(getPaymentSettlementData, payload);
-      // console.log('~res',response)
+       console.log('~res22',response)
       if(response!==undefined){
         yield put({
           type: 'getPaymentSettlementDataR',

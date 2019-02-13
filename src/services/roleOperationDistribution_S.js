@@ -285,7 +285,8 @@ export async function getCheckAgreementData(params) {
 
 export async function getPaymentSettlementData(params) {
   // return request(`/llback/Balance/AA`,{
-  return request(`/llback/Balance/PurchasePayment`,{
+  // return request(`/llback/Balance/PurchasePayment`,{
+    return request(`/llback/Balance/GetPayment`,{  
     method: 'POST',
     body: params,
   })

@@ -76,7 +76,10 @@ export default class checkAgreement extends Component {
               查看合同
             </div>
           </Row>
-          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginTop:'25px',marginBottom:'15px'}}>
+          {
+            tableData.customersCode!=''?
+            <div>
+              <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginTop:'25px',marginBottom:'15px'}}>
             <Col md={8} sm={24}></Col>
             <Col md={16} sm={24} style={{fontSize:'16px'}}>
               <span style={{marginLeft:'70px',marginRight:'25px'}}>客商编码：</span>{tableData.customersCode}
@@ -118,6 +121,50 @@ export default class checkAgreement extends Component {
               <span style={{marginLeft:'70px',marginRight:'25px'}}>扣点方式：</span>{Number(tableData.platformPoint)+Number(tableData.supplierPoint)+Number(tableData.purchasePoint)}%
             </Col>
           </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>运费承担方式:</span>{tableData.freightBelong==1?'供货商':'平台'}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>税费承担方式:</span>{tableData.taxBelong==1?'供货商':'平台'}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>商户名称:</span>{tableData.merchantName}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>开户行:</span>{tableData.depositBank}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>开户行支行:</span>{tableData.depositBankSubbranch}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }} style={{marginBottom:'15px'}}>
+            <Col md={8} sm={24}></Col>
+            <Col md={16} sm={24} style={{fontSize:'16px'}}>
+              <span style={{marginLeft:'70px',marginRight:'25px'}}>银行卡号:</span>{tableData.bankCard}
+            </Col>
+          </Row>
+            </div>:  
+            <div style={{textAlign:'center',fontSize:15}}>
+              <Divider dashed />
+              暂时没有合同相关数据
+            </div>
+          }
+
+
           
           <Row gutter={{ md: 12, lg: 24, xl: 48 }}  style={{marginBottom:'25px',}}>
             <div className={styles.titleName}></div>

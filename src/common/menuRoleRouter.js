@@ -62,6 +62,7 @@ export function supplier (dynamicWrapper,app){
     //货款结算
     '/finance/supplierPurchaseSettlement': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
+      
     },
 
 

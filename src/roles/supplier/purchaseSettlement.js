@@ -351,16 +351,11 @@ class ChildDetails extends Component {
         key: 'purchasePrice',
         render:val=>`¥${val}`,
       },{
-        title: '销售单价',
-        dataIndex: 'skuUnitPrice',
-        key: 'skuUnitPrice',
-        render:val=>`¥${val}`,
-      },{
-        title: '销售数量',
+        title: '供货数量',
         dataIndex: 'quantity',
         key: 'quantity',
       },{
-        title: '销售金额',
+        title: '供货总额',
         dataIndex: 'money',
         key: 'money',
         render:val=>`¥${val}`,
