@@ -6,6 +6,7 @@ import styles from './style.less';
 import {getToken} from "../../../utils/Global";
 const userId = getToken().userId;
 class Step4 extends React.PureComponent {
+
   componentDidMount() {
     const {match,dispatch}=this.props;
     this.props.dispatch({
@@ -44,8 +45,8 @@ class Step4 extends React.PureComponent {
     const onValidateForm = e => {
       e.preventDefault();
      // dispatch(routerRedux.push('/goods/goodsAboutS')); 修改 跳转页面 改弹窗
-    //console.log(1111)
       const {match,dispatch}=this.props;
+    
       dispatch({
         type:'goods/getUploadviewData',
         payload:{
@@ -143,7 +144,9 @@ class TestChild  extends Component {
 
   //翻页
   handleTableChange=(pagination, filters, sorter)=>{
-    const {match,dispatch}=this.props;
+    
+        const {match,dispatch}=this.props;
+      //console.log(2222,this.props.goods.step4supplementData.id)
 
     const params = {
       ...pagination,
@@ -153,7 +156,7 @@ class TestChild  extends Component {
       type: 'goods/getUploadviewData',
       payload: {
         ...params,
-        logId:match.params.id
+        logId:this.props.goods.step4supplementData.id
          //logId:87
       }
     });
