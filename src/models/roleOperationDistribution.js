@@ -589,15 +589,21 @@ export default {
 
 
     //-----------------创建合同 页----------
-    *getcreateAgreementData({ payload },{ call,put }){
+    *getcreateAgreementData({ payload,callback },{ call,put }){
       const response = yield call(getcreateAgreementData, payload);
-     // console.log('~res',response)
+      //console.log('~res',response.type)
       if(response!==undefined){
-        yield put({
-          type: 'getcreateAgreementDataR',
-          payload: response,
-        })
-        yield put(routerRedux.push('/agreement/agreementList'));
+        if (response.type==1) {
+          yield put({
+            type: 'getcreateAgreementDataR',
+            payload: response,
+          })
+          yield put(routerRedux.push('/agreement/agreementList'));
+          callback(response)
+        } else if(response.type==0){
+        //  message.error('xxxx对账失败，请重新确认');
+        }
+        
       }
     },
 
@@ -1229,12 +1235,14 @@ export default {
 
     //-----------------创建合同 页----------
     getcreateAgreementDataR(state, action){
-      //  console.log('fs',action.payload)
+      //console.log('fs',action.payload)
         return {
           ...state,
           createAgreement:{
             ...state.createAgreement,
-            tableData:action.payload
+            tableData: {
+              item:action.payload
+            }
           }
         }
       },

@@ -50,6 +50,10 @@ export default class createAgreement extends Component {
   //保存
   onSearch=(e)=>{
     e.preventDefault();
+    const { roleOperationDistribution:{createAgreement} } = this.props;
+    //console.log(777,createAgreement)
+    let that = this
+
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
       const rangeValue = fieldsValue['date'];
@@ -71,8 +75,9 @@ export default class createAgreement extends Component {
             ...values,
             list:this.state.listImg
           },
+          callback: that.callbackType,
         });
-        this.props.form.resetFields();
+       // this.props.form.resetFields();
         this.setState({
           formValues: {},
           sortedInfo: null,
@@ -82,6 +87,15 @@ export default class createAgreement extends Component {
       }
     });
   }
+
+  callbackType = (params) => {
+     console.log('1111',params)
+     if(params.type==1){
+      this.props.form.resetFields();
+     }
+   }
+
+  
   handleFormReset =()=>{
     this.props.form.resetFields();
     this.setState({
