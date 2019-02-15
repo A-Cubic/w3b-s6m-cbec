@@ -173,7 +173,24 @@ export default class GoodsAboutP extends Component {
               )}
             </FormItem>
           </Col>
-
+              
+          <Col md={8} sm={24}>
+            <FormItem label="商品所在地">
+              {getFieldDecorator('businessType')(
+                <Select
+                  placeholder="请选择"
+                  optionFilterProp="label"
+                  // onChange={this.onSelectChange}
+                >
+                  <Option value="">全部</Option>
+                  <Option value="0">国内现货</Option>
+                  <Option value="1">海外直邮</Option>
+                  <Option value="2">保税</Option>
+              
+                </Select>
+              )}
+            </FormItem>
+          </Col>
 
         </Row>
         <div style={{ overflow: 'hidden' }}>
@@ -218,6 +235,10 @@ export default class GoodsAboutP extends Component {
       title: '品牌',
       dataIndex: 'brand',
       key: 'brand',
+    }, {
+      title: '商品所在地',
+      dataIndex: 'businessType',
+      key: 'businessType',
     },{
         title: '库存',
         dataIndex: 'goodsnum',
