@@ -17,3 +17,10 @@ export async function getWorkbenchDataO(params) {
   });
 }
 
+// 工作台 - 供应商 - new
+export async function getWorkbenchNewSupplierData(params) {
+  return request(`/llback/aaaa/getWorkbenchNewSupplierData`, {
+    method: 'POST',
+    body: params,
+  });
+}

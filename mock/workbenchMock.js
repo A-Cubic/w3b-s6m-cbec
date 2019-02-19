@@ -1,11 +1,13 @@
 // const orderManagement = 'http://console.llwell.net/';
 export default function workbenMock(url) {
   return {
-    // 工作台-供应商
+    // 工作台-供应商 旧
     'POST /llback/Dashboard/GetWorkBenchS': getChannelList,
-    // 工作台-供应商
+    // 工作台-供应商 旧
     'POST /llback/Dashboard/GetWorkBenchO': url,
 
+     // 工作台 - 供应商 - new
+     'POST /llback/aaaa/getWorkbenchNewSupplierData': getWorkbenchNewSupplierData,
   };
 }
 export function getPlatform(req, res) {
@@ -20,6 +22,16 @@ export function getPlatform(req, res) {
     },
   ]);
 }
+
+export function getWorkbenchNewSupplierData(req, res) {
+  res.send({
+    a:'a',
+    b:'b',
+    arr1:[0,1,2,3],
+    arr2:[4,5,6]
+  });
+}
+
 export function getA(req, res) {
   res.send({
     overtime: '11',
