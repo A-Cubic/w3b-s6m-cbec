@@ -2,9 +2,13 @@ import {getSettlementListS} from "../services/settlementManagement_S";
 
 export default function(dynamicWrapper,app){
   return {
-    //工作台 - 供应商
+    //工作台 - 供应商 - old图表
+    // '/workbenchS': {
+    //   component: dynamicWrapper(app, ['workbench'], () => import('../routes/Workbench/workbenchS')),
+    // },
+    //工作台 - 供应商 - new
     '/workbenchS': {
-      component: dynamicWrapper(app, ['workbench'], () => import('../routes/Workbench/workbenchS')),
+      component: dynamicWrapper(app, ['workbench'], () => import('../routes/Workbench/workbenchNewSupplier')),
     },
     //工作台 - 运营
     '/workbenchO': {
