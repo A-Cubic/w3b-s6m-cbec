@@ -13,12 +13,12 @@ export default {
     },
     workbenchNewSupplier:{
       getData:{
-        item:{
-          // a:'',
-          // b:'',
-          // arr1:[],
-          // arr2:[]
-        }
+        // item:{
+        //   // a:'',
+        //   // b:'',
+        //   // arr1:[],
+        //   // arr2:[]
+        // }
       }
     }
   },
@@ -28,7 +28,7 @@ export default {
     //工作台 - 供应商 - new
     *getWorkbenchNewSupplierData({ payload },{ call,put}){
       const response = yield call(getWorkbenchNewSupplierData, payload);
-      console.log('8888888~',response)
+     // console.log('8888888~',response)
       if (response !== undefined) {
         yield put({
           type: 'getWorkbenchNewSupplierDataR',
@@ -86,14 +86,15 @@ export default {
       };
     },//old 旧
     getWorkbenchNewSupplierDataR(state, action) {
-      console.log('res',action)
+      //console.log('res',action.payload)
       return {
         ...state,
         workbenchNewSupplier:{
           ...state.workbenchNewSupplier,
-          getData:{
-            item:action.payload
-          }
+          // getData:{
+          //   item:action.payload
+          // }
+          getData:action.payload
         }
       };
     },
