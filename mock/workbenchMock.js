@@ -1,4 +1,5 @@
 // const orderManagement = 'http://console.llwell.net/';
+//const a = 'http://192.168.0.127:54195/';
 export default function workbenMock(url) {
   return {
     // 工作台-供应商 旧
@@ -7,7 +8,9 @@ export default function workbenMock(url) {
     'POST /llback/Dashboard/GetWorkBenchO': url,
 
      // 工作台 - 供应商 - new
-     'POST /llback/aaaa/getWorkbenchNewSupplierData': getWorkbenchNewSupplierData,
+    //'POST /llback/aaaa/getWorkbenchNewSupplierData': getWorkbenchNewSupplierData,
+    'POST /llback/Dashboard/GetNewWorkBenchS': url,
+     
   };
 }
 export function getPlatform(req, res) {

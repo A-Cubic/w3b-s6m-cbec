@@ -1,80 +1,80 @@
- const a = 'http://192.168.0.127:54195/';
+ //const a = 'http://192.168.0.127:54195/';
 export default function rolePurchaserBulkPurchasesMock(url) {
   return {
     // -------- 发起询价 --------------
     // 发起询价 - 保存
-    'POST /llback/Purchase/InquiryPreservation': a,
+    'POST /llback/Purchase/InquiryPreservation': url,
 
     // 发起询价 - 提交
-    'POST /llback/Purchase/InquirySubmission': a,
+    'POST /llback/Purchase/InquirySubmission': url,
 
 
     //  发起询价- 导入订单
-    'POST /llback/Purchase/OnLoadGoodsList': a,
+    'POST /llback/Purchase/OnLoadGoodsList': url,
 
 
     //  发起询价- 删除
-    'POST /llback/Purchase/GoodsDelete': a,
+    'POST /llback/Purchase/GoodsDelete': url,
 
 
     //  发起询价- 分页 - 改
-    'POST /llback/Purchase/Goodspagination': a,
+    'POST /llback/Purchase/Goodspagination': url,
 
 
     // -------- 询价列表 --------------
-    'POST /llback/Purchase/InquiryList': a,
+    'POST /llback/Purchase/InquiryList': url,
 
 
     //  询价列表- 删除
-    'POST /llback/Purchase/InquiryListDelete': a,
+    'POST /llback/Purchase/InquiryListDelete': url,
 
 
     // 询价列表 - 查看
     // 询价列表 - 询价中
     // 询价列表 - 报价中
     // 询价列表 - 已报价
-    'POST /llback/Purchase/InquiryListDetailed': a,
+    'POST /llback/Purchase/InquiryListDetailed': url,
 
 
     // 询价列表 -报价中-详情
     // 询价列表/采购列表-点击详情
-    'POST /llback/Purchase/OtherGoodsDetails': a,
+    'POST /llback/Purchase/OtherGoodsDetails': url,
 
 
     // 询价列表 - 已报价 - 点击详情
-    'POST /llback/Purchase/GoodsDetails': a,
+    'POST /llback/Purchase/GoodsDetails': url,
 
     //  已报价- 删除
-    'POST /llback/Purchase/InquiryGoodsDelete': a,
+    'POST /llback/Purchase/InquiryGoodsDelete': url,
 
     // 询价列表-已报价 - 提交
-    'POST /llback/Purchase/OfferSub': a,
+    'POST /llback/Purchase/OfferSub': url,
     // 询价列表-已报价(二次) - 立即下单
-    'POST /llback/Purchase/OfferedSub': a,
+    'POST /llback/Purchase/OfferedSub': url,
 
     // 询价列表-已报价 - 取消
-    'POST /llback/Purchase/OfferCancel': a,
+    'POST /llback/Purchase/OfferCancel': url,
 
 
     // 询价列表-已报价 - 改变采购数量
-    'POST /llback/Purchase/GoodsDetermine': a,
+    'POST /llback/Purchase/GoodsDetermine': url,
 
 
     // 询价列表-已报价 - 详情改变采购数量
-    'POST /llback/Purchase/GoodsDetailsDetermine': a,
+    'POST /llback/Purchase/GoodsDetailsDetermine': url,
 
 
     // 询价列表-已报价 - 分页
     //  采购列表 - 分页
-    'POST /llback/Purchase/OtherInquiryPagesn': a,
+    'POST /llback/Purchase/OtherInquiryPagesn': url,
 
 
     // -------- 采购列表 --------------
-    'POST /llback/Purchase/PurchaseList': a,
+    'POST /llback/Purchase/PurchaseList': url,
 
 
     // 采购列表 - 查看  询价列表
-    'POST /llback/Purchase/PurchaseDetails': a,
+    'POST /llback/Purchase/PurchaseDetails': url,
 
 
   };

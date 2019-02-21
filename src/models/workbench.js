@@ -13,12 +13,13 @@ export default {
     },
     workbenchNewSupplier:{
       getData:{
-        // item:{
-        //   // a:'',
-        //   // b:'',
-        //   // arr1:[],
-        //   // arr2:[]
-        // }
+        company:'',
+        lastTime:'',
+        batchSupply:{},
+        bussness:{},
+        distribution:{},
+        goods:{},
+        substitute:{}
       }
     }
   },
@@ -86,15 +87,20 @@ export default {
       };
     },//old 旧
     getWorkbenchNewSupplierDataR(state, action) {
-      //console.log('res',action.payload)
+     // console.log('res',action.payload.goods)
       return {
         ...state,
         workbenchNewSupplier:{
           ...state.workbenchNewSupplier,
-          // getData:{
-          //   item:action.payload
-          // }
-          getData:action.payload
+          getData:{
+            company:action.payload.company,
+            lastTime:action.payload.lastTime,
+            batchSupply:action.payload.batchSupply,
+            bussness:action.payload.bussness,
+            distribution:action.payload.distribution,
+            goods:action.payload.goods,
+            substitute:action.payload.substitute
+          }
         }
       };
     },
