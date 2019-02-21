@@ -412,6 +412,7 @@ class ChildDetails extends Component {
                      columns={columnsTab1}
                      pagination={paginationProps1}
                      onChange={this.handleTableChangeTab1}
+                     rowClassName={record => (record.accountType==1 ? styles.trnobg : styles.trbg)}
                 // loading={submitting}
               />
             </TabPane>
@@ -422,6 +423,7 @@ class ChildDetails extends Component {
                      columns={columnsTab2}
                      pagination={paginationProps2}
                      onChange={this.handleTableChangeTab2}
+                     rowClassName={record => (record.accountType==1 ? styles.trnobg : styles.trbg)}
                 // loading={submitting}
               />
             </TabPane>
