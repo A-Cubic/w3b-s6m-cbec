@@ -170,11 +170,13 @@ export default class quoteWithDetails extends Component {
 
               this.props.rolePurchaserBulkPurchases.listQuotedQrice.tableData.item.status==4?
                 // <div onClick={()=>this.demo()}>777</div>:
-                <Row style={{marginTop:'30px', marginBottom:'35px'}}>
+                <Row style={{marginTop:'30px', marginBottom:'35px',textAlign:'center'}}>
                   <Col md={9} sm={24}></Col>
                   <Col md={6} sm={24}>
-                    <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnPlaceAnOrder} >立即下单</Button>
-                    <Button style={{ marginLeft: 48 }} onClick={this.handleReturn}>取消</Button>
+                    {/* <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnPlaceAnOrder} >立即下单</Button>
+                    <Button style={{ marginLeft: 48 }} onClick={this.handleReturn}>取消</Button> */}
+                    <Button style={{marginRight:'10px'}}type="primary" onClick={this.handleOnPlaceAnOrder} >立即下单</Button>
+                    <Button onClick={this.handleReturn}>取消</Button>
                   </Col>
                   <Col md={9} sm={24}></Col>
                 </Row>:

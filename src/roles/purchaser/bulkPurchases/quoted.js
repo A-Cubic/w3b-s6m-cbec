@@ -66,13 +66,30 @@ export default class quoted extends Component {
     //console.log('v',v)
     this.setState({
       value: v
-    },()=>{
-      //console.log('bbbbbb',this.state.value)
-    });
-   
+     
     }
+    // ,()=>{
+    //   console.log('改变num',this.state.value)
+    // }
+    )
+    
+    
+
+
+
+    }
+    // inputOnFocus=(record,val)=>{
+    //   console.log('vvvvvvvvvvvv',val)
+    //   // this.setState({
+    //   //   value: record.purchaseNum
+    //   // },()=>{
+    //   //   console.log('vvvvvvvvvvvv',this.state.value)
+    //   // })
+    // }
   render() {
+   
     const { rolePurchaserBulkPurchases:{listQuotedQriceOver:{tableData:{item,list, pagination}}} } = this.props;
+    console.log('list', list)
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
@@ -126,6 +143,7 @@ export default class quoted extends Component {
           return (
             record.supplierNumType ==2?<span >{record.purchaseNum}</span>:
           <InputNumber 
+          //onFocus={()=>this.inputOnFocus(record)}
             // onChange={this.onChange(record)} 
              onChange={this.onChange}
              onBlur={()=>this.inputOnBlur(record) }
@@ -199,11 +217,13 @@ export default class quoted extends Component {
           商品金额：<span>{item.purchasePrice}</span>　运费：<span>￥{item.waybillfee}</span>　税费：<span>￥{item.tax}</span>
           </div>
           <PurchaseOrder />
-            <Row style={{marginTop:'30px', marginBottom:'35px'}}>
+            <Row style={{marginTop:'30px', marginBottom:'35px',textAlign:'center'}}>
               <Col md={9} sm={24}></Col>      
               <Col md={6} sm={24}>
-                <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleSubmission} >提交</Button>
-                <Button style={{ marginLeft: 48 }} onClick={this.handleCancel}>取消</Button>
+                {/* <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleSubmission} >提交</Button>
+                <Button style={{ marginLeft: 48 }} onClick={this.handleCancel}>取消</Button> */}
+                <Button style={{ marginRight:'10px' }}type="primary" onClick={this.handleSubmission} >提交</Button>
+                <Button onClick={this.handleCancel}>取消</Button>
               </Col>
               <Col md={9} sm={24}></Col>      
             </Row>
@@ -213,26 +233,37 @@ export default class quoted extends Component {
   }
 
 
-//改变数量
-  //onChange
+//改变数量失去焦点
+  //onBlur
   inputOnBlur = (record,val) =>{
-   // console.log('record',record.barcode)
+    
+    console.log('tttttt-------------record',record.barcode)
+    console.log('tttttt-------------val',record.barcode)
     //console.log('onchange_valuce', this.state.value)
+    //console.log('qb',record.barcode)
     const {match,dispatch}=this.props;
+    const { rolePurchaserBulkPurchases:{listQuotedQriceOver:{tableData:{item,list, pagination}}} } = this.props;
     const getData = JSON.parse(match.params.biography)
-    const b = this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list.map((item) => {
+    console.log('原list',list)
+
+    const b = list.map((item) => {
      return {
-      // demand:this.state.value,
-      // price:item.supplyPrice,
       purchaseNum:this.state.value,
+     // purchaseNum:item.purchaseNum,
       supplyPrice:item.supplyPrice,
       barcode:item.barcode,
-     }
+     } 
     })
 
-    const c =b.find(item=>
-      item.barcode===record.barcode
-    )
+
+   
+
+
+
+    console.log('b',b)
+
+    const c =b.find(item=>item.barcode===record.barcode)
+    console.log('c',[c])
     const d = [c].map((item) => {
       // const demand
       // const price
@@ -244,11 +275,13 @@ export default class quoted extends Component {
         price:item.supplyPrice,
        }
       })  
+
     // console.log('item返回值b',b)
     // console.log('item返回值c',[c])
     // console.log('item返回值d',d)
     // console.log('purchaseNum',record.purchaseNum)  
     // console.log('this.state.value',this.state.value =='') 
+
     if(this.state.value != ''){
       if(record.purchaseNum != this.state.value){
         //console.log('传数')
@@ -377,7 +410,7 @@ class PurchaseOrder extends Component {
   }
   inputOnBlurDetails = (record,val) =>{
     
-    //  console.log(this.state.valueDetails)
+      //console.log('qa',this.state.valueDetails)
     const a = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData;
     a.map((item) => {
       if(item.keyId == record.keyId && this.state.valueDetails[item.keyId] != undefined){

@@ -209,8 +209,8 @@ export default class initiateInquiry extends Component {
         type: 'rolePurchaserBulkPurchases/uploadOrderbill',
         payload: {
           purchasesn:id,
-          fileTemp: info.file.response.fileName[0]
-         //fileTemp:info.file.name
+          //fileTemp: info.file.response.fileName[0]
+          fileTemp:info.file.name
         },
         callback: this.onUploadCallback
       });
@@ -406,11 +406,13 @@ export default class initiateInquiry extends Component {
                  onChange={this.handleTableChange}
                  // loading={submitting}
           />
-        <Row style={{marginTop:'15px', marginBottom:'5px'}}>
+        <Row style={{marginTop:'15px', marginBottom:'5px',textAlign:'center'}}>
           <Col md={9} sm={24}></Col>
           <Col md={6} sm={24}>
-            <Button style={{ marginLeft: 48 }} htmlType="submit">保存</Button>
-            <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnSubmission} >提交</Button>
+            {/* <Button style={{ marginLeft: 48 }} htmlType="submit">11保存</Button>
+            <Button style={{ marginLeft: 48, marginLeft:"20px"}}type="primary" onClick={this.handleOnSubmission} >提交</Button> */}
+            <Button style={{ marginRight: '10px' }}  htmlType="submit">保存</Button>
+            <Button type="primary" onClick={this.handleOnSubmission} >提交</Button>
           </Col>
           <Col md={9} sm={24}></Col>
         </Row>
