@@ -417,13 +417,14 @@ export default {
     //已报价 - 删除
     *getQuotedPriceDel({payload, callback},{call,put}){
       const response = yield call(getQuotedPriceDel,payload);
-     //console.log('~xxxxx删除',response.item.type)
+     //console.log('~xxxxx删除',response)
       if (response !== undefined) {
         if (response.type==1) {
           message.success('删除成功');
           yield put({
             type:'getQuotedPriceDelR',
-            payload: payload
+           //payload: payload
+           payload: response
           })
           // callback(response);
          // console.log('xxxx',response)
@@ -880,19 +881,29 @@ export default {
       // const newData=dataSource.filter(item => item.barcode != inList[index].barcode)purchasesn
       const newData=state.listQuotedQriceOver.tableData.list.filter(item => item.barcode != bb)
       // console.log('555',state.listQuotedQriceOver.tableData.list)
-      // console.log('newData',newData)
+       //console.log('newData',newData)
        //console.log('删除bb',bb)
+     
+     
       return {
         ...state,
         listQuotedQriceOver:{
           ...state.listQuotedQriceOver,
+          'item.purchasePrice':action.payload.allPrice,
           tableData:{
             ...state.listQuotedQriceOver.tableData,
-            list:newData
+            list:newData,
+            item:{
+              purchasePrice:action.payload.allPrice
+            }
           }
         }
+      
       }
     },
+
+   
+
 
     // 询价列表-已报价 - 改变采购数量
     getChangeNumR(state,action){
@@ -923,8 +934,7 @@ export default {
 
       // console.log('b',action.payload)
       //  console.log('totalPrice',action.payload.totalPrice)
-      //  console.log('purchasePrice',state.listQuotedQriceOver.tableData.item.purchasePrice)
-
+     
       return {
         ...state,
         listQuotedQriceOver:{
@@ -951,7 +961,7 @@ export default {
       )
       b.totalPrice = action.payload.totalPrice
       b.purchaseNum = action.payload.purchaseNum
-      //console.log('b.purchaseNum',b.purchaseNum)
+     
       //b.purchaseNum = action.payload.purchaseNum
       state.listQuotedQriceOver.tableData.item.purchasePrice = action.payload.allPrice
       return {

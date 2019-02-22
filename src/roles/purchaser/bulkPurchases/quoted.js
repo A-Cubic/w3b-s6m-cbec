@@ -2,7 +2,8 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs,InputNumber   } from 'antd';
-import styles from './listDetails.less';
+// import styles from './listDetails.less';
+import styles from './quoted.less';
 import {message} from "antd/lib/index";
 import moment from 'moment';
 import { getCurrentUrl } from '../../../services/api'
@@ -63,21 +64,91 @@ export default class quoted extends Component {
   }
 
    onChange=(v)=>{
-    //console.log('v',v)
+   // console.log('v',v)
     this.setState({
-      value: v
-     
+      value: v 
     }
     // ,()=>{
     //   console.log('改变num',this.state.value)
     // }
     )
-    
-    
-
-
-
     }
+    inputonFocus = (record,val) =>{
+     // console.log('入获取',record)
+      this.setState({
+        value: record.purchaseNum
+      })
+    }
+
+
+
+    //改变数量失去焦点
+  //onBlur
+  inputOnBlur = (record,val) =>{
+    // console.log('失焦',record)
+    // console.log('tttttt-------------record',record.barcode)
+    // console.log('tttttt-------------val',record.barcode)
+    //console.log('onchange_valuce', this.state.value)
+    //console.log('qb',record.barcode)
+    const {match,dispatch}=this.props;
+    const { rolePurchaserBulkPurchases:{listQuotedQriceOver:{tableData:{item,list, pagination}}} } = this.props;
+    const getData = JSON.parse(match.params.biography)
+   // console.log('原list',list)
+    //b指循环所有list 把改变的数量赋值到对应数量
+    const b = list.map((item) => {
+     return {
+      purchaseNum:this.state.value,
+     // purchaseNum:item.purchaseNum,
+      supplyPrice:item.supplyPrice,
+      barcode:item.barcode,
+     } 
+    })
+
+
+  //  console.log('b',b)
+    //c指新赋值list的数量找到当前获取的这一行所有属性
+    const c =b.find(item=>item.barcode===record.barcode)
+  //  console.log('c',[c])
+    //d指循环c整行的属性，如果删除所有数量传0值
+    const d = [c].map((item) => {
+      // const demand
+      // const price
+       //return  [item.demand = item.purchaseNum,item.price = item.supplyPrice]
+       return {
+        // demand:this.state.value,
+        // price:item.supplyPrice,
+        //id:record.id,
+        //demand:this.state.value,
+        demand:this.state.value==null || this.state.value =='' || this.state.value==undefined?0:this.state.value ,
+        price:item.supplyPrice,
+        id:record.id
+       }
+      })  
+
+    // console.log('item返回值b',b)
+    // console.log('item返回值c',[c])
+    // console.log('item返回值d',d)
+    // console.log('purchaseNum',record.purchaseNum)  
+    // console.log('this.state.value',this.state.value =='') 
+
+    // if(this.state.value != ''){
+    //   if(record.purchaseNum != this.state.value){
+
+     //   console.log('传数',this.state.value)
+        this.props.dispatch({
+          type: 'rolePurchaserBulkPurchases/getChangeNum',
+          //payload: params,
+          payload: {
+            purchasesn:getData.purchasesn,
+            // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
+            list:d,
+            barcode:record.barcode,
+          //  id:record.id
+          },
+        }); 
+    //   }  
+    // }  
+  }
     // inputOnFocus=(record,val)=>{
     //   console.log('vvvvvvvvvvvv',val)
     //   // this.setState({
@@ -89,7 +160,7 @@ export default class quoted extends Component {
   render() {
    
     const { rolePurchaserBulkPurchases:{listQuotedQriceOver:{tableData:{item,list, pagination}}} } = this.props;
-    console.log('list', list)
+   // console.log('list', list)
     //const { rolePurchaserConsignment:{confirmReceipt:{tableData:{list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
@@ -143,10 +214,15 @@ export default class quoted extends Component {
           return (
             record.supplierNumType ==2?<span >{record.purchaseNum}</span>:
           <InputNumber 
+          style={{textAlign:'center'}}
+          className={styles.displayNo}
+           
           //onFocus={()=>this.inputOnFocus(record)}
             // onChange={this.onChange(record)} 
              onChange={this.onChange}
              onBlur={()=>this.inputOnBlur(record) }
+             onFocus={()=>this.inputonFocus(record) }
+            
              //  onClick={(e) => this.handleDelCheck(e, record, index)}>
               min={parseInt(record.minAvailableNum)} 
               max={parseInt(record.maxAvailableNum)} 
@@ -233,71 +309,7 @@ export default class quoted extends Component {
   }
 
 
-//改变数量失去焦点
-  //onBlur
-  inputOnBlur = (record,val) =>{
-    
-    console.log('tttttt-------------record',record.barcode)
-    console.log('tttttt-------------val',record.barcode)
-    //console.log('onchange_valuce', this.state.value)
-    //console.log('qb',record.barcode)
-    const {match,dispatch}=this.props;
-    const { rolePurchaserBulkPurchases:{listQuotedQriceOver:{tableData:{item,list, pagination}}} } = this.props;
-    const getData = JSON.parse(match.params.biography)
-    console.log('原list',list)
 
-    const b = list.map((item) => {
-     return {
-      purchaseNum:this.state.value,
-     // purchaseNum:item.purchaseNum,
-      supplyPrice:item.supplyPrice,
-      barcode:item.barcode,
-     } 
-    })
-
-
-   
-
-
-
-    console.log('b',b)
-
-    const c =b.find(item=>item.barcode===record.barcode)
-    console.log('c',[c])
-    const d = [c].map((item) => {
-      // const demand
-      // const price
-       //return  [item.demand = item.purchaseNum,item.price = item.supplyPrice]
-       return {
-        // demand:this.state.value,
-        // price:item.supplyPrice,
-        demand:this.state.value,
-        price:item.supplyPrice,
-       }
-      })  
-
-    // console.log('item返回值b',b)
-    // console.log('item返回值c',[c])
-    // console.log('item返回值d',d)
-    // console.log('purchaseNum',record.purchaseNum)  
-    // console.log('this.state.value',this.state.value =='') 
-
-    if(this.state.value != ''){
-      if(record.purchaseNum != this.state.value){
-        //console.log('传数')
-        this.props.dispatch({
-          type: 'rolePurchaserBulkPurchases/getChangeNum',
-          //payload: params,
-          payload: {
-            purchasesn:getData.purchasesn,
-            // list:this.props.rolePurchaserBulkPurchases.listQuotedQriceOver.tableData.list,
-            list:d,
-            barcode:record.barcode
-          },
-        }); 
-      }  
-    }  
-  }
 
   //提交
   handleSubmission = () => {
@@ -397,35 +409,40 @@ class PurchaseOrder extends Component {
 
 
   onChangeDetails=(v, r)=>{
+    const sss = r.keyId;
+
     // console.log('v',v)
     // console.log('r',r)
-    const sss = r.keyId;
+    // console.log('sss',[sss])
+
     this.setState({
       valueDetails: {...this.state.valueDetails, [sss]: v}
     }
+
     // ,()=>{
     //   console.log('bbbbbb',this.state.valueDetails)
     // }
     );
   }
+  //获取焦点
+
+
+
+  //失焦
   inputOnBlurDetails = (record,val) =>{
     
-      //console.log('qa',this.state.valueDetails)
     const a = this.props.rolePurchaserBulkPurchases.inquiryDetailsListDetails.tableData;
     a.map((item) => {
       if(item.keyId == record.keyId && this.state.valueDetails[item.keyId] != undefined){
         item.demand=this.state.valueDetails[item.keyId]
-        
       }
-       // console.log('item',item)
     })
-
-   }
+  }
 
 
   handleOk = () => {
     const {rolePurchaserBulkPurchases:{inquiryDetailsListDetails:{show,tableData}}} = this.props
-    //console.log('tableData',tableData)
+    //console.log('新tableData',tableData)
     this.props.dispatch({
       // type: 'rolePurchaserBulkPurchases/getChangeNum',
       type: 'rolePurchaserBulkPurchases/CommodityDetails',
@@ -506,6 +523,7 @@ class PurchaseOrder extends Component {
              defaultValue={record.demand}
               onChange={(e)=>{this.onChangeDetails(e, record)}}
               onBlur={()=>this.inputOnBlurDetails(record) }
+          //    onFocus={()=>this.inputonFocusDetails(record) }
             />
           )
 
