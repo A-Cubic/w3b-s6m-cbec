@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
+import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker,Radio  } from 'antd';
 import styles from './SalesStatisticsS.less';
 import moment from 'moment';
 import {getToken} from "../../utils/Global";
@@ -79,30 +79,23 @@ export default class SalesStatisticsS extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="商品条码：">
-              {getFieldDecorator('barcode')(
-                <Input placeholder="请输入商品条码" />
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }} style={{marginBottom:'0px',height:'36px'}}>
+          <Col md={24} sm={24}>
+            <FormItem label="">
+              {getFieldDecorator('aaadate')(
+                <div>
+                <Radio.Group defaultValue="" buttonStyle="solid">
+                  <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="">全部</Radio.Button>
+                  <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="批量供货">批量供货</Radio.Button>
+                  <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="一件代发">一件代发</Radio.Button>
+                  <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="铺货">铺货</Radio.Button>
+                </Radio.Group>
+              </div>
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="商品名称：">
-              {getFieldDecorator('goodsName')(
-                <Input placeholder="请输入商品名称" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="商品品牌：">
-              {getFieldDecorator('brand')(
-                <Input placeholder="请输入商品品牌" />
-              )}
-            </FormItem>
-          </Col>
-
         </Row>
+        <Divider dashed />
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="销售日期">
@@ -110,14 +103,41 @@ export default class SalesStatisticsS extends Component {
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
+            
           </Col>
           <Col md={8} sm={24}>
+            <FormItem label="商品品牌：">
+              {getFieldDecorator('brand')(
+                <Input placeholder="请输入商品品牌" />
+              )}
+            </FormItem> 
           </Col>
           <Col md={8} sm={24}>
-            <span style={{ float: 'right' }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-          </span>
+            <FormItem label="商品条码：">
+              {getFieldDecorator('barcode')(
+                <Input placeholder="请输入商品条码" />
+              )}
+            </FormItem>    
+          </Col>
+
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="商品名称：">
+              {getFieldDecorator('goodsName')(
+                <Input placeholder="请输入商品名称" />
+              )}
+            </FormItem>
+               
+          </Col>
+          <Col md={8} sm={24}>
+            <span style={{ float: 'left' }}>
+              <Button type="primary" htmlType="submit">查询</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+            </span>
+          </Col>
+          <Col md={8} sm={24}>
+            
           </Col>
         </Row>
         <Divider dashed />
@@ -146,7 +166,27 @@ export default class SalesStatisticsS extends Component {
         title: '序号',
         dataIndex: 'id',
         key: 'id',
+      },{
+        title: '销售日期',
+        dataIndex: 'a',
+        key: 'a',
+      },{
+        title: '销售类型',
+        dataIndex: 'b',
+        key: 'b',
+      },{
+        title: '仓库',
+        dataIndex: 'c',
+        key: 'c',
       }, {
+        title: '商品类别',
+        dataIndex: 'category',
+        key: 'category',
+      }, {
+        title: '商品品牌',
+        dataIndex: 'brand',
+        key: 'brand',
+      },{
         title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
@@ -160,24 +200,26 @@ export default class SalesStatisticsS extends Component {
         title: '商品名称',
         dataIndex: 'goodsName',
         key: 'goodsName',
-      }, {
-        title: '商品品牌',
-        dataIndex: 'brand',
-        key: 'brand',
-      }, {
-        title: '商品类别',
-        dataIndex: 'category',
-        key: 'category',
-      }, {
-        title: '销量',
+      },{
+        title: '销售单价',
+        dataIndex: 'd',
+        key: 'd',
+        width:100,
+        sorter: (a, b) => a.salesPrice - b.salesPrice,
+        render:val=>`¥${val}`
+      },{
+        title: '销售数量',
         dataIndex: 'salesNum',
         key: 'salesNum',
         width:100,
-      }, {
-        title: '销售额',
+        sorter: (a, b) => a.salesNum - b.salesNum,
+      },{
+        title: '销售金额',
         dataIndex: 'salesPrice',
         key: 'salesPrice',
         width:100,
+        sorter: (a, b) => a.salesPrice - b.salesPrice,
+        render:val=>`¥${val}`
       }
     ];
     return (
