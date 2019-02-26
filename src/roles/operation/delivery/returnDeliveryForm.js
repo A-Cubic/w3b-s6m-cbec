@@ -236,6 +236,7 @@ export default class deliveryForm extends Component {
             type: 'roleOperationDistribution/getchooseShipment',
             payload: {
              // fileTemp: info.file.response.fileName[0],
+            //fileTemp:'2.xlsx',
               //usercode:"cgs",
               usercode:that.state.usercode,
               id:item.id==''?list[0].id:item.id,
@@ -348,6 +349,7 @@ export default class deliveryForm extends Component {
     }
   }
   onChangeNum=(v)=>{
+    //console.log('v',v)
     this.setState({
       valueGoodsNum: v
     },()=>{
@@ -355,25 +357,32 @@ export default class deliveryForm extends Component {
     });
     }
 
+  inputonFocus = (record,val) =>{
+     //console.log('record.goodsNum',record.goodsNum)
+      this.setState({
+        valueGoodsNum: record.goodsNum
+      })
+    }
+
+
 //改变数量 GoodsNum
   //onChange
   inputOnBlur = (record,val) =>{
     //.log('val',this.state.value)
-   // console.log('record',record.id)
-     const b = this.props.roleOperationDistribution.deliveryForm.tableData.list.map((item) => {
+    const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+    //b指循环list替换改变goodsNum
+     const b = list.map((item) => {
       return {
-       // demand:this.state.value,
-       // price:item.supplyPrice,
-       goodsNum:this.state.valueGoodsNum, //发货数量
-      // safeNum:this.state.value,  //安全数量
-      // supplyPrice:item.supplyPrice,
-       id:record.id,
-       barcode:item.barcode,
-      }
+        goodsNum:this.state.valueGoodsNum,
+        id:record.id,
+        barcode:item.barcode,
+      } 
      })
+
      const c =b.find(item=>
        item.barcode===record.barcode
      )
+     
    //  console.log('c',c)
     if(this.state.valueGoodsNum != ''){
       //if(record.goodsNum != this.state.value){
@@ -404,6 +413,14 @@ export default class deliveryForm extends Component {
       //console.log('bbbbbb',this.state.value)
     });
     }
+    inputonFocusSafeNum = (record,val) =>{
+      // console.log('入获取',record)
+       this.setState({
+        valueSafeNum: record.safeNum
+       })
+     }  
+
+
 //改变数量 SafeNum
   //onChange
   inputOnBlurSafeNum = (record,val) =>{
@@ -636,7 +653,7 @@ export default class deliveryForm extends Component {
 
   render() {
     const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
- //   console.log('goodsNum',list[0].goodsNum)
+   //console.log('原list',list)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -683,8 +700,10 @@ export default class deliveryForm extends Component {
         render: (val,record,e) =>{
           return (
             <InputNumber
+              className={styles.displayNo}
               onChange={this.onChangeNum}
               onBlur={()=>this.inputOnBlur(record) }
+              onFocus={()=>this.inputonFocus(record) }
               min={parseInt(1)}
               max={parseInt(record.mNum)}
               
@@ -699,8 +718,10 @@ export default class deliveryForm extends Component {
         render: (val,record,e) =>{
           return (
             <InputNumber
+              className={styles.displayNo}
               onChange={this.onChangeSafeNum}
               onBlur={()=>this.inputOnBlurSafeNum(record) }
+              onFocus={()=>this.inputonFocusSafeNum(record) }
               min={parseInt(0)}
               defaultValue={record.safeNum}
             />

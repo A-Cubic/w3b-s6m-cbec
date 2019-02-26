@@ -413,14 +413,28 @@ export default class deliveryForm extends Component {
 
    //记录改变SafeNum
    onChangeSafeNum=(v)=>{
-  //  console.log('valueGoodsNum',v)
-    this.setState({
-      valueSafeNum: v
-    },()=>{
-      //console.log('bbbbbb',this.state.value)
-    });
+    //  console.log('valueGoodsNum',v)
+      this.setState({
+        valueSafeNum: v
+      },()=>{
+        //console.log('bbbbbb',this.state.value)
+      });
 
     }
+    inputonFocusSafeNum = (record,val) =>{
+      // console.log('入获取',record)
+       this.setState({
+        valueSafeNum: record.safeNum
+       })
+     }  
+
+    inputonFocus = (record,val) =>{
+    console.log('record.goodsNum',record.goodsNum)
+      this.setState({
+        valueGoodsNum: record.goodsNum
+      })
+    } 
+
 
 //改变数量 SafeNum
   //onChange
@@ -700,8 +714,11 @@ export default class deliveryForm extends Component {
         render: (val,record,e) =>{
           return (
             <InputNumber
+              style={{textAlign:'center'}}
+              className={styles.displayNo}
               onChange={this.onChangeNum}
               onBlur={()=>this.inputOnBlur(record) }
+              onFocus={()=>this.inputonFocus(record) }
               min={parseInt(1)}
               max={parseInt(record.mNum)}
               defaultValue={record.goodsNum}
@@ -715,8 +732,11 @@ export default class deliveryForm extends Component {
         render: (val,record,e) =>{
           return (
             <InputNumber
+              style={{textAlign:'center'}}
+              className={styles.displayNo}
               onChange={this.onChangeSafeNum}
               onBlur={()=>this.inputOnBlurSafeNum(record) }
+              onFocus={()=>this.inputonFocusSafeNum(record) }
               min={parseInt(0)}
               defaultValue={record.safeNum}
             />

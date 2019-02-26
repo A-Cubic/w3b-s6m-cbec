@@ -972,7 +972,7 @@ export default {
     },
 
     // 发货列表-改变采购数量
-    getChangeNumR(state,action){
+  getChangeNumR(state,action){
 
    const inList = state.deliveryForm.tableData.list
    const bb = action.payload.barcode
@@ -985,6 +985,8 @@ export default {
 
    state.deliveryForm.tableData.item.purchasePrice = action.payload.allPrice
    b.pNum =  action.payload.pNum == null?b.pNum:action.payload.pNum
+   b.goodsNum = action.payload.goodsNum
+   b.safeNum = action.payload.safeNum==null?b.safeNum:action.payload.safeNum
    const num = action.payload.pNum == null?b.pNum:action.payload.pNum
 
    return {
