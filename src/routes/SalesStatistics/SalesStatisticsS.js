@@ -10,6 +10,8 @@ const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
+const RadioGroup = Radio.Group;
+
 
 @connect(({salesStatistics,  loading }) => ({
   salesStatistics,
@@ -20,6 +22,7 @@ const TabPane = Tabs.TabPane;
 export default class SalesStatisticsS extends Component {
   state={
     formValues:{},
+    value: 1,
   }
   init(){
     this.props.dispatch({
@@ -57,9 +60,14 @@ export default class SalesStatisticsS extends Component {
       });
     });
   }
-  handleFormReset =()=>{
+  handleFormReset =(e)=>{
+    const that = this
     this.props.form.resetFields();
     this.init();
+    this.setState({
+      value: 1,
+    });
+
   }
   handleTableChange=(pagination, filtersArg, sorter)=>{
     const params = {
@@ -73,6 +81,37 @@ export default class SalesStatisticsS extends Component {
     });
   }
 
+  onChange = (e) => {
+    const that = this
+    //console.log('radio checked', e.target.value);
+    this.setState({
+      value: e.target.value,
+    });
+    //this.onSearch(e)
+    const {salesStatistics:{salesStatisticsAll:{tableData}}}=this.props
+    this.props.form.validateFields((err, fieldsValue) => {
+      // console.log('values',fieldsValue)
+      if (err) return;
+      const rangeValue = fieldsValue['date'];
+      const values = rangeValue==undefined ? {
+        ...fieldsValue,
+      }:{
+        ...fieldsValue,
+        'date': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+      };
+      this.setState({
+        formValues: values,
+      });
+      this.props.dispatch({
+        type: 'salesStatistics/getSalesStatisticsListS',
+        payload: {
+          ...values,
+          platformId:e.target.value,
+          ...tableData.pagination
+        },
+      });
+    });
+  }
 
   renderAdvancedForm(){
     const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
@@ -82,13 +121,13 @@ export default class SalesStatisticsS extends Component {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }} style={{marginBottom:'0px',height:'36px'}}>
           <Col md={24} sm={24}>
             <FormItem label="">
-              {getFieldDecorator('aaadate')(
+              {getFieldDecorator('platformId')(
                 <div>
-                <Radio.Group defaultValue="" buttonStyle="solid">
-                  <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="">全部</Radio.Button>
-                  <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="批量供货">批量供货</Radio.Button>
-                  <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="一件代发">一件代发</Radio.Button>
-                  <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="铺货">铺货</Radio.Button>
+                <Radio.Group defaultValue={1} defaultValue={this.state.value}  onChange={this.onChange} value={this.state.value}>
+                  <Radio.Button onClick={this.handleAll} className={styles.all_title} style={{borderRadius:'5px'}} value={1}>全部</Radio.Button>
+                  <Radio.Button onClick={this.handleBatch} className={styles.all_title} style={{borderRadius:'5px'}} value="批量供货">批量供货</Radio.Button>
+                  <Radio.Button onClick={this.handleOnePiece} className={styles.all_title} style={{borderRadius:'5px'}} value="一件代发">一件代发</Radio.Button>
+                  <Radio.Button onClick={this.handleDistribution} className={styles.all_title} style={{borderRadius:'5px'}} value="铺货">铺货</Radio.Button>
                 </Radio.Group>
               </div>
               )}
@@ -168,16 +207,16 @@ export default class SalesStatisticsS extends Component {
         key: 'id',
       },{
         title: '销售日期',
-        dataIndex: 'a',
-        key: 'a',
+        dataIndex: 'salseTime',
+        key: 'salseTime',
       },{
         title: '销售类型',
-        dataIndex: 'b',
-        key: 'b',
+        dataIndex: 'platformType',
+        key: 'platformType',
       },{
         title: '仓库',
-        dataIndex: 'c',
-        key: 'c',
+        dataIndex: 'wname',
+        key: 'wname',
       }, {
         title: '商品类别',
         dataIndex: 'category',
@@ -190,34 +229,34 @@ export default class SalesStatisticsS extends Component {
         title: '商品条码',
         dataIndex: 'barcode',
         key: 'barcode',
-        render: (val,record) => (
-          <div>
-            <span>{val}</span>
-            <img src={ record.slt} alt="" width={80} style={{marginLeft:8}}/>
-          </div>
-        )
-      }, {
+        // render: (val,record) => (
+        //   <div>
+        //     <span>{val}</span>
+        //     <img src={ record.slt} alt="" style={{marginLeft:8,width:'80px'}}/>
+        //   </div>
+        // )
+      },{
         title: '商品名称',
         dataIndex: 'goodsName',
         key: 'goodsName',
       },{
         title: '销售单价',
-        dataIndex: 'd',
-        key: 'd',
-        width:100,
+        dataIndex: 'supplyPrice',
+        key: 'supplyPrice',
+        width:110,
         sorter: (a, b) => a.salesPrice - b.salesPrice,
         render:val=>`¥${val}`
       },{
         title: '销售数量',
         dataIndex: 'salesNum',
         key: 'salesNum',
-        width:100,
+        width:110,
         sorter: (a, b) => a.salesNum - b.salesNum,
       },{
         title: '销售金额',
         dataIndex: 'salesPrice',
         key: 'salesPrice',
-        width:100,
+        width:110,
         sorter: (a, b) => a.salesPrice - b.salesPrice,
         render:val=>`¥${val}`
       }

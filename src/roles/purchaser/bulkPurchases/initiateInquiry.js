@@ -209,8 +209,8 @@ export default class initiateInquiry extends Component {
         type: 'rolePurchaserBulkPurchases/uploadOrderbill',
         payload: {
           purchasesn:id,
-          //fileTemp: info.file.response.fileName[0]
-          fileTemp:info.file.name
+          fileTemp: info.file.response.fileName[0]
+          //fileTemp:info.file.name
         },
         callback: this.onUploadCallback
       });
