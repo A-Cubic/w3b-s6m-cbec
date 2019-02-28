@@ -129,7 +129,7 @@ export default class SalesStatisticsS extends Component {
         payload: {
           ...values,
           platformId:e.target.value,
-          ...tableData.pagination
+          //...tableData.pagination
         },
       });
     });
