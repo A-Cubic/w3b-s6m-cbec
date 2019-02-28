@@ -429,7 +429,7 @@ export default class deliveryForm extends Component {
      }  
 
     inputonFocus = (record,val) =>{
-    console.log('record.goodsNum',record.goodsNum)
+    //console.log('record.goodsNum',record.goodsNum)
       this.setState({
         valueGoodsNum: record.goodsNum
       })

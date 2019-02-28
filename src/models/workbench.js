@@ -4,8 +4,6 @@ export default {
   namespace: 'workbench',
 
   state: {
-    //
-    workbenchDataNewSupplier:{},
     //old
     workbenchDataS:{},
     workbenchDataO:{

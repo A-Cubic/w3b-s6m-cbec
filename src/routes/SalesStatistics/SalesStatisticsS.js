@@ -21,6 +21,7 @@ const RadioGroup = Radio.Group;
 @Form.create()
 export default class SalesStatisticsS extends Component {
   state={
+    sortedInfo:null,
     formValues:{},
     value: 1,
   }
@@ -50,35 +51,55 @@ export default class SalesStatisticsS extends Component {
       };
       this.setState({
         formValues: values,
+        sortedInfo: null,
       });
       this.props.dispatch({
         type: 'salesStatistics/getSalesStatisticsListS',
         payload: {
           ...values,
-          ...tableData.pagination
+          // ...tableData.pagination
         },
       });
     });
+  
   }
   handleFormReset =(e)=>{
     const that = this
     this.props.form.resetFields();
     this.init();
     this.setState({
+      formValues: {},
       value: 1,
+      sortedInfo: null,
     });
 
   }
-  handleTableChange=(pagination, filtersArg, sorter)=>{
-    const params = {
-      ...this.state.formValues,
-      ...pagination,
-    };
 
+
+  handleTableChange=(pagination, filtersArg, sorter,e)=>{
+    const sorterConditions = ['ascend','descend']
+    const { salesStatistics:{salesStatisticsAll:{tableData:{item}}} } = this.props;
+    //console.log('tableData',item.platformId)
+    let sorters={}
+    if (sorter.field) {
+      sorters = {
+        [sorter.field]: sorterConditions.findIndex(i => i==sorter.order)
+      }
+    }
+    this.setState({
+      sortedInfo: sorter,
+    });
     this.props.dispatch({
       type: 'salesStatistics/getSalesStatisticsListS',
-      payload: params,
+      payload: {
+        ...this.state.formValues,
+        ...this.state.values,
+        ...sorters,
+        ...pagination,
+        platformId:this.state.value
+      },
     });
+    
   }
 
   onChange = (e) => {
@@ -86,6 +107,7 @@ export default class SalesStatisticsS extends Component {
     //console.log('radio checked', e.target.value);
     this.setState({
       value: e.target.value,
+      sortedInfo:null,
     });
     //this.onSearch(e)
     const {salesStatistics:{salesStatisticsAll:{tableData}}}=this.props
@@ -114,6 +136,7 @@ export default class SalesStatisticsS extends Component {
   }
 
   renderAdvancedForm(){
+    
     const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
@@ -195,6 +218,9 @@ export default class SalesStatisticsS extends Component {
   }
   render() {
     const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
+    const { salesStatistics:{salesStatisticsAll:{tableData:{item}}} } = this.props;
+   //console.log('tableData',item.platformId)
+    let { sortedInfo } = this.state;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -244,21 +270,27 @@ export default class SalesStatisticsS extends Component {
         dataIndex: 'supplyPrice',
         key: 'supplyPrice',
         width:110,
-        sorter: (a, b) => a.salesPrice - b.salesPrice,
-        render:val=>`¥${val}`
+        // sorter: (a, b) => a.salesPrice - b.salesPrice,
+        render:val=>`¥${val}`,
+        sorter:true,
+        sortOrder:sortedInfo?sortedInfo.columnKey === 'supplyPrice' && sortedInfo.order:false
       },{
         title: '销售数量',
         dataIndex: 'salesNum',
         key: 'salesNum',
         width:110,
-        sorter: (a, b) => a.salesNum - b.salesNum,
+        //sorter: (a, b) => a.salesNum - b.salesNum,
+        sorter:true,
+        sortOrder:sortedInfo?sortedInfo.columnKey === 'salesNum' && sortedInfo.order:false
       },{
         title: '销售金额',
         dataIndex: 'salesPrice',
         key: 'salesPrice',
         width:110,
-        sorter: (a, b) => a.salesPrice - b.salesPrice,
-        render:val=>`¥${val}`
+        //sorter: (a, b) => a.salesPrice - b.salesPrice,
+        render:val=>`¥${val}`,
+        sorter:true,
+        sortOrder:sortedInfo?sortedInfo.columnKey === 'salesPrice' && sortedInfo.order:false
       }
     ];
     return (

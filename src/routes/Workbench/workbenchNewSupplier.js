@@ -32,10 +32,7 @@ export default class workbenchNewSupplier extends Component {
 
 
   render() {
-   // const {workbenchNewSupplier:{} = this.props;
     const {workbench:{workbenchNewSupplier:{getData:{company,lastTime,batchSupply,bussness,distribution,goods,substitute}}}}= this.props;
-    //console.log(777,this.props.workbench.workbenchNewSupplier)
-    //console.log('qs',batchSupply)
    
     return (
       <div >
