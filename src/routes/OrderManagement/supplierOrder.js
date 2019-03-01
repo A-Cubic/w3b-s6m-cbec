@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
+import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker,Radio } from 'antd';
 import SupplierOrderCheckModal from './supplierOrderCheckModal';
 import styles from './supplierOrder.less';
 import moment from 'moment';
@@ -28,6 +28,7 @@ export default class supplierOrder extends Component {
     visible: false,
     formValues:{},
     warehouseId:'',
+    valueWhole:'全部',
   }
   init(){
     this.props.dispatch({
@@ -102,7 +103,7 @@ export default class supplierOrder extends Component {
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
       // console.log('valuesdadadada',fieldsValue['date'])
-
+     // console.log('val',this.state.valueWhole)
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue!==undefined ? {
@@ -120,7 +121,8 @@ export default class supplierOrder extends Component {
         payload: {
           userId:userId,
           ...values,
-          ...tableData.pagination
+          ...tableData.pagination,
+          platformId:this.state.valueWhole
         },
       });
     });
@@ -130,12 +132,16 @@ export default class supplierOrder extends Component {
   handleFormReset =()=>{
     this.props.form.resetFields();
     this.init();
+    this.setState ({
+      valueWhole:'全部'
+    })
   }
   handleTableChange=(pagination, filtersArg, sorter)=>{
     const params = {
       ...this.state.formValues,
       ...pagination,
-      userId:userId
+      userId:userId,
+      platformId:this.state.valueWhole
     };
 
     this.props.dispatch({
@@ -187,14 +193,49 @@ export default class supplierOrder extends Component {
       }
     })
   }
+
+  onChangeAll = (e) => {
+    const that = this
+    //console.log('radio checked', e.target.value);
+    this.setState({
+      valueWhole: e.target.value,
+    });
+   // console.log('valueWhole',e.target.value)
+    this.props.dispatch({
+      type:'orderManagement/getgoodsData',
+      payload:{
+        platformId:e.target.value
+      }
+    })
+    
+  }
+
   renderAdvancedForm(){
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr,wareHouseArr,expressArr} }= this.props;
     const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
+      <Row gutter={{ md: 8, lg: 24, xl: 48 }} style={{marginBottom:'0px',height:'36px'}}>
+          <Col md={24} sm={24}>
+            <FormItem label="">
+              {getFieldDecorator('platformId')(
+                <div>
+                <Radio.Group defaultValue={'全部'} defaultValue={this.state.valueWhole}  onChange={this.onChangeAll} value={this.state.valueWhole}>
+                  <Radio.Button onClick={this.handleAll} className={styles.all_title} style={{borderRadius:'5px'}} value={'全部'}>全部</Radio.Button>
+                  <Radio.Button onClick={this.handleBatch} className={styles.all_title} style={{borderRadius:'5px'}} value="待发货">待发货({})</Radio.Button>
+                  <Radio.Button onClick={this.handleOnePiece} className={styles.all_title} style={{borderRadius:'5px'}} value="已发货">已发货</Radio.Button>
+                  
+                </Radio.Group>
+              </div>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
+            
+            {/*  旧项目 去掉
             <FormItem label="订单状态">
               {getFieldDecorator('status',{
                 initialValue:'全部'
@@ -213,26 +254,32 @@ export default class supplierOrder extends Component {
                   <Option value="5">已完成</Option>
                   <Option value="6">待处理</Option>
                   <Option value="-1">已关闭</Option>
-                  {/*<Option value="待付款">待付款</Option>*/}
-                  {/*<Option value="待发货">待发货</Option>*/}
-                  {/*<Option value="已发货">已发货</Option>*/}
-                  {/*<Option value="已完成">已完成</Option>*/}
-                  {/*<Option value="已关闭">已关闭</Option>*/}
                 </Select>
+              )}
+            </FormItem> */}
+            <FormItem label="下单日期">
+              {getFieldDecorator('date')(
+                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} onChange={this.onChangeaa}/>
+              )}
+            </FormItem>
+
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="发货日期">
+              {getFieldDecorator('datea')(
+                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} onChange={this.onChangeaa}/>
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
+            {/* <FormItem label="运单编号">
+              {getFieldDecorator('waybillno')(
+                <Input placeholder="请输入运单编号" />
+              )}
+            </FormItem> */}
             <FormItem label="订单编号">
               {getFieldDecorator('orderId')(
                 <Input placeholder="请输入订单编号" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="运单编号">
-              {getFieldDecorator('waybillno')(
-                <Input placeholder="请输入运单编号" />
               )}
             </FormItem>
           </Col>
@@ -240,29 +287,26 @@ export default class supplierOrder extends Component {
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="时段">
-              {getFieldDecorator('date')(
-                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} onChange={this.onChangeaa}/>
-              )}
-            </FormItem>
+            <span style={{ float: 'left',marginBottom:'0px' }}>
+              <Button type="primary" htmlType="submit">查询</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+            </span>    
           </Col>
           <Col md={8} sm={24}>
                 
           </Col>
           <Col md={8} sm={24}>
-            <span style={{ float: 'right' }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-          </span>
+           
           </Col>
         </Row>
+        
         <Divider dashed />
-        <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
+        {/* <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-          <span> 共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
-          <span>总订单额：¥{tableData.item?tableData.item.totalTradeAmount :0} </span>
-        </div>
-        </div>
+            <span> 共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
+            <span>总订单额：¥{tableData.item?tableData.item.totalTradeAmount :0} </span>
+          </div>
+        </div> */}
       </Form>
     );
   }
@@ -346,6 +390,9 @@ export default class supplierOrder extends Component {
     return (
       <div>
         <Card className={styles.mT10}>
+          <div className={styles.tableListForm}>
+            {this.renderAdvancedForm()}
+          </div>
           <div >
             <Select style={{ width: 180 }}
                     placeholder="请选择仓库"
@@ -355,10 +402,7 @@ export default class supplierOrder extends Component {
             <Button style={{ marginLeft: 8 }} onClick={this.downloadToSendOrder}>
               <Icon type="cloud-download-o" />导出需发货的订单
             </Button>
-            {/* 新修改 去掉下载 */}
-            {/* <Button style={{ marginLeft: 8 }} type="primary" onClick={this.downloadTemplate}>
-              <Icon type="download" />下载运单模板
-            </Button> */}
+          
             <Upload {...props} >
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="cloud-upload-o" /> 导入运单信息
@@ -367,10 +411,16 @@ export default class supplierOrder extends Component {
 
 
           </div>
-          <Divider dashed />
-          <div className={styles.tableListForm}>
-            {this.renderAdvancedForm()}
+          
+          <div>
+            <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16,marginTop:25}}>
+              <div style={{ float: 'right' }}>
+                <span> 共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
+                <span>总订单额：¥{tableData.item?tableData.item.totalTradeAmount :0} </span>
+              </div>
+            </div>
           </div>
+
           <Table
             dataSource={tableData.list}
                  rowKey={record => record.id}
