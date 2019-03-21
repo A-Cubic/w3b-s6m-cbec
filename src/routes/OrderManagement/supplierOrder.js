@@ -34,13 +34,13 @@ export default class supplierOrder extends Component {
     this.props.dispatch({
       type: 'publicDictionary/getWareHouse',
       payload: {
-        userId:userId,
+        //userId:userId,
       },
     });
     this.props.dispatch({
       type: 'orderManagement/supplierOrderTable',
       payload: {
-        userId:userId,
+        //userId:userId,
         status:"全部"
       },
     });
@@ -61,7 +61,7 @@ export default class supplierOrder extends Component {
       this.props.dispatch({
         type:'orderManagement/downloadToSendOrder',
         payload:{
-          userId:userId,
+          //userId:userId,
           wid:this.state.warehouseId
         }
       })
@@ -79,7 +79,7 @@ export default class supplierOrder extends Component {
       this.props.dispatch({
         type: 'orderManagement/uploadWaybill',
         payload: {
-          userId:userId,
+         // userId:userId,
           fileTemp: info.file.response.fileName[0]
         },
         callback: this.onUploadCallback,
@@ -100,6 +100,7 @@ export default class supplierOrder extends Component {
   onSearch=(e)=>{
     e.preventDefault();
     const {orderManagement:{supplierOrder:{tableData}}}=this.props
+    console.log(77777777)
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
       // console.log('valuesdadadada',fieldsValue['date'])
@@ -119,10 +120,11 @@ export default class supplierOrder extends Component {
       this.props.dispatch({
         type: 'orderManagement/supplierOrderTable',
         payload: {
-          userId:userId,
+          //userId:userId,
           ...values,
           ...tableData.pagination,
-          platformId:this.state.valueWhole
+          // platformId:this.state.valueWhole
+          status:this.state.valueWhole
         },
       });
     });
@@ -140,8 +142,9 @@ export default class supplierOrder extends Component {
     const params = {
       ...this.state.formValues,
       ...pagination,
-      userId:userId,
-      platformId:this.state.valueWhole
+      //userId:userId,
+      // platformId:this.state.valueWhole
+      status:this.state.valueWhole
     };
 
     this.props.dispatch({
@@ -201,12 +204,21 @@ export default class supplierOrder extends Component {
       valueWhole: e.target.value,
     });
    // console.log('valueWhole',e.target.value)
+    // this.props.dispatch({
+    //   type:'orderManagement/getgoodsData',
+    //   payload:{
+    //     // platformId:e.target.value
+    //     status:e.target.value
+    //   }
+    // })
+
     this.props.dispatch({
-      type:'orderManagement/getgoodsData',
-      payload:{
-        platformId:e.target.value
-      }
-    })
+      type: 'orderManagement/supplierOrderTable',
+      payload: {
+        //userId:userId,
+        status:e.target.value
+      },
+    });
     
   }
 
@@ -219,7 +231,7 @@ export default class supplierOrder extends Component {
       <Row gutter={{ md: 8, lg: 24, xl: 48 }} style={{marginBottom:'0px',height:'36px'}}>
           <Col md={24} sm={24}>
             <FormItem label="">
-              {getFieldDecorator('platformId')(
+              {getFieldDecorator('status')(
                 <div>
                 <Radio.Group defaultValue={'全部'} defaultValue={this.state.valueWhole}  onChange={this.onChangeAll} value={this.state.valueWhole}>
                   <Radio.Button onClick={this.handleAll} className={styles.all_title} style={{borderRadius:'5px'}} value={'全部'}>全部</Radio.Button>
@@ -457,7 +469,7 @@ class ChildrenDelivery extends React.Component {
           type:'orderManagement/confirmDelivery',
           payload:{
             ...fieldsValue,
-            userId:userId,
+           // userId:userId,
             orderId:this.props.parent.orderId
           },
           callback:function () {
@@ -466,7 +478,7 @@ class ChildrenDelivery extends React.Component {
             that.props.dispatch({
               type: 'orderManagement/supplierOrderTable',
               payload: {
-                userId:userId,
+               // userId:userId,
                 status:"全部"
               },
             });
@@ -481,7 +493,7 @@ class ChildrenDelivery extends React.Component {
     this.props.parent.dispatch({
       type:'orderManagement/shipmentOverseas',
       payload:{
-        userId:userId,
+       // userId:userId,
         orderId:this.props.parent.orderId
       },
       callback:function () {
@@ -490,7 +502,7 @@ class ChildrenDelivery extends React.Component {
         that.props.dispatch({
           type: 'orderManagement/supplierOrderTable',
           payload: {
-            userId:userId,
+            //userId:userId,
             status:"全部"
           },
         });

@@ -38,13 +38,13 @@ export default class operatorOrder extends Component {
     this.props.dispatch({
       type: 'publicDictionary/getWareHouse',
       payload: {
-        userId:userId,
+        //userId:userId,
       },
     });
     this.props.dispatch({
       type: 'orderManagement/supplierOrderTable',
       payload: {
-        userId:userId,
+        //userId:userId,
         status:"全部"
       },
     });
@@ -65,7 +65,7 @@ export default class operatorOrder extends Component {
       this.props.dispatch({
         type:'orderManagement/downloadToSendOrder',
         payload:{
-          userId:userId,
+          //userId:userId,
           wid:this.state.warehouseId
         }
       })
@@ -82,7 +82,7 @@ export default class operatorOrder extends Component {
       this.props.dispatch({
         type: 'orderManagement/uploadOrderbill',
         payload: {
-          userId:userId,
+          //userId:userId,
           fileTemp: info.file.response.fileName[0]
         },
         callback: this.onUploadCallback,
@@ -97,7 +97,7 @@ export default class operatorOrder extends Component {
       this.props.dispatch({
         type: 'orderManagement/uploadWaybill',
         payload: {
-          userId:userId,
+          //userId:userId,
           fileTemp: info.file.response.fileName[0]
         },
         callback: this.onUploadCallback,
@@ -137,7 +137,7 @@ export default class operatorOrder extends Component {
       this.props.dispatch({
         type: 'orderManagement/supplierOrderTable',
         payload: {
-          userId:userId,
+          //userId:userId,
           ...values,
           ...tableData.pagination
         },
@@ -157,7 +157,7 @@ export default class operatorOrder extends Component {
       type:'orderManagement/exportOrders',
       payload:{
         ...this.state.formValues,
-        userId:userId,
+       // userId:userId,
       }
     })
   }
@@ -165,7 +165,7 @@ export default class operatorOrder extends Component {
     const params = {
       ...this.state.formValues,
       ...pagination,
-      userId:userId
+      //userId:userId
     };
 
     this.props.dispatch({
@@ -484,7 +484,7 @@ class ChildrenDelivery extends React.Component {
           type:'orderManagement/confirmDelivery',
           payload:{
             ...fieldsValue,
-            userId:userId,
+            //userId:userId,
             orderId:this.props.parent.orderId
           },
           callback:function () {
@@ -493,7 +493,7 @@ class ChildrenDelivery extends React.Component {
             that.props.dispatch({
               type: 'orderManagement/supplierOrderTable',
               payload: {
-                userId:userId,
+               // userId:userId,
                 status:"全部"
               },
             });
@@ -508,7 +508,7 @@ class ChildrenDelivery extends React.Component {
     this.props.parent.dispatch({
       type:'orderManagement/shipmentOverseas',
       payload:{
-        userId:userId,
+        //userId:userId,
         orderId:this.props.parent.orderId
       },
       callback:function () {
@@ -517,7 +517,7 @@ class ChildrenDelivery extends React.Component {
         that.props.dispatch({
           type: 'orderManagement/supplierOrderTable',
           payload: {
-            userId:userId,
+           // userId:userId,
             status:"全部"
           },
         });
