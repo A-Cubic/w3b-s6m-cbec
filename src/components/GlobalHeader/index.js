@@ -52,6 +52,10 @@ export default class GlobalHeader extends PureComponent {
     event.initEvent('resize', true, false);
     window.dispatchEvent(event);
   }
+  gotoMall=()=>{
+    console.log('sss')
+    window.open('http://console.llwell.net/mall','_blank')
+  }
   render() {
 
    // console.log('hereeeeee',this.props)
@@ -102,7 +106,15 @@ export default class GlobalHeader extends PureComponent {
           type={collapsed ? 'menu-unfold' : 'menu-fold'}
           onClick={this.toggle}
         />
+
         <div className={styles.right}>
+          <div className={styles.goMall} onClick={this.gotoMall}>去商城逛逛
+            <Icon
+              className={styles.mall}
+              type="up-circle"
+              theme="outlined"
+            />
+          </div>
           {/*<HeaderSearch*/}
             {/*className={`${styles.action} ${styles.search}`}*/}
             {/*placeholder="站内搜索"*/}
