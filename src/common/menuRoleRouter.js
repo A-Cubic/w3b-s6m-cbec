@@ -62,9 +62,32 @@ export function supplier (dynamicWrapper,app){
     //货款结算
     '/finance/supplierPurchaseSettlement': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
-      
     },
 
+    //-----------------------------20190321商品管理-----------------------------
+    //我的可供商品
+    '/forGoods/supplierForGoods': {
+      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
+    },
+    // 批量供货页
+    // '/forGoods/supplierForGoods/bulkSupply': {
+    //   component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
+    // },
+    // 批量供货-商品详情
+    '/forGoods/bulkSupplyGoodsDetails': {
+      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
+    },
+
+    //-----------------------------20190321报价管理-----------------------------
+    // 报价列表
+    '/quotationManagement/quotationList': {
+      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
+    },
+    // 去报价（商品）
+    // 查看报价（商品）
+    // 去确认（相关费用）
+    // 查看（相关费用）
+    // 查看（已关闭）
 
   }
 }
