@@ -507,9 +507,6 @@ class ChildPrint extends Component {
                    rowKey={record => record.keyId}
                    columns={columnsPrinta}
                    pagination={false}
-              // pagination={paginationProps2}
-              // onChange={this.handleTableChangeTab2}
-              // loading={submitting}
             />
             <Row className={styles.Printer}>
               <Col span={24}>打印人：{childModelPrint.item.name}</Col>

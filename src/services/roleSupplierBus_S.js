@@ -11,3 +11,10 @@ export async function getUploadviewData(params) {
 }
 
 
+//供应商 - 报价管理 - 商品报价列表
+export async function getQuotationListData(params) {
+    return request(`/llback/get/getQuotationListData`,{
+        method: 'POST',
+        body: params,
+    })
+}

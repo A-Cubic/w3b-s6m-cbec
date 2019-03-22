@@ -11,7 +11,8 @@ export default function roleSupplierBusMock(url) {
     //商品管理-商品查看   与运营  合同查看共用接口
    // 'POST /llback/Agreement/ContractDetails': a,
 
-
+    //供应商 - 报价管理 - 商品报价列表
+    'POST /llback/get/getQuotationListData': shippingList,
 
 
 
@@ -125,7 +126,7 @@ export function shippingList(req, res) {
         sendTime: '2018/10/30 0:00:00',
         sendName: '2乓球',
         sendTel: '213565458746',
-        status: '0',
+        status: '2',
       }, {
         keyId: '3',
         id: '3',

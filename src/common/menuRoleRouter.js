@@ -81,14 +81,17 @@ export function supplier (dynamicWrapper,app){
     //-----------------------------20190321报价管理-----------------------------
     // 报价列表
     '/quotationManagement/quotationList': {
-      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
+      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/quotationList')),
     },
     // 去报价（商品）
     // 查看报价（商品）
     // 去确认（相关费用）
     // 查看（相关费用）
     // 查看（已关闭）
-
+    //共同页面去报价（商品） 查看报价（商品） 去确认（相关费用）查看（相关费用）查看（已关闭）
+    '/quotationManagement/commodityGeneralPage/:id': {
+      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/commodityGeneralPage')),
+    },
   }
 }
 //-------------------------------------采购商-------------------------------------

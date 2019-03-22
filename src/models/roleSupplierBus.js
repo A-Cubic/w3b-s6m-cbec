@@ -2,6 +2,7 @@ import { message} from 'antd';
 import moment from 'moment';
 import {routerRedux} from "dva/router";
 import {
+  getQuotationListData, //供应商 - 报价管理 - 商品报价列表
 } from '../services/roleSupplierBus_S'
 import {
   //---------------------------------------------合同管理---------------------------------------------
@@ -14,7 +15,6 @@ import {
   getSettlementDetailsData,           // 货款结算 - 查看结算明细 - 货款
   getSettlementDetailsElseData,       // 货款结算 - 查看结算明细 - 其他
   changeStatusCompleteReconciliation, // 货款结算 - 完成对账
-
 } from "../services/roleOperationDistribution_S";
 
 
@@ -81,6 +81,22 @@ export default {
         pagination:{}
       }
     },
+
+
+    //-------------------------------------报价管理----------------------------------------------------------
+    //供应商 - 报价管理 - 商品报价列表
+    quotationList: {
+      tableData:{
+        list: [],
+        pagination:{},
+      },
+      status:''
+    }
+
+
+
+
+
   },
   effects:{
     //---------------------------------------------合同管理-----------------------------------------
@@ -110,7 +126,7 @@ export default {
     // 采购结算 - 列表
     *getPaymentSettlementData({ payload },{ call,put }){
       const response = yield call(getPaymentSettlementData, payload);
-      // console.log('~res7777',response)
+      //console.log('~res7777',response)
       if(response!==undefined){
         yield put({
           type: 'getPaymentSettlementDataR',
@@ -188,6 +204,30 @@ export default {
         }
       }
     },
+
+    //-------------------------------------报价管理----------------------------------------------------------
+    //供应商 - 报价管理 - 商品报价列表
+  
+    *getQuotationListData({ payload },{ call,put }){
+      const response = yield call(getQuotationListData, payload);
+      if(response!==undefined){
+        yield put({
+          type: 'getQuotationListDataR',
+          payload: {
+            response,
+            ...payload
+          }
+        })
+      }
+    },
+
+
+
+
+
+
+
+
 
   },
 
@@ -292,6 +332,27 @@ export default {
         }
       }
     },
+
+     //-------------------------------------报价管理----------------------------------------------------------
+    //供应商 - 报价管理 - 商品报价列表
+
+    getQuotationListDataR(state, action){
+      return {
+        ...state,
+        quotationList:{
+          ...state.quotationList,
+          tableData:action.payload.response,
+          status:action.payload.status
+        }
+      }
+    },
+
+
+
+
+
+
+
   }
 }
 
