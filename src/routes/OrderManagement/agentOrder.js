@@ -156,7 +156,6 @@ export default class agentOrder extends Component {
     }
   }
   handleChildrenCheck =(record)=>{
-    console.log(777,record.merchantOrderId)
     this.props.dispatch({
       type: 'orderManagement/supplierOrderChildCheck',
       payload: {

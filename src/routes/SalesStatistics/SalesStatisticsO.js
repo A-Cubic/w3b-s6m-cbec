@@ -185,7 +185,6 @@ export default class SalesStatisticsO extends Component {
     );
   }
   render() {
-    // console.log(this.props)
     const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,

@@ -229,7 +229,6 @@ class Distributors extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {distributionManagement:{distributorsMgtData:{visible,childCheckS}}} = this.props
-    // console.log(childCheckS)
     return (
       <div>
         <Modal

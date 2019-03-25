@@ -53,7 +53,6 @@ export default class GlobalHeader extends PureComponent {
     window.dispatchEvent(event);
   }
   gotoMall=()=>{
-    console.log('sss')
     window.open('http://console.llwell.net/mall','_blank')
   }
   render() {

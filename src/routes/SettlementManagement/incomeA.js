@@ -133,7 +133,6 @@ export default class incomeA extends Component {
     });
   }
   onChangeTabs=(key)=>{
-    // console.log(key)
     if(key==1){
       this.props.dispatch({
         type: 'settlementManagement/getIncomeAForecastData',
@@ -350,7 +349,6 @@ export default class incomeA extends Component {
     this.setState({
       accountCode:record.accountCode
     })
-    // console.log(record)
     this.props.dispatch({
       type: 'settlementManagement/getIncomeASettlementOrderData',
       payload: {accountCode:record.accountCode},

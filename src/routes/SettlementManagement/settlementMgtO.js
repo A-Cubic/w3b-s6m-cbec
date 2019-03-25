@@ -222,8 +222,6 @@ export default class settlementMgtO extends Component {
     );
   }
   render() {
-    // console.log('~~~',this.props)
-
     const { settlementManagement:{settlementAll:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
