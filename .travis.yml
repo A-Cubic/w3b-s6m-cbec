@@ -37,13 +37,17 @@ after_success:
     docker build -t "$REGISTRY_URL"/"$REGISTRY_IMAGE" .;
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$REGISTRY_URL";
     docker push "$REGISTRY_URL"/"$REGISTRY_IMAGE";
+    elif [ "$TRAVIS_BRANCH" = "libraryGift" ] && [ "$TEST_TYPE" = build ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+    docker build -t "$REGISTRY_URL"/"$REGISTRY_IMAGE":gift .;
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$REGISTRY_URL";
+    docker push "$REGISTRY_URL"/"$REGISTRY_IMAGE";
     fi
 
 script:
   - |
     if [ "$TEST_TYPE" = lint ] && [ "$TRAVIS_BRANCH" = "develop" ]; then
       npm run lint
-    elif [ "$TEST_TYPE" = build ] && [ "$TRAVIS_BRANCH" = "master" ]; then
+    elif [ "$TEST_TYPE" = build ] && [[ "$TRAVIS_BRANCH" = "master" ]||[ "$TRAVIS_BRANCH" = "libraryGift" ]]; then
       npm run build
     elif [ "$TEST_TYPE" = test-all ] && [ "$TRAVIS_BRANCH" = "develop" ]; then
       npm run test:all
