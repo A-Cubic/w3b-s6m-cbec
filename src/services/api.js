@@ -2,8 +2,8 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 // const apiUrl = process.env.NODE_ENV === 'development' ? '' : 'http://api.llwell.net';
-const apiUrl = process.env.NODE_ENV === 'development' ? '' : 'http://console.llwell.net';
-const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://console.llwell.net' : '';
+const apiUrl = process.env.NODE_ENV === 'development' ? '' : 'http://oms.a-cubic.com';
+const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://oms.a-cubic.com' : '';
 
 
 export function getUploadUrl() {

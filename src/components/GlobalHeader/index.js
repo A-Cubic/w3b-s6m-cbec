@@ -54,7 +54,7 @@ export default class GlobalHeader extends PureComponent {
   }
   gotoMall=()=>{
     console.log('sss')
-    window.open('http://console.llwell.net/mall','_blank')
+    window.open('http://oms.a-cubic.com/mall','_blank')
   }
   render() {
 

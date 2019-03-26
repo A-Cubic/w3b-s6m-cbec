@@ -26,10 +26,10 @@ import publicDictionaryMock from './mock/publicDictionaryMock';
 const noProxy = process.env.NO_PROXY === 'true';
 const h = 'http://172.16.10.51:54195';
 // const service_url =  'http://api.llwell.net/';// http://api.llwell.net/  http://localhost:9999/
-const service_url =  'http://console.llwell.net/';// http://api.llwell.net/  http://localhost:9999/
+const service_url =  'http://oms.a-cubic.com/';// http://api.llwell.net/  http://localhost:9999/
 
 // const service_url2 = process.env.NODE_ENV === 'development' ? 'http://172.16.10.51:54195/' : 'http://console.llwell.net/';
-const service_url2 =  'http://console.llwell.net/';// http://console.llwell.net/  http://localhost:51184/
+const service_url2 =  'http://oms.a-cubic.com/';// http://console.llwell.net/  http://localhost:51184/
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
   ...roleFinanceManagementMock(service_url2),
