@@ -47,7 +47,7 @@ script:
   - |
     if [ "$TEST_TYPE" = lint ] && [ "$TRAVIS_BRANCH" = "develop" ]; then
       npm run lint
-    elif [ "$TEST_TYPE" = build ] && [[ "$TRAVIS_BRANCH" = "master" ]||[ "$TRAVIS_BRANCH" = "libraryGift" ]]; then
+    elif [ "$TEST_TYPE" = build ] && ([ "$TRAVIS_BRANCH" = "master" ]||[ "$TRAVIS_BRANCH" = "libraryGift" ]); then
       npm run build
     elif [ "$TEST_TYPE" = test-all ] && [ "$TRAVIS_BRANCH" = "develop" ]; then
       npm run test:all
