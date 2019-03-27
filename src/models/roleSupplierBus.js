@@ -2,7 +2,11 @@ import { message} from 'antd';
 import moment from 'moment';
 import {routerRedux} from "dva/router";
 import {
-  getQuotationListData, //供应商 - 报价管理 - 商品报价列表
+  getQuotationListData,            //供应商 - 报价管理 - 商品报价列表
+  getcommodityGeneralPageData,     //供应商 - 报价管理 - 商品报价列表-待报价
+  uploadOrderbill,                 //供应商 - 报价管理 - 商品报价列表-待报价-上传文件
+  getUploadOfferOrderSubmitData,   //供应商 - 报价管理 - 商品报价列表-待报价-提交
+  getWaitingSubmit,                //待确认-提交
 } from '../services/roleSupplierBus_S'
 import {
   //---------------------------------------------合同管理---------------------------------------------
@@ -91,8 +95,27 @@ export default {
         pagination:{},
       },
       status:''
-    }
+    },
 
+    commodityGeneralPage: {
+      tableData:{
+        address: "",
+        contacts: "",
+        deliverytime: "",
+        goodslisturl: "",
+        offerlisturl: "",
+        offerstatus: "",
+        otherprice: "",
+        purchasesn: "",
+        remark: "",
+        tax: "",
+        tel: "",
+        waybillfee: "",
+        status:'',
+        item:{},
+      },
+     
+    },
 
 
 
@@ -205,6 +228,9 @@ export default {
       }
     },
 
+
+
+
     //-------------------------------------报价管理----------------------------------------------------------
     //供应商 - 报价管理 - 商品报价列表
   
@@ -220,12 +246,61 @@ export default {
         })
       }
     },
+    //供应商 - 报价管理 - 商品报价列表-待报价
+    *getcommodityGeneralPageData({ payload },{ call,put }){
+      const response = yield call(getcommodityGeneralPageData, payload);
+      if(response!==undefined){
+        yield put({
+          type: 'getcommodityGeneralPageDataR',
+          payload: response
+        })
+      }
+    },
+    //供应商 - 报价管理 - 商品报价列表-待报价-上传文件
+    *uploadOrderbill({ payload,callback },{ call,put}){
+      const response = yield call(uploadOrderbill, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
+      }
+    },
 
+    //供应商 - 报价管理 - 商品报价列表-待报价-提交
+    *getUploadOfferOrderSubmitData({ payload,callback  },{ call,put }){
+      const response = yield call(getUploadOfferOrderSubmitData, payload);
+    // console.log('~resxxxx提交接口',response.type)
+      if(response!==undefined){
+        if(response.type == 1){
+          // callback(response)
+          // yield put({
+          //   type: 'getUploadOfferOrderSubmitDataR',
+          //   payload: response,
+          // })
+          yield put(routerRedux.push('/quotationManagement/quotationList'));
+        } else {
+          message.error(response.msg);
 
+        }
+      }
+    },
+    // 待确认-提交
+    *getWaitingSubmit({ payload,callback  },{ call,put }){
+      const response = yield call(getWaitingSubmit, payload);
+    // console.log('~resxxxx提交接口',response.type)
+      if(response!==undefined){
+        if(response.type == 1){
+          // callback(response)
+          // yield put({
+          //   type: 'getUploadOfferOrderSubmitDataR',
+          //   payload: response,
+          // })
+          yield put(routerRedux.push('/quotationManagement/quotationList'));
+        } else {
+          message.error(response.msg);
 
-
-
-
+        }
+      }
+    },
 
 
 
@@ -347,8 +422,17 @@ export default {
       }
     },
 
-
-
+    
+    getcommodityGeneralPageDataR(state, action){
+      return {
+        ...state,
+        commodityGeneralPage:{
+          ...state.commodityGeneralPage,
+          tableData:action.payload
+         
+        }
+      }
+    },
 
 
 

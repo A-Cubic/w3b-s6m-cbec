@@ -1,5 +1,5 @@
-// const h = 'http://192.168.191.1:54195/';
- //const a = 'http://192.168.0.127:54195/';
+//const h = 'http://192.168.191.1:54195/';
+const a = 'http://192.168.0.127:54195/';
 export default function roleSupplierBusMock(url) {
   return {
     //订单统计 发货传值
@@ -12,11 +12,19 @@ export default function roleSupplierBusMock(url) {
    // 'POST /llback/Agreement/ContractDetails': a,
 
     //供应商 - 报价管理 - 商品报价列表
-    'POST /llback/get/getQuotationListData': shippingList,
+    'POST /llback/Purchase/OfferOrderList': a,
 
+    //供应商 - 报价管理 - 商品报价列表-详情通用页
+    'POST /llback/Purchase/OfferOrderDetails': a,
 
+     //供应商 - 报价管理 - 商品报价列表-待报价-上传文件
+     'POST /llback/Purchase/UploadOfferOrder': a,
 
+    //供应商 - 报价管理 - 商品报价列表-待报价-提交
+    'POST /llback/Purchase/UploadOfferOrderSubmit': a,
 
+    //待确认-提交
+    'POST /llback/Purchase/WaitingSubmit': a,
 
 
     // ---------------------------------------------合同管理部分-----------------------------------------
@@ -36,6 +44,7 @@ export function getPayment(req, res) {
   res.send({
     msg: '已删除',
     type: '1',
+    url: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/DistributorGoods.xlsx',
     list: [{
       keyId: '11',
       date: '20190101~20190103',
@@ -108,35 +117,23 @@ export function shippingList(req, res) {
     },
     list: [
       {
-        keyId: '1',
-        id: '1',
-        purchasersCode: 'cgs',
-        purchasersName: '1采购商测试',
-        goodsTotal: '500',
-        sendTime: '2018/10/30 0:00:00',
-        sendName: '1乓球',
-        sendTel: '13565458746',
-        status: '1',
+        "keyId": "1",
+        "purchasesn": "123456",
+        "deliverytime": "2019/5/1 0:00:00",
+        "createtime": "2019/3/22 14:40:22",
+        "offerstatus": "1"
       }, {
-        keyId: '2',
-        id: '2',
-        purchasersCode: 'cgs',
-        purchasersName: '2采购商测试',
-        goodsTotal: '500',
-        sendTime: '2018/10/30 0:00:00',
-        sendName: '2乓球',
-        sendTel: '213565458746',
-        status: '2',
+        "keyId": "2",
+        "purchasesn": "2123456",
+        "deliverytime": "2019/6/1 0:00:00",
+        "createtime": "2019/3/22 14:40:22",
+        "offerstatus": "2"
       }, {
-        keyId: '3',
-        id: '3',
-        purchasersCode: 'cgs',
-        purchasersName: '3采购商测试',
-        goodsTotal: '500',
-        sendTime: '2018/10/30 0:00:00',
-        sendName: '3乓球',
-        sendTel: '313565458746',
-        status: '3',
+        "keyId": "3",
+        "purchasesn": "323456",
+        "deliverytime": "2019/7/1 0:00:00",
+        "createtime": "2019/3/22 14:40:22",
+        "offerstatus": "3"
       },
     ],
     pagination: {
