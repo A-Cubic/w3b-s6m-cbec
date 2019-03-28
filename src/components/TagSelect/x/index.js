@@ -6,36 +6,30 @@ import styles from './index.less';
 
 const { CheckableTag } = Tag;
 
-const TagSelectOption = ({ children, checked, onChange, value, backgroudColor,fontColor }) => (
-  <Tag color={backgroudColor} style={{color:fontColor}} checked={checked} key={value} onChange={state => onChange(value, state)}>
+const TagSelectOption = ({ children, checked, onChange, value }) => (
+  <CheckableTag
+    checked={checked}
+    key={value}
+    onChange={state => onChange(value, state)}
+  >
     {children}
-  </Tag>
- // CheckableTag
+  </CheckableTag>
 );
 
 TagSelectOption.isTagSelectOption = true;
 
 class TagSelect extends Component {
-  static defaultProps = {
-    hideCheckAll: false,
+  state = {
+    expand: false,
+    value: this.props.value || this.props.defaultValue || [],
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      expand: false,
-      value: props.value || props.defaultValue || [],
-    };
-  }
-
-  static getDerivedStateFromProps(nextProps) {
-    if ('value' in nextProps) {
-      return { value: nextProps.value || [] };
+  componentWillReceiveProps(nextProps) {
+    if ('value' in nextProps && nextProps.value) {
+      this.setState({ value: nextProps.value });
     }
-    return null;
   }
 
-  onChange = value => {
+  onChange = (value) => {
     const { onChange } = this.props;
     if (!('value' in this.props)) {
       this.setState({ value });
@@ -43,15 +37,15 @@ class TagSelect extends Component {
     if (onChange) {
       onChange(value);
     }
-  };
+  }
 
-  onSelectAll = checked => {
+  onSelectAll = (checked) => {
     let checkedTags = [];
     if (checked) {
       checkedTags = this.getAllTags();
     }
     this.onChange(checkedTags);
-  };
+  }
 
   getAllTags() {
     let { children } = this.props;
@@ -63,8 +57,7 @@ class TagSelect extends Component {
   }
 
   handleTagChange = (value, checked) => {
-    const { value: StateValue } = this.state;
-    const checkedTags = [...StateValue];
+    const checkedTags = [...this.state.value];
 
     const index = checkedTags.indexOf(value);
     if (checked && index === -1) {
@@ -73,23 +66,23 @@ class TagSelect extends Component {
       checkedTags.splice(index, 1);
     }
     this.onChange(checkedTags);
-  };
+  }
 
   handleExpand = () => {
-    const { expand } = this.state;
     this.setState({
-      expand: !expand,
+      expand: !this.state.expand,
     });
-  };
+  }
 
-  isTagSelectOption = node =>
-    node &&
-    node.type &&
-    (node.type.isTagSelectOption || node.type.displayName === 'TagSelectOption');
+  isTagSelectOption = (node) => {
+    return node && node.type && (
+      node.type.isTagSelectOption || node.type.displayName === 'TagSelectOption'
+    );
+  }
 
   render() {
     const { value, expand } = this.state;
-    const { children, hideCheckAll, className, style, expandable } = this.props;
+    const { children, className, style, expandable } = this.props;
 
     const checkedAll = this.getAllTags().length === value.length;
 
@@ -99,13 +92,15 @@ class TagSelect extends Component {
     });
     return (
       <div className={cls} style={style}>
-        {hideCheckAll ? null : (
-          <CheckableTag checked={checkedAll} key="tag-select-__all__" onChange={this.onSelectAll}>
-            全部
-          </CheckableTag>
-        )}
-        {value &&
-          React.Children.map(children, child => {
+        <CheckableTag
+          checked={checkedAll}
+          key="tag-select-__all__"
+          onChange={this.onSelectAll}
+        >
+          全部
+        </CheckableTag>
+        {
+          value && React.Children.map(children, (child) => {
             if (this.isTagSelectOption(child)) {
               return React.cloneElement(child, {
                 key: `tag-select-${child.props.value}`,
@@ -115,12 +110,15 @@ class TagSelect extends Component {
               });
             }
             return child;
-          })}
-        {expandable && (
-          <a className={styles.trigger} onClick={this.handleExpand}>
-            {expand ? '收起' : '展开'} <Icon type={expand ? 'up' : 'down'} />
-          </a>
-        )}
+          })
+        }
+        {
+          expandable && (
+            <a className={styles.trigger} onClick={this.handleExpand}>
+              {expand ? '收起' : '展开'} <Icon type={expand ? 'up' : 'down'} />
+            </a>
+          )
+        }
       </div>
     );
   }

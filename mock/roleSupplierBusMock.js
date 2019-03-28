@@ -11,6 +11,7 @@ export default function roleSupplierBusMock(url) {
     //商品管理-商品查看   与运营  合同查看共用接口
    // 'POST /llback/Agreement/ContractDetails': a,
 
+   //-----------------------------报价管理-----------------------------
     //供应商 - 报价管理 - 商品报价列表
     'POST /llback/Purchase/OfferOrderList': a,
 
@@ -25,6 +26,13 @@ export default function roleSupplierBusMock(url) {
 
     //待确认-提交
     'POST /llback/Purchase/WaitingSubmit': a,
+
+//-----------------------------商品管理-----------------------------
+    //一件发货，铺货等获取接口
+    'POST /llback/Goods/SelectSupplyGoodsList': a,
+
+
+
 
 
     // ---------------------------------------------合同管理部分-----------------------------------------

@@ -64,7 +64,7 @@ export function supplier (dynamicWrapper,app){
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
     },
 
-    //-----------------------------20190321商品管理-----------------------------
+    //-----------------------------20190321报价管理-----------------------------
     //我的可供商品
     '/forGoods/supplierForGoods': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
@@ -77,6 +77,17 @@ export function supplier (dynamicWrapper,app){
     '/forGoods/bulkSupplyGoodsDetails': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
     },
+    //-----------------------------20190321商品管理-----------------------------
+    // 批量供货
+    // 一件代发
+    // 铺货
+    '/commodityManagement/bulkSupplyGeneralPage': {
+      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/bulkSupplyGeneralPage')),
+    },
+    '/commodityManagement/commodityDetailsGeneralPage': {
+      component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/commodityDetailsGeneralPage')),
+    },
+
 
     //-----------------------------20190321报价管理-----------------------------
     // 报价列表

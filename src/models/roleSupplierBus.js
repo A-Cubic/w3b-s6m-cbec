@@ -7,6 +7,7 @@ import {
   uploadOrderbill,                 //供应商 - 报价管理 - 商品报价列表-待报价-上传文件
   getUploadOfferOrderSubmitData,   //供应商 - 报价管理 - 商品报价列表-待报价-提交
   getWaitingSubmit,                //待确认-提交
+  getSelectSupplyGoodsListData,    //供应商 - 商品管理 - 铺货，一件发货获取接口
 } from '../services/roleSupplierBus_S'
 import {
   //---------------------------------------------合同管理---------------------------------------------
@@ -116,8 +117,20 @@ export default {
       },
      
     },
-
-
+     //-----------------------------商品管理-----------------------------
+    bulkSupplyGeneralPage:{
+      tableData:{
+        type:{},
+        flag:[],
+        catelog1:[],
+        selectSupplyGoodsItems: [],
+        pagination:{
+          pageSize:10
+        },
+      },
+      classification:'全部',
+      upperShelf:'全部',
+    },
 
 
   },
@@ -302,6 +315,22 @@ export default {
       }
     },
 
+    //-----------------------------商品管理-----------------------------
+
+    //铺货，一件发货获取接口
+    *getSelectSupplyGoodsListData({ payload },{ call,put }){
+      const response = yield call(getSelectSupplyGoodsListData, payload);
+      if(response!==undefined){
+        yield put({
+          type: 'getSelectSupplyGoodsListDataR',
+          payload: {
+            response,
+            ...payload
+          }
+        })
+      }
+    },
+
 
 
   },
@@ -434,7 +463,24 @@ export default {
       }
     },
 
-
+    //-----------------------------商品管理-----------------------------
+    getSelectSupplyGoodsListDataR(state, action){
+      return {
+        ...state,
+        bulkSupplyGeneralPage:{
+          ...state.bulkSupplyGeneralPage,
+          tableData:action.payload.response,
+          // tableData:{
+          //   tableData:action.payload.response,
+          // }
+          //classification:action.payload.catelog1
+          classification:action.payload.catelog1==undefined?"全部":action.payload.catelog1,
+          upperShelf:action.payload.flag==undefined?"全部":action.payload.flag,
+          ...state.tableData,
+          
+        }
+      }
+    },
 
 
   }
