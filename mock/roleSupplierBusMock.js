@@ -28,11 +28,14 @@ export default function roleSupplierBusMock(url) {
     'POST /llback/Purchase/WaitingSubmit': a,
 
 //-----------------------------商品管理-----------------------------
-    //一件发货，铺货等获取接口
+    //一件发货，铺货等获取接口 llback/Goods/SelectSupplyGoodsDetails
     'POST /llback/Goods/SelectSupplyGoodsList': a,
 
+    //一件发货，铺货等获取接口 -商品详情
+    'POST /llback/Goods/SelectSupplyGoodsDetails': a,
 
-
+    //一件发货，铺货等获取接口 -商品详情-上下架
+    'POST /llback/Goods/UpDownFlag': a,
 
 
     // ---------------------------------------------合同管理部分-----------------------------------------

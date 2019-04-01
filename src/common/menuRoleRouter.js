@@ -84,7 +84,7 @@ export function supplier (dynamicWrapper,app){
     '/commodityManagement/bulkSupplyGeneralPage': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/bulkSupplyGeneralPage')),
     },
-    '/commodityManagement/commodityDetailsGeneralPage': {
+    '/commodityManagement/commodityDetailsGeneralPage/:barcode/:type': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/commodityDetailsGeneralPage')),
     },
 

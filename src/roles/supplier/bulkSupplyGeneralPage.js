@@ -231,7 +231,7 @@ export default class bulkSupplyGeneralPage extends Component {
         }}
         renderItem={item => (
           <List.Item>
-            <Link target="_blank" to={`/goodsDetails/${item.barcode}`}>
+            <Link target="_blank" to={`/commodityManagement/commodityDetailsGeneralPage/${item.barcode}/${type}`}>
               <Card
                 className={styles.card}
                
@@ -243,7 +243,7 @@ export default class bulkSupplyGeneralPage extends Component {
                   description={
                     <div >
                       <Ellipsis style={{height:'50px'}} lines={2}>{item.name}</Ellipsis>
-                      <Ellipsis  className={styles.ellipsis} lines={2}>￥{item.price}</Ellipsis>
+                      <Ellipsis  className={styles.ellipsis} lines={2}>{item.price}</Ellipsis>
                     </div>
                   }
                 />

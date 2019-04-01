@@ -58,3 +58,17 @@ export async function getSelectSupplyGoodsListData(params) {
         body: params,
     })
 }
+// 铺货-一件发货获取接口 - 商品详情
+export async function getSelectSupplyGoodsDetailsData(params) {
+    return request(`/llback/Goods/SelectSupplyGoodsDetails`,{
+        method: 'POST',
+        body: params,
+    })
+}
+// 铺货-一件发货获取接口 - 商品详情- 上下架
+export async function getUpDownFlagDate(params) {
+    return request(`/llback/Goods/UpDownFlag`,{
+        method: 'POST',
+        body: params,
+    })
+}
