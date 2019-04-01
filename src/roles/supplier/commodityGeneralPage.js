@@ -2,7 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { message} from 'antd';
-import { Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs,  } from 'antd';
+import {InputNumber, Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal,Tabs,  } from 'antd';
 import styles from './commodityGeneralPage.less';
 import moment from 'moment';
 import { getCurrentUrl } from '../../services/api'
@@ -160,7 +160,7 @@ export default class commodityGeneralPage extends Component {
     const offerstatus = JSON.parse(match.params.id)
     const statustype =offerstatus.status
     const that = this
-
+    
     const props = {
       action: getUploadUrl(),
       headers: getHeader(),
@@ -179,7 +179,9 @@ export default class commodityGeneralPage extends Component {
             <Row style={{marginBottom:'20px'}} gutter={{ md: 12, lg: 24, xl: 48 }}>
               <Col md={9} sm={24}></Col>
               <Col md={12} sm={24}>  
-                <span style={{fontSize:'16px'}}>下载询价商品：</span><a target="_blank" onClick={()=>this.handleToBeQuoted()}  >商品询价单.xls</a>
+                {/* <span style={{fontSize:'16px'}}>下载询价商品：</span><a target="_blank" onClick={()=>this.handleToBeQuoted()}  >商品询价单.xls</a> */}
+                <span style={{fontSize:'16px'}}>下载询价商品：</span>
+                <a href={tableData.goodslisturl}>商品询价单.xls</a>
               </Col>
             </Row>
             <Row style={{marginBottom:'20px'}} gutter={{ md: 12, lg: 24, xl: 48 }}>
@@ -250,7 +252,7 @@ export default class commodityGeneralPage extends Component {
                           initialValue: tableData.waybillfee,
                           rules: [{ required: true, message: '请输入运费' }],
                         })(
-                          tableData.status==1?<Input placeholder="请输入运费"/>:<Input disabled={true} placeholder="请输入运费"/>
+                          tableData.status==1?<InputNumber placeholder="请输入运费"/>:<InputNumber disabled={true} placeholder="请输入运费"/>
                         )}
                     </FormItem>
                   </Col>
@@ -263,7 +265,7 @@ export default class commodityGeneralPage extends Component {
                         initialValue: tableData.tax,
                         rules: [{ required: true, message: '请输入税费' }],
                       })(
-                        tableData.status==1?<Input placeholder="请输入税费"/>:<Input  disabled={true} placeholder="请输入税费"/>
+                        tableData.status==1?<InputNumber placeholder="请输入税费"/>:<InputNumber  disabled={true} placeholder="请输入税费"/>
                       )}
                     </FormItem>        
                   </Col>
@@ -276,7 +278,7 @@ export default class commodityGeneralPage extends Component {
                         initialValue: tableData.otherprice,
                         //rules: [{ required: true, message: '请输入其它费用' }],
                       })(
-                        tableData.status==1?<Input placeholder="请输入税费"/>:<Input disabled={true} placeholder="请输入税费"/>
+                        tableData.status==1?<InputNumber placeholder="请输入税费"/>:<InputNumber disabled={true} placeholder="请输入税费"/>
                       )}
                     </FormItem>      
                   </Col>
@@ -321,7 +323,7 @@ export default class commodityGeneralPage extends Component {
                           initialValue: tableData.waybillfee,
                           rules: [{ required: true, message: '请输入运费' }],
                         })(
-                          tableData.status==1?<Input placeholder="请输入运费"/>:<Input disabled={true} placeholder="请输入运费"/>
+                          tableData.status==1?<InputNumber placeholder="请输入运费"/>:<InputNumber disabled={true} placeholder="请输入运费"/>
                         )}
                     </FormItem>
                   </Col>
@@ -334,7 +336,7 @@ export default class commodityGeneralPage extends Component {
                         initialValue: tableData.tax,
                         rules: [{ required: true, message: '请输入税费' }],
                       })(
-                        tableData.status==1?<Input placeholder="请输入税费"/>:<Input  disabled={true} placeholder="请输入税费"/>
+                        tableData.status==1?<InputNumber placeholder="请输入税费"/>:<InputNumber  disabled={true} placeholder="请输入税费"/>
                       )}
                     </FormItem>        
                   </Col>
@@ -347,7 +349,7 @@ export default class commodityGeneralPage extends Component {
                         initialValue: tableData.otherprice,
                         //rules: [{ required: true, message: '请输入其它费用' }],
                       })(
-                        tableData.status==1?<Input placeholder="请输入税费"/>:<Input disabled={true} placeholder="请输入税费"/>
+                        tableData.status==1?<InputNumber placeholder="请输入税费"/>:<InputNumber disabled={true} placeholder="请输入税费"/>
                       )}
                     </FormItem>      
                   </Col>
@@ -402,7 +404,7 @@ export default class commodityGeneralPage extends Component {
                           initialValue: tableData.waybillfee,
                           rules: [{ required: true, message: '请输入运费' }],
                         })(
-                          tableData.status==1?<Input placeholder="请输入运费"/>:<Input disabled={true} placeholder="请输入运费"/>
+                          tableData.status==1?<InputNumber placeholder="请输入运费"/>:<InputNumber disabled={true} placeholder="请输入运费"/>
                         )}
                     </FormItem>
                   </Col>
@@ -415,7 +417,7 @@ export default class commodityGeneralPage extends Component {
                         initialValue: tableData.tax,
                         rules: [{ required: true, message: '请输入税费' }],
                       })(
-                        tableData.status==1?<Input placeholder="请输入税费"/>:<Input  disabled={true} placeholder="请输入税费"/>
+                        tableData.status==1?<InputNumber placeholder="请输入税费"/>:<InputNumber  disabled={true} placeholder="请输入税费"/>
                       )}
                     </FormItem>        
                   </Col>
@@ -428,7 +430,7 @@ export default class commodityGeneralPage extends Component {
                         initialValue: tableData.otherprice,
                         //rules: [{ required: true, message: '请输入其它费用' }],
                       })(
-                        tableData.status==1?<Input placeholder="请输入税费"/>:<Input disabled={true} placeholder="请输入税费"/>
+                        tableData.status==1?<InputNumber placeholder="请输入税费"/>:<InputNumber disabled={true} placeholder="请输入税费"/>
                       )}
                     </FormItem>      
                   </Col>
