@@ -2,7 +2,14 @@ import { message} from 'antd';
 import moment from 'moment';
 import {routerRedux} from "dva/router";
 import {
-  getQuotationListData, //供应商 - 报价管理 - 商品报价列表
+  getQuotationListData,            //供应商 - 报价管理 - 商品报价列表
+  getcommodityGeneralPageData,     //供应商 - 报价管理 - 商品报价列表-待报价
+  uploadOrderbill,                 //供应商 - 报价管理 - 商品报价列表-待报价-上传文件
+  getUploadOfferOrderSubmitData,   //供应商 - 报价管理 - 商品报价列表-待报价-提交
+  getWaitingSubmit,                //待确认-提交
+  getSelectSupplyGoodsListData,    //供应商 - 商品管理 - 铺货，一件发货获取接口
+  getSelectSupplyGoodsDetailsData, //供应商 - 商品管理 - 铺货，一件发货获取接口 -商品详情 
+  getUpDownFlagDate,               //供应商 - 商品管理 - 铺货，一件发货获取接口 -商品详情 -上下架
 } from '../services/roleSupplierBus_S'
 import {
   //---------------------------------------------合同管理---------------------------------------------
@@ -15,6 +22,7 @@ import {
   getSettlementDetailsData,           // 货款结算 - 查看结算明细 - 货款
   getSettlementDetailsElseData,       // 货款结算 - 查看结算明细 - 其他
   changeStatusCompleteReconciliation, // 货款结算 - 完成对账
+
 } from "../services/roleOperationDistribution_S";
 
 
@@ -91,9 +99,58 @@ export default {
         pagination:{},
       },
       status:''
+    },
+
+    commodityGeneralPage: {
+      tableData:{
+        address: "",
+        contacts: "",
+        deliverytime: "",
+        goodslisturl: "",
+        offerlisturl: "",
+        offerstatus: "",
+        otherprice: "",
+        purchasesn: "",
+        remark: "",
+        tax: "",
+        tel: "",
+        waybillfee: "",
+        status:'',
+        item:{},
+      },
+     
+    },
+     //-----------------------------商品管理-----------------------------
+    bulkSupplyGeneralPage:{
+      tableData:{
+        type:{},
+        flag:[],
+        catelog1:[],
+        selectSupplyGoodsItems: [],
+        pagination:{
+          pageSize:10
+        },
+      },
+      classification:'全部',
+      upperShelf:'全部',
+    },
+    commodityDetailsGeneralPage:{
+      tableData:{
+        barcode: "",
+        efficacy: "",
+        flag: "",
+        goodsDetailImgArr: [],
+        goodsParameters: [],
+        inprice: '',
+        name: "",
+        num:[],
+        prices:[],
+        slt:[],
+        type: "",
+        waybillfee:'',
+      },
+      imgone:''
     }
-
-
 
 
 
@@ -205,6 +262,9 @@ export default {
       }
     },
 
+
+
+
     //-------------------------------------报价管理----------------------------------------------------------
     //供应商 - 报价管理 - 商品报价列表
   
@@ -220,14 +280,109 @@ export default {
         })
       }
     },
+    //供应商 - 报价管理 - 商品报价列表-待报价
+    *getcommodityGeneralPageData({ payload },{ call,put }){
+      const response = yield call(getcommodityGeneralPageData, payload);
+      if(response!==undefined){
+        yield put({
+          type: 'getcommodityGeneralPageDataR',
+          payload: response
+        })
+      }
+    },
+    //供应商 - 报价管理 - 商品报价列表-待报价-上传文件
+    *uploadOrderbill({ payload,callback },{ call,put}){
+      const response = yield call(uploadOrderbill, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        callback(response)
+      }
+    },
 
+    //供应商 - 报价管理 - 商品报价列表-待报价-提交
+    *getUploadOfferOrderSubmitData({ payload,callback  },{ call,put }){
+      const response = yield call(getUploadOfferOrderSubmitData, payload);
+    // console.log('~resxxxx提交接口',response.type)
+      if(response!==undefined){
+        if(response.type == 1){
+          // callback(response)
+          // yield put({
+          //   type: 'getUploadOfferOrderSubmitDataR',
+          //   payload: response,
+          // })
+          yield put(routerRedux.push('/quotationManagement/quotationList'));
+        } else {
+          message.error(response.msg);
 
+        }
+      }
+    },
+    // 待确认-提交
+    *getWaitingSubmit({ payload,callback  },{ call,put }){
+      const response = yield call(getWaitingSubmit, payload);
+    // console.log('~resxxxx提交接口',response.type)
+      if(response!==undefined){
+        if(response.type == 1){
+          // callback(response)
+          // yield put({
+          //   type: 'getUploadOfferOrderSubmitDataR',
+          //   payload: response,
+          // })
+          yield put(routerRedux.push('/quotationManagement/quotationList'));
+        } else {
+          message.error(response.msg);
 
+        }
+      }
+    },
 
+    //-----------------------------商品管理-----------------------------
 
+    //铺货，一件发货获取接口
+    *getSelectSupplyGoodsListData({ payload },{ call,put }){
+      const response = yield call(getSelectSupplyGoodsListData, payload);
+      if(response!==undefined){
+        yield put({
+          type: 'getSelectSupplyGoodsListDataR',
+          payload: {
+            response,
+            ...payload
+          }
+        })
+      }
+    },
 
+    //铺货，一件发货获取接口-商品详情
+    *getSelectSupplyGoodsDetailsData({ payload },{ call,put }){
+      const response = yield call(getSelectSupplyGoodsDetailsData, payload);
+    // console.log('xxxxxxxxxxxxxx')
+      if(response!==undefined){
+        yield put({
+          type: 'getSelectSupplyGoodsDetailsDataR',
+          // payload: {
+          //   response,
+          //   ...payload
+          // }
+          payload: response
+        })
+      }
+    },
+     //铺货，一件发货获取接口-商品详情-上下架
+    *getUpDownFlagDate({ payload, callback },{ call,put }){
+      const response = yield call(getUpDownFlagDate, payload);
+    // console.log('~resxxxx提交接口',response.type)
+      if(response!==undefined){
+        if(response.type == 1){
+          callback(response)
+          
+  
+         
+        } else {
+          message.error(response.msg);
 
-
+        }
+      }
+    },
 
   },
 
@@ -347,8 +502,81 @@ export default {
       }
     },
 
+    
+    getcommodityGeneralPageDataR(state, action){
+      return {
+        ...state,
+        commodityGeneralPage:{
+          ...state.commodityGeneralPage,
+          tableData:action.payload
+         
+        }
+      }
+    },
 
+    //-----------------------------商品管理-----------------------------
+    getSelectSupplyGoodsListDataR(state, action){
+      return {
+        ...state,
+        bulkSupplyGeneralPage:{
+          ...state.bulkSupplyGeneralPage,
+          tableData:action.payload.response,
+          // tableData:{
+          //   tableData:action.payload.response,
+          // }
+          //classification:action.payload.catelog1
+          classification:action.payload.catelog1==undefined?"全部":action.payload.catelog1,
+          upperShelf:action.payload.flag==undefined?"全部":action.payload.flag,
+          ...state.tableData,
+          
+        }
+      }
+    },
 
+    getSelectSupplyGoodsDetailsDataR(state, action){
+      return {
+        ...state,
+        commodityDetailsGeneralPage:{
+          ...state.commodityDetailsGeneralPage,
+          tableData:action.payload,
+          ...state.tableData,
+          imgone:action.payload.slt[0]
+        }
+      }
+    },
+
+   
+    changeShowImgR(state, action){
+      if(state.commodityDetailsGeneralPage.tableData.slt.length<2){
+        return{
+          ...state,
+          commodityDetailsGeneralPage:{
+            ...state.commodityDetailsGeneralPage,
+            imgone:state.commodityDetailsGeneralPage.tableData.slt[0],
+          }
+        }
+      }
+        return {
+          ...state,
+          commodityDetailsGeneralPage:{
+            ...state.commodityDetailsGeneralPage,
+            imgone:state.commodityDetailsGeneralPage.tableData.slt[action.payload],
+          }
+        }
+    },
+
+    clickShowImgR(state, action){
+      
+      return {
+        ...state,
+        commodityDetailsGeneralPage:{
+          ...state.commodityDetailsGeneralPage,
+          imgone:action.payload,
+        }
+      }
+    },
+
+    
 
 
 

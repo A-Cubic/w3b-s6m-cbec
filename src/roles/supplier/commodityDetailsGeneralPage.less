@@ -143,3 +143,60 @@
   text-align: right;
   margin-top: 10px;
 }
+
+
+.ellipsis {
+  color: #dd7427;
+}
+.ellipsisName {
+  color: #777;
+  height: 44px;
+}
+.ellipsisName:hover {
+  color: #f00;
+}
+.goodsDetails {
+  .carousel {
+    height: 340px;
+    overflow: hidden;
+    //background: red;
+  }
+
+  
+
+  .card {
+    :global {
+      .ant-card-meta-title {
+        margin-bottom: 4px;
+        & > a {
+          color: @heading-color;
+          display: inline-block;
+          max-width: 100%;
+        }
+        & > p {
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
+          -webkit-line-clamp:2;
+        }
+      }
+      .ant-card-meta-description {
+        height: 44px;
+        line-height: 22px;
+        overflow: hidden;
+      }
+    }
+
+    &:hover {
+      :global {
+        .ant-card-meta-title > a {
+          color: @primary-color;
+        }
+      }
+    }
+  }
+  .imgsDetails {
+    padding: 20px 0;
+  }
+
+}

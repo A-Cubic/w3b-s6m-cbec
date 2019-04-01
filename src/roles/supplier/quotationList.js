@@ -22,11 +22,12 @@ export default class quotationList extends Component {
     formValues:{}
   }
   init(){
-    const { roleSupplierBus:{quotationList,quotationList:{status,tableData:{list,pagination}}} } = this.props;
+    const { roleSupplierBus:{quotationList,quotationList:{tableData:{list,pagination}}} } = this.props;
+   
     this.props.dispatch({
       type:'roleSupplierBus/getQuotationListData',
       payload:{
-        status:status==''?'待报价':status,
+        offerstatus:'待报价',
       }
     })
     
@@ -39,18 +40,21 @@ export default class quotationList extends Component {
     this.props.dispatch({
       type:'roleSupplierBus/getQuotationListData',
       payload: {
-        status:index,
+        offerstatus:index,
       }
     });
   }
-
+  //跳转链接传参
   handleStatus=(item) => {
     //console.log('item',item)
-    this.props.dispatch(routerRedux.push('/quotationManagement/commodityGeneralPage/' + item.id  ));
+    const getdata = {purchasesn:item.purchasesn,status:item.offerstatus}
+    this.props.dispatch(routerRedux.push('/quotationManagement/commodityGeneralPage/' +  JSON.stringify(getdata)  ));
   } 
 
   handleTableChange=(pagination, filtersArg, sorter)=>{
-    const { roleSupplierBus:{quotationList,quotationList:{status}} } = this.props;
+    const { roleSupplierBus:{quotationList:{tableData:{list}}} } = this.props;
+    const status=list[0].offerstatus
+    
     const params = {
       ...pagination,
     };
@@ -59,14 +63,14 @@ export default class quotationList extends Component {
       // payload: params,
       payload: {
         ...params,
-        status:status==''?'待报价':status,
+        offerstatus:status,
       }
     });
   }
 
   render() {
-   const { roleSupplierBus:{quotationList,quotationList:{status,tableData:{list,pagination}}} } = this.props;
-    //console.log(777777777,list)
+   const { roleSupplierBus:{quotationList,quotationList:{tableData:{list,pagination}}} } = this.props;
+  
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -82,24 +86,24 @@ export default class quotationList extends Component {
       }, 
       {
         title: '询价单号',
-        dataIndex: 'id',
-        key: 'id',
+        dataIndex: 'purchasesn',
+        key: 'purchasesn',
       },
       {
         title: '采购截至日期',
-        dataIndex: 'sendTime',
-        key: 'sendTime',
+        dataIndex: 'deliverytime',
+        key: 'deliverytime',
       }, {
         title: '询价日期',
-        dataIndex: 'sendTel',
-        key: 'sendTel',
+        dataIndex: 'createtime',
+        key: 'createtime',
       }, 
       {
         title: '操作',
         dataIndex: 'status',
         key: 'status',
         render: (val,record) =>{
-
+          const status=list[0].offerstatus
           switch(status){
             case '待报价':
               return <span onClick={()=>this.handleStatus(record)}><a>去报价</a></span>
