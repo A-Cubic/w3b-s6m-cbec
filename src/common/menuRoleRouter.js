@@ -81,9 +81,12 @@ export function supplier (dynamicWrapper,app){
     // 批量供货
     // 一件代发
     // 铺货
-    '/commodityManagement/bulkSupplyGeneralPage': {
+    '/goods/bulkSupplyGeneralPage': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/bulkSupplyGeneralPage')),
     },
+    // 批量供货-商品详情
+    // 一件代发-商品详情
+    // 铺货-商品详情
     '/commodityManagement/commodityDetailsGeneralPage/:barcode/:type': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/commodityDetailsGeneralPage')),
     },
@@ -91,7 +94,7 @@ export function supplier (dynamicWrapper,app){
 
     //-----------------------------20190321报价管理-----------------------------
     // 报价列表
-    '/quotationManagement/quotationList': {
+    '/bulkPurchases/quotationList': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/quotationList')),
     },
     // 去报价（商品）

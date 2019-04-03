@@ -48,7 +48,6 @@ export default class GoodsAboutO extends Component {
   onSearch=(e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
 
       if (err) return;
       const values = {
@@ -187,7 +186,6 @@ export default class GoodsAboutO extends Component {
   }
 
   render() {
-    // console.log('1',this.props)
     const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckO}} } = this.props;
 
     const paginationProps = {

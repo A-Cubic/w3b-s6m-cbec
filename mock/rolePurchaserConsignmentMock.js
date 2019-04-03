@@ -1,5 +1,5 @@
 // const h = 'http://172.16.10.51:54195/'
-//const a = 'http://192.168.0.127:54195/';
+// const a = 'http://192.168.0.127:54195/';
 export default function rolePurchaserConsignmentMock(url) {
   return {
     // -------- 收货确认 --------------
@@ -16,7 +16,7 @@ export default function rolePurchaserConsignmentMock(url) {
 
     // -------- 数据统计 --------------
     // 数据统计-列表查询
-    'POST /llback/Sales/dataStatistics': GetOrderList,
+    'POST /llback/Sales/dataStatistics': url,
 
 
     // -------- 商品销售 --------------
@@ -38,7 +38,7 @@ export default function rolePurchaserConsignmentMock(url) {
     'POST /llback/Balance/GetPaymentOtherDetailed': url,
     // 货款结算 - 查看结算明细 - 打印      -------运营 采购结算 -打印 共用接口
     'POST /llback/Balance/GetPaymentPrinting': url,
-    //货款结算 - 确认付款
+    // 货款结算 - 确认付款
     'POST /llback/Balance/SurePayMent': url,
   };
 }

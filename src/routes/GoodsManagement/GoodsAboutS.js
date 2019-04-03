@@ -48,7 +48,6 @@ export default class GoodsAboutS extends Component {
   onSearch=(e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
 
       if (err) return;
       const values = {
@@ -79,7 +78,6 @@ export default class GoodsAboutS extends Component {
     });
   }
   handleEdit=(e, record, index)=>{
-    // console.log(record)
     this.props.dispatch({
       type: 'goodsManagement/getGoodsDetailsS',
       payload: {
@@ -182,12 +180,12 @@ export default class GoodsAboutS extends Component {
                 <Select
                   placeholder="请选择"
                   optionFilterProp="label"
-                 
+
                 >
                   <Option value="">全部</Option>
                   <Option value="1">是</Option>
                   <Option value="0">否</Option>
-                
+
                 </Select>
               )}
             </FormItem>
@@ -204,7 +202,6 @@ export default class GoodsAboutS extends Component {
   }
 
   render() {
-    // console.log('1',this.props)
     const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckS}} } = this.props;
 
     const paginationProps = {
@@ -243,7 +240,7 @@ export default class GoodsAboutS extends Component {
       render: (val,record) => (
         <div>
           <span>{record.ifph==0?'否':'是'}</span>
-         
+
         </div>
           )
     },

@@ -1,6 +1,6 @@
 
 // const h = 'http://192.168.191.1:54195/';
-//const a = 'http://192.168.0.127:54195/';
+// const a = 'http://192.168.0.127:54195/';
 
 
 export default function roleOperationDistributionMock(url) {
@@ -15,7 +15,7 @@ export default function roleOperationDistributionMock(url) {
     'POST /llback/Warehouse/OnloadWarehousingGoods': url,
 
     // 平台库存 - 删除
-    'POST /llback/Sales/deleteList': getPayment,
+    // 'POST /llback/Sales/deleteList': getPayment,
     // -----------------库存 - 门店库存 页---------------
     // 门店库存 获取列表
     'POST /llback/Warehouse/StoreInventory': url,
@@ -58,7 +58,6 @@ export default function roleOperationDistributionMock(url) {
     'POST /llback/Warehouse/DeliverOrderListDelete': url,
 
     // 发货列表- 点击查看
-    // 'POST /llback/Warehouse/DeliverOrderDetails': a,
     'POST /llback/Warehouse/DeliverOrderDetails': url,
 
     // 发货列表- 撤回
@@ -80,20 +79,16 @@ export default function roleOperationDistributionMock(url) {
     // ---------------------------------------------合同管理部分-----------------------------------------
     // -----------------合同列表 页--------------
     'POST /llback/Agreement/ContractList': url,
-    // 'POST /llback/Agreement/ContractList': a,
 
-    // 'POST /llback/Agreement/ContractDetails': a, //查看跳页
-    // 'POST /llback/Sales/getAgreementListData': getPayment,
     // -----------------创建合同 页--------------
 
     // 保存
-    // 'POST /llback/Agreement/getcreateAgreementData': getPayment,
     'POST /llback/Agreement/CreateContract': url,
     // 导入数据
     // 'POST /llback/delivery/getcreateAgreementImg': upimg,
     'POST /llback/Agreement/ContractUploadImg': url,
-    // -----------------查看合同 页-------------- 共用接口 
-    'POST /llback/Agreement/ContractDetails': url,    //共用接口  商品管理-商品查看
+    // -----------------查看合同 页-------------- 共用接口
+    'POST /llback/Agreement/ContractDetails': url, // 共用接口  商品管理-商品查看
 
 
     // ---------------------------------------------财务管理部分-----------------------------------------

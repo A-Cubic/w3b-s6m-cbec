@@ -120,7 +120,6 @@ export default class operatorOrder extends Component {
     e.preventDefault();
     const {orderManagement:{supplierOrder:{tableData}}}=this.props
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
 
       if (err) return;
       const rangeValue = fieldsValue['date'];
@@ -152,7 +151,6 @@ export default class operatorOrder extends Component {
   }
   //导出订单
   exportOrders =()=>{
-// console.log('~~',this.state.formValues)
     this.props.dispatch({
       type:'orderManagement/exportOrders',
       payload:{
@@ -205,7 +203,6 @@ export default class operatorOrder extends Component {
         // orderId:"SH20180913112913284028",
       },
     });
-    // console.log("record",record)
   }
   handleChildrenDelivery=(record)=>{
     this.setState({
@@ -321,7 +318,6 @@ export default class operatorOrder extends Component {
     );
   }
   render() {
-    // console.log('~~',this.props)
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr,wareHouseArr,expressArr} }= this.props;
     const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     const paginationProps = {
@@ -533,7 +529,6 @@ class ChildrenDelivery extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     // const {parent:{expressArr}} = this.props
-    // console.log(this.props)
     return (
       <div>
         <Modal

@@ -1,41 +1,41 @@
-//const h = 'http://192.168.191.1:54195/';
-const a = 'http://192.168.0.127:54195/';
+// const h = 'http://192.168.191.1:54195/';
+// const a = 'http://192.168.0.127:54195/';
 export default function roleSupplierBusMock(url) {
   return {
-    //订单统计 发货传值
+    // 订单统计 发货传值
     'POST /llback/Order/GetConsigneeMsg': url,
 
-    //商品管理-商品上架 -弹窗
+    // 商品管理-商品上架 -弹窗
     'POST /llback/Goods/SelectOnloadGoodsList': url,
 
-    //商品管理-商品查看   与运营  合同查看共用接口
-   // 'POST /llback/Agreement/ContractDetails': a,
+    // 商品管理-商品查看   与运营  合同查看共用接口
+    // 'POST /llback/Agreement/ContractDetails': a,
 
-   //-----------------------------报价管理-----------------------------
-    //供应商 - 报价管理 - 商品报价列表
-    'POST /llback/Purchase/OfferOrderList': a,
+    // -----------------------------报价管理-----------------------------
+    // 供应商 - 报价管理 - 商品报价列表
+    'POST /llback/Purchase/OfferOrderList': url,
 
-    //供应商 - 报价管理 - 商品报价列表-详情通用页
-    'POST /llback/Purchase/OfferOrderDetails': a,
+    // 供应商 - 报价管理 - 商品报价列表-详情通用页
+    'POST /llback/Purchase/OfferOrderDetails': url,
 
-     //供应商 - 报价管理 - 商品报价列表-待报价-上传文件
-     'POST /llback/Purchase/UploadOfferOrder': a,
+    // 供应商 - 报价管理 - 商品报价列表-待报价-上传文件
+    'POST /llback/Purchase/UploadOfferOrder': url,
 
-    //供应商 - 报价管理 - 商品报价列表-待报价-提交
-    'POST /llback/Purchase/UploadOfferOrderSubmit': a,
+    // 供应商 - 报价管理 - 商品报价列表-待报价-提交
+    'POST /llback/Purchase/UploadOfferOrderSubmit': url,
 
-    //待确认-提交
-    'POST /llback/Purchase/WaitingSubmit': a,
+    // 待确认-提交
+    'POST /llback/Purchase/WaitingSubmit': url,
 
-//-----------------------------商品管理-----------------------------
-    //一件发货，铺货等获取接口 llback/Goods/SelectSupplyGoodsDetails
-    'POST /llback/Goods/SelectSupplyGoodsList': a,
+    // -----------------------------商品管理-----------------------------
+    // 一件发货，铺货等获取接口 llback/Goods/SelectSupplyGoodsDetails
+    'POST /llback/Goods/SelectSupplyGoodsList': url,
 
-    //一件发货，铺货等获取接口 -商品详情
-    'POST /llback/Goods/SelectSupplyGoodsDetails': a,
+    // 一件发货，铺货等获取接口 -商品详情
+    'POST /llback/Goods/SelectSupplyGoodsDetails': url,
 
-    //一件发货，铺货等获取接口 -商品详情-上下架
-    'POST /llback/Goods/UpDownFlag': a,
+    // 一件发货，铺货等获取接口 -商品详情-上下架
+    'POST /llback/Goods/UpDownFlag': url,
 
 
     // ---------------------------------------------合同管理部分-----------------------------------------
@@ -128,23 +128,23 @@ export function shippingList(req, res) {
     },
     list: [
       {
-        "keyId": "1",
-        "purchasesn": "123456",
-        "deliverytime": "2019/5/1 0:00:00",
-        "createtime": "2019/3/22 14:40:22",
-        "offerstatus": "1"
+        keyId: '1',
+        purchasesn: '123456',
+        deliverytime: '2019/5/1 0:00:00',
+        createtime: '2019/3/22 14:40:22',
+        offerstatus: '1',
       }, {
-        "keyId": "2",
-        "purchasesn": "2123456",
-        "deliverytime": "2019/6/1 0:00:00",
-        "createtime": "2019/3/22 14:40:22",
-        "offerstatus": "2"
+        keyId: '2',
+        purchasesn: '2123456',
+        deliverytime: '2019/6/1 0:00:00',
+        createtime: '2019/3/22 14:40:22',
+        offerstatus: '2',
       }, {
-        "keyId": "3",
-        "purchasesn": "323456",
-        "deliverytime": "2019/7/1 0:00:00",
-        "createtime": "2019/3/22 14:40:22",
-        "offerstatus": "3"
+        keyId: '3',
+        purchasesn: '323456',
+        deliverytime: '2019/7/1 0:00:00',
+        createtime: '2019/3/22 14:40:22',
+        offerstatus: '3',
       },
     ],
     pagination: {

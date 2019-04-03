@@ -53,8 +53,6 @@ export default class distributionOrder extends Component {
   onSelectChangeWarehouse=(val)=>{
     this.setState({
       warehouseId:val
-    },()=>{
-      // console.log(this.state.warehouseId)
     })
   }
   downloadToSendOrder=()=>{
@@ -116,7 +114,6 @@ export default class distributionOrder extends Component {
     e.preventDefault();
     const {orderManagement:{supplierOrder:{tableData}}}=this.props
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
 
       if (err) return;
       const rangeValue = fieldsValue['date'];
@@ -162,7 +159,6 @@ export default class distributionOrder extends Component {
     e.preventDefault();
     const {orderManagement:{supplierOrder:{tableData}}}=this.props
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
 
       if (err) return;
       const rangeValue = fieldsValue['date'];
@@ -307,7 +303,6 @@ export default class distributionOrder extends Component {
     );
   }
   render() {
-    // console.log(this.props)
     const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,

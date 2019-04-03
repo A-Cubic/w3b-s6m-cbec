@@ -266,7 +266,7 @@ export default class supplierOrder extends Component {
             </FormItem> */}
             <FormItem label="下单日期">
               {getFieldDecorator('date')(
-                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} onChange={this.onChangeaa}/>
+                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
             </FormItem>
 
@@ -274,7 +274,7 @@ export default class supplierOrder extends Component {
           <Col md={8} sm={24}>
             <FormItem label="发货日期">
               {getFieldDecorator('datea')(
-                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} onChange={this.onChangeaa}/>
+                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
             </FormItem>
           </Col>
