@@ -79,7 +79,6 @@ export default class GoodsAboutP extends Component {
     });
   }
   handleEdit=(e, record, index)=>{
-    // console.log(record)
     this.props.dispatch({
       type: 'goodsManagement/getGoodsDetailsA',
       payload: {
@@ -173,7 +172,7 @@ export default class GoodsAboutP extends Component {
               )}
             </FormItem>
           </Col>
-              
+
           <Col md={8} sm={24}>
             <FormItem label="商品所在地">
               {getFieldDecorator('businessType')(
@@ -186,7 +185,7 @@ export default class GoodsAboutP extends Component {
                   <Option value="0">国内现货</Option>
                   <Option value="1">海外直邮</Option>
                   <Option value="2">保税</Option>
-              
+
                 </Select>
               )}
             </FormItem>
@@ -204,7 +203,6 @@ export default class GoodsAboutP extends Component {
   }
 
   render() {
-    // console.log('1',this.props)
     const { goodsManagement:{goodsAboutData:{tableData:{list, pagination},childCheckA}} } = this.props;
 
     const paginationProps = {

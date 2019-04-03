@@ -17,7 +17,6 @@ export default class GoodsAboutAEditModal extends React.PureComponent {
 
   render() {
     const {goodsManagement:{goodsAboutData:{childCheckA}}} = this.props;
-    // console.log('~~',childCheckA)
     const {getFieldDecorator, validateFields} = this.props.form;
     const divRow = {marginBottom:'8px'}
     const labelWidth = {width:'100px',display:'inline-block'}

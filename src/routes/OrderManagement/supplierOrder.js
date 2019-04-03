@@ -100,7 +100,6 @@ export default class supplierOrder extends Component {
   onSearch=(e)=>{
     e.preventDefault();
     const {orderManagement:{supplierOrder:{tableData}}}=this.props
-    console.log(77777777)
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
       // console.log('valuesdadadada',fieldsValue['date'])
@@ -219,7 +218,7 @@ export default class supplierOrder extends Component {
         status:e.target.value
       },
     });
-    
+
   }
 
   renderAdvancedForm(){
@@ -237,7 +236,7 @@ export default class supplierOrder extends Component {
                   <Radio.Button onClick={this.handleAll} className={styles.all_title} style={{borderRadius:'5px'}} value={'全部'}>全部</Radio.Button>
                   <Radio.Button onClick={this.handleBatch} className={styles.all_title} style={{borderRadius:'5px'}} value="待发货">待发货({})</Radio.Button>
                   <Radio.Button onClick={this.handleOnePiece} className={styles.all_title} style={{borderRadius:'5px'}} value="已发货">已发货</Radio.Button>
-                  
+
                 </Radio.Group>
               </div>
               )}
@@ -246,7 +245,7 @@ export default class supplierOrder extends Component {
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            
+
             {/*  旧项目 去掉
             <FormItem label="订单状态">
               {getFieldDecorator('status',{
@@ -271,7 +270,7 @@ export default class supplierOrder extends Component {
             </FormItem> */}
             <FormItem label="下单日期">
               {getFieldDecorator('date')(
-                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} onChange={this.onChangeaa}/>
+                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
             </FormItem>
 
@@ -279,7 +278,7 @@ export default class supplierOrder extends Component {
           <Col md={8} sm={24}>
             <FormItem label="发货日期">
               {getFieldDecorator('datea')(
-                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} onChange={this.onChangeaa}/>
+                <RangePicker  style={{ width: '100%' }}  placeholder={['起始时间', '终止时间']} />
               )}
             </FormItem>
           </Col>
@@ -302,16 +301,16 @@ export default class supplierOrder extends Component {
             <span style={{ float: 'left',marginBottom:'0px' }}>
               <Button type="primary" htmlType="submit">查询</Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-            </span>    
+            </span>
           </Col>
           <Col md={8} sm={24}>
-                
+
           </Col>
           <Col md={8} sm={24}>
-           
+
           </Col>
         </Row>
-        
+
         <Divider dashed />
         {/* <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
@@ -323,7 +322,7 @@ export default class supplierOrder extends Component {
     );
   }
   onChangeaa(){
-    console.log('~~~~~~~~here')
+    // console.log('~~~~~~~~here')
   }
   render() {
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr,wareHouseArr,expressArr} }= this.props;
@@ -414,7 +413,7 @@ export default class supplierOrder extends Component {
             <Button style={{ marginLeft: 8 }} onClick={this.downloadToSendOrder}>
               <Icon type="cloud-download-o" />导出需发货的订单
             </Button>
-          
+
             <Upload {...props} >
               <Button style={{ marginLeft: 8 }}>
                 <Icon type="cloud-upload-o" /> 导入运单信息
@@ -423,7 +422,7 @@ export default class supplierOrder extends Component {
 
 
           </div>
-          
+
           <div>
             <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16,marginTop:25}}>
               <div style={{ float: 'right' }}>

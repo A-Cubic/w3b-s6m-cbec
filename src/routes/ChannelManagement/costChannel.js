@@ -186,7 +186,6 @@ class ChildEdit extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {channelManagement:{costChannel:{childEdit}}} = this.props
-    console.log('fs',this.props)
     return (
       <div>
         <Modal

@@ -81,7 +81,6 @@ export default {
     // 商品管理 - 商品查看 - 运营/供应商/代理/采购
     *getGoodsAboutData({ payload },{ call,put}){
       const response = yield call(getGoodsList, payload);
-      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getGoodsAboutDataR',
@@ -92,7 +91,6 @@ export default {
     // 商品管理 - 商品查看详情 - 供应
     *getGoodsDetailsS({ payload },{ call,put}){
       const response = yield call(getGoodsDetailsS, payload);
-      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getGoodsDetailsSR',
@@ -103,7 +101,6 @@ export default {
     // 商品管理 - 商品查看详情 - 运营
     *getGoodsDetailsO({ payload },{ call,put}){
       const response = yield call(getGoodsDetailsO, payload);
-      // console.log('~',response)
       if (response !== undefined) {
         yield put({
           type: 'getGoodsDetailsOR',
@@ -114,7 +111,6 @@ export default {
     // 商品管理 - 商品查看详情 - 运营 - 默认选中供应商
     *getDefaultRadios({ payload },{ call,put}){
       const response = yield call(getDefaultRadios, payload);
-      // console.log('~',response)
       if (response !== undefined) {
         if(response.type==1){
           message.success(response.msg);
