@@ -69,8 +69,7 @@ export default class quotationList extends Component {
   }
 
   render() {
-   const { roleSupplierBus:{quotationList,quotationList:{tableData:{list,pagination}}} } = this.props;
-  
+   const { roleSupplierBus:{quotationList,quotationList:{status,tableData:{list,pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -132,7 +131,7 @@ export default class quotationList extends Component {
     return (
       <div >
         <Card bordered={false}>
-          <Tabs  type="line" style={{marginBottom:'10px'}} onChange={this.callback}>
+          <Tabs defaultActiveKey={status}  type="line" style={{marginBottom:'10px'}} onChange={this.callback}>
             <TabPane tab="待报价" key="待报价">
             </TabPane>
             <TabPane tab="已报价" key="已报价">

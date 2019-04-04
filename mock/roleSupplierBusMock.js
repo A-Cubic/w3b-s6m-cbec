@@ -1,5 +1,5 @@
 // const h = 'http://192.168.191.1:54195/';
-// const a = 'http://192.168.0.127:54195/';
+ //const a = 'http://192.168.0.127:54195/';
 export default function roleSupplierBusMock(url) {
   return {
     // 订单统计 发货传值
@@ -28,13 +28,13 @@ export default function roleSupplierBusMock(url) {
     'POST /llback/Purchase/WaitingSubmit': url,
 
     // -----------------------------商品管理-----------------------------
-    // 一件发货，铺货等获取接口 llback/Goods/SelectSupplyGoodsDetails
+    // 我的可供商品--一件发货，铺货等获取接口 
     'POST /llback/Goods/SelectSupplyGoodsList': url,
 
-    // 一件发货，铺货等获取接口 -商品详情
+    // 我的可供商品--一件发货，铺货等获取接口 -商品详情
     'POST /llback/Goods/SelectSupplyGoodsDetails': url,
 
-    // 一件发货，铺货等获取接口 -商品详情-上下架
+    // 我的可供商品--一件发货，铺货等获取接口 -商品详情-上下架
     'POST /llback/Goods/UpDownFlag': url,
 
 

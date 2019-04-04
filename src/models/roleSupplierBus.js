@@ -497,7 +497,7 @@ export default {
         quotationList:{
           ...state.quotationList,
           tableData:action.payload.response,
-          status:action.payload.status
+          status:action.payload.offerstatus
         }
       }
     },
