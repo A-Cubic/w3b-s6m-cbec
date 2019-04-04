@@ -310,7 +310,7 @@ export default {
           //   type: 'getUploadOfferOrderSubmitDataR',
           //   payload: response,
           // })
-          yield put(routerRedux.push('/quotationManagement/quotationList'));
+          yield put(routerRedux.push('/bulkPurchases/quotationList'));
         } else {
           message.error(response.msg);
 
@@ -328,7 +328,7 @@ export default {
           //   type: 'getUploadOfferOrderSubmitDataR',
           //   payload: response,
           // })
-          yield put(routerRedux.push('/quotationManagement/quotationList'));
+          yield put(routerRedux.push('/bulkPurchases/quotationList'));
         } else {
           message.error(response.msg);
 
