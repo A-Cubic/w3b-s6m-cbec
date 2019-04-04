@@ -100,7 +100,6 @@ export default class SiderMenu extends PureComponent {
   * @memberof SiderMenu
   */
   getMenuItemPath = (item) => {
-    // console.log('item',item)
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
     const { target, name } = item;

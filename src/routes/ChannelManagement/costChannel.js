@@ -152,7 +152,6 @@ class ChildEdit extends React.Component {
   handleOk = (e) => {
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr} }= this.props;
     const {channelManagement:{costChannel:{childEdit}}} = this.props
-    // console.log(this.props)
     e.preventDefault();
     const that = this;
     this.props.form.validateFields((err, fieldsValue)=>{

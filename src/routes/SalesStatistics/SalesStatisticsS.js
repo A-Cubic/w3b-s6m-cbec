@@ -61,7 +61,7 @@ export default class SalesStatisticsS extends Component {
         },
       });
     });
-  
+
   }
   handleFormReset =(e)=>{
     const that = this
@@ -99,7 +99,7 @@ export default class SalesStatisticsS extends Component {
         platformId:this.state.value
       },
     });
-    
+
   }
 
   onChange = (e) => {
@@ -109,7 +109,6 @@ export default class SalesStatisticsS extends Component {
       value: e.target.value,
       sortedInfo:null,
     });
-    //this.onSearch(e)
     const {salesStatistics:{salesStatisticsAll:{tableData}}}=this.props
     this.props.form.validateFields((err, fieldsValue) => {
       // console.log('values',fieldsValue)
@@ -136,7 +135,7 @@ export default class SalesStatisticsS extends Component {
   }
 
   renderAdvancedForm(){
-    
+
     const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
@@ -165,21 +164,21 @@ export default class SalesStatisticsS extends Component {
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
-            
+
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="商品品牌：">
               {getFieldDecorator('brand')(
                 <Input placeholder="请输入商品品牌" />
               )}
-            </FormItem> 
+            </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="商品条码：">
               {getFieldDecorator('barcode')(
                 <Input placeholder="请输入商品条码" />
               )}
-            </FormItem>    
+            </FormItem>
           </Col>
 
         </Row>
@@ -190,7 +189,7 @@ export default class SalesStatisticsS extends Component {
                 <Input placeholder="请输入商品名称" />
               )}
             </FormItem>
-               
+
           </Col>
           <Col md={8} sm={24}>
             <span style={{ float: 'left' }}>
@@ -199,7 +198,7 @@ export default class SalesStatisticsS extends Component {
             </span>
           </Col>
           <Col md={8} sm={24}>
-            
+
           </Col>
         </Row>
         <Divider dashed />
@@ -219,7 +218,6 @@ export default class SalesStatisticsS extends Component {
   render() {
     const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
     const { salesStatistics:{salesStatisticsAll:{tableData:{item}}} } = this.props;
-   //console.log('tableData',item.platformId)
     let { sortedInfo } = this.state;
     const paginationProps = {
       showSizeChanger: true,

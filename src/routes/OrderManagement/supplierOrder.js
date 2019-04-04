@@ -101,9 +101,6 @@ export default class supplierOrder extends Component {
     e.preventDefault();
     const {orderManagement:{supplierOrder:{tableData}}}=this.props
     this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
-      // console.log('valuesdadadada',fieldsValue['date'])
-     // console.log('val',this.state.valueWhole)
       if (err) return;
       const rangeValue = fieldsValue['date'];
       const values = rangeValue!==undefined ? {
@@ -187,7 +184,6 @@ export default class supplierOrder extends Component {
       payload:{}
     })
     //发货传参
-    //console.log('record22',record)
     this.props.dispatch({
       type:'orderManagement/getgoodsData',
       payload:{
@@ -517,7 +513,6 @@ class ChildrenDelivery extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const { orderManagement:{supplierOrder:{fs}} } = this.props;
     // const {parent:{expressArr}} = this.props
-   //console.log(fs)
     return (
       <div>
         <Modal

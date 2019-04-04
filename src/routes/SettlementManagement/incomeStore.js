@@ -128,7 +128,6 @@ export default class incomeStore extends Component {
     });
   }
   onChangeTabs=(key)=>{
-    // console.log(key)
     if(key==1){
       this.props.dispatch({
         type: 'settlementManagement/getIncomeStoreUnSettlementData',
@@ -325,7 +324,6 @@ export default class incomeStore extends Component {
     this.setState({
       accountCode:record.accountCode
     })
-    // console.log(record)
     this.props.dispatch({
       type: 'settlementManagement/getIncomeStoreSettlementOrderData',
       payload: {accountCode:record.accountCode},

@@ -33,8 +33,6 @@ export default class DistributorsMgt extends Component {
 
 
   render() {
-    // console.log(this.props)
-
     const { distributionManagement:{agentQRCode} } = this.props;
 
     return (

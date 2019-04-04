@@ -131,10 +131,10 @@ export class ChangeGoodsOnAuditModal extends Component {
           this.handleChangeSelectedId(selectedRowKeys);
         },
         onSelect: (record, selected, selectedRows) => {
-          console.log(record, selected, selectedRows);
+          // console.log(record, selected, selectedRows);
         },
         onSelectAll: (selected, selectedRows, changeRows) => {
-          console.log(selected, selectedRows, changeRows);
+          // console.log(selected, selectedRows, changeRows);
         },
         getCheckboxProps: record => ({
           defaultChecked:true,
