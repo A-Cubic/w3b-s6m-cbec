@@ -149,7 +149,7 @@ export default class commodityGeneralPage extends Component {
 
    //待报价-取消
   handleToBeQuotedCancel=() => {
-    this.props.dispatch(routerRedux.push('/quotationManagement/quotationList'));
+    this.props.dispatch(routerRedux.push('/bulkPurchases/quotationList'));
   }
 
   //下半部分根据字段判断显示

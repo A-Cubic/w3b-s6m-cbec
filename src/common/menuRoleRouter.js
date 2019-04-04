@@ -78,15 +78,15 @@ export function supplier (dynamicWrapper,app){
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/purchaseSettlement')),
     },
     //-----------------------------20190321商品管理-----------------------------
-    // 批量供货
-    // 一件代发
-    // 铺货
+    // 我的可供商品-批量供货
+    // 我的可供商品-一件代发
+    // 我的可供商品-铺货
     '/goods/bulkSupplyGeneralPage': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/bulkSupplyGeneralPage')),
     },
-    // 批量供货-商品详情
-    // 一件代发-商品详情
-    // 铺货-商品详情
+    // 我的可供商品-批量供货-商品详情
+    // 我的可供商品-一件代发-商品详情
+    // 我的可供商品-铺货-商品详情
     '/commodityManagement/commodityDetailsGeneralPage/:barcode/:type': {
       component: dynamicWrapper(app, ['roleSupplierBus'], () => import('../roles/supplier/commodityDetailsGeneralPage')),
     },
