@@ -184,7 +184,7 @@ export function procurement (dynamicWrapper,app){
 
   }
 }
-//------------------------------------------------------平台------------------------------------------------------
+//-------------------------------------------------------------平台------------------------------------------------------
 //-------------------------------------运营-------------------------------------
 export function operation (dynamicWrapper,app){
   return {
@@ -262,9 +262,19 @@ export function operation (dynamicWrapper,app){
 
   }
 }
-//-------------------------------------财务-------------------------------------
+//-------------------------------------财务角色-------------------------------------
 export function finance (dynamicWrapper,app){
   return {
+    //-----------------------------平台-财务角色-结算管理-----------------------------
+    // 供货结算
+    '/financialSettlement/supplySettlement': {
+      component: dynamicWrapper(app, ['roleFinanceManagement'], () => import('../roles/finance/salesDayReport')),
+    },
+    // 采购结算
+    '/financialSettlement/purchaseSettlement': {
+      component: dynamicWrapper(app, ['roleFinanceManagement'], () => import('../roles/finance/salesDayReport')),
+    },
+
     //-----------------------------报表管理-----------------------------
     //销售管理 - 销售日报表
     '/report/salesDayReport': {

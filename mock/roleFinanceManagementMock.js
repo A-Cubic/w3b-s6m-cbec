@@ -1,11 +1,11 @@
 // const h = 'http://192.168.191.1:54195/';
 // const a = 'http://192.168.0.127:54195/';
-export default function roleFinanceManagementMock(url) {
+export default function roleFinanceManagementMock() {
   return {
     // ---------------------------------------------报表管理部分-----------------------------------------
     // -----------------销售日报表 页----------
     // 销售日报表 - 列表查询
-    'POST /llback/Warehouse/salesDayReport': url,
+    'POST /llback/Warehouse/salesDayReport': getPayment,
   };
 }
 
