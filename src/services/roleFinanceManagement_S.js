@@ -10,23 +10,31 @@ export async function salesDayReport(params) {
   })
 }
 //-----------------------------平台-财务角色-结算管理-----------------------------
-//供货结算 - 采购结算 -获取数据
+//供货结算 -获取数据
 export async function getsupplySettlementDate(params) {
   return request(`/llback/Balance/SupplySettlement`,{
     method: 'POST',
     body: params,
   })
 }
-//供货结算 - 采购结算 -确认付款
+//供货结算 -确认付款
 export async function getSupplySettlementSubmit(params) {
   return request(`/llback/Balance/SupplySettlementSubmit`,{
     method: 'POST',
     body: params,
   })
 }
-//供货结算 - 采购结算-结算明细
+//供货结算 -结算明细
 export async function getSupplySettlementDetails(params) {
   return request(`/llback/Balance/SupplySettlementDetails`,{
+    method: 'POST',
+    body: params,
+  })
+}
+
+//采购结算 -获取数据
+export async function getNewPurchaseSettlementDate(params) {
+  return request(`/llback/Balance/NewPurchaseSettlement`,{
     method: 'POST',
     body: params,
   })

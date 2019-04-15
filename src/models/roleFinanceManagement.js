@@ -6,12 +6,14 @@ import {
   //------------------销售日报表 页---------
   salesDayReport,
   //-----------------------------平台-财务角色-结算管理-----------------------------
-  //供货结算 - 采购结算-获取数据
+  //供货结算 - 获取数据
   getsupplySettlementDate,
-  //供货结算 - 采购结算-确认付款
+  //供货结算 - 确认付款
   getSupplySettlementSubmit,
-   //供货结算 - 采购结算-结算明细
+  //供货结算 - 结算明细
   getSupplySettlementDetails,
+  //采购结算-获取数据
+  getNewPurchaseSettlementDate,  
 } from "../services/roleFinanceManagement_S";
 export default {
   namespace: 'roleFinanceManagement',
@@ -30,7 +32,7 @@ export default {
         },
       },
   //-----------------------------平台-财务角色-结算管理-----------------------------
-  //供货结算 - 采购结算
+  //供货结算 
     supplySettlement:{
       tableData:{
         item:{},
@@ -38,8 +40,18 @@ export default {
         pagination:{},
         type1:'一件代发',
         type2:'待结算'
-      },  
-      
+      } 
+    },
+    //采购结算
+    purchaseSettlement:{
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+        type1:'分销',
+        type2:'待结算',
+        
+      } 
     }
   },
   effects:{
@@ -57,7 +69,7 @@ export default {
       }
     },
     //-----------------------------平台-财务角色-结算管理-----------------------------
-    //供货结算 - 采购结算
+    //供货结算 - 
     *getsupplySettlementDate({ payload },{ call,put }){
       const response = yield call(getsupplySettlementDate, payload);
     //  console.log('~res',response)
@@ -101,6 +113,22 @@ export default {
     }
   },
 
+  //采购结算-获取数据
+  *getNewPurchaseSettlementDate({ payload },{ call,put }){
+    const response = yield call(getNewPurchaseSettlementDate, payload);
+  //  console.log('~res',response)
+    if(response!==undefined){
+      yield put({
+        type: 'getNewPurchaseSettlementDateR',
+        payload: {
+          response,
+          ...payload
+        }
+      })
+    }
+  },
+
+
   },
 
   reducers:{
@@ -136,6 +164,28 @@ export default {
         }
       }
     },
+
+    getNewPurchaseSettlementDateR(state, action){
+      return {
+        ...state,
+        purchaseSettlement:{
+          ...state.purchaseSettlement,
+          //tableData:action.payload.response,
+          // type1:action.payload.model,
+          // type2:action.payload.status,
+          tableData :{
+            ...state.purchaseSettlement.tableData,
+            list:action.payload.response.list,
+            pagination:action.payload.response.pagination,
+            item:action.payload.response.item,
+            ...state.purchaseSettlement.tableData.item,
+            type1:action.payload.model==undefined?'分销':action.payload.model,
+            type2:action.payload.status==undefined?'待结算':action.payload.status
+          }
+        }
+      }
+    },
+
   }
 }
 

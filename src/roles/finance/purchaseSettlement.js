@@ -33,7 +33,7 @@ export default class purchaseSettlement extends Component {
   //****/
   init(){
     this.props.dispatch({
-      type:'roleFinanceManagement/getsupplySettlementDate',
+      type:'roleFinanceManagement/getNewPurchaseSettlementDate',
       payload:{
 
       }
@@ -43,7 +43,7 @@ export default class purchaseSettlement extends Component {
     this.init();
   }
   onSearch=(e)=>{
-    const { roleFinanceManagement:{supplySettlement,supplySettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -58,7 +58,7 @@ export default class purchaseSettlement extends Component {
         formValues: values,
       });
       this.props.dispatch({
-        type:'roleFinanceManagement/getsupplySettlementDate',
+        type:'roleFinanceManagement/getNewPurchaseSettlementDate',
         payload:{
           model:type1,
           status:type2,
@@ -77,7 +77,7 @@ export default class purchaseSettlement extends Component {
   }
   //翻页
   handleTableChange=(pagination, filters, sorter)=>{
-    const { roleFinanceManagement:{supplySettlement,supplySettlement:{tableData:{type1,type2,item,list}}} } = this.props;
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list}}} } = this.props;
     const params = {
       ...pagination,
       ...this.state.formValues,
@@ -85,13 +85,13 @@ export default class purchaseSettlement extends Component {
       status:type2,
     };
     this.props.dispatch({
-      type:'roleFinanceManagement/getsupplySettlementDate',
+      type:'roleFinanceManagement/getNewPurchaseSettlementDate',
       payload: params,
     });
   }
   renderForm(){
-    const { roleFinanceManagement:{supplySettlement,supplySettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
-    console.log('7777',supplySettlement)
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
+    console.log('7777',purchaseSettlement)
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -117,25 +117,12 @@ export default class purchaseSettlement extends Component {
           </Col>
         </Row>
         <Divider dashed />
-        {/* <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-            <div style={{ float: 'right' }}>
-              <span>共查询出符合条件的数据：{tableData?tableData.pagination.total:0}条，</span>
-            </div>
-          </div>
-        </Row> */}
-        {/* <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
-            <div style={{ float: 'right' }}>
-              <span>销售收入合计(元)：{item.a}{item.a}{item.a}{item.a}{item.a}{item.a}不含税收入(元)：{item.b}运费(元)：0.00服务费(元)：0.00</span>
-            </div>
-          </div>
-        </Row> */}
+       
       </Form>
     );
   }
   render() {
-    const { roleFinanceManagement:{supplySettlement,supplySettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -223,18 +210,56 @@ export default class purchaseSettlement extends Component {
       <div>
         
         <Card bordered={false}>
-          {/* <Tabs defaultActiveKey={item.tpye1} activeKey={item.tpye1} onChange={this.callback} type="line"> */}
+          
           <Tabs defaultActiveKey='分销' onChange={this.callback.bind(this)} type="line">
-            <TabPane tab="分销" key="分销"></TabPane>
-            <TabPane tab="代理" key="代理"></TabPane>
-            <TabPane tab="已结算" key="已结算"></TabPane>
+            
+              <TabPane tab="分销" key="分销"></TabPane>
+              <TabPane tab="代理" key="代理"></TabPane>
+              <TabPane tab="已结算" key="已结算"></TabPane> 
+      
+             
+
+              
+
+
+
           </Tabs>
           
-          {/* <Radio.Group defaultValue={this.state.value}  onChange={this.onChange} value={this.state.value}> */}
+        
           <Radio.Group defaultValue={type1}  onChange={this.onChange} value={type2}>
-            <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待结算'>待结算({pagination.total})</Radio.Button>
-            <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">已结算</Radio.Button>
-            
+            {/* <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待结算'>待结算({item.reconciliationing})</Radio.Button>
+            <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">待收款({item.receivabling})</Radio.Button>
+            <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">已结算</Radio.Button> */}
+
+            {( ()=>{
+              console.log('type1',type1)
+                switch(type1){
+                    case "分销":return (
+                      <div>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待结算'>待结算({item.reconciliationing})</Radio.Button>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">待收款({item.receivabling})</Radio.Button>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">已结算</Radio.Button>
+                      </div>
+                    )
+                    break;
+                    case "代理":return (
+                      <div>2</div>
+                    )
+                    break;
+                    case "已结算":return (
+                      <div>3</div>
+                    )
+                    break;
+                    default:return null;
+                  }
+                }
+            )()}
+
+
+
+
+
+
           </Radio.Group>
           <Divider dashed />
           <div className={styles.tableList}>
@@ -259,7 +284,7 @@ export default class purchaseSettlement extends Component {
   //确认付款
   handleConfirmThePayment(record){
     this.props.dispatch({
-      type:'roleFinanceManagement/getSupplySettlementSubmit',
+      type:'roleFinanceManagement/getNewPurchaseSettlementDate',
       payload:{
         accountCode:record.accountCode
       },
@@ -271,9 +296,9 @@ export default class purchaseSettlement extends Component {
       this.init()
     }
   } 
-  //结算明细
+  //结算明细 
   handleSettlementDetails(record){
-    const { roleFinanceManagement:{supplySettlement,supplySettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
     this.props.dispatch({
       type:'roleFinanceManagement/getSupplySettlementDetails',
       payload:{
@@ -286,10 +311,12 @@ export default class purchaseSettlement extends Component {
 
   //点击一件代发或铺货
   callback(key) {
-    //console.log(key);
-    const { roleFinanceManagement:{supplySettlement,supplySettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
+    console.log('key',key);
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
+   
+   
     this.props.dispatch({
-      type:'roleFinanceManagement/getsupplySettlementDate',
+      type:'roleFinanceManagement/getNewPurchaseSettlementDate',
       payload:{
         model:key,
         status:type2,
@@ -305,9 +332,9 @@ export default class purchaseSettlement extends Component {
   //
   onChange = (e) => {
     //console.log('e.target.value',e.target.value)
-    const { roleFinanceManagement:{supplySettlement,supplySettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
     this.props.dispatch({
-      type:'roleFinanceManagement/getsupplySettlementDate',
+      type:'roleFinanceManagement/getNewPurchaseSettlementDate',
       payload:{
         model:type1,
         status:e.target.value

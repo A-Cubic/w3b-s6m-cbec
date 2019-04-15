@@ -7,14 +7,18 @@ export default function roleFinanceManagementMock() {
     // 销售日报表 - 列表查询
     'POST /llback/Warehouse/salesDayReport': getPayment,
     //-----------------------------平台-财务角色-结算管理-----------------------------
-    //供货结算 - 采购结算 - 获取数据
+    //供货结算 - 获取数据
     'POST /llback/Balance/SupplySettlement': a,
 
-    //供货结算 - 采购结算 -确认付款
+    //供货结算 -确认付款
     'POST /llback/Balance/SupplySettlementSubmit': a,
-    
-    //供货结算 - 采购结算-结算明细
+
+    //供货结算 - 结算明细
     'POST /llback/Balance/SupplySettlementDetails': a,
+
+    //采购结算-获取接口
+    'POST /llback/Balance/NewPurchaseSettlement': a,
+
   };
 }
 
