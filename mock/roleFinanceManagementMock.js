@@ -1,11 +1,20 @@
 // const h = 'http://192.168.191.1:54195/';
-// const a = 'http://192.168.0.127:54195/';
+ const a = 'http://192.168.0.127:54195/';
 export default function roleFinanceManagementMock() {
   return {
     // ---------------------------------------------报表管理部分-----------------------------------------
     // -----------------销售日报表 页----------
     // 销售日报表 - 列表查询
     'POST /llback/Warehouse/salesDayReport': getPayment,
+    //-----------------------------平台-财务角色-结算管理-----------------------------
+    //供货结算 - 采购结算 - 获取数据
+    'POST /llback/Balance/SupplySettlement': a,
+
+    //供货结算 - 采购结算 -确认付款
+    'POST /llback/Balance/SupplySettlementSubmit': a,
+    
+    //供货结算 - 采购结算-结算明细
+    'POST /llback/Balance/SupplySettlementDetails': a,
   };
 }
 
@@ -17,7 +26,7 @@ export function upimg(req, res) {
 }
 export function getPayment(req, res) {
   res.send({
-    msg: '已删除',
+    msg: 'qX已删除',
     type: '1',
     list: [{
       keyId: '11',
@@ -68,7 +77,8 @@ export function getPayment(req, res) {
       getcode: '',
       getTel: '',
       usercode: '',
-
+      type1:'铺货',
+      type2:'已结算',
     },
   });
 }

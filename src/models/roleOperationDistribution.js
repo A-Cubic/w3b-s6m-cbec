@@ -828,7 +828,7 @@ export default {
      // 我要发货- 导入询价商品
 
      deliverGoodsuploadOrderbillR(state, action){
-     //console.log('xxx',action.payload.item.id,)
+      console.log('xxx',action.payload.item.id,)
       return {
         ...state,
         deliveryForm:{
