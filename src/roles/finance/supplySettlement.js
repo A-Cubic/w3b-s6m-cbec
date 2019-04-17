@@ -68,12 +68,21 @@ export default class supplySettlement extends Component {
     });
   }
   handleFormReset =()=>{
+    const { roleFinanceManagement:{supplySettlement,supplySettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
     this.props.form.resetFields();
     this.setState({
       formValues: {},
       sortedInfo: null,
     });
-    this.init();
+   // this.init();
+   this.props.dispatch({
+    type:'roleFinanceManagement/getsupplySettlementDate',
+    payload:{
+      status:type2,
+     
+    }
+  })
+
   }
   //翻页
   handleTableChange=(pagination, filters, sorter)=>{
@@ -235,7 +244,7 @@ export default class supplySettlement extends Component {
           
           {/* <Radio.Group defaultValue={this.state.value}  onChange={this.onChange} value={this.state.value}> */}
           <Radio.Group defaultValue={type1}  onChange={this.onChange} value={type2}>
-            <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待结算'>待结算({item.settled})</Radio.Button>
+            <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待结算'>待结算({item.settling})</Radio.Button>
             <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">已结算</Radio.Button>
             
           </Radio.Group>
@@ -295,10 +304,14 @@ export default class supplySettlement extends Component {
       type:'roleFinanceManagement/getsupplySettlementDate',
       payload:{
         model:key,
-        status:type2,
+       // status:type2,
       }
     })
     this.props.form.resetFields();
+    this.setState({
+      formValues: {},
+      sortedInfo: null,
+    });
   }
 
   handleSizeChange = (e) => {
@@ -317,7 +330,10 @@ export default class supplySettlement extends Component {
       }
     })
     this.props.form.resetFields();
-  
+    this.setState({
+      formValues: {},
+      sortedInfo: null,
+    });
   }
 
 

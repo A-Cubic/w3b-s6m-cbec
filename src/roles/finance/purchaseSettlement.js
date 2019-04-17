@@ -25,9 +25,8 @@ export default class purchaseSettlement extends Component {
     formValues:{},
     visible: false,
     visibleChildCheck:false,
-
     sortedInfo:null,
-    value: '待结算',
+    //value: '待结算',
   }
 
   //****/
@@ -42,8 +41,9 @@ export default class purchaseSettlement extends Component {
   componentDidMount() {
     this.init();
   }
+  //查询
   onSearch=(e)=>{
-    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,type3,item,list,pagination}}} } = this.props;
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -57,41 +57,85 @@ export default class purchaseSettlement extends Component {
       this.setState({
         formValues: values,
       });
-      this.props.dispatch({
-        type:'roleFinanceManagement/getNewPurchaseSettlementDate',
-        payload:{
-          model:type1,
-          status:type2,
-          ...values,
-        }
-      })
+  
+      if(type1=='分销' || type1=='铺货'){
+        this.props.dispatch({
+          type:'roleFinanceManagement/getNewPurchaseSettlementDate',
+          payload:{
+            model:type1,
+            status:type2,
+            ...values,
+          }
+        })
+      } else {
+        this.props.dispatch({
+          type:'roleFinanceManagement/getNewPurchaseSettlementType3Date',
+          payload:{
+            model:type1,
+            status:type3,
+            ...values,
+          }
+        })
+      }
     });
   }
   handleFormReset =()=>{
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,type3,item,list,pagination}}} } = this.props;
     this.props.form.resetFields();
     this.setState({
       formValues: {},
       sortedInfo: null,
     });
-    this.init();
+  
+    if(type1=='分销' || type1=='铺货'){
+      this.props.dispatch({
+        type:'roleFinanceManagement/getNewPurchaseSettlementDate',
+        payload:{
+          model:type1,
+          status:type2,
+        }
+      })
+    } else {
+      this.props.dispatch({
+        type:'roleFinanceManagement/getNewPurchaseSettlementType3Date',
+        payload:{
+          model:type1,
+          status:type3,
+        }
+      })
+    }
+
   }
   //翻页
   handleTableChange=(pagination, filters, sorter)=>{
-    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list}}} } = this.props;
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,type3,item,list}}} } = this.props;
     const params = {
       ...pagination,
       ...this.state.formValues,
       model:type1,
       status:type2,
     };
-    this.props.dispatch({
-      type:'roleFinanceManagement/getNewPurchaseSettlementDate',
-      payload: params,
-    });
+    if(type1 == '代理'){
+      this.props.dispatch({
+        type:'roleFinanceManagement/getNewPurchaseSettlementDate',
+        payload:{
+          model:type1,
+          status:type3,
+          ...pagination,
+          ...this.state.formValues,
+        }
+      })
+    } else {
+        this.props.dispatch({
+          type:'roleFinanceManagement/getNewPurchaseSettlementDate',
+          payload: params,
+        });
+    }
+
   }
   renderForm(){
     const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
-    console.log('7777',purchaseSettlement)
+    //console.log('7777',purchaseSettlement)
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -122,7 +166,7 @@ export default class purchaseSettlement extends Component {
     );
   }
   render() {
-    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,type3,item,list,pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -180,19 +224,47 @@ export default class purchaseSettlement extends Component {
                       </Col>
                       <Col md={12}>
                         <div style={{ float:"right" }}>
-                          
-                          {type2=='待结算'?
-                            <div>
-                              <Button style={{ marginRight:7 }} onClick={this.handleSettlementDetails.bind(this,record)} >
-                                结算明细
-                              </Button>
-                              <Button  type="primary" style={{ marginRight:7 }} onClick={()=>this.handleConfirmThePayment(record)} >
-                                确认付款
-                              </Button>
-                            </div>
-                            :
-                            <Button style={{ marginRight:7 }}>结算明细</Button>
-                          }
+                          {( ()=>{
+                            if(type2 == '待对账'){
+                              return(
+                                <div>
+                                  <Button style={{ marginRight:7 }} onClick={this.handleSettlementDetails.bind(this,record)} >
+                                    结算明细
+                                  </Button>
+                                  {/* {
+                                    type3 == '已结算'?'':<Button style={{ marginRight:7 }} onClick={this.handleSettlementDetails.bind(this,record)} >
+                                    结算明细
+                                  </Button>
+                                  } */}
+                                  {
+                                  type3 == '已结算'?'':<Button  type="primary" style={{ marginRight:7 }} onClick={()=>this.handleConfirmThePayment(record)} >
+                                    {type1=='代理'?'确认付款':'完成对账'}
+                                  </Button>
+                                  }
+                                </div>
+                              )
+                            } else if(type2 == '待收款'){
+                              return(
+                                <div>
+                                  <Button style={{ marginRight:7 }} onClick={this.handleSettlementDetails.bind(this,record)} >
+                                    结算明细
+                                  </Button>
+                                  <Button  type="primary" style={{ marginRight:7 }} onClick={()=>this.handleConfirmThePayment(record)} >
+                                    确认收款
+                                  </Button>
+                                </div>
+                              )
+                            } else {
+                              return(
+                                <div>
+                                  <Button style={{ marginRight:7 }} onClick={this.handleSettlementDetails.bind(this,record)} >
+                                    结算明细
+                                  </Button>
+                                </div>
+                              )
+                            }
+                              }
+                          )()}
                         </div>
                       </Col>
                     </Row>
@@ -204,63 +276,50 @@ export default class purchaseSettlement extends Component {
       }
     ];
 
-
-
     return (
       <div>
-        
         <Card bordered={false}>
-          
-          <Tabs defaultActiveKey='分销' onChange={this.callback.bind(this)} type="line">
-            
-              <TabPane tab="分销" key="分销"></TabPane>
-              <TabPane tab="代理" key="代理"></TabPane>
-              <TabPane tab="已结算" key="已结算"></TabPane> 
-      
-             
-
-              
-
-
-
+          <Tabs defaultActiveKey={type1} onChange={this.callback.bind(this)} type="line">
+              <TabPane tab="分销" key="分销">
+              </TabPane>
+              <TabPane tab="代理" key="代理">
+              </TabPane>
+              <TabPane tab="铺货" key="铺货">
+              </TabPane> 
           </Tabs>
           
-        
-          <Radio.Group defaultValue={type1}  onChange={this.onChange} value={type2}>
-            {/* <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待结算'>待结算({item.reconciliationing})</Radio.Button>
-            <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">待收款({item.receivabling})</Radio.Button>
-            <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">已结算</Radio.Button> */}
-
             {( ()=>{
-              console.log('type1',type1)
                 switch(type1){
                     case "分销":return (
-                      <div>
-                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待结算'>待结算({item.reconciliationing})</Radio.Button>
-                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">待收款({item.receivabling})</Radio.Button>
+                     <Radio.Group defaultValue={type2}  onChange={this.onChange} value={type2}>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待对账'>待对账({item.reconciliationing})</Radio.Button>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="待收款">待收款({item.receivabling})</Radio.Button>
                         <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">已结算</Radio.Button>
-                      </div>
+                      </Radio.Group>
+                     
                     )
+                    
                     break;
                     case "代理":return (
-                      <div>2</div>
-                    )
+                      <Radio.Group defaultValue={type1}  onChange={this.onChangeType3.bind(this)} value={type3}>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待结算'>待结算({item.settling})</Radio.Button>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">已结算</Radio.Button>
+                      </Radio.Group>
+                    ) 
                     break;
-                    case "已结算":return (
-                      <div>3</div>
+                    case "铺货":return (
+                     <Radio.Group defaultValue={type1}  onChange={this.onChange} value={type2}>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value='待对账'>待对账({item.reconciliationing})</Radio.Button>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="待收款">待收款({item.receivabling})</Radio.Button>
+                        <Radio.Button className={styles.all_title} style={{borderRadius:'5px'}} value="已结算">已结算</Radio.Button>
+                        </Radio.Group>
                     )
                     break;
                     default:return null;
-                  }
                 }
-            )()}
+            })()}
 
-
-
-
-
-
-          </Radio.Group>
+          
           <Divider dashed />
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
@@ -281,52 +340,61 @@ export default class purchaseSettlement extends Component {
       </div>
     );
   }
-  //确认付款
+  //确认付款 完成对账
   handleConfirmThePayment(record){
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
     this.props.dispatch({
-      type:'roleFinanceManagement/getNewPurchaseSettlementDate',
+      type:'roleFinanceManagement/getNewPurchaseSettlementSubmitDate',
       payload:{
-        accountCode:record.accountCode
+        accountCode:record.accountCode,
+        model:type1,
+        status:record.status,
       },
       callback: this.callbackType,
     })
   }
   callbackType = (params) => {
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
     if(params.type==1){
-      this.init()
+      this.props.dispatch({
+        type:'roleFinanceManagement/getNewPurchaseSettlementDate',
+        payload:{
+          model:type1
+        }
+      })
     }
   } 
   //结算明细 
   handleSettlementDetails(record){
     const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
     this.props.dispatch({
-      type:'roleFinanceManagement/getSupplySettlementDetails',
+      type:'roleFinanceManagement/getNewPurchaseSettlementDetails',
       payload:{
         accountCode:record.accountCode,
-        model:type1=='一件代发'?'1':'2'
+        model:type1=='分销'?'3':(type1=='代理'?'4':'5')
       },
     })
+
   }
 
 
-  //点击一件代发或铺货
+  //分销-代理-铺货
+
   callback(key) {
-    console.log('key',key);
-    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,item,list,pagination}}} } = this.props;
-   
-   
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,type3,item,list,pagination}}} } = this.props;
     this.props.dispatch({
       type:'roleFinanceManagement/getNewPurchaseSettlementDate',
       payload:{
         model:key,
-        status:type2,
+        //status:type2, 
       }
     })
+    
     this.props.form.resetFields();
-  }
-
-  handleSizeChange = (e) => {
-    this.setState({ size: e.target.value });
+    this.setState({
+      formValues: {},
+      sortedInfo: null,
+    });
   }
 
   //
@@ -341,7 +409,27 @@ export default class purchaseSettlement extends Component {
       }
     })
     this.props.form.resetFields();
-  
+    this.setState({
+      formValues: {},
+      sortedInfo: null,
+    });
+  }
+
+  onChangeType3 = (e) => {
+    //console.log('e.target.value',e.target.value)
+    const { roleFinanceManagement:{purchaseSettlement,purchaseSettlement:{tableData:{type1,type2,type3,item,list,pagination}}} } = this.props;
+    this.props.dispatch({
+      type:'roleFinanceManagement/getNewPurchaseSettlementType3Date',
+      payload:{
+        model:type1,
+        status:e.target.value
+      }
+    })
+    this.props.form.resetFields();
+    this.setState({
+      formValues: {},
+      sortedInfo: null,
+    });
   }
 
 

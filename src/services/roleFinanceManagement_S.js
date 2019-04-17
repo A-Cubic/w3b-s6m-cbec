@@ -39,3 +39,28 @@ export async function getNewPurchaseSettlementDate(params) {
     body: params,
   })
 }
+export async function getNewPurchaseSettlementType3Date(params) {
+  return request(`/llback/Balance/NewPurchaseSettlement`,{
+    method: 'POST',
+    body: params,
+  })
+}
+
+//采购结算 - 结算明细
+export async function getNewPurchaseSettlementDetails(params) {
+  return request(`/llback/Balance/NewPurchaseSettlementDetails`,{
+    method: 'POST',
+    body: params,
+  })
+}
+
+
+//采购结算 -确认付款
+export async function getNewPurchaseSettlementSubmitDate(params) {
+  return request(`/llback/Balance/NewPurchaseSettlementSubmit`,{
+    method: 'POST',
+    body: params,
+  })
+}
+
+

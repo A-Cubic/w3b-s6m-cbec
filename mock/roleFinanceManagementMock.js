@@ -1,6 +1,6 @@
 // const h = 'http://192.168.191.1:54195/';
- const a = 'http://192.168.0.127:54195/';
-export default function roleFinanceManagementMock() {
+ //const a = 'http://192.168.0.127:54195/';
+export default function roleFinanceManagementMock(url) {
   return {
     // ---------------------------------------------报表管理部分-----------------------------------------
     // -----------------销售日报表 页----------
@@ -8,17 +8,22 @@ export default function roleFinanceManagementMock() {
     'POST /llback/Warehouse/salesDayReport': getPayment,
     //-----------------------------平台-财务角色-结算管理-----------------------------
     //供货结算 - 获取数据
-    'POST /llback/Balance/SupplySettlement': a,
+    'POST /llback/Balance/SupplySettlement': url,
 
     //供货结算 -确认付款
-    'POST /llback/Balance/SupplySettlementSubmit': a,
+    'POST /llback/Balance/SupplySettlementSubmit': url,
 
     //供货结算 - 结算明细
-    'POST /llback/Balance/SupplySettlementDetails': a,
+    'POST /llback/Balance/SupplySettlementDetails': url,
 
     //采购结算-获取接口
-    'POST /llback/Balance/NewPurchaseSettlement': a,
-
+    'POST /llback/Balance/NewPurchaseSettlement': url,
+    
+    //采购结算 -确认付款
+    'POST /llback/Balance/NewPurchaseSettlementSubmit': url,
+    
+    //采购结算 -结算明细
+    'POST /llback/Balance/NewPurchaseSettlementDetails': url,
   };
 }
 

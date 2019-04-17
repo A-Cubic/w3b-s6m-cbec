@@ -14,6 +14,13 @@ import {
   getSupplySettlementDetails,
   //采购结算-获取数据
   getNewPurchaseSettlementDate,  
+  getNewPurchaseSettlementType3Date,
+
+  //采购结算-确认付款 完成对账
+  getNewPurchaseSettlementSubmitDate,
+  //采购结算 - 完成明细
+  getNewPurchaseSettlementDetails,
+
 } from "../services/roleFinanceManagement_S";
 export default {
   namespace: 'roleFinanceManagement',
@@ -48,8 +55,9 @@ export default {
         item:{},
         list: [],
         pagination:{},
-        type1:'分销',
-        type2:'待结算',
+        type1:'分销',  //第一类别 分销-代理-铺货
+        type2:'待结算',//第二类别 待对账-已结算
+        type3:'待结算' //第二类别
         
       } 
     }
@@ -84,7 +92,7 @@ export default {
       }
     },
 
-    //供货结算 - 采购结算-确认付款
+    //供货结算 - 确认付款
     *getSupplySettlementSubmit({ payload ,callback},{ call,put }){
       const response = yield call(getSupplySettlementSubmit, payload);
     //  console.log('~res',response)
@@ -99,7 +107,7 @@ export default {
       }
     },
 
-  //供货结算 - 采购结算-结算明细
+  //供货结算 -结算明细
   *getSupplySettlementDetails({ payload ,callback},{ call,put }){
     const response = yield call(getSupplySettlementDetails, payload);
     //console.log('~res',response)
@@ -127,7 +135,49 @@ export default {
       })
     }
   },
+  
+  *getNewPurchaseSettlementType3Date({ payload },{ call,put }){
+    const response = yield call(getNewPurchaseSettlementType3Date, payload);
+  //  console.log('~res',response)
+    if(response!==undefined){
+      yield put({
+        type: 'getNewPurchaseSettlementType3DateR',
+        payload: {
+          response,
+          ...payload
+        }
+      })
+    }
+  },
 
+  //采购结算-确认付款
+  *getNewPurchaseSettlementSubmitDate({ payload ,callback},{ call,put }){
+    const response = yield call(getNewPurchaseSettlementSubmitDate, payload);
+  //  console.log('~res',response)
+    if(response!==undefined){
+      if (response.type==1) {
+        message.success('付款成功');
+        callback(response);
+       // console.log('xxxx',response)
+      }else{
+        message.error(response.msg);
+      }
+    }
+  },
+
+  //采购结算 -结算明细
+  *getNewPurchaseSettlementDetails({ payload ,callback},{ call,put }){
+    const response = yield call(getNewPurchaseSettlementDetails, payload);
+    //console.log('~res',response)
+    if(response!==undefined){
+      if (response.type==1) {
+        //message.success('付款成功');
+        window.location.href=response.msg
+      }else{
+        //message.error(response.msg);
+      }
+    }
+  },
 
   },
 
@@ -166,13 +216,11 @@ export default {
     },
 
     getNewPurchaseSettlementDateR(state, action){
+      const model =action.payload.model
       return {
         ...state,
         purchaseSettlement:{
           ...state.purchaseSettlement,
-          //tableData:action.payload.response,
-          // type1:action.payload.model,
-          // type2:action.payload.status,
           tableData :{
             ...state.purchaseSettlement.tableData,
             list:action.payload.response.list,
@@ -180,12 +228,36 @@ export default {
             item:action.payload.response.item,
             ...state.purchaseSettlement.tableData.item,
             type1:action.payload.model==undefined?'分销':action.payload.model,
-            type2:action.payload.status==undefined?'待结算':action.payload.status
+            type2:action.payload.status==undefined?'待对账':action.payload.status,
+            type3:action.payload.status==undefined?'待结算':action.payload.status
+            
+            
           }
         }
       }
     },
-
+    
+    getNewPurchaseSettlementType3DateR(state, action){
+      const model =action.payload.model
+      return {
+        ...state,
+        purchaseSettlement:{
+          ...state.purchaseSettlement,
+          tableData :{
+            ...state.purchaseSettlement.tableData,
+            list:action.payload.response.list,
+            pagination:action.payload.response.pagination,
+            item:action.payload.response.item,
+            ...state.purchaseSettlement.tableData.item,
+            //type1:action.payload.model==undefined?'分销':action.payload.model,
+            //type2:action.payload.status==undefined?'待对账':action.payload.status,
+            type3:action.payload.status==undefined?'待结算':action.payload.status
+            
+            
+          }
+        }
+      }
+    },
   }
 }
 
