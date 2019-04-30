@@ -5,8 +5,10 @@ import {
   GetRetailMoney, //充值获取页面
   getPopupR,//打开弹窗
   getPopupColoseR,//关闭弹窗
-  getPayment,充值接口
-
+  getPayment,//充值接口
+  handleFormPopupR,//新加弹窗
+  getPopupFormColoseR,//关闭新加弹窗
+  handleNumR,//传弹窗值
 } from '../services/roleRetaiBusManagement_S'
 
 export default {
@@ -38,8 +40,9 @@ export default {
         item:'',
         list:[],
         pagination:{}
-      }
-      
+      },
+      childDetailsModelVisible:false,
+      num:''
     },
     //充值
     rechargeDetails:{
@@ -106,9 +109,10 @@ export default {
     //充值接口  payment
     *getPayment({ payload,callback },{ call,put}){
       const response = yield call(getPayment, payload);
+      //console.log(response.msg)
       if (response !== undefined) {
         if (response.type==1) {
-          
+         // console.log('ok',response.msg)
           yield put({
             type: 'getPaymentR',
             payload: response,
@@ -117,7 +121,7 @@ export default {
           message.success('请扫描支付');
           callback(response);
         }else{
-          message.error('生成二维码失败，请联系客服！');
+          message.error(response.msg);
         }
       }
     },
@@ -171,6 +175,48 @@ export default {
           }
       }
     },
+
+    //新加弹窗 SalesForm
+    //打开弹窗
+    handleFormPopupR(state,action){
+      return{
+        ...state,
+        SalesForm:{
+            ...state.SalesForm,
+            //tableData:action.payload.list,
+            childDetailsModelVisible:true,
+      
+          }
+      }
+    },
+    //新加弹窗 SalesForm
+    //关闭弹窗
+    getPopupFormColoseR(state,action){
+      return{
+        ...state,
+        SalesForm:{
+            ...state.SalesForm,
+            //tableData:action.payload.list,
+            childDetailsModelVisible:false,
+      
+          }
+      }
+    },
+
+    //传弹窗值handleNumR
+    handleNumR(state,action){
+      return{
+        ...state,
+        SalesForm:{
+            ...state.SalesForm,
+            //tableData:action.payload.list,
+            num:action.payload.num,
+      
+          }
+      }
+    },
+
+
 
     getPaymentR(state,action){
       return{

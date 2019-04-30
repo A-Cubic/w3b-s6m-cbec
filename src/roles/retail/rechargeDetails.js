@@ -105,7 +105,7 @@ export default class rechargeDetails extends Component {
     //console.log('ffff',tableData)
     return (
       <div>
-        <div style={{fontSize:'22px',marginBottom:'16px'}}>账户余额：{tableData.item.fund} ¥</div>
+        <div style={{fontSize:'22px',marginBottom:'16px'}}>账户余额：<span style={{color:'red'}}>¥{tableData.item.fund}</span> </div>
         <Button type="primary" onClick={this.handlePopup.bind(this)}>充值</Button>
         <Divider dashed />
         <Form onSubmit={this.onSearch} layout="inline">
@@ -178,9 +178,9 @@ export default class rechargeDetails extends Component {
         dataIndex: 'keyId',
         key: 'keyId',
       },{
-        title: '订单号',
-        dataIndex: 'orderId',
-        key: 'orderId',
+        title: '类别',
+        dataIndex: 'fundtype',
+        key: 'fundtype',
       } ,{
         title: '支付时间',
         dataIndex: 'paytime',
@@ -326,7 +326,7 @@ class StoresSalesSee  extends Component {
 
 
   render(){
-    const { roleRetaiBusManagement:{rechargeDetails,rechargeDetails:{tableData,childDetailsModelVisible,img}} } = this.props;
+    const { roleRetaiBusManagement:{rechargeDetails,rechargeDetails:{num,tableData,childDetailsModelVisible,img}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     // console.log('xxxxx',rechargeDetails)
     // console.log('77777',this.state.isimg)
@@ -342,7 +342,7 @@ class StoresSalesSee  extends Component {
           <Form onSubmit={this.handleOk} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={24} sm={24} >
-                <div  style={{width:'260px',margin:'30px auto 0px auto',fontSize:'18px'}}>
+                <div  style={{width:'270px',margin:'30px auto 0px auto',fontSize:'18px'}}>
                   <FormItem label="微信充值金额：">
                     {getFieldDecorator('totalPrice',{
                       // rules:[{
@@ -358,7 +358,7 @@ class StoresSalesSee  extends Component {
                       />
                     )}
                   </FormItem>
-                  <span style={{color:'red',fontSize:'12px',marginLeft:'76px',marginTop:'-10px'}}>充值金额最少100起</span>
+                  <span style={{color:'red',fontSize:'12px',marginLeft:'100px',marginTop:'-10px'}}>充值金额最少100起</span>
                 </div>
               </Col>
               <Col md={24} sm={24}>

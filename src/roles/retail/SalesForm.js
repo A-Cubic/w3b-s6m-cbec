@@ -28,6 +28,7 @@ export default class SalesForm extends Component {
     visible: false,
     formValues:{},
     warehouseId:'',
+    num:''
   }
   init(){
     this.props.dispatch({
@@ -194,13 +195,30 @@ export default class SalesForm extends Component {
 
   //付款新接口
   handlePayment = (record) => {
+    
+   // console.log('merchantOrderId',record.merchantOrderId)
+    // this.props.dispatch({
+    //   type: 'roleRetaiBusManagement/getPayOrder',
+    //   payload: {
+    //     parentOrderId:record.merchantOrderId,
+    //   },
+    //   callback: this.callbackType,
+    // });
     this.props.dispatch({
-      type: 'roleRetaiBusManagement/getPayOrder',
-      payload: {
-        parentOrderId:record.merchantOrderId,
-      },
-      callback: this.callbackType,
+      type:'roleRetaiBusManagement/handleFormPopupR',
+      
     });
+
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/handleNumR',
+      payload: {
+        num:record.merchantOrderId
+      }
+    });
+
+    // this.setState({
+    //   num:record.merchantOrderId
+    // })
 
   }
 
@@ -224,11 +242,20 @@ export default class SalesForm extends Component {
       payload:{}
     })
   }
+  //弹窗
+  handlePopup (){
+    //console.log(7777)
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/handleFormPopupR',
+      
+    });
+  }
+
   renderAdvancedForm(){
     //const { roleRetaiBusManagement:{SalesForm} } = this.props;
 
-    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
-    //console.log('tableData',tableData)
+    const { orderManagement:{supplierOrder:{tableData,num}} } = this.props;
+    //console.log('num',num)
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -296,11 +323,8 @@ export default class SalesForm extends Component {
         <Divider dashed />
         <div style={{ overflow: 'hidden',marginBottom:10,fontSize:16 }}>
           <div style={{ float: 'right' }}>
-            <span> 共查询出符合条件的数据：{tableData?tableData.pagination.total:0}， </span>
-            <span>总销量：{tableData.item?tableData.item.totalSales :0}， </span>
-            <span>总订单额：¥{tableData.item?tableData.item.totalTradeAmount :0}， </span>
-            <span>渠道总利润额：¥{tableData.item?tableData.item.purchaseTotal :0}， </span>
-            <span>账号余额：¥{tableData.item?tableData.item.accountBalance :0}</span>
+            {/* <span onClick={this.handlePopup.bind(this)}>弹窗</span> */}
+            <span style={{color:'red',fontSize:'18px'}}>账号余额：¥{tableData.item?tableData.item.accountBalance :0}</span>
           </div>
         </div>
       </Form>
@@ -409,9 +433,104 @@ export default class SalesForm extends Component {
         <ChannelOrderCheckModal
           parent = {parent}
         />
+        <StoresSalesSee />
       </div>
     );
   }
+}
+
+
+//查看弹窗
+@connect(({roleOperationDistribution,roleRetaiBusManagement }) => ({
+  roleOperationDistribution,roleRetaiBusManagement
+}))
+@Form.create()
+class StoresSalesSee  extends Component {
+
+  handleCancel = () => {
+    // this.props.dispatch({
+    //   type:'roleOperationDistribution/storesSalesCloseR',
+    //   payload:false
+    // })
+
+    //this.props.form.resetFields();
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/getPopupFormColoseR',
+      
+    });
+    
+  }
+  handleOk = (e) => {
+  
+    const { roleRetaiBusManagement:{SalesForm:{num}} } = this.props;
+   
+    this.props.dispatch({
+      type: 'roleRetaiBusManagement/getPayOrder',
+      payload: {
+        parentOrderId:num,
+      },
+      callback: this.callbackType,
+    });
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/getPopupFormColoseR',
+      
+    });
+  }
+
+  callbackType = (params) => {
+    if(params.type==1){
+      //this.init()
+      this.props.dispatch({
+        type: 'publicDictionary/getWareHouse',
+        payload: {
+          userId:userId,
+        },
+      });
+      this.props.dispatch({
+        
+        type: 'orderManagement/supplierOrderTable',
+        payload: {
+          userId:userId,
+          status:"全部"
+        },
+      });
+    }
+  } 
+
+
+  
+
+
+
+  render(){
+    const { roleRetaiBusManagement:{SalesForm,SalesForm:{tableData,childDetailsModelVisible,img}} } = this.props;
+    const { getFieldDecorator } = this.props.form;
+    // console.log('xxxxx',rechargeDetails)
+    // console.log('77777',this.state.isimg)
+    return(
+      <div>
+        <Modal
+          visible= {childDetailsModelVisible}
+          onCancel={this.handleCancel}
+          width={'35%'}
+          onOk={this.handleOk}
+          style={{padding:'20px'}}
+        >
+          <div>请确认付款</div>        
+
+
+
+        </Modal>
+      </div>
+    )
+
+    
+    
+   
+    
+
+  }
+
 }
 
 
