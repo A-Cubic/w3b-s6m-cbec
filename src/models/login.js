@@ -100,9 +100,13 @@ export default {
             case 'unaudited-p':
               tUrl = '/user/register-verify';
               break;
-            //  仓库
+              //  仓库
             case 'warehouse':
               tUrl = '/orderManagement/order-w';
+              break;
+              //零售
+            case 'retail':
+              tUrl = '/roles/SalesForm';
               break;
             case '':
               tUrl = '/user/login';

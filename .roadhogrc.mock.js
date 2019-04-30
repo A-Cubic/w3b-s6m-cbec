@@ -21,6 +21,9 @@ import goodsManagementMock from './mock/goodsManagementMock';
 import distributionManagementMock from './mock/distributionManagementMock';
 import settlementManagementMock from './mock/settlementManagementMock';
 import publicDictionaryMock from './mock/publicDictionaryMock';
+
+import roleRetaiBusManagementMock from './mock/roleRetaiBusManagementMock';
+
 // 是否禁用代理
 
 const noProxy = process.env.NO_PROXY === 'true';
@@ -45,7 +48,7 @@ const proxy = {
   ...orderManagementMock(service_url2),
   ...channelManagementMock(service_url2),
   ...goodsManagementMock(service_url2),
-
+  ...roleRetaiBusManagementMock(service_url2),
 
   'POST /llback/user/register/renameNew': service_url2,
   // 支持值为 Object 和 Array

@@ -1,38 +1,28 @@
 // const orderManagement = 'http://console.llwell.net/';
 //const a = 'http://192.168.0.127:54195/';
 
-export default function orderManagementMock(url) {
+export default function roleRetaiBusManagementMock(url) {
   return {
-    // 订单管理-获取订单列表
-    'POST /llback/Order/GetOrderList': url,
-    // 订单管理-查看详细订单
-    'POST /llback/Order/GetOrder': url,
-    // 订单管理-导出需发货的订单
-    'POST /llback/Order/ExportOrder': url,
-    // 导入订单信息
-    'POST /llback/Order/UploadOrder': url,
-    // 分销商 - 上传订单
-    '/llback/Order/UploadOrderOfDistribution': url,
-    // 导入运单信息
-    'POST /llback/Order/UploadWaybill': url,
-    // 导出运单信息
-    'POST /llback/Order/ExportWaybill': url,
-    // 导出订单
-    'POST /llback/Order/ExportSelectOrder': url,
-    // 确认发货 新增
-    'POST /llback/Order/SingleWaybill': url,
-    // 海外已出货
-    'POST /llback/Order/Overseas': url,
-    // 分销商 - 扫码支付
-    'POST /llback/Order/GetOrderPageQRCode': url,
-    // 运营 - 增加获取海关清关状态数据
-    'POST /llback/Order/GetCustomsState': url,
+   
+    // 运营 - 测试
+    'POST /llback/Ordera/GetCustomsStateb': GetOrderList,
+
+    // 运营 - 付款  
+    'POST /llback/Order/PayOrder': url,
+
+    // 运营 - 充值获取
+    'POST /llback/AccountFund/GetRetailMoney': url,
+
+    // 运营 - 充值按钮
+    'POST /llback/AccountFund/RetailRecharge': url,
+
   };
 }
 export function GetOrderList(req, res) {
   res.send({
+    item:{fund:'7777'},    
     list: [{
-      id: '3004',
+      keyId: '3004',
       status: '待发货',
       merchantOrderId: 'SH20180127144502664278',
       tradeTime: '2018-01-27 14:45:02',
@@ -115,6 +105,6 @@ export function confirmDelivery(req, res) {
 export function shipmentOverseas(req, res) {
   res.send({
     type: 1,
-    msg: 'http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/Waybill.xlsx',
+    msg: 'http://hellorfimg.zcool.cn/preview/179504174.jpg',
   });
 }

@@ -8,7 +8,9 @@ export default function(dynamicWrapper,app){
     // 运营
     ...operation(dynamicWrapper,app),
     // 财务
-    ...finance(dynamicWrapper,app)
+    ...finance(dynamicWrapper,app),
+    // 零售
+    ...retail(dynamicWrapper,app)
   }
 
 };
@@ -280,5 +282,23 @@ export function finance (dynamicWrapper,app){
     '/report/salesDayReport': {
       component: dynamicWrapper(app, ['roleFinanceManagement'], () => import('../roles/finance/supplySettlement')),
     },
+  }
+}
+
+
+
+//-------------------------------------零售付款-------------------------------------
+export function retail (dynamicWrapper,app){
+  return {
+    // 零售-付款
+    '/roles/SalesForm': {
+      component: dynamicWrapper(app, ['orderManagement','publicDictionary','roleRetaiBusManagement'], () => import('../roles/retail/SalesForm')),
+    },
+    //零售-充值
+    '/roles/rechargeDetails': {
+      component: dynamicWrapper(app, ['roleRetaiBusManagement'], () => import('../roles/retail/rechargeDetails')),
+    
+    },
+
   }
 }
