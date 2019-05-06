@@ -9,31 +9,15 @@ import {
   handleFormPopupR,//新加弹窗
   getPopupFormColoseR,//关闭新加弹窗
   handleNumR,//传弹窗值
+  getQRColoseR,//二维码弹窗关闭
+  getQROpenR,//二维码弹窗打开
 } from '../services/roleRetaiBusManagement_S'
 
 export default {
   namespace: 'roleRetaiBusManagement',
   state:{
 
-    //供应商-运营商-渠道商接口共用table
-    // supplierOrder:{
-    //   tableData:{
-    //     list: [],
-    //     pagination:{},
-    //   },
-    //   fs:{
-    //     consigneeName:'',
-    //     consigneeMobile:'',
-    //     consigneeAdr:''
-    //   },
-    //   childCheck:{
-    //     id:'',
-    //   },
-    // },
-    // customsVisible:false,
-    // customsInformationList:[],
-    // codeVisible:false,
-    // codeUrl:'',
+   
 
     SalesForm:{
       tableData:{
@@ -52,6 +36,7 @@ export default {
         pagination:{},
       },
       childDetailsModelVisible:false,
+      qRCode:false,
       img:''
       
     }
@@ -171,6 +156,32 @@ export default {
             ...state.rechargeDetails,
             //tableData:action.payload.list,
             childDetailsModelVisible:false,
+      
+          }
+      }
+    },
+
+
+    //二维码打开弹窗
+    getQROpenR(state,action){
+      return{
+        ...state,
+        rechargeDetails:{
+            ...state.rechargeDetails,
+            //tableData:action.payload.list,
+            qRCode:true,
+      
+          }
+      }
+    },
+    //二维码关闭弹窗
+    getQRColoseR(state,action){
+      return{
+        ...state,
+        rechargeDetails:{
+            ...state.rechargeDetails,
+            //tableData:action.payload.list,
+            qRCode:false,
       
           }
       }

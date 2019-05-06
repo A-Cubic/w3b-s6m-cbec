@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { InputNumber ,Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
+import { Radio ,InputNumber ,Input,Button,Table,Card,Form,Row,Col,Select,Upload,notification,Divider,Switch,Icon,DatePicker,Modal } from 'antd';
 import styles from './rechargeDetails.less';
 import moment from 'moment';
 import {getCurrentUrl, getUploadUrl} from '../../services/api'
@@ -13,6 +13,10 @@ import {message} from "antd/lib/index";
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
+const QRCode = require('qrcode.react');
+
+
 @connect(({roleRetaiBusManagement }) => ({
   roleRetaiBusManagement
 }))
@@ -29,10 +33,6 @@ export default class rechargeDetails extends Component {
 
   //****/
   init(){
-    // this.props.dispatch({
-    //   type:'roleOperationDistribution/storesSales',
-    //   payload:{}
-    // })
     this.props.dispatch({
       type:'roleRetaiBusManagement/GetRetailMoney',
       payload:{}
@@ -95,7 +95,13 @@ export default class rechargeDetails extends Component {
       
     });
   }
-
+  handleQRCode (){
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/getQROpenR',
+      
+    });
+   // console.log('QR')
+  }
 
   renderForm(){
     // const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
@@ -105,7 +111,10 @@ export default class rechargeDetails extends Component {
     //console.log('ffff',tableData)
     return (
       <div>
-        <div style={{fontSize:'22px',marginBottom:'16px'}}>账户余额：<span style={{color:'red'}}>¥{tableData.item.fund}</span> </div>
+        <div style={{fontSize:'22px',marginBottom:'16px'}}>
+          账户余额：
+          <span style={{color:'red'}}>¥{tableData.item.fund}</span> 
+        </div>
         <Button type="primary" onClick={this.handlePopup.bind(this)}>充值</Button>
         <Divider dashed />
         <Form onSubmit={this.onSearch} layout="inline">
@@ -166,7 +175,7 @@ export default class rechargeDetails extends Component {
   render() {
     //const { roleOperationDistribution:{storesSales:{tableData:{list, pagination}}} } = this.props
     
-    const { roleRetaiBusManagement:{rechargeDetails:{tableData:{list, pagination}}} } = this.props;
+    const { roleRetaiBusManagement:{rechargeDetails,rechargeDetails:{tableData:{img,list, pagination}}} } = this.props;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -195,15 +204,6 @@ export default class rechargeDetails extends Component {
         key: 'fundprice',
         render:val=>`¥${val}`
       }
-      // ,{
-      //   title: '操作',
-      //   dataIndex: '',
-      //   key: '',
-      //   render: (val,record) =>
-      //   <div>
-      //       {<a onClick={(e) => this.handlestoresSalesClick(e, record)}>查看</a>}
-      //   </div>
-      // }
     ];
 
     const props = {
@@ -216,6 +216,10 @@ export default class rechargeDetails extends Component {
       multiple: false,
       // customRequest:this.upload,
     };
+    //接收二维码
+   // console.log('77777',rechargeDetails)
+    //const code =  <QRCode value='img' />,
+
     return (
       <div>
         <Card bordered={false}>
@@ -234,25 +238,15 @@ export default class rechargeDetails extends Component {
           />
         </Card>
         <StoresSalesSee />
+        {/* <QrCode /> */}
+        <StoresSalesSeeCode />
       </div>
     );
   }
-   //查看
-  // handlestoresSalesClick = (e, record)=>{
-  //    //console.log('record',11)
-  //   this.props.dispatch({
-  //     type: 'roleOperationDistribution/storesSalesClickList',
-  //     payload: {
-  //       orderId:record.orderId,
-  //       //barcode:record.barcode,
-  //       //index:index
-  //     },
-  //   });
-  // }
 }
 
 
-//查看弹窗
+//充值弹窗
 @connect(({roleOperationDistribution,roleRetaiBusManagement }) => ({
   roleOperationDistribution,roleRetaiBusManagement
 }))
@@ -262,17 +256,7 @@ class StoresSalesSee  extends Component {
     isimg:false,
   }
 
-
-
-
-
-
   handleCancel = () => {
-    // this.props.dispatch({
-    //   type:'roleOperationDistribution/storesSalesCloseR',
-    //   payload:false
-    // })
-
     this.props.form.resetFields();
     this.props.dispatch({
       type:'roleRetaiBusManagement/getPopupColoseR',
@@ -287,7 +271,6 @@ class StoresSalesSee  extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue)=>{
       if(!err){
-        if(_that.state.isimg==false){
           _that.props.dispatch({
             type:'roleRetaiBusManagement/getPayment',
             payload:{
@@ -296,14 +279,17 @@ class StoresSalesSee  extends Component {
             },
             callback: _that.callbackType,
           });
-        } else {
-          _that.props.dispatch({
-            type:'roleRetaiBusManagement/getPopupColoseR',
-          });
-          _that.setState({
-            isimg:false,
-          })
-        }
+
+          // _that.props.dispatch({
+          //   type:'roleRetaiBusManagement/getQROpenR',
+          //   payload:{ 
+          //   },
+          // });
+          // _that.props.dispatch({
+          //   type:'roleRetaiBusManagement/getPopupColoseR',
+          // });
+
+
       }
     })
   }
@@ -311,25 +297,32 @@ class StoresSalesSee  extends Component {
   callbackType = (params) => {
     const msg = params.msg;
     if(params.type=='1'){
-      this.setState({
-        isimg:true,
-      })
+      // this.setState({
+      //   isimg:true,
+      // })
+      // this.props.dispatch({
+      //   type:'roleRetaiBusManagement/getPopupColoseR',
+      // });
+      this.props.dispatch({
+        type:'roleRetaiBusManagement/getQROpenR',
+        payload:{ 
+        },
+      });
+      this.props.dispatch({
+        type:'roleRetaiBusManagement/getPopupColoseR',
+      });
+
     } else {
-      this.setState({
-        isimg:true,
-      })
+      // this.setState({
+      //   isimg:false,
+      // })
+      message.error(msg);
     }
   } 
-
-
-
-
 
   render(){
     const { roleRetaiBusManagement:{rechargeDetails,rechargeDetails:{num,tableData,childDetailsModelVisible,img}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    // console.log('xxxxx',rechargeDetails)
-    // console.log('77777',this.state.isimg)
     return(
       <div>
         <Modal
@@ -342,12 +335,12 @@ class StoresSalesSee  extends Component {
           <Form onSubmit={this.handleOk} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={24} sm={24} >
-                <div  style={{width:'270px',margin:'30px auto 0px auto',fontSize:'18px'}}>
-                  <FormItem label="微信充值金额：">
+                <div  style={{width:'280px',margin:'30px auto 0px auto',fontSize:'18px'}}>
+                  <FormItem label="充值金额：">
                     {getFieldDecorator('totalPrice',{
-                      // rules:[{
-                      //   required:true,message:'充值金额最少100起',
-                      // }]
+                      rules:[{
+                        required:true,message:'充值金额最少100起',
+                      }]
                     })(
                       <InputNumber 
                         style={{width:'150px'}} 
@@ -362,31 +355,68 @@ class StoresSalesSee  extends Component {
                 </div>
               </Col>
               <Col md={24} sm={24}>
+                <RadioGroup value='1' style={{display:'flex',width:'100%',justifyContent:'center',marginTop:'30px'}} >
+                  <Radio value='1' style={{}}>
+                    <img style={{width:'25px'}} src="http://llwell-b2b.oss-cn-beijing.aliyuncs.com/image/wxzf.png"></img>
+                    <span style={{marginLeft:'10px'}}>微信支付</span>
+                  </Radio>
+                  <Radio value='2' style={{}} disabled>
+                    <img style={{width:'60px'}} src="http://llwell-b2b.oss-cn-beijing.aliyuncs.com/image/zfbzf.png"></img>
+                    <span style={{marginLeft:'10px'}}></span>
+                  </Radio>
+                  
+                </RadioGroup>         
               </Col>
               </Row>
           </Form>
-          
-          {this.state.isimg ==true?
-            <div style={{textAlign:'center'}}>
-              <img src={img} style={{width:'200px',display:'block',margin:'20px auto'}} />
-              <span style={{textAlign:'center',margin:'20px auto',display:'block',fontSize:'18px',paddingTop:'15px'}}>扫码付款成功后,请刷新页面查看余额！</span>
-            </div>:
-            <span></span>
-          }            
-
-
-
         </Modal>
       </div>
     )
-
-    
-    
-   
-    
-
   }
-
 }
 
 
+//二维码弹窗
+@connect(({roleOperationDistribution,roleRetaiBusManagement }) => ({
+  roleOperationDistribution,roleRetaiBusManagement
+}))
+@Form.create()
+class StoresSalesSeeCode  extends Component {
+  state={
+    isimg:false,
+  }
+
+  handleQRCancel = () => {
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/getQRColoseR',
+    });
+  }
+  handleQROk = (e) => {
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/getQRColoseR',
+    });
+  }
+  render(){
+    const { roleRetaiBusManagement:{rechargeDetails,rechargeDetails:{qRCode,num,tableData,childDetailsModelVisible,img}} } = this.props;
+    const { getFieldDecorator } = this.props.form;
+    return(
+      <div>
+        <Modal
+          visible= {qRCode}
+          onCancel={this.handleQRCancel}
+          width={'35%'}
+          // onOk={this.handleQROk}
+          style={{padding:'20px'}}
+          footer= {null}
+        >
+          <div>
+            <QRCode value={img} style={{margin:'20px auto 0 auto',display:'block',border:'1px solid #ccc'}} /> 
+            <span style={{textAlign:'center',margin:'20px auto',display:'block',fontSize:'18px',paddingTop:'15px'}}>
+              扫码付款成功后,请刷新页面查看余额！
+            </span>
+          </div>
+        </Modal>
+      </div>
+    )
+  }
+}

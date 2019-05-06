@@ -1,6 +1,6 @@
 // const orderManagement = 'http://console.llwell.net/';
 //const a = 'http://192.168.0.127:54195/';
-
+//const a = 'http://192.168.191.1:54195/';
 export default function orderManagementMock(url) {
   return {
     // 订单管理-获取订单列表
