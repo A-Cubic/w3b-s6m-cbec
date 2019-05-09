@@ -71,7 +71,7 @@ export default function(dynamicWrapper,app){
     // },
     //订单管理 - 运营商
     '/orderManagement/operatorOrder': {
-      component: dynamicWrapper(app, ['orderManagement','publicDictionary'], () => import('../routes/OrderManagement/operatorOrder')),
+      component: dynamicWrapper(app, ['orderManagement','publicDictionary','roleRetaiBusManagement'], () => import('../routes/OrderManagement/operatorOrder')),
     },
     //订单管理 - 渠道商
     '/direct/channelOrder': {

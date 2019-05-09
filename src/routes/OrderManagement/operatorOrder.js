@@ -13,8 +13,8 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
-@connect(({orderManagement,publicDictionary,  loading }) => ({
-  orderManagement,publicDictionary,
+@connect(({orderManagement,publicDictionary,  loading ,roleRetaiBusManagement }) => ({
+  orderManagement,publicDictionary,roleRetaiBusManagement,
   loading: loading.effects['orderManagement/supplierOrderTable'],
 }))
 
@@ -165,7 +165,6 @@ export default class operatorOrder extends Component {
       ...pagination,
       //userId:userId
     };
-
     this.props.dispatch({
       type: 'orderManagement/supplierOrderTable',
       payload: params,
@@ -216,9 +215,88 @@ export default class operatorOrder extends Component {
       payload:{}
     })
   }
+  //点击同意退货
+  handleAgreedToReturn = (record) => {
+    const { orderManagement:{supplierOrder:{agreedToReturn,orderId}} } = this.props;
+    this.props.dispatch({
+      type:'orderManagement/getAgreedToReturnR',
+      payload:{
+        id:record.merchantOrderId
+      }
+    })
+    this.props.dispatch({
+      type:'orderManagement/getOpenAgreedToReturn',
+      payload:{
+        id:record.merchantOrderId
+      }
+    })
+    this.props.dispatch({
+      type:'orderManagement/getReGoodsMessage',
+      payload:{
+        parentOrderId:record.merchantOrderId
+      }
+    })
+    
+
+  }
+
+  //点击填写运单
+  handleCompleteReturn = (record) => {
+
+    //console.log('go')
+
+    this.props.dispatch({
+      type:'orderManagement/getAgreedToReturnR',
+      payload:{
+        id:record.merchantOrderId
+      }
+    })
+    this.props.dispatch({
+      type:'orderManagement/getOpenCompleteReturnR',
+      payload:{
+        // id:record.merchantOrderId
+      }
+    })
+    //快递选择
+    this.props.dispatch({
+      type:'publicDictionary/getExpress',
+      payload:{}
+    })
+
+    
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/getReGoodsFundIdMessage',
+      payload: {
+        parentOrderId:record.merchantOrderId,
+        
+      }
+    });
+
+  }
+
+  //点击完成退款
+  handleReturnRoods = (record) => {
+    
+    this.props.dispatch({
+      type:'orderManagement/getAgreedToReturnR',
+      payload:{
+        id:record.merchantOrderId
+      }
+    })
+    this.props.dispatch({
+      type:'orderManagement/getOpenReturnGoods',
+      payload:{
+      }
+    })
+
+  }
+
+
   renderAdvancedForm(){
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr,wareHouseArr,expressArr} }= this.props;
     const { orderManagement:{supplierOrder:{tableData}} } = this.props;
+   
+
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -233,7 +311,7 @@ export default class operatorOrder extends Component {
                   optionFilterProp="label"
                   // onChange={this.onSelectChange}
                 >
-                  <Option value="全部">全部</Option>
+                  {/* <Option value="全部">全部</Option>
                   <Option value="0">未支付</Option>
                   <Option value="1">新订单</Option>
                   <Option value="2">等待发货</Option>
@@ -241,6 +319,16 @@ export default class operatorOrder extends Component {
                   <Option value="4">等待签收</Option>
                   <Option value="5">已完成</Option>
                   <Option value="6">待处理</Option>
+                  <Option value="-1">已关闭</Option> */}
+                  <Option value="全部">全部</Option>
+                  <Option value="0">未支付</Option>
+                  <Option value="1">已付款</Option>
+                  <Option value="2">等待发货</Option>
+                  <Option value="3">已发货</Option>
+                  <Option value="4">等待签收</Option>
+                  <Option value="5">已完成</Option>
+                  <Option value="6">申请退款</Option>
+                  <Option value="7">同意退货</Option>
                   <Option value="-1">已关闭</Option>
                 </Select>
               )}
@@ -371,7 +459,19 @@ export default class operatorOrder extends Component {
             <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
             <a href="javascript:;" onClick={()=>this.handleChildrenCustoms (record)}>清关信息</a><br/>
             {record.ifSend=='1'?
-            <a href="javascript:;" onClick={()=>this.handleChildrenDelivery(record)}>发货</a>:''}
+            <a href="javascript:;" onClick={()=>this.handleChildrenDelivery(record)}>发货<br/></a>:''}
+            {
+              record.ifAgree==1?
+              <a href="javascript:;" onClick={()=>this.handleAgreedToReturn(record)}>退货审批<br/></a>:''
+            }
+            {
+              record.ifFinish==1?
+              <a href="javascript:;" onClick={()=>this.handleCompleteReturn(record)}>填写运单<br/></a>:''
+            }
+            {
+              record.ifFinish==1?
+              <a href="javascript:;" onClick={()=>this.handleReturnRoods(record)}>退货完成<br/></a>:''
+            }
           </div>
       }
     ];
@@ -460,13 +560,18 @@ export default class operatorOrder extends Component {
           parent = {ChildrenDeliveryParent}
         />
         <ChildrenCustoms />
+        <AgreedToReturn />
+        <CompleteReturn 
+          parent = {ChildrenDeliveryParent}
+        />
+        <AddReturnGoods />
       </div>
     );
   }
 }
 
-@connect(({orderManagement,publicDictionary,  loading }) => ({
-  orderManagement,publicDictionary,
+@connect(({orderManagement,publicDictionary,  loading ,roleRetaiBusManagement}) => ({
+  orderManagement,publicDictionary,roleRetaiBusManagement,
   loading: loading.effects['orderManagement/supplierOrderTable'],
 }))
 @Form.create()
@@ -528,7 +633,9 @@ class ChildrenDelivery extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+   
     // const {parent:{expressArr}} = this.props
+    // console.log('this.props',this.props)
     return (
       <div>
         <Modal
@@ -548,6 +655,7 @@ class ChildrenDelivery extends React.Component {
               <Col md={24} sm={24}>
                 <FormItem label="运单号">
                   {getFieldDecorator('waybillno',{
+                    //initialValue:reGoodsFundIdMessage.expressName,
                     rules:[{
                       required:true,message:'请填写运单号',
                     }]
@@ -558,18 +666,21 @@ class ChildrenDelivery extends React.Component {
               </Col>
               <Col md={24} sm={24}>
             <FormItem label="快递公司">
-              {getFieldDecorator('expressId')(
-                <Select
-                  placeholder="请选择"
-                  optionFilterProp="label"
-                  // onChange={this.onSelectChange}
-                >
-                  {/*<Option value="重庆仓库">重庆仓库</Option>*/}
-                  {/*<Option value="香港仓库">香港仓库</Option>*/}
-                  {/*<Option value="青岛仓库">青岛仓库</Option>*/}
-                  {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressId} label={val.expressName}>{val.expressName}</Option>)}
-                </Select>
-              )}
+              {getFieldDecorator('expressId',{
+                  //initialValue:item.usercode,
+                  //initialValue:reGoodsFundIdMessage.type==0?'':reGoodsFundIdMessage.refundId,
+                  rules: [{ required: true, message: '请选择快递：' }],
+                  })(
+                    <Select
+                    placeholder="请选择"
+                    optionFilterProp="label"
+                    // onChange={this.onSelectChange}
+                  >
+                    {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressId} label={val.expressName}>{val.expressName}</Option>)}
+                  </Select>
+                )}
+
+
             </FormItem>
               </Col>
               </Row>
@@ -655,5 +766,255 @@ class ChildrenCustoms extends React.PureComponent {
         </Modal>
       </div>
     );
+  }
+}
+
+//同意退货
+@connect(({orderManagement,roleOperationDistribution,roleRetaiBusManagement }) => ({
+  orderManagement,roleOperationDistribution,roleRetaiBusManagement
+}))
+@Form.create()
+class AgreedToReturn  extends Component {
+  handleCancel = () => {
+    //console.log('go')
+    this.props.dispatch({
+      type:'orderManagement/getCloseAgreedToReturn',
+    });
+    
+  }
+  handleOk = (e) => {
+    const { orderManagement:{supplierOrder:{agreedToReturn,orderId}} } = this.props;
+   
+    this.props.dispatch({
+      type: 'orderManagement/getAgreeReGoods',
+      payload: {
+        parentOrderId:orderId,
+      },
+      callback: this.callbackType,
+    });
+
+  }
+
+  callbackType = (params) => {
+    if(params.type==1){
+      //this.init()
+
+      this.props.dispatch({
+        type:'orderManagement/getCloseAgreedToReturn',
+      });
+      this.props.dispatch({
+        type: 'orderManagement/supplierOrderTable',
+        payload: {
+          //userId:userId,
+          status:"全部"
+        },
+      });
+    }
+  } 
+  render(){
+    const { orderManagement:{supplierOrder:{agreedToReturn,orderId,item}} } = this.props;
+    const { getFieldDecorator } = this.props.form;
+    //console.log('item',item)
+    return(
+      <div>
+        <Modal
+          visible= {agreedToReturn}
+          onCancel={this.handleCancel}
+          width={'55%'}
+          onOk={this.handleOk}
+          style={{padding:'20px'}}
+        >
+          <div style={{margin:'25px',fontSize:'16px'}}>
+            <div style={{padding:'5px 0px',marginLeft:'300PX'}}><span style={{paddingRight:'35px'}}>采购商名:</span>{item.purchaserCode}</div>
+            <div style={{padding:'5px 0',marginLeft:'300PX'}}><span style={{paddingRight:'35px'}}>采购商电话:</span>{item.purchaserTel}</div>
+            <div style={{padding:'5px 0',marginLeft:'300PX'}}><span style={{paddingRight:'35px'}}>供应商名:</span>{item.customerCode}</div>
+            <div style={{padding:'5px 0',marginLeft:'300PX'}}><span style={{paddingRight:'35px'}}>供应商电话:</span>{item.customerTel}</div>
+            <div style={{padding:'5px 0',marginLeft:'100PX'}}><span style={{paddingRight:'5px'}}>退货理由:</span>{item.refundRemark}</div>
+            <div style={{padding:'5px 0',marginLeft:'100PX'}}></div>
+          </div>      
+        </Modal>
+      </div>
+    )
+  }
+}
+
+//填写运单
+@connect(({orderManagement,publicDictionary,  loading ,roleRetaiBusManagement}) => ({
+  orderManagement,publicDictionary,roleRetaiBusManagement,
+  loading: loading.effects['orderManagement/supplierOrderTable'],
+}))
+@Form.create()
+class CompleteReturn extends React.Component {
+
+  handleOk = (e) => {
+    const { orderManagement:{supplierOrder:{completeReturn,orderId}} } = this.props;
+    // const { orderManagement:{supplierOrder:{completeReturn,orderId}} } = this.props;
+    const { roleRetaiBusManagement:{SalesForm:{waybill,num}} } = this.props;
+    //console.log('orderId',orderId)
+    e.preventDefault();
+    const that = this;
+    this.props.form.validateFields((err, fieldsValue)=>{
+      if(!err){
+        this.props.parent.dispatch({
+          type:'roleRetaiBusManagement/getReGoodsFundId',
+          payload:{
+            ...fieldsValue,
+            parentOrderId:orderId
+          },
+          callback: this.callbackType,
+        })
+      }
+    })
+  }
+
+  callbackType = (params) => {
+    if(params.type==1){
+      //this.init()
+      this.props.dispatch({
+        type:'orderManagement/getCloseCompleteReturnR',
+      });
+      this.props.dispatch({
+        type: 'orderManagement/supplierOrderTable',
+        payload: {
+          //userId:userId,
+          status:"全部"
+        },
+      });
+      this.props.form.resetFields();
+    }
+  } 
+
+  handleCancel = (e) => {
+    // this.props.parent.handleVisible(false,'childDelivery')
+    this.props.dispatch({
+      type:'orderManagement/getCloseCompleteReturnR',
+      payload:{
+        // id:record.merchantOrderId
+      }
+    })
+    this.props.form.resetFields();
+  }
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { orderManagement:{supplierOrder:{completeReturn,orderId}} } = this.props;
+    const { roleRetaiBusManagement:{SalesForm:{waybill,num,reGoodsFundIdMessage}} } = this.props;
+    
+
+    return (
+      <div>
+        <Modal
+          title="填写运单"
+          visible={completeReturn}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="1" onClick={this.handleCancel}>关闭</Button>,
+      
+            <Button key="3" type="primary" onClick={this.handleOk}>确定</Button>
+          ]}
+        >
+        <div className={styles.tableListForm}>
+          <Form onSubmit={this.handleOk} layout="inline">
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={24} sm={24}>
+                <FormItem label="运单号11111">
+                  {getFieldDecorator('refundId',{
+                    initialValue:reGoodsFundIdMessage.type==0?'':reGoodsFundIdMessage.refundId,
+                    rules:[{
+                      required:true,message:'请填写运单号',
+                    }]
+                  })(
+                    <Input placeholder="请输入" />
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={24} sm={24}>
+            <FormItem label="快递公司">
+                {getFieldDecorator('refundExpressId',{
+                  initialValue:reGoodsFundIdMessage.type==0?'':reGoodsFundIdMessage.expressName,
+                  rules: [{ required: true, message: '请选择快递：' }],
+                  })(
+                    <Select
+                    placeholder="请选择"
+                    optionFilterProp="label"
+                    // onChange={this.onSelectChange}
+                  >
+                    {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressId} label={val.expressName}>{val.expressName}</Option>)}
+                  </Select>
+                )}
+            </FormItem>
+              </Col>
+              </Row>
+          </Form>
+        </div>
+        </Modal>
+      </div>
+    );
+  }
+}
+
+//完成退货弹窗
+@connect(({orderManagement,roleOperationDistribution,roleRetaiBusManagement }) => ({
+  orderManagement,roleOperationDistribution,roleRetaiBusManagement
+}))
+@Form.create()
+class AddReturnGoods  extends Component {
+  handleCancel = () => {
+    this.props.dispatch({
+      type:'orderManagement/getCloseReturnGoods',
+      
+    });
+    
+  }
+  handleOk = (e) => {
+    const { orderManagement:{supplierOrder:{completeReturn,orderId}} } = this.props;
+    console.log(9999)
+    this.props.dispatch({
+      type:'orderManagement/getMakeSureReGoods',
+      payload:{
+        parentOrderId:orderId
+      },
+      callback: this.callbackType,
+    })
+
+  }
+
+  callbackType = (params) => {
+    if(params.type==1){
+      //this.init()
+    
+      this.props.dispatch({
+        type:'orderManagement/getCloseReturnGoods',
+      });
+      this.props.dispatch({
+        type: 'orderManagement/supplierOrderTable',
+        payload: {
+          //userId:userId,
+          status:"全部"
+        },
+      });
+      this.props.form.resetFields();
+    }
+  } 
+
+  render(){
+    const { orderManagement:{supplierOrder:{AddReturnGoods,orderId}} } = this.props;
+    const { getFieldDecorator } = this.props.form;
+    //console.log('ffff',num)
+    return(
+      <div>
+        <Modal
+          visible= {AddReturnGoods}
+          onCancel={this.handleCancel}
+          width={'55%'}
+          onOk={this.handleOk}
+          style={{padding:'20px'}}
+        >
+          
+          <div style={{textAlign:'center',clear:'both',margin:'25px 0 25px 0',fontSize:'20px'}}>请确认是否收到退货</div>        
+        </Modal>
+      </div>
+    )
   }
 }

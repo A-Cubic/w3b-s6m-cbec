@@ -102,3 +102,27 @@ export async function getCustoms(params) {
     body: params,
   });
 }
+
+// 运营 - 同意退货
+export async function getAgreeReGoods(params) {
+  return request(`/llback/Order/AgreeReGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 运营 - 完成退货
+export async function getMakeSureReGoods(params) {
+  return request(`/llback/Order/MakeSureReGoods`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 运营 - 退货原因
+export async function getReGoodsMessage(params) {
+  return request(`/llback/Order/ReGoodsMessage`, {
+    method: 'POST',
+    body: params,
+  });
+}

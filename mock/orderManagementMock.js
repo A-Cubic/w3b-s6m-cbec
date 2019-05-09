@@ -1,10 +1,19 @@
 // const orderManagement = 'http://console.llwell.net/';
 //const a = 'http://192.168.0.127:54195/';
-//const a = 'http://192.168.191.1:54195/';
+const a = 'http://192.168.191.1:54195/';
 export default function orderManagementMock(url) {
   return {
     // 订单管理-获取订单列表
-    'POST /llback/Order/GetOrderList': url,
+    'POST /llback/Order/GetOrderList': a,
+    // 同意退货
+    'POST /llback/Order/AgreeReGoods': a,
+    // 完成退货
+    'POST /llback/Order/MakeSureReGoods': a,
+    // 退货原因
+    'POST /llback/Order/ReGoodsMessage': a,
+
+
+
     // 订单管理-查看详细订单
     'POST /llback/Order/GetOrder': url,
     // 订单管理-导出需发货的订单

@@ -31,3 +31,27 @@ export async function getPayment(params) {
     body: params,
   });
 }
+
+// 退款
+export async function getReGoodsApply(params) {
+  return request(`/llback/Order/ReGoodsApply`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 填写运单号
+export async function getReGoodsFundId(params) {
+  return request(`/llback/Order/ReGoodsFundId`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 快递获取
+export async function getReGoodsFundIdMessage(params) {
+  return request(`/llback/Order/ReGoodsFundIdMessage`, {
+    method: 'POST',
+    body: params,
+  });
+}

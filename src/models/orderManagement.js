@@ -1,7 +1,17 @@
 import { message} from 'antd';
 import {getSupplierOrderTable,getSupplierOrderChildCheck,
   getDownloadToSendOrder,getUploadWaybill,getUploadOrderbill,getUploadDistributorsOrderbill,getExportWaybill,getExportOrders,
-  confirmDelivery,shipmentOverseas,getCode,getCustoms,getgoodsData
+  confirmDelivery,shipmentOverseas,getCode,getCustoms,getgoodsData,
+  getAgreedToReturnR,//获取id
+  getOpenAgreedToReturn,//同意退货弹窗
+  getCloseAgreedToReturn,//同意退货弹窗
+  getAgreeReGoods,//同意退货
+  getOpenCompleteReturnR, //填写运单弹窗
+  getCloseCompleteReturnR, //填写运单弹窗
+  getMakeSureReGoods, //完成退货接口
+  getReGoodsMessage,//退货原因
+  getOpenReturnGoods,//完全退货弹窗
+  getCloseReturnGoods,//完全退货弹窗
 } from '../services/orderManagement_S'
 import {getBrandData} from "../services/publicDictionary_S";
 export default {
@@ -22,11 +32,17 @@ export default {
       childCheck:{
         id:'',
       },
+      item:''
     },
     customsVisible:false,
     customsInformationList:[],
     codeVisible:false,
-    codeUrl:''
+    codeUrl:'',
+    agreedToReturn:false,
+    orderId:'',
+    completeReturn:false,
+    AddReturnGoods:false,
+    
   },
   effects:{
     // 运营 - 增加获取海关清关状态数据
@@ -237,20 +253,53 @@ export default {
         message.error(response.msg)
       }
     },
+
+  //同意退货接口
+  *getAgreeReGoods({ payload,callback },{ call,put}){
+    const response = yield call(getAgreeReGoods, payload);
+    //console.log('xxx')
+    if (response !== undefined) {
+      if (response.type==1) {
+        message.success('同意退货');
+        callback(response);
+      }else{
+        message.error(response.msg);
+      }
+    }
+  },  
+
+  //完成退货接口
+  *getMakeSureReGoods({ payload,callback },{ call,put}){
+    const response = yield call(getMakeSureReGoods, payload);
+    //console.log('xxx')
+    if (response !== undefined) {
+      if (response.type==1) {
+        message.success('退货完成');
+        callback(response);
+      }else{
+        message.error(response.msg);
+      }
+    }
+  },  
+
+  //获取退货理由等信息
+  //获取订单列表
+  *getReGoodsMessage({payload, callback},{call,put}){
+    const response = yield call(getReGoodsMessage,payload);
+    // console.log('~',response)
+    if (response !== undefined){
+      yield put({
+        type:'getReGoodsMessageR',
+        payload: response
+      })
+    }
+  },
+
+
+
   },
   reducers:{
-    // getChannelTypeR(state, action) {
-    //   return {
-    //     ...state,
-    //     channelTypeArr:action.payload,
-    //   };
-    // },
-    // getWareHouseR(state, action) {
-    //   return {
-    //     ...state,
-    //     wareHouseData:action.payload,
-    //   };
-    // },
+   
     changeCustomsVisibleR(state, action) {
       return {
         ...state,
@@ -312,6 +361,96 @@ export default {
         ...state,
         codeVisible:action.payload.codeVisible
       }
+    },
+    //获取id
+    getAgreedToReturnR(state,action){
+      return{
+        ...state,
+        supplierOrder:{
+          ...state.supplierOrder,
+          orderId:action.payload.id
+        }
+      }
+    },
+
+  
+  //同意退货弹窗
+  getOpenAgreedToReturn(state,action){
+    //console.log('xxx',action.payload.id)
+    return{
+      ...state,
+      supplierOrder:{
+        ...state.supplierOrder,
+        agreedToReturn:true,
+      }
     }
+  },
+  getCloseAgreedToReturn(state,action){
+    return{
+      ...state,
+      supplierOrder:{
+        ...state.supplierOrder,
+        agreedToReturn:false,
+      }
+    }
+  },
+
+    //填写运单弹窗   
+    getOpenCompleteReturnR(state,action){
+      //console.log('xxx',action.payload.id)
+      return{
+        ...state,
+        supplierOrder:{
+          ...state.supplierOrder,
+          completeReturn:true,
+        }
+      }
+    },
+    getCloseCompleteReturnR(state,action){
+      return{
+        ...state,
+        supplierOrder:{
+          ...state.supplierOrder,
+          completeReturn:false,
+        }
+      }
+    },
+
+    //退货原因
+    
+    getReGoodsMessageR(state,action){
+      console.log('xx',action.payload)
+      return{
+        ...state,
+        supplierOrder:{
+          ...state.supplierOrder,
+          item:action.payload,
+        }
+      }
+    },
+
+    //完全退货弹窗   
+    getOpenReturnGoods(state,action){
+      //console.log('xxx',action.payload.id)
+      return{
+        ...state,
+        supplierOrder:{
+          ...state.supplierOrder,
+          AddReturnGoods:true,
+        }
+      }
+    },
+    getCloseReturnGoods(state,action){
+      return{
+        ...state,
+        supplierOrder:{
+          ...state.supplierOrder,
+          AddReturnGoods:false,
+        }
+      }
+    },
+
+
+
   }
 }

@@ -11,6 +11,14 @@ import {
   handleNumR,//传弹窗值
   getQRColoseR,//二维码弹窗关闭
   getQROpenR,//二维码弹窗打开
+  handleOpenRefundR,//退货弹窗
+  handleCloseRefundR,//退货弹窗
+  getReGoodsApply,//退款接口
+  handleOpenWaybillR, //填写单号弹窗
+  handleColoseWaybillR,//填写单号弹窗
+  getReGoodsFundId, //填写运单号
+  getReGoodsFundIdMessage, //快递获取接口
+
 } from '../services/roleRetaiBusManagement_S'
 
 export default {
@@ -23,10 +31,20 @@ export default {
       tableData:{
         item:'',
         list:[],
-        pagination:{}
+        pagination:{},
+        
       },
       childDetailsModelVisible:false,
-      num:''
+      num:'',
+      amountOfMoney:'',
+      totalSum:'',
+      refund:false,
+      waybill:false,
+      reGoodsFundIdMessage: {
+        refundId:'',
+        expressName:'',
+        type:0
+      }
     },
     //充值
     rechargeDetails:{
@@ -76,6 +94,19 @@ export default {
         }
       }
     },
+    //退款
+    *getReGoodsApply({ payload,callback },{ call,put}){
+      const response = yield call(getReGoodsApply, payload);
+      //console.log('xxx')
+      if (response !== undefined) {
+        if (response.type==1) {
+          message.success('退款成功');
+          callback(response);
+        }else{
+          message.error(response.msg);
+        }
+      }
+    },
 
     //充值获取页面
     *GetRetailMoney({ payload ,callback },{ call,put}){
@@ -111,6 +142,35 @@ export default {
       }
     },
 
+
+    //填写运单号接口
+  *getReGoodsFundId({ payload,callback },{ call,put}){
+    const response = yield call(getReGoodsFundId, payload);
+   // console.log('xxx')
+    if (response !== undefined) {
+      if (response.type==1) {
+        message.success('填写完成');
+        callback(response);
+      }else{
+        message.error(response.msg);
+      }
+    }
+  },  
+
+
+  //快递获取
+  *getReGoodsFundIdMessage({ payload ,callback },{ call,put}){
+     
+    const response = yield call(getReGoodsFundIdMessage, payload);
+    if (response !== undefined) {
+      //console.log('666')
+      yield put({
+        type: 'getReGoodsFundIdMessageR',
+        payload: response,
+        
+      });
+    }
+  },
 
   },
   reducers:{
@@ -213,6 +273,33 @@ export default {
           }
       }
     },
+    //退货弹窗
+    handleOpenRefundR(state,action){
+      return{
+        ...state,
+        SalesForm:{
+            ...state.SalesForm,
+            //tableData:action.payload.list,
+            refund:true,
+      
+          }
+      }
+    },
+    //退货弹窗
+    //关闭弹窗
+    handleCloseRefundR(state,action){
+      return{
+        ...state,
+        SalesForm:{
+            ...state.SalesForm,
+            //tableData:action.payload.list,
+            refund:false,
+      
+          }
+      }
+    },
+
+
 
     //传弹窗值handleNumR
     handleNumR(state,action){
@@ -222,7 +309,8 @@ export default {
             ...state.SalesForm,
             //tableData:action.payload.list,
             num:action.payload.num,
-      
+            amountOfMoney:action.payload.amountOfMoney,
+            totalSum:action.payload.totalSum
           }
       }
     },
@@ -236,6 +324,48 @@ export default {
             ...state.rechargeDetails,
             //tableData:action.payload.list,
             img:action.payload.url
+          }
+      }
+    },
+
+    //填写单号弹窗
+    handleOpenWaybillR(state,action){
+      return{
+        ...state,
+        SalesForm:{
+            ...state.SalesForm,
+            //tableData:action.payload.list,
+            waybill:true,
+      
+          }
+      }
+    },
+
+     //填写单号弹窗
+     handleColoseWaybillR(state,action){
+      return{
+        ...state,
+        SalesForm:{
+            ...state.SalesForm,
+            //tableData:action.payload.list,
+            waybill:false,
+      
+          }
+      }
+    },
+
+    //快递获取
+    getReGoodsFundIdMessageR(state,action){
+      //console.log('xxx',action.payload)
+      return{
+        ...state,
+        SalesForm:{
+            ...state.SalesForm,
+            reGoodsFundIdMessage: {
+              refundId:action.payload.refundId,
+              expressName:action.payload.expressName,
+              type:action.payload.type,
+            }
           }
       }
     },

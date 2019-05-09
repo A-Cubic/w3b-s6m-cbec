@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
+import { Mention ,Radio,InputNumber,message,Modal,Tabs,Input,Button,Table,Card,Form,Row,Col,Select,Upload,Pagination,Badge,notification,Divider,Switch,Icon,DatePicker } from 'antd';
 import ChannelOrderCheckModal from './channelOrderCheckModal';
 import styles from './SalesForm.less';
 import moment from 'moment';
@@ -12,7 +12,8 @@ const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
-
+const { TextArea } = Input;
+const { toString, toContentState } = Mention;
 @connect(({orderManagement,publicDictionary,roleRetaiBusManagement,  loading }) => ({
   orderManagement,publicDictionary,roleRetaiBusManagement,
   loading: loading.effects['orderManagement/supplierOrderTable'],
@@ -192,18 +193,31 @@ export default class SalesForm extends Component {
       this.handleVisible(true,'childCheck');
     },0)
   }
+  //申请退款
+  handlereFund = (record) => {
+    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
+    this.props.dispatch({
+      type: 'roleRetaiBusManagement/handleOpenRefundR',
+      payload: {
+        num:record.merchantOrderId
+      },
+    });
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/handleNumR',
+      payload: {
+        num:record.merchantOrderId,
+        amountOfMoney:record.tradeAmount,
+        totalSum:tableData.item.accountBalance
+      }
+    });
+  
+  }
+
+
 
   //付款新接口
   handlePayment = (record) => {
-    
-   // console.log('merchantOrderId',record.merchantOrderId)
-    // this.props.dispatch({
-    //   type: 'roleRetaiBusManagement/getPayOrder',
-    //   payload: {
-    //     parentOrderId:record.merchantOrderId,
-    //   },
-    //   callback: this.callbackType,
-    // });
+    const { orderManagement:{supplierOrder:{tableData}} } = this.props;
     this.props.dispatch({
       type:'roleRetaiBusManagement/handleFormPopupR',
       
@@ -212,7 +226,9 @@ export default class SalesForm extends Component {
     this.props.dispatch({
       type:'roleRetaiBusManagement/handleNumR',
       payload: {
-        num:record.merchantOrderId
+        num:record.merchantOrderId,
+        amountOfMoney:record.tradeAmount,
+        totalSum:tableData.item.accountBalance
       }
     });
 
@@ -251,11 +267,45 @@ export default class SalesForm extends Component {
     });
   }
 
+  //填写运单点击
+  handleWaybill = (record) => {
+    //console.log(777)
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/handleOpenWaybillR',
+      
+    });
+    this.props.dispatch({
+      type:'publicDictionary/getExpress',
+      payload:{}
+    })
+    
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/handleNumR',
+      payload: {
+        num:record.merchantOrderId,
+        
+      }
+    });
+
+    //快递获取
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/getReGoodsFundIdMessage',
+      payload: {
+        parentOrderId:record.merchantOrderId,
+        
+      }
+    });
+
+  }
+
+
+
+
   renderAdvancedForm(){
     //const { roleRetaiBusManagement:{SalesForm} } = this.props;
 
     const { orderManagement:{supplierOrder:{tableData,num}} } = this.props;
-    //console.log('num',num)
+  // console.log('num',num)
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -272,12 +322,15 @@ export default class SalesForm extends Component {
                 >
                   <Option value="全部">全部</Option>
                   <Option value="0">未支付</Option>
-                  <Option value="1">新订单</Option>
+                  {/* <Option value="1">新订单</Option> */}
+                  <Option value="1">已付款</Option>
                   <Option value="2">等待发货</Option>
                   <Option value="3">已发货</Option>
                   <Option value="4">等待签收</Option>
                   <Option value="5">已完成</Option>
-                  <Option value="6">待处理</Option>
+                  {/* <Option value="6">待处理</Option> */}
+                  <Option value="6">申请退款</Option>
+                  <Option value="7">同意退货</Option>
                   <Option value="-1">已关闭</Option>
                   {/*<Option value="待付款">待付款</Option>*/}
                   {/*<Option value="待发货">待发货</Option>*/}
@@ -334,6 +387,7 @@ export default class SalesForm extends Component {
     
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr,wareHouseArr,expressArr} }= this.props;
     const { orderManagement:{supplierOrder:{tableData}} } = this.props;
+    //console.log('8888',tableData.item.accountBalance)
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -369,10 +423,104 @@ export default class SalesForm extends Component {
         dataIndex: 'operate',
         key: 'operate',
         render: (val,record) =>
-          <div>
-            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
-            {record.status=='未支付'?<a  href="javascript:;" onClick={()=>this.handlePayment(record)}>付款</a>:<span></span>}
-          </div>
+        {
+          // return(
+          //   <div>
+          //     <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+          //     {record.status=='未支付'?<a  href="javascript:;" onClick={()=>this.handlePayment(record)}>付款</a>:<span></span>}
+          //   </div>
+          // )
+          switch (record.status) {
+            case '未支付':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                {record.status=='未支付'?<a  href="javascript:;" onClick={()=>this.handlePayment(record)}>付款</a>:<span></span>}
+                
+              </div>
+              )
+              break;
+              case '已关闭':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                {/* <a href="javascript:;" onClick={()=>this.handlereFund(record)}>申请退款</a><br/> */}
+              </div>
+              )
+              break;
+              case '已付款':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                <a href="javascript:;" onClick={()=>this.handlereFund(record)}>申请退款</a><br/>
+              </div>
+              )
+              break;
+              case '等待发货':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                <a href="javascript:;" onClick={()=>this.handlereFund(record)}>申请退款</a><br/>
+              </div>
+              )
+              break;
+              case '已发货':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                <a href="javascript:;" onClick={()=>this.handlereFund(record)}>申请退款</a><br/>
+              </div>
+              )
+              break;
+              case '等待签收':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                <a href="javascript:;" onClick={()=>this.handlereFund(record)}>申请退款</a><br/>
+              </div>
+              )
+              break;  
+              case '已完成':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                <a href="javascript:;" onClick={()=>this.handlereFund(record)}>申请退款</a><br/>                
+              </div>
+              )
+              break;  
+              case '申请退货':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                
+              </div>
+              )
+              break;    
+              case '同意退货':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                <a href="javascript:;" onClick={()=>this.handleWaybill(record)}>填写运单</a><br/>
+              </div>
+              )
+              break;    
+              case '同意退款':
+              return (
+              <div>
+                <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+                
+              </div>
+              )
+              break;  
+            default:
+              break;
+          }
+        }
+
+          // <div>
+          //   <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>订单详情</a><br/>
+          //   {record.status=='未支付'?<a  href="javascript:;" onClick={()=>this.handlePayment(record)}>付款</a>:<span></span>}
+          // </div>
           
       }
     ];
@@ -415,7 +563,6 @@ export default class SalesForm extends Component {
               </Button>
             </Upload>
 
-
           </div>
           <Divider dashed />
           <div className={styles.tableListForm}>
@@ -434,15 +581,19 @@ export default class SalesForm extends Component {
           parent = {parent}
         />
         <StoresSalesSee />
+        <Refund />
+        <CompleteReturn 
+          parent = {ChildrenDeliveryParent}
+        />
       </div>
     );
   }
 }
 
 
-//查看弹窗
-@connect(({roleOperationDistribution,roleRetaiBusManagement }) => ({
-  roleOperationDistribution,roleRetaiBusManagement
+//付款弹窗
+@connect(({orderManagement,roleOperationDistribution,roleRetaiBusManagement }) => ({
+  orderManagement,roleOperationDistribution,roleRetaiBusManagement
 }))
 @Form.create()
 class StoresSalesSee  extends Component {
@@ -496,41 +647,257 @@ class StoresSalesSee  extends Component {
       });
     }
   } 
-
-
-  
-
-
-
   render(){
-    const { roleRetaiBusManagement:{SalesForm,SalesForm:{tableData,childDetailsModelVisible,img}} } = this.props;
+    const { roleRetaiBusManagement:{SalesForm,SalesForm:{totalSum,amountOfMoney,num,childDetailsModelVisible,img}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    // console.log('xxxxx',rechargeDetails)
-    // console.log('77777',this.state.isimg)
+    //console.log('ffff',num)
     return(
       <div>
         <Modal
           visible= {childDetailsModelVisible}
           onCancel={this.handleCancel}
-          width={'35%'}
+          width={'55%'}
           onOk={this.handleOk}
           style={{padding:'20px'}}
         >
-          <div>请确认付款</div>        
-
-
-
+          <div style={{marginTop:'20px',display:'flex',justifyContent:'center',fontSize:'18px'}}>
+            <span>账户金额：<span style={{color:'red'}}>¥{totalSum}</span></span>
+            <span style={{margin:'0 20px'}}>付款金额：<span style={{color:'red'}}>¥{amountOfMoney}</span></span>
+            <span>账户余额：<span style={{color:'red'}}>¥{totalSum - amountOfMoney}</span></span>
+          </div>
+          <div style={{textAlign:'center',clear:'both',margin:'25px 0 25px 0',fontSize:'20px'}}>请确认付款</div>        
         </Modal>
       </div>
     )
+  }
+}
 
+//退款弹窗
+@connect(({orderManagement,roleOperationDistribution,roleRetaiBusManagement }) => ({
+  orderManagement,roleOperationDistribution,roleRetaiBusManagement
+}))
+@Form.create()
+class Refund  extends Component {
+
+  handleCancelRefund = () => {
+    // this.props.dispatch({
+    //   type:'roleOperationDistribution/storesSalesCloseR',
+    //   payload:false
+    // })
+
+    this.props.form.resetFields();
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/handleCloseRefundR',
+      
+    });
     
-    
-   
-    
+  }
+  //
+  handleOkRefund = (e) => {
+    const { roleRetaiBusManagement:{SalesForm,SalesForm:{totalSum,amountOfMoney,num,refund,img}} } = this.props;
+    const _that = this
+    e.preventDefault();
+    this.props.form.validateFields((err, fieldsValue)=>{
+      if(!err){
+          _that.props.dispatch({
+            type:'roleRetaiBusManagement/getReGoodsApply',
+            payload:{
+              ...fieldsValue,
+              parentOrderId:num    
+            },
+            callback: _that.callbackTypea,
+          });
+      }
+    })
 
   }
 
+  callbackTypea = (params) => {
+    if(params.type==1){
+      //this.init()
+      this.props.dispatch({
+        type: 'publicDictionary/getWareHouse',
+        payload: {
+          userId:userId,
+        },
+      });
+      this.props.dispatch({
+        
+        type: 'orderManagement/supplierOrderTable',
+        payload: {
+          userId:userId,
+          status:"全部"
+        },
+      });
+      this.props.dispatch({
+        type: 'roleRetaiBusManagement/handleCloseRefundR',
+        payload: {
+        },
+      });
+      this.props.form.resetFields();
+    }
+  } 
+  render(){
+    const { roleRetaiBusManagement:{SalesForm,SalesForm:{totalSum,amountOfMoney,num,refund,img}} } = this.props;
+    //const { orderManagement:{supplierOrder:{tableData,num}} } = this.props;
+    //console.log('refund',refund)
+    const { getFieldDecorator } = this.props.form;
+    return(
+      <div>
+        <Modal
+          visible= {refund}
+          onCancel={this.handleCancelRefund}
+          width={'35%'}
+          onOk={this.handleOkRefund}
+          style={{padding:'20px'}}
+        >
+          <div style={{marginTop:'20px',display:'flex',justifyContent:'center',fontSize:'18px'}}>
+          <Form onSubmit={this.handleOk} layout="inline">
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={24} sm={24} >
+                <div  style={{width:'100%',margin:'30px auto 0px auto',fontSize:'18px'}}>
+                  <FormItem label="退货原因：">
+                    {getFieldDecorator('refundRemark',{
+                      rules:[{
+                        required:true,message:'输入退款原因',
+                      }]
+                    })(
+                  
+                      <TextArea 
+                        rows={4} 
+                        style={{width:'370px'}}
+                      />
+
+
+                    )}
+                  </FormItem>
+              
+                </div>
+              </Col>
+              </Row>
+          </Form>
+          </div>        
+        </Modal>
+      </div>
+    )
+  }
 }
 
+
+
+// 填写运单
+@connect(({orderManagement,publicDictionary,  loading,roleRetaiBusManagement }) => ({
+  orderManagement,publicDictionary,roleRetaiBusManagement,
+  loading: loading.effects['orderManagement/supplierOrderTable'],
+}))
+@Form.create()
+class CompleteReturn extends React.Component {
+
+  handleOk = (e) => {
+   // const { orderManagement:{supplierOrder:{completeReturn,orderId}} } = this.props;
+    const { roleRetaiBusManagement:{SalesForm:{waybill,num}} } = this.props;
+    //console.log('orderId',orderId)
+    e.preventDefault();
+    const that = this;
+    this.props.form.validateFields((err, fieldsValue)=>{
+      if(!err){
+        this.props.parent.dispatch({
+          type:'roleRetaiBusManagement/getReGoodsFundId',
+          payload:{
+            ...fieldsValue,
+            parentOrderId:num
+          },
+          callback: this.callbackType,
+        })
+      }
+    })
+  }
+
+  callbackType = (params) => {
+    if(params.type==1){
+      //this.init()
+    
+      this.props.dispatch({
+        type:'roleRetaiBusManagement/handleColoseWaybillR',
+      });
+      this.props.dispatch({
+        type: 'orderManagement/supplierOrderTable',
+        payload: {
+          //userId:userId,
+          status:"全部"
+        },
+      });
+      this.props.form.resetFields();
+    }
+  } 
+
+  handleCancel = (e) => {
+    // this.props.parent.handleVisible(false,'childDelivery')
+    this.props.dispatch({
+      type:'roleRetaiBusManagement/handleColoseWaybillR',
+      payload:{
+        // id:record.merchantOrderId
+      }
+    })
+
+    this.props.form.resetFields();
+  }
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { orderManagement:{supplierOrder:{completeReturn,orderId}} } = this.props;
+    const { roleRetaiBusManagement:{SalesForm:{waybill,num,reGoodsFundIdMessage}} } = this.props;
+    console.log('reGoodsFundIdMessage.refundId',reGoodsFundIdMessage.refundId)
+    return (
+      <div>
+        <Modal
+          title="填写运单"
+          visible={waybill}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="1" onClick={this.handleCancel}>关闭</Button>,
+            <Button key="3" type="primary" onClick={this.handleOk}>确定</Button>
+          ]}
+        >
+        <div className={styles.tableListForm}>
+          <Form onSubmit={this.handleOk} layout="inline">
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={24} sm={24}>
+                <FormItem label="运单号">
+                  {getFieldDecorator('refundId',{
+                    initialValue:reGoodsFundIdMessage.type==0?'':reGoodsFundIdMessage.refundId,
+                    rules:[{
+                      required:true,message:'请填写运单号',
+                    }]
+                  })(
+                    <Input placeholder="请输入" />
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={24} sm={24}>
+            <FormItem label="快递公司">
+                {getFieldDecorator('refundExpressId',{
+                  initialValue:reGoodsFundIdMessage.type==0?'':reGoodsFundIdMessage.expressName,
+                  rules: [{ required: true, message: '请选择快递：' }],
+                  })(
+                    <Select
+                    placeholder="请选择"
+                    optionFilterProp="label"
+                    // onChange={this.onSelectChange}
+                  >
+                    {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressId} label={val.expressName}>{val.expressName}</Option>)}
+                  </Select>
+                )}
+
+            </FormItem>
+              </Col>
+              </Row>
+          </Form>
+        </div>
+        </Modal>
+      </div>
+    );
+  }
+}
 
