@@ -55,3 +55,4 @@ export async function getReGoodsFundIdMessage(params) {
     body: params,
   });
 }
+

@@ -19,14 +19,14 @@ import {
   getReGoodsFundId, //填写运单号
   getReGoodsFundIdMessage, //快递获取接口
 
+
 } from '../services/roleRetaiBusManagement_S'
 
 export default {
   namespace: 'roleRetaiBusManagement',
   state:{
 
-   
-
+  
     SalesForm:{
       tableData:{
         item:'',
@@ -55,8 +55,8 @@ export default {
       },
       childDetailsModelVisible:false,
       qRCode:false,
-      img:''
-      
+      img:'',
+      foundId:''
     }
 
 
@@ -134,7 +134,7 @@ export default {
             payload: response,
             
           });
-          message.success('请扫描支付');
+          message.success('请扫码充值');
           callback(response);
         }else{
           message.error(response.msg);
@@ -171,6 +171,7 @@ export default {
       });
     }
   },
+
 
   },
   reducers:{
@@ -323,7 +324,8 @@ export default {
         rechargeDetails:{
             ...state.rechargeDetails,
             //tableData:action.payload.list,
-            img:action.payload.url
+            img:action.payload.url,
+            foundId:action.payload.msg
           }
       }
     },

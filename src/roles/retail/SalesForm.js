@@ -240,7 +240,7 @@ export default class SalesForm extends Component {
 
   callbackType = (params) => {
     if(params.type==1){
-      console.log('go')
+     // console.log('go')
       this.init()
     }
   } 
@@ -847,7 +847,7 @@ class CompleteReturn extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const { orderManagement:{supplierOrder:{completeReturn,orderId}} } = this.props;
     const { roleRetaiBusManagement:{SalesForm:{waybill,num,reGoodsFundIdMessage}} } = this.props;
-    console.log('reGoodsFundIdMessage.refundId',reGoodsFundIdMessage.refundId)
+    //console.log('reGoodsFundIdMessage.refundId',reGoodsFundIdMessage.refundId)
     return (
       <div>
         <Modal
@@ -886,7 +886,7 @@ class CompleteReturn extends React.Component {
                     optionFilterProp="label"
                     // onChange={this.onSelectChange}
                   >
-                    {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressId} label={val.expressName}>{val.expressName}</Option>)}
+                    {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressName} label={val.expressName}>{val.expressName}</Option>)}
                   </Select>
                 )}
 

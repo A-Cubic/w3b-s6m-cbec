@@ -1,6 +1,6 @@
 // const orderManagement = 'http://console.llwell.net/';
 // const a = 'http://192.168.0.127:54195/';
-const a = 'http://192.168.191.1:54195/';
+//const a = 'http://192.168.191.1:54195/';
 export default function roleRetaiBusManagementMock(url) {
   return {
    
@@ -8,22 +8,22 @@ export default function roleRetaiBusManagementMock(url) {
     'POST /llback/Ordera/GetCustomsStateb': GetOrderList,
 
     // 零售 - 付款  
-    'POST /llback/Order/PayOrder': a,
+    'POST /llback/Order/PayOrder': url,
 
     // 零售 - 充值获取
-    'POST /llback/AccountFund/GetRetailMoney': a,
+    'POST /llback/AccountFund/GetRetailMoney': url,
 
     // 零售 - 充值按钮
-    'POST /llback/AccountFund/RetailRecharge': a,
+    'POST /llback/AccountFund/RetailRecharge': url,
 
     // 零售 - 退款
-    'POST /llback/Order/ReGoodsApply': a,
+    'POST /llback/Order/ReGoodsApply': url,
 
     // 零售 - 填写运单号
-    'POST /llback/Order/ReGoodsFundId': a,
+    'POST /llback/Order/ReGoodsFundId': url,
 
     // 零售 - 快递获取
-    'POST /llback/Order/ReGoodsFundIdMessage': a,
+    'POST /llback/Order/ReGoodsFundIdMessage': url,
 
   };
 }

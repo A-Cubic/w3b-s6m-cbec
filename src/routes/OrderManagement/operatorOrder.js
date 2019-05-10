@@ -940,7 +940,7 @@ class CompleteReturn extends React.Component {
                     optionFilterProp="label"
                     // onChange={this.onSelectChange}
                   >
-                    {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressId} label={val.expressName}>{val.expressName}</Option>)}
+                    {this.props.parent.expressArr.map(val => <Option key={val.expressId} value={val.expressName} label={val.expressName}>{val.expressName}</Option>)}
                   </Select>
                 )}
             </FormItem>
@@ -969,7 +969,7 @@ class AddReturnGoods  extends Component {
   }
   handleOk = (e) => {
     const { orderManagement:{supplierOrder:{completeReturn,orderId}} } = this.props;
-    console.log(9999)
+   
     this.props.dispatch({
       type:'orderManagement/getMakeSureReGoods',
       payload:{

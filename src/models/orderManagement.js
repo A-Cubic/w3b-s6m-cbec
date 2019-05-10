@@ -419,7 +419,7 @@ export default {
     //退货原因
     
     getReGoodsMessageR(state,action){
-      console.log('xx',action.payload)
+      //console.log('xx',action.payload)
       return{
         ...state,
         supplierOrder:{

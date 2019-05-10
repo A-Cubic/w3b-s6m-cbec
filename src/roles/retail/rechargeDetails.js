@@ -35,7 +35,9 @@ export default class rechargeDetails extends Component {
   init(){
     this.props.dispatch({
       type:'roleRetaiBusManagement/GetRetailMoney',
-      payload:{}
+      payload:{
+        fundtype: "充值"
+      }
     })
   }
   componentDidMount() {
@@ -253,7 +255,7 @@ export default class rechargeDetails extends Component {
 @Form.create()
 class StoresSalesSee  extends Component {
   state={
-    isimg:false,
+    isSocket:''
   }
 
   handleCancel = () => {
@@ -280,29 +282,20 @@ class StoresSalesSee  extends Component {
             callback: _that.callbackType,
           });
 
-          // _that.props.dispatch({
-          //   type:'roleRetaiBusManagement/getQROpenR',
-          //   payload:{ 
-          //   },
-          // });
-          // _that.props.dispatch({
-          //   type:'roleRetaiBusManagement/getPopupColoseR',
-          // });
-
-
       }
     })
   }
 
   callbackType = (params) => {
+    
+    const { roleRetaiBusManagement:{rechargeDetails,rechargeDetails:{foundId,num,tableData,childDetailsModelVisible,img}} } = this.props;
     const msg = params.msg;
+   
+   // console.log('foundId',foundId)
+
     if(params.type=='1'){
-      // this.setState({
-      //   isimg:true,
-      // })
-      // this.props.dispatch({
-      //   type:'roleRetaiBusManagement/getPopupColoseR',
-      // });
+      const _that = this
+      
       this.props.dispatch({
         type:'roleRetaiBusManagement/getQROpenR',
         payload:{ 
@@ -311,12 +304,50 @@ class StoresSalesSee  extends Component {
       this.props.dispatch({
         type:'roleRetaiBusManagement/getPopupColoseR',
       });
+    
+      //var ws = new WebSocket('ws://192.168.191.1:54195/zf');
+      var ws = new WebSocket('ws://console.llwell.net/zf');
+      ws.onopen = function(evt) { 
+        ws.send("getPayState,fundId:"+foundId);
+        setTimeout(()=>{
+          ws.close();
+        },20000)
 
+      };
+      
+      ws.onmessage = function(evt) {
+        _that.setState({
+          isSocket:JSON.parse(evt.data).type
+        })
+        if( JSON.parse(evt.data).type == '1'){
+          _that.props.dispatch({
+            type:'roleRetaiBusManagement/getQRColoseR',
+            
+          });
+          _that.props.dispatch({
+            type:'roleRetaiBusManagement/GetRetailMoney',
+            payload:{}
+          })
+          message.success('充值成功');
+          ws.close();
+          
+        } else {
+          //message.error(JSON.parse(evt.data).msg);
+        }
+        
+        _that.props.form.resetFields();
+      };
+      
+      ws.onclose = function(evt) {
+        if(_that.state.isSocket=='0'){
+          message.success('扫码付款成功后请手动刷新页面，查看充值金额！')
+        }
+        ws.close();
+      };  
+      
+      
     } else {
-      // this.setState({
-      //   isimg:false,
-      // })
-      message.error(msg);
+    
     }
   } 
 
@@ -345,7 +376,7 @@ class StoresSalesSee  extends Component {
                       <InputNumber 
                         style={{width:'150px'}} 
                         className={styles.displayNo}
-                        min={100} max={99999999999} 
+                        min={100} max={99999999} 
                         // defaultValue={0} 
                         placeholder="请输入充值金额" 
                       />
@@ -412,7 +443,7 @@ class StoresSalesSeeCode  extends Component {
           <div>
             <QRCode value={img} style={{margin:'20px auto 0 auto',display:'block',border:'1px solid #ccc'}} /> 
             <span style={{textAlign:'center',margin:'20px auto',display:'block',fontSize:'18px',paddingTop:'15px'}}>
-              扫码付款成功后,请刷新页面查看余额！
+              请扫码充值！
             </span>
           </div>
         </Modal>
