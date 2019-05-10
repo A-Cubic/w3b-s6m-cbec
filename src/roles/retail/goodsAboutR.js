@@ -29,12 +29,12 @@ export default class goodsAboutR extends Component {
         userId:userId,
       },
     });
-    this.props.dispatch({
-      type: 'publicDictionary/getWareHouse',
-      payload: {
-        userId:userId,
-      },
-    });
+    // this.props.dispatch({
+    //   type: 'publicDictionary/getWareHouse',
+    //   payload: {
+    //     userId:userId,
+    //   },
+    // });
     this.props.dispatch({
       type: 'goodsManagement/getGoodsAboutData',
       payload: {
@@ -107,7 +107,7 @@ export default class goodsAboutR extends Component {
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
+          {/* <Col md={8} sm={24}>
             <FormItem label="状态">
               {getFieldDecorator('status')(
                 <Select
@@ -117,13 +117,19 @@ export default class goodsAboutR extends Component {
                 >
                   <Option value="上架">上架</Option>
                   <Option value="下架">下架</Option>
-                  {/*<Option value="申请中">申请中</Option>*/}
-                  {/*<Option value="已驳回">已驳回</Option>*/}
-                  {/* {brandsData.map(val => <Option key={val.id} value={val.id} label={val.name}>{val.name}</Option>)} */}
+                 
                 </Select>
               )}
             </FormItem>
-          </Col>
+          </Col> */}
+          <Col md={8} sm={24}>
+            <FormItem label="商品编码">
+              {getFieldDecorator('barcode')(
+                <Input placeholder="请输入" />
+              )}
+            </FormItem>
+          </Col>  
+
           <Col md={8} sm={24}>
             {/* <FormItem label="所属仓库">
               {getFieldDecorator('wid')(
@@ -160,51 +166,9 @@ export default class goodsAboutR extends Component {
           </Col>
 
         </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="品牌">
-              {getFieldDecorator('brand')(
-                <Select
-                  placeholder="请选择"
-                  optionFilterProp="label"
-                  // onChange={this.onSelectChange}
-                >
-                  {/*<Option value="品牌1">品牌1</Option>*/}
-                   {brandArr.map(val => <Option key={val.brand} value={val.brand} label={val.brand}>{val.brand}</Option>)}
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-
-          <Col md={8} sm={24}>
-            <FormItem label="商品编码">
-              {getFieldDecorator('barcode')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-
-          <Col md={8} sm={24}>
-            {/* <FormItem label="发货方式">
-              {getFieldDecorator('businessType')(
-                <Select
-                  placeholder="请选择"
-                  optionFilterProp="label"
-                  // onChange={this.onSelectChange}
-                >
-                  <Option value="">全部</Option>
-                  <Option value="0">国内现货</Option>
-                  <Option value="1">海外直邮</Option>
-                  <Option value="2">保税</Option>
-
-                </Select>
-              )}
-            </FormItem> */}
-          </Col>
-
-        </Row>
+        
         <div style={{ overflow: 'hidden' }}>
-          <span style={{ float: 'right', marginBottom: 0 }}>
+          <span style={{ float: 'left', marginBottom: 0 }}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </span>

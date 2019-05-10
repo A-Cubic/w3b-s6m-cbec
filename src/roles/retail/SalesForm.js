@@ -740,7 +740,7 @@ class Refund  extends Component {
   render(){
     const { roleRetaiBusManagement:{SalesForm,SalesForm:{totalSum,amountOfMoney,num,refund,img}} } = this.props;
     //const { orderManagement:{supplierOrder:{tableData,num}} } = this.props;
-    //console.log('refund',refund)
+    //console.log('refund',refund) className={styles.tableListForm}
     const { getFieldDecorator } = this.props.form;
     return(
       <div>
@@ -751,31 +751,32 @@ class Refund  extends Component {
           onOk={this.handleOkRefund}
           style={{padding:'20px'}}
         >
-          <div style={{marginTop:'20px',display:'flex',justifyContent:'center',fontSize:'18px'}}>
-          <Form onSubmit={this.handleOk} layout="inline">
-            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col md={24} sm={24} >
-                <div  style={{width:'100%',margin:'30px auto 0px auto',fontSize:'18px'}}>
-                  <FormItem label="退货原因：">
-                    {getFieldDecorator('refundRemark',{
-                      rules:[{
-                        required:true,message:'输入退款原因',
-                      }]
-                    })(
-                  
-                      <TextArea 
-                        rows={4} 
-                        style={{width:'370px'}}
-                      />
+          {/* <div style={{marginTop:'20px',display:'flex',justifyContent:'center',fontSize:'18px'}}> */}
+          <div className={styles.tableListForm}>
+            <Form onSubmit={this.handleOk} layout="inline">
+              <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                <Col md={24} sm={24} >
+                  <div  style={{width:'100%',margin:'30px auto 0px auto',fontSize:'18px'}}>
+                    <FormItem label="退货原因：">
+                      {getFieldDecorator('refundRemark',{
+                        rules:[{
+                          required:true,message:'输入退款原因',
+                        }]
+                      })(
+                    
+                        <TextArea 
+                          rows={4} 
+                          // style={{width:'100%'}}
+                        />
 
 
-                    )}
-                  </FormItem>
-              
-                </div>
-              </Col>
+                      )}
+                    </FormItem>
+                
+                  </div>
+                </Col>
               </Row>
-          </Form>
+            </Form>
           </div>        
         </Modal>
       </div>

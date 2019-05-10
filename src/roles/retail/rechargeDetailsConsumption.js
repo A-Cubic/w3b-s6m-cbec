@@ -136,7 +136,7 @@ export default class rechargeDetailsConsumption extends Component {
                 )}
               </FormItem>
             </Col>
-            <Col md={8} sm={24}>
+            {/* <Col md={8} sm={24}>
               <FormItem label="类别">
                 {getFieldDecorator('fundtype')(
                   <Select
@@ -150,7 +150,7 @@ export default class rechargeDetailsConsumption extends Component {
                   </Select>
                 )}
               </FormItem>
-            </Col>
+            </Col> */}
             <Col md={6} sm={24}>
               <Button type="primary" htmlType="submit">查询</Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>

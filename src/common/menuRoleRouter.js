@@ -290,26 +290,25 @@ export function finance (dynamicWrapper,app){
 //-------------------------------------零售付款-------------------------------------
 export function retail (dynamicWrapper,app){
   return {
-    // 零售-付款  - 订单列表
-    '/roles/SalesForm': {
+    //  - 订单列表
+    '/orderManagemen/SalesForm': {
       component: dynamicWrapper(app, ['orderManagement','publicDictionary','roleRetaiBusManagement'], () => import('../roles/retail/SalesForm')),
     },
-    //零售-充值 - 充值记录
+    // - 充值记录
     '/roles/rechargeDetails': {
       component: dynamicWrapper(app, ['roleRetaiBusManagement'], () => import('../roles/retail/rechargeDetails')),
     
     },
-    //零售-充值 - 消费明细
+    //- 消费明细
     '/roles/rechargeDetailsConsumption': {
       component: dynamicWrapper(app, ['roleRetaiBusManagement'], () => import('../roles/retail/rechargeDetailsConsumption')),
     
     },
 
-    //商品管理 - 商品管理-商品查看  
-    '/commodityManagement/goodsAboutR': {
+    //商品管理 -商品查看  
+    '/goods/goodsAboutR': {
       component: dynamicWrapper(app, ['goodsManagement','publicDictionary'], () => import('../roles/retail/goodsAboutR')),
     },
-
 
     //关注公众号 - 二维码 联系客服
     '/mediaPlatformR': {

@@ -142,7 +142,7 @@ export default class rechargeDetails extends Component {
                 )}
               </FormItem>
             </Col>
-            <Col md={8} sm={24}>
+            {/* <Col md={8} sm={24}>
               <FormItem label="类别">
                 {getFieldDecorator('fundtype')(
                   <Select
@@ -156,7 +156,7 @@ export default class rechargeDetails extends Component {
                   </Select>
                 )}
               </FormItem>
-            </Col>
+            </Col> */}
             <Col md={6} sm={24}>
               <Button type="primary" htmlType="submit">查询</Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
@@ -306,7 +306,8 @@ class StoresSalesSee  extends Component {
       });
     
       //var ws = new WebSocket('ws://192.168.191.1:54195/zf');
-      var ws = new WebSocket('ws://console.llwell.net/zf');
+      // var ws = new WebSocket('ws://console.llwell.net/zf');
+      var ws = new WebSocket('ws://console.llwell.net/llback/zf');
       ws.onopen = function(evt) { 
         ws.send("getPayState,fundId:"+foundId);
         setTimeout(()=>{
