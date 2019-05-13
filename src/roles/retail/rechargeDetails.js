@@ -312,7 +312,7 @@ class StoresSalesSee  extends Component {
         ws.send("getPayState,fundId:"+foundId);
         setTimeout(()=>{
           ws.close();
-        },20000)
+        },65000)
 
       };
       
@@ -341,6 +341,10 @@ class StoresSalesSee  extends Component {
       
       ws.onclose = function(evt) {
         if(_that.state.isSocket=='0'){
+          _that.props.dispatch({
+            type:'roleRetaiBusManagement/getQRColoseR',
+            
+          });
           message.success('扫码付款成功后请手动刷新页面，查看充值金额！')
         }
         ws.close();
