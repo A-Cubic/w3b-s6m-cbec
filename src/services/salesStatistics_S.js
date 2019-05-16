@@ -29,6 +29,17 @@ export async function getSalesStatisticsListO(params) {
     body: params,
   });
 }
+
+//统计柱状图
+export async function getWorkStatisticsDate(params) {
+  return request(`/llback/Sales/ShopSalseAnalysis`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+
+
 // // 获取销售商（渠道商）
 // export async function getPurchaseData(params) {
 //   return request(`/llback/Sales/GetPurchase`, {

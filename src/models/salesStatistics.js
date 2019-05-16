@@ -2,7 +2,8 @@ import { message} from 'antd';
 import {notification} from "antd/lib/index";
 import {
   getClient,
-  getSalesStatisticsListA,getSalesStatisticsListS,getSalesStatisticsListO
+  getSalesStatisticsListA,getSalesStatisticsListS,getSalesStatisticsListO,
+  getWorkStatisticsDate, //统计柱状图
 } from '../services/salesStatistics_S'
 export default {
   namespace: 'salesStatistics',
@@ -22,7 +23,21 @@ export default {
         list: [],
         pagination:{},
       }
+    },
+
+    managementStatisticS: {
+      tableData:{
+        item:{
+          
+        },
+        list: [],
+        pagination:{},
+      },
     }
+
+
+
+
   },
   effects:{
     // 我的客户
@@ -69,8 +84,17 @@ export default {
         });
       }
     },
-
-
+    // getWorkStatisticsDate 统计图
+    *getWorkStatisticsDate({ payload },{ call,put}){
+      const response = yield call(getWorkStatisticsDate, payload);
+      // console.log('~',response)
+      if (response !== undefined) {
+        yield put({
+          type: 'getWorkStatisticsDateR',
+          payload: response,
+        });
+      }
+    },
   },
   reducers:{
     getClientR(state, action){
@@ -91,6 +115,17 @@ export default {
           },
         };
     },
+    
+    getWorkStatisticsDateR(state, action) {
+      return {
+        ...state,
+        managementStatisticS: {
+          ...state.managementStatisticS,
+            tableData:action.payload
+        }
+      };
+    },
+
 
   }
 }

@@ -1,4 +1,7 @@
 // const orderManagement = 'http://console.llwell.net/';
+
+//const a = 'http://192.168.191.1:54195/';
+
 export default function salesStatisticsMock(url) {
   return {
     // 我的客户
@@ -9,6 +12,8 @@ export default function salesStatisticsMock(url) {
     'POST /llback/Sales/GetSalesListBySupplier': url,
     // 销售统计 - 运营- 列表
     'POST /llback/Sales/GetSalesListByOperator': url,
+    // 销售统计 - 运营- 列表 -统计柱状图
+    'POST /llback/Sales/ShopSalseAnalysis': url,
   };
 }
 export function GetOrderList(req, res) {

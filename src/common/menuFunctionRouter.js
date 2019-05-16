@@ -101,6 +101,12 @@ export default function(dynamicWrapper,app){
     '/sales/salesStatisticsS': {
       component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsS')),
     },
+    // 销售统计 - 柱形图
+    '/sales/managementStatistics': {
+      component: dynamicWrapper(app, ['salesStatistics','workbench'], () => import('../routes/SalesStatistics/managementStatisticS')),
+    },
+
+
     // 销售统计 - 运营
     '/sales/salesStatisticsO': {
       component: dynamicWrapper(app, ['salesStatistics','publicDictionary'], () => import('../routes/SalesStatistics/SalesStatisticsO')),
