@@ -85,7 +85,7 @@ export default class platformStock extends Component {
   // 下载销售模板
   downloadTemplate=()=>{
     // window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/order.xlsx'
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/platformStock.xlsx'
+    window.location.href='http://llwell-b2b.oss-cn-beijing.aliyuncs.com/templet/platformStock.xlsx'
   }
   // 上传销售数据
   handleUploadChange=(info)=>{

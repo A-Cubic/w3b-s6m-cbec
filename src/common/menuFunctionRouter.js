@@ -101,7 +101,7 @@ export default function(dynamicWrapper,app){
     '/sales/salesStatisticsS': {
       component: dynamicWrapper(app, ['salesStatistics'], () => import('../routes/SalesStatistics/SalesStatisticsS')),
     },
-    // 销售统计 - 柱形图
+    //统计分析表 - 柱形图
     '/sales/managementStatistics': {
       component: dynamicWrapper(app, ['salesStatistics','workbench'], () => import('../routes/SalesStatistics/managementStatisticS')),
     },

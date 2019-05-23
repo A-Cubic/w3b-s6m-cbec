@@ -23,7 +23,7 @@ export default class DistributorsMgt extends Component {
         <Card>
           <section style={{textAlign :'center',margin:100}}>
             <div>
-              <img style={{width:200,height:200,margin:15}} src="http://ecc-product.oss-cn-beijing.aliyuncs.com/static/mediaPlatform.jpeg" alt=""/>
+              <img style={{width:200,height:200,margin:15}} src="http://llwell-b2b.oss-cn-beijing.aliyuncs.com/static/mediaPlatform.jpeg" alt=""/>
             </div>
             <div style={{fontSize:18}}>欢迎关注流连优选公众号</div>
             <div style={{fontSize:18}}>有任何问题或疑问，请在公众号里留言。</div>

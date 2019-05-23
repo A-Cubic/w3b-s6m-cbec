@@ -273,7 +273,7 @@ export default class commodityDetailsGeneralPage extends Component {
                 <Divider dashed />
                 <Row gutter={16} type="flex" justify="space-around">
                   <Col lg={23} md={23} sm={23} xs={23}>
-                    <img style={{ width:'100%'}} src="http://ecc-product.oss-cn-beijing.aliyuncs.com/b2bmall/consumerNotification.jpg" alt="" />
+                    <img style={{ width:'100%'}} src="http://llwell-b2b.oss-cn-beijing.aliyuncs.com/b2bmall/consumerNotification.jpg" alt="" />
                   </Col>
                 </Row>
                 <Divider dashed />

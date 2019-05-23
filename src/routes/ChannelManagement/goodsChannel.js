@@ -98,7 +98,7 @@ export default class costChannel extends Component {
     }
   }
   downloadGoodsTemp=()=>{
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/DistributorGoods.xlsx'
+    window.location.href='http://llwell-b2b.oss-cn-beijing.aliyuncs.com/templet/DistributorGoods.xlsx'
   }
   render() {
     const { publicDictionary:{purchaseArr,channelTypeArr,supplierArr} }= this.props;

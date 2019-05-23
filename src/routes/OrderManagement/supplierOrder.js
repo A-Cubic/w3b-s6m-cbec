@@ -71,7 +71,7 @@ export default class supplierOrder extends Component {
   }
   //下载运单模板
   downloadTemplate=()=>{
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/Waybill.xlsx'
+    window.location.href='http://llwell-b2b.oss-cn-beijing.aliyuncs.com/templet/Waybill.xlsx'
   }
   // 导入
   handleUploadChange=(info)=>{

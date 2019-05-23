@@ -192,7 +192,7 @@ export default class deliveryForm extends Component {
 
   //下载运单模板
   downloadTemplate=()=>{
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/downloadDeliveryTemplate.xlsx'
+    window.location.href='http://llwell-b2b.oss-cn-beijing.aliyuncs.com/templet/downloadDeliveryTemplate.xlsx'
   }
   handleFormReset =()=>{
     this.props.form.resetFields();

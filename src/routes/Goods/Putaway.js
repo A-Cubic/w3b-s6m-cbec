@@ -111,7 +111,7 @@ export default class GoodsAbout extends Component {
   }
   downloadStoreTemp=()=>{
     // window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/b2b/goodsnum/warehouse.xlsx'
-    window.location.href='http://ecc-product.oss-cn-beijing.aliyuncs.com/templet/warehouse.xlsx'  //修改新连接
+    window.location.href='http://llwell-b2b.oss-cn-beijing.aliyuncs.com/templet/warehouse.xlsx'  //修改新连接
   }
   render() {
 
