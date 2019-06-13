@@ -1,6 +1,6 @@
 import { message} from 'antd';
 import {notification} from "antd/lib/index";
-import {getDistributorTable,getUpdateDistributor,getAgentQRCode} from '../services/distributionManagement_S'
+import {handlePopupCloseR,handlePopup,getDistributorTable,getUpdateDistributor,getAgentQRCode,} from '../services/distributionManagement_S'
 import {getBrandData, getGoodsPutaway, getO2OCheck, getUpdateWarehouse} from "../services/api";
 export default {
   namespace: 'distributionManagement',
@@ -20,7 +20,19 @@ export default {
         wxName:'',
       },
     },
-    agentQRCode:''
+    agentQRCode:'',
+
+    popupList: {
+      tableData:{
+        item:{},
+        list: [],
+        pagination:{},
+      },
+      popup:false
+    }
+
+
+
   },
   effects:{
     *changeVisible({ payload },{ call, put }){
@@ -85,6 +97,23 @@ export default {
         message.error('出错了');
       }
     },
+
+    *handlePopup({ payload,callback },{ call,put}){
+      const response = yield call(handlePopup, payload);
+      if (response !== undefined) {
+          yield put({
+            type: 'handlePopupR',
+            payload: response,
+          });
+
+      }else{
+        message.error('出错了');
+      }
+    },
+
+
+
+
   },
   reducers:{
     changeVisibleR(state, action){
@@ -116,6 +145,36 @@ export default {
       return {
         ...state,
         agentQRCode:action.payload.agentQRCodeUrl,
+      };
+    },
+
+    
+    handlePopupR(state, action) {
+      //console.log('xxmadel',action.payload)
+      return {
+        ...state,
+        popupList:{
+          tableData:{
+            item:action.payload.item,
+            list: action.payload.list,
+            pagination:action.payload.pagination,
+          },
+          popup:true
+        },
+      };
+    },
+    handlePopupCloseR(state, action) {
+      //console.log('xxxxxxxstate',state)
+      return {
+        ...state,
+        popupList:{
+          tableData:{
+            item:{},
+            list: [],
+            pagination:{},
+          },
+          popup:false
+        },
       };
     },
   }

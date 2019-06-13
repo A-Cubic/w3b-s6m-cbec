@@ -1,4 +1,7 @@
 // const orderManagement = 'http://console.llwell.net/';
+
+//const a = 'http://192.168.191.1:54195/';
+
 export default function distributionManagementMock(url) {
   return {
     // 销售统计 - 代理- 列表
@@ -7,6 +10,9 @@ export default function distributionManagementMock(url) {
     'POST /llback/Agent/UpdateDistribution': url,
     // 推广二维码
     'POST /llback/Agent/GetAgentQRCode': url,
+    // 弹窗
+    'POST /llback/Agent/GetDistributionOrderList': url,
+
   };
 }
 export function getPlatform(req, res) {

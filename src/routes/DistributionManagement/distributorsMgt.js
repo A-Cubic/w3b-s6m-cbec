@@ -65,7 +65,7 @@ export default class DistributorsMgt extends Component {
       ...this.state.formValues,
       ...pagination,
     };
-
+    
     this.props.dispatch({
       type: 'distributionManagement/getDistributorTable',
       payload: params,
@@ -96,12 +96,28 @@ export default class DistributorsMgt extends Component {
     });
     this.handleChangeVisible(true)
   }
+
+
+  handlePopup(r) {
+    //console.log(789,r)
+    this.props.dispatch({
+      type: 'distributionManagement/handlePopup',
+      payload: {
+        agentCode:r.agentCode
+      },
+    });
+  }
+
+
+
+
+
   renderAdvancedForm(){
     // const { salesStatistics:{salesStatisticsAll:{tableData}} } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.onSearch} layout="inline">
-        <Button onClick={this.mgtDistributors}>添加分销商</Button>
+        {/* <Button onClick={this.mgtDistributors}>添加分销商</Button> */}
         <Divider dashed />
         <Row gutter={{ md: 8, lg: 24, xl: 48 }} type="flex" justify="center">
           <Col md={10} sm={24}>
@@ -137,18 +153,29 @@ export default class DistributorsMgt extends Component {
         dataIndex: 'keyId',
         key: 'keyId',
       }, {
+        title: '图片',
+        dataIndex: 'barcode',
+        key: 'barcode',
+        render: (val,record) => (
+          <div>
+            <img src={ record.img} />
+          </div>
+        )
+      },{
         title: '分销商',
         dataIndex: 'userName',
         key: 'userName',
-      }, {
-        title: '公司名称',
-        dataIndex: 'company',
-        key: 'company',
-      }, {
-        title: '联系电话',
-        dataIndex: 'mobile',
-        key: 'mobile',
-      }, {
+      }, 
+      // {
+      //   title: '公司名称',
+      //   dataIndex: 'company',
+      //   key: 'company',
+      // }, {
+      //   title: '联系电话',
+      //   dataIndex: 'mobile',
+      //   key: 'mobile',
+      // }, 
+      {
         title: '微信昵称',
         dataIndex: 'wxName',
         key: 'wxName',
@@ -156,9 +183,13 @@ export default class DistributorsMgt extends Component {
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
+        // render: (val,record) =>
+        //   <div>
+        //     <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>编辑</a><br/>
+        //   </div>
         render: (val,record) =>
           <div>
-            <a href="javascript:;" onClick={()=>this.handleChildrenCheck(record)}>编辑</a><br/>
+            <a href="javascript:;" onClick={()=>this.handlePopup(record)}>详情</a><br/>
           </div>
       }
     ];
@@ -178,6 +209,7 @@ export default class DistributorsMgt extends Component {
           />
         </Card>
         <Distributors />
+        <Popup />
       </div>
     );
   }
@@ -189,33 +221,25 @@ export default class DistributorsMgt extends Component {
 }))
 @Form.create()
 class Distributors extends React.Component {
-  handleOk=(e)=>{
-    const {distributionManagement:{distributorsMgtData:{childCheckS}}}=this.props;
-    const _this = this;
-    e.preventDefault();
-    this.props.form.validateFields((err, fieldsValue) => {
-      // console.log('values',fieldsValue)
-      if (err) return;
-      const values = {
-        ...fieldsValue,
-      }
-      this.setState({
-        formValues: values,
-      });
-      this.props.dispatch({
-        type: 'distributionManagement/updateDistributor',
-        payload: {
-          ...values,
-          id:childCheckS.id
-        },
-        callback:()=>{
-          this.props.form.resetFields();
-        }
-      });
-    });
+  
 
 
-  }
+handleTableChange=(pagination, filtersArg, sorter)=>{
+
+  //console.log(999)
+
+  const params = {
+    ...this.state.formValues,
+    ...pagination,
+  };
+
+  this.props.dispatch({
+    type: 'distributionManagement/getDistributorTable',
+    //type: 'distributionManagement/handlePopup',
+    payload: params,
+  });
+}
+
   handleCancel = (e) => {
     this.props.dispatch({
       type: 'distributionManagement/changeVisibleR',
@@ -229,6 +253,8 @@ class Distributors extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {distributionManagement:{distributorsMgtData:{visible,childCheckS}}} = this.props
+
+    //console.log('777',this.props)
     return (
       <div>
         <Modal
@@ -301,3 +327,117 @@ class Distributors extends React.Component {
   }
 }
 
+
+
+@connect(({distributionManagement,  loading }) => ({
+  distributionManagement,
+  // loading: loading.effects['orderManagement/supplierOrderTable'],
+}))
+@Form.create()
+class Popup extends React.Component {
+  handleOk=()=>{
+    console.log(333)
+    this.props.dispatch({
+      type: 'distributionManagement/handlePopupCloseR',
+      payload: {
+      }
+    });
+  }
+  handleCancel = (e) => {
+    this.props.dispatch({
+      type: 'distributionManagement/handlePopupCloseR',
+      payload: {
+      }
+    });
+   // this.props.form.resetFields();
+  }
+
+  handleTableChange=(pagination, filtersArg, sorter)=>{
+    const {distributionManagement:{popupList:{tableData:{item}}}}=this.props;
+    //console.log('item',item)
+    const params = {
+      //...this.state.formValues,
+      ...pagination,
+    };
+    this.props.dispatch({
+      type: 'distributionManagement/handlePopup',
+      payload: {
+        ...params,
+        agentCode:item
+      },
+    });
+  }
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const {distributionManagement:{popupList:{popup,tableData,tableData:{list,pagination}}}}=this.props;
+
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...tableData.pagination,
+    }
+    const columns = [
+      {
+        title: '序号',
+        dataIndex: 'keyId',
+        key: 'keyId',
+      },{
+        title: '订单时间',
+        dataIndex: 'tradeTime',
+        key: 'tradeTime',
+      }, 
+      {
+        title: '订单金额',
+        dataIndex: 'tradeAmount',
+        key: 'tradeAmount',
+        render:val => `¥${val}`
+      }, 
+      
+      {
+        title: '分销金额',
+        dataIndex: 'agentPrice',
+        key: 'agentPrice',
+        render:val => `¥${val}`
+      }, 
+      {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+        
+      }, 
+      
+    ];
+
+
+    //console.log('popup',list)
+    return (
+      <div>
+        <Modal
+          width={'65%'}
+          title="分销商"
+          visible={popup}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="1" onClick={this.handleCancel}>关闭</Button>,
+            // <Button key="2" type="primary" onClick={this.handleOk}>确定</Button>
+          ]}
+        >
+          <div className={styles.tableListForm}>
+            
+          <Table
+            dataSource={tableData.list}
+            rowKey={record => record.keyId}
+            columns={columns}
+            pagination={paginationProps}
+            onChange={this.handleTableChange}
+            // loading={submitting}
+          />
+
+          </div>
+        </Modal>
+      </div>
+    );
+  }
+}

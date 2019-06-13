@@ -24,3 +24,11 @@ export async function getAgentQRCode(params) {
     body: params,
   });
 }
+
+// 弹窗接口
+export async function handlePopup(params) {
+  return request(`/llback/Agent/GetDistributionOrderList`, {
+    method: 'POST',
+    body: params,
+  });
+}
