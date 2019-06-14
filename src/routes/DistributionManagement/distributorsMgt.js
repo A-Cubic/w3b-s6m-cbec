@@ -153,12 +153,12 @@ export default class DistributorsMgt extends Component {
         dataIndex: 'keyId',
         key: 'keyId',
       }, {
-        title: '图片',
+        title: '微信头像',
         dataIndex: 'barcode',
         key: 'barcode',
         render: (val,record) => (
           <div>
-            <img src={ record.img} />
+            <img style={{width:'35px'}} src={ record.img} />
           </div>
         )
       },{
@@ -175,6 +175,11 @@ export default class DistributorsMgt extends Component {
       //   dataIndex: 'mobile',
       //   key: 'mobile',
       // }, 
+      {
+        title: '分销商账号',
+        dataIndex: 'agentCode',
+        key: 'agentCode',
+      },
       {
         title: '微信昵称',
         dataIndex: 'wxName',
