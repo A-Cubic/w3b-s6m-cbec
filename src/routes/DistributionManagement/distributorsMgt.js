@@ -153,18 +153,14 @@ export default class DistributorsMgt extends Component {
         dataIndex: 'keyId',
         key: 'keyId',
       }, {
-        title: '微信头像',
+        title: '图片',
         dataIndex: 'barcode',
         key: 'barcode',
         render: (val,record) => (
           <div>
-            <img style={{width:'35px'}} src={ record.img} />
+            <img src={ record.img} />
           </div>
         )
-      },{
-        title: '分销商账号',
-        dataIndex: 'agentCode',
-        key: 'agentCode',
       },{
         title: '分销商',
         dataIndex: 'userName',
