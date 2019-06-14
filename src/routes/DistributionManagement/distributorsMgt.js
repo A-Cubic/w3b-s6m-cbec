@@ -387,7 +387,13 @@ class Popup extends React.Component {
         title: '序号',
         dataIndex: 'keyId',
         key: 'keyId',
-      },{
+      },
+      {
+        title: '订单号',
+        dataIndex: 'orderId',
+        key: 'orderId',
+      }, 
+      {
         title: '订单时间',
         dataIndex: 'tradeTime',
         key: 'tradeTime',
