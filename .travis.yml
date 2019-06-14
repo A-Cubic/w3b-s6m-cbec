@@ -20,9 +20,9 @@ env:
 #    packages:
 #      - xvfb
 
-#cache:
-#  directories:
-#    - "node_modules"
+cache:
+  directories:
+    - "node_modules"
 
 #notifications:
   #webhooks: https://hook.bearychat.com/=bwCGO/travis/42614e695afefe41ff5437de242de91c

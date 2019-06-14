@@ -37,7 +37,7 @@
     "omit.js": "1.0.0",
     "path-to-regexp": "2.4.0",
     "prop-types": "15.6.2",
-    "qrcode.react": "^0.9.3",
+    "qrcode.react": "0.9.3",
     "qs": "6.5.2",
     "rc-drawer-menu": "0.5.7",
     "react": "16.6.3",
@@ -45,7 +45,7 @@
     "react-document-title": "2.0.3",
     "react-dom": "16.6.3",
     "react-fittext": "1.0.0",
-    "socket.io": "^2.2.0",
+    "socket.io": "2.2.0",
     "url-polyfill": "1.1.0"
   },
   "devDependencies": {
